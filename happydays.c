@@ -1816,6 +1816,19 @@ static Int16 PerformNotifyTD(BirthDate birth, DateType when,
     return 0;
 }
 
+static void AdjustDesktopCompatible(DateType *when)
+{
+    int maxtry = 4;
+    // get current date
+    //
+    
+    if (when->year < 1970 - 1904) when->year = 1970 - 1904;
+                
+    while (DaysInMonth(when->month, when->year) < when->day && maxtry-- >0) {
+        when->year++;
+    }
+}
+
 static void NotifyDatebook(int mainDBIndex, DateType when,
                            Int16 *created, Int16 *touched)
 {
@@ -1859,9 +1872,8 @@ static void NotifyDatebook(int mainDBIndex, DateType when,
                 if (r.flag.bits.year) when = r.date;
 
 				// Because Palm Desktop doesn't support events before 1970.
-				//   
-				if (when.year < 1970 - 1904) when.year = 1970 - 1904;
-                
+				//
+                AdjustDesktopCompatible(&when);
                 PerformNotifyDB(r, when, &repeatInfo, created, touched);
             }
             else if (gPrefsR->DBNotifyPrefs.duration == -1) {
@@ -1869,8 +1881,8 @@ static void NotifyDatebook(int mainDBIndex, DateType when,
                 if (r.flag.bits.year) when = r.date;
 
 				// Because Palm Desktop doesn't support events before 1970.
-				//   
-				if (when.year < 1970 - 1904) when.year = 1970 - 1904;
+				//
+                AdjustDesktopCompatible(&when);
 
                 DateToInt(repeatInfo.repeatEndDate) = -1;
                 PerformNotifyDB(r, when, &repeatInfo, created, touched);
@@ -2819,7 +2831,8 @@ static Int16 OpenDatabases(void)
         }
         else if ((creator == MemoAppID)
                  && (StrCaselessCompare(dbname, MemoDBName) == 0)) {
-            MemoDB = DmOpenDatabase(cardNo, dbID, mode | dmModeReadWrite);
+            MemoDB = DmOpenDatabase(cardNo, dbID, 
+						mode | dmModeReadWrite | dmModeShowSecret);
         }
         else if ((creator == AddressAppID) &&
                  (StrCaselessCompare(dbname, AddressDBName) == 0)) {

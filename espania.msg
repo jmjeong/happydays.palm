@@ -18,9 +18,103 @@
 
 #include "happydaysRsc.h"
 
+TRANSLATION "ENGLISH"
+BEGIN
+    "Translator" = "English version"
+    "Translator's email" = ""
+
+    "long_notifySettingString" = ""\
+    "* Records\n"\
+    "Tab 'all' if you'd like to "\
+    "make notification entries created for all of your events in this"\
+    " category."\
+    "Tab 'selected' if only the currently selected record should be "\
+    "taken into account.\n\n"\
+    "* Existing\n"\
+    "Tap 'keep' if existing HappyDays entries "\
+    "should be left untouched. Tap 'modify' if you'd like "\
+    "these entries to be changed.\n\n"\
+    "* Alarm\n"\
+    "will set the alarm notification in your datebook entry. Set "\
+	"the number of days in advance you'd like to get notified.\n\n"\
+    "* Time\n"\
+	"Time of the event\n\n"\
+    "* Repeat for\n"\
+    "is the interval of the notification record. "\
+    "-1 means repeat forever in case of solar event, and "\
+    "means repeat for 5 years in lunar event for convenience.\n"
+
+	"long_notifySettingMoreString" = ""\
+	"For AN Icon Number, consult Action Names manual. DateBk3Icon is "\
+	"read from MemoPad. If you don't have DateBk3 Icon entry in MemoPad, "\
+	"nothing is displayed.\n"
+
+    "long_customErrorString" = ""\
+    "'Birthday' is the default custom field name."\
+    "To set a different default custom field"\
+    " name, tap 'Preferences'.\n\n"\
+    "IMPORTANT: You need to launch your Addressbook and select 'Options/"\
+    "Rename Custom Fields' to rename a custom field to 'Birthday'"\
+    " or whatever you set as a custom field name in the Preferences of "\
+    "HappyDays.\n"
+
+    "long_aboutString" = ""\
+    "'HappyDays' will help you remember the birthdays and anniversaries "\
+    "of your friends and family members, as well as other events."\
+    "\n\nUse one of the custom fields in Address Book application "\
+    "and rename it to 'Birthday'."\
+    "\n\nExamples:\n"\
+    " Last Name: Jeong\n"\
+    " First name: JaeMok\n"\
+    " ...\n"\
+    " Birthday: -)12/4/70\n\n"\
+    "Formats:\n"\
+    " [-)|#)]Date\n"\
+    " -) means lunar calendar\n"\
+    " #) means lunar leap month\n\n"\
+    "Date format is automatically read from the system preferences. "\
+    "You can omit the year field. Year input below 100 is assumed to be "\
+    "year in the 20th century, If you are not sure of the year format, "\
+    "just write it in form of YYYY(e.g. 1970).\n\n"\
+    "To set multiple entry, refer the manual.\n"
+
+    "long_cleanupAlertString" = ""\
+    "Notification entries are considered HappyDays if they have "\
+	"{HappyDays ID} in their memo field. "\ 	
+    "If you use this format in your own "\
+    "entries, this record might also be removed by CleanUp.\n"
+
+    "long_prefFormString" = ""\
+	"* Instead of system date...\n"\
+	"Control the interpretation of the AddressDB Birthday custom field. "\
+	"By default this is the same as the system date format preference.\n\n"\
+	"* Scan note field\n"\
+	"To read note field in Address Book, check this option.\n\n"\
+    "* Emphasize Lunar Date\n"\
+    "If checkbox is on, the dashed line is drawed beneath lunar date.\n\n"\
+	"* Notify format\n"\
+	"The description format used for notification\n\n"\
+    "* Custom field\n"\
+    "The name of custom fields in Address Book used for INPUT\n\n"\
+    "* HappyDays ID\n"\
+    "Used for Notify and Cleanup\n"
+
+    "long_removeConfirmString" = ""\
+    "Are you sure you want to remove all "\
+    "HappyDays notify entries?"
+
+    "long_sl2lnString" = ""\
+        "-) means plain month in lunar\n"\
+        "#) means leap month in lunar"
+
+    "long_cantFindAddrString" = ""\
+    "Can't find custom address book field: '%s'\n"\
+    "Please rename a custom field of your address book."
+END
+
 TRANSLATION "KOREAN"
 BEGIN
-    "Translator" = "ÇÑ±Û ¹öÁ¯"
+    "Translator" = "ÇÑ±¹¾î ¹öÁ¯"
     "Translator's email" = ""
 
     "long_notifySettingString" = ""\
@@ -144,8 +238,8 @@ BEGIN
     "Goto" = "ÀÌµ¿"
 
     "Utilities" = "À¯Æ¿¸®Æ¼ "
-    "Date Book Notify" = "ÀÏÁ¤°ü¸®¿¡ ¾Ë¸² "
-    "Cleanup Date Book"  = "ÀÏÁ¤°ü¸®¿¡¼­ Á¤¸® "
+    "DateBook Notify" = "ÀÏÁ¤°ü¸®¿¡ ¾Ë¸² "
+    "Cleanup Datebook"  = "ÀÏÁ¤°ü¸®¿¡¼­ Á¤¸® "
 	"To Do Notify" = "ÇÒ ÀÏ¿¡ ¾Ë¸² "
 	"Cleanup To Do"  = "ÇÒ ÀÏ¿¡¼­ Á¤¸® "
     "Export to Memo Pad" = "¸Þ¸ðÀåÀ¸·Î Àü¼Û "
@@ -187,7 +281,6 @@ BEGIN
 
     "Result Solar date:" = "º¯È¯µÈ ¾ç·Â ³¯Â¥ :"
 
-    
     "Records:" = "·¹ÄÚµå :"
       "all" = "ÀüºÎ"
       "selected" = "¼±ÅÃ"
@@ -199,7 +292,7 @@ BEGIN
     "Private:" = "°³ÀÎ¿ë :"
     "Alarm:" = "¾Ë¶÷ :"
     "Time:" = "½Ã°£ :"
-    "Icon" = "¾ÆÀÌÄÜ"
+    "More..." = "´õ..."
 
     "Repeat for:" = "¸î ³â°£ :"
     "years" = "³â"
@@ -249,17 +342,15 @@ BEGIN
     "Y.M.D" = "Y.M.D"
     "Y-M-D" = "Y-M-D"
 
-	"Date Book Icon" = "¾ÆÀÌÄÜ ¼³Á¤"
+	"DateBook Notify More" = "¾ÆÀÌÄÜ ¼³Á¤"
 	"Icon Support" = "¾ÆÀÌÄÜ Áö¿ø"
-	"AN Icon Number:" = "AN ¾ÆÀÌÄÜ ¹øÈ£: "
-	"DateBk3 Icon:" = "DateBk3 ¾ÆÀÌÄÜ: "
+	"AN ICON Number:" = "AN ¾ÆÀÌÄÜ ¹øÈ£: "
+	"DateBk3 ICON:" = "DateBk3 ¾ÆÀÌÄÜ: "
 
     "Days" = "ÀÏÀü"
-	"Date Book" = "ÀÏÁ¤°ü¸®"
+	"Datebook" = "ÀÏÁ¤°ü¸®"
 	"To Do" = "ÇÒ ÀÏ"
 	"Scan note field" = "ÁÖ¼Ò·ÏÀÇ ³ëÆ® ÇÊµå ÀÐ±â"
-    "%d day(s) left" = "%d ÀÏ ³²¾Ò½À´Ï´Ù"
-
 	
 	"Notify Format:" = "¾Ë¸² ·¹ÄÚµå Çü½Ä: "
 	"[Last, First] E(1) Year" = "[¼º, ÀÌ¸§] E(1) ³ªÀÌ"
@@ -268,11 +359,252 @@ BEGIN
 	"Event - First Last Year" = "Çà»ç - ÀÌ¸§ ¼º ³ªÀÌ"
 	"First Last Year" = "ÀÌ¸§ ¼º ³ªÀÌ"
 
-    
-
 	"Processing" = "ÁøÇàÁß"
 	"Processed : " = "Ã³¸®µÈ°Í : "
 END
+
+
+TRANSLATION "SPANISH"
+BEGIN
+    "Translator" = "Traducción: Fernando Calderón"
+    "Translator's email" = "jfcalderon@usa.net"
+
+    "long_notifySettingString" = ""\
+      "* Registros\n"\
+      "Seleccione \"Todos\" para crear notificaciones de "\
+      "todos los eventos en esta categoría. "\
+      "Selecione \"Marcado\" para notificar solamente el registo "\
+      "actual.\n\n"\
+      "* Existente\n"\
+      "Seleccione \"dejar\" si no desea alterar las notificaciones existentes. "\
+      "Seleccione \"cambiar\" para modificar estas entradas.\n\n"\
+      "* Alarma\n"\
+      "Para colocar la hora de alarma en la notificación. Indique "\
+      "el número de días de anticipación para la notificación.\n\n"\
+      "* Hora\n"\
+      "Hora del evento\n\n"\
+      "* Repetir\n"\
+      "Establece el intervalo de la notificación. "\
+      "Utilice -1 para repetir siempre en eventos solares y "\
+      "repetir por 5 años en eventos lunares.\n\n"
+
+    "long_notifySettingMoreString" = ""\
+      "Para el Número de Icono de Action Names consulte su manual. "\
+      "Los iconos de DateBk3 son leidos del bloc de notas. "\
+      "Si no existe la entrada de DateBk3 en el bloc de notas no se muestra información.\n"
+
+    "long_customErrorString" = ""\
+    "'Nacimiento' es el nombre personalizado por omisión."\
+    "Para establecer un campo personalizado diferente"\
+    " seleccione 'Preferencias'.\n\n"\
+    "IMPORTANTE: Necesitará utilizar Direcciones y seleccionar 'Opciones/"\
+    "Nombre campos pers...' para cambiar un campo personalizado a 'Nacimiento'"\
+    " o lo que desee establecer como nombre en las Preferencias de "\
+    "HappyDays.\n"
+
+    "long_aboutString" = ""\
+      "'HappyDays' le ayudará a recordar los cumpleaños y aniversarios "\
+      "de sus amigos y familiares, así como otros eventos.\n\n"\
+      "Use uno de los campos personalizados de la Agenda y renombrelo como 'Nacimiento'."\
+      "\n\nEjemplos:\n"\
+      " Apellidos: Jeong\n"\
+      " Nombre: JaeMok\n"\
+      " ...\n"\
+      " Nacimiento: -)12/4/1970\n\n"\
+      "Formatos:\n"\
+      " [-)|#)]Fecha\n"\
+      " -) calendario lunar\n"\
+      " #) calendario lunar bisiesto\n\n"\
+      "Se utiliza el formato de fecha de las preferencias del sistema. "\
+      "El año puede omitirse. Si escribe un año menor a 100 se asume del siglo 20. "\
+      "Si no está seguro del formato de año, escribalo en la forma AAAA (como 1970).\n\n"\
+      "Para entradas múltiples consulte el manual.\n"
+
+    "long_cleanupAlertString" = ""\
+    "Las notificaciones se consideran HappyDays si tienen "\
+	"{HappyDays ID} en el campo Nota. "\ 	
+    "Si usa este formato en sus propias entradas, "\
+    "este registro puede ser removido por la Limpieza.\n"
+
+    "long_prefFormString" = ""\
+	"* En lugar de fecha del sistema...\n"\
+	"Controla la interpretación del campo personalizado de Nacimiento. "\
+	"Si se omite, es el mismo que las preferencias de fecha del sistema.\n\n"\
+	"* Buscar en Notas\n"\
+	"Para buscar en el campo de notas, seleccione esta opción.\n\n"\
+      "* Enfatizar Fecha Lunar \n"\
+      "Si se selecciona, la linea punteada se dibuja junto a la fecha lunar.\n\n"\
+	"* Notify format\n"\
+	"The description format used for notification\n\n"\
+      "* Custom field\n"\
+      "The name of custom fields in Address Book used for INPUT\n\n"\
+      "* HappyDays ID\n"\
+      "Used for Notify and Cleanup\n"
+
+
+    "long_cantFindAddrString" = ""\
+      "Kein Benutzerfeld '%s' im Adreßbuch gefunden.\n"\
+      "Bitte ein Benutzerfeld umbenennen."
+
+    "Select Time" = "Establecer hora"
+    "No Time" = "Sin hora"
+    "Invalid input date" = "Fecha inválida"
+    "Export to Memo Pad is completed." = "Exportación a Bloc de notas lista."
+
+    "SUN"   = "DOM"
+    "MON"   = "LUN"
+    "TUE"   = "MAR"
+    "WED"   = "MIE"
+    "THU"   = "JUE"
+    "FRI"   = "VIE"
+    "SAT"   = "SAB"
+
+    "Not enough memory" = "Memoria Insuficiente"
+    "%d notify entry is created.\n" = "%d notificación creada.\n"
+    "%d existing entry " = "%d notificación existente "
+    "is kept untouched." = "sin modificar."
+    "is modified." = "modificada."
+
+    "Could not write prefs." = "No se ha podido guardar preferencias."
+    "Collecting Information..." = "Recolectando información..."
+
+    "HappyDays List" = "Lista HappyDays"
+    "Look up" = "Buscar"
+    "Today" = "Hoy"
+
+	"HappyDays View" = "Detalles HappyDays"
+    "Done"  = "Hecho"
+    "DB" = "Agenda"
+    "TD" = "Tareas"
+    "Goto" = "Ir a"
+
+    "Utilities" = "Utilerias"
+    "DateBook Notify" = "Notificar en Agenda"
+    "Cleanup Datebook"  = "Limpiar Agenda"
+    "To Do Notify" = "Notificar en Tareas"
+    "Cleanup To Do"  = "Limpiar Tareas"
+    "Export to Memo Pad" = "Exportar a Bloc de notas"
+    "Solar to Lunar" = "Solar -> Lunar"
+    "Lunar to Solar" = "Lunar -> Solar"
+
+    "Options" = "Opciones"
+    "Preferences" = "Preferencias"
+    "About HappyDays" = "Acerca de HappyDays"
+
+    "Edit" = "Edición"
+    "Undo" = "Deshacer"
+    "Cut" = "Cortar"
+    "Copy" = "Copiar"
+    "Paste" = "Pegar"
+    "Select All" = "Selec todo"
+    "Keyboard" = "Teclado"
+    "Graffiti" = "Ayuda de Graffiti"
+
+    "HappyDays Preferences" = "Preferencias de HappyDays"
+    "Custom field:" = "Campo pers:"
+    "HappyDays ID:" = "Identif. HappyDays:"
+    "Emphasize Lunar Date" = "Preferir Calendario Lunar"
+
+    "OK" = "Hecho"
+    "Cancel" = "Cancelar"
+
+    "Solar to Lunar Convert" = "Solar -> Lunar"
+    "Enter Solar date:" = "Indique la fecha Solar:"
+    "Year must be in 1881-2043" = "El Año debe ser entre 1881 y 2043"
+    "Result Lunar date:" = "Fecha Lunar resultado:"
+
+    "Convert" = "Convertir"
+
+    "Lunar to Solar Convert" = "Lunar -> Solar."
+    "Enter Lunar date:" = "Indique la fecha Lunar:"
+    "Leap" = "Bisiesto"
+    "Result Solar date:" = "Fecha Solar resultado:"
+
+    "Records:" = "Registros:"
+      "all" = "Todos"
+      "selected" = "Marcado"
+    "Existing:" = "Existente:"
+      "keep" = "dejar"
+      "modify" = "cambiar"
+    "Priority:" = "Prioridad:"
+	"Category:" = "Categoría:"
+    "Private:" = "Confidencial:"
+    "Alarm:" = "Alarma:"
+    "Time:" = "Hora:"
+    "More..." = "Más..."
+
+    "Repeat for:" = "Repetir:"
+    "years" = "año(s)"
+
+    "HappyDays says" = "HappyDays dice"
+
+    "HappyDays Export" = "Exportar HappyDays"
+    "Would you like to export HappyDays List to Memo Pad?" = ""\
+      "¿Desea exportar la lista HappyDays al Bloc de notas?"
+
+    "Custom Field Error" = "Error en campo personalizado"
+    "Help" = "Ayuda"
+
+
+    "HappyDays Cleanup" = "Limpiar HappyDays"
+
+    "Notify warning" = "Aviso"
+    "^1: Are you sure you want to create notify entries for ^2 HappyDays records?" = ""\
+      "^1: ¿Está seguro que desea crear notificaciones de HappyDays para ^2 registros?"
+
+    "Invalid event format" = "Formato de evento invalido."
+
+    "The address record for ^1\n contains an invalid event. How would you like to handle it?" = ""\
+      "El registro de agenda de ^1\n contiene un evento invalido. ¿Cómo desea proceder?"
+
+    "Ignore" = "Ignorar"
+    "Ignore all" = "Ignorar todos"
+
+    "Cleanup Done" = "Limpieza concluida"
+
+    "^1: ^2 HappyDays notify entries removed." = ""\
+      "^1: ^2 notificaciones de HappyDays eliminadas."
+
+    "Birthday" = "Nacimiento"
+    "All" = "Todos"
+    "HappyDays Export List" = "Exportar Lista HappyDays"
+    "(not exist in this year)" = "(no existe en este año)"
+    "Please run Date Book once first." = "Por favor selecione la Agenda primero."
+    
+    "Instead of system date format" = "Reemplazar el formato de fecha del sistema"
+    "Use" = "Usar"
+    "M/D/Y" = "M/D/A"
+    "D/M/Y" = "D/M/A"
+    "D.M.Y" = "D.M.A"
+    "D-M-Y" = "D-M-A"
+    "Y/M/D" = "A/M/D"
+    "Y.M.D" = "A.M.D"
+    "Y-M-D" = "A-M-D"
+
+	"DateBook Notify More" = "Más notificación de Agenda"
+      "Icon Support" = "Soporte de Iconos"
+	  "AN" = "AN"
+	  "DateBk3" = "DBk3"
+      "AN ICON Number:" = "Número Icono AN:"
+      "DateBk3 ICON:" = "Icono DateBk3:"
+
+    "Days" = "Días"
+	"Datebook" = "Agenda"
+	"To Do" = "Tareas"
+	"Scan note field" = "Buscar en Notas"
+	
+	"Notify Format:" = "Formato de Notificación:"
+    "[Last, First] E(1) Year" = "[Apellido, Nombre] E(1) Año"
+	"[First Last] E(1) Year" = "[Nombre Apellido] E(1) Año"
+	"Event - Last, First Year" = "Evento - Apellido, Nombre Año"
+	"Event - First Last Year" = "Evento - Nombre Apellido Año"
+	"First Last Year" = "Nombre Apellido Año"
+	
+	"Processing" = "Procesando"
+	"Processed : " = "Procesado : "	
+END
+
+
 STRING ID DateBookNotifyHelpString "long_notifySettingString"
 STRING ID DateBookNotifyMoreHelpString "long_notifySettingMoreString"
 STRING ID SelectDateString  "HappyDays"
@@ -309,9 +641,8 @@ STRING ID ViewNotExistString	"(not exist in this year)"
 STRING ID DateBookFirstAlertString  "Please run Date Book once first."
 STRING ID DateBookNotifyDaysString "Days"
 
-STRING ID DateBookString		"Date Book"
+STRING ID DateBookString		"Datebook"
 STRING ID ToDoString			"To Do"
-STRING ID BirthLeftString		"%d day(s) left"
 
 FORM StartForm AT (0 0 160 160)
 NOFRAME
@@ -355,18 +686,15 @@ BEGIN
 
 	FIELD ID BirthdateCategory AT (RIGHT@158 1 65 AUTO) RIGHTALIGN 
 		NONEDITABLE FONT 0
-
     FIELD ID BirthdateFirst AT (6 30 148 AUTO) NONEDITABLE FONT 2
-    FIELD ID BirthdateSecond AT (PrevLeft PrevBottom+2 148 AUTO) 
-		NONEDITABLE FONT 2
-    FIELD ID BirthdateCustom AT (PrevLeft PrevBottom+6 148 AUTO)
+    FIELD ID BirthdateSecond AT (PrevLeft PrevBottom+5 148 AUTO) NONEDITABLE
+        FONT 2
+    FIELD ID BirthdateCustom AT (PrevLeft PrevBottom+8 148 AUTO)
         NONEDITABLE FONT 1
     FIELD ID BirthdateDate AT (PrevLeft PrevBottom+3 148 AUTO)
         NONEDITABLE FONT 2
-    FIELD ID BirthdateOrigin AT (PrevLeft PrevBottom+1 148 AUTO)
+    FIELD ID BirthdateOrigin AT (PrevLeft PrevBottom+3 148 AUTO)
         NONEDITABLE FONT 0
-    FIELD ID BirthdateLeft AT (PrevLeft+42 PrevBottom+2 128 AUTO)
-		NONEDITABLE FONT 0
 
     BUTTON "Done" ID BirthdateDone AT (1 BOTTOM@159 AUTO AUTO)
     BUTTON "DB" ID BirthdateNotifyDB AT (PrevRight+6 PrevTop AUTO AUTO)
@@ -378,8 +706,8 @@ MENU ID MainFormMenu
 BEGIN
     PULLDOWN "Utilities"
     BEGIN
-        MENUITEM "Date Book Notify"   	MainFormMenuNotifyDatebook  "D"
-        MENUITEM "Cleanup Date Book"     MainFormMenuCleanupDatebook "C"
+        MENUITEM "DateBook Notify"   	MainFormMenuNotifyDatebook  "D"
+        MENUITEM "Cleanup Datebook"     MainFormMenuCleanupDatebook "C"
         MENUITEM "To Do Notify"   		MainFormMenuNotifyTodo		"T"
         MENUITEM "Cleanup To Do"       	MainFormMenuCleanupTodo 	"O"
         MENUITEM SEPARATOR
@@ -468,7 +796,7 @@ BEGIN
 	GRAFFITISTATEINDICATOR AT (PrevRight+5 PrevTop)
 END
 
-FORM ID Sl2LnForm AT (2 2 156 156)
+FORM ID Sl2LnForm AT (1 2 158 156)
 USABLE
 SAVEBEHIND
 MODAL
@@ -491,7 +819,7 @@ BEGIN
 
 END
 
-FORM ID Ln2SlForm AT (2 2 156 156)
+FORM ID Ln2SlForm AT (1 2 158 156)
 USABLE
 SAVEBEHIND
 MODAL
@@ -522,7 +850,7 @@ USABLE
 DEFAULTBTNID DateBookNotifyFormCancel
 HELPID  DateBookNotifyHelpString
 BEGIN
-    TITLE "Date Book Notify"
+    TITLE "DateBook Notify"
     LABEL "Records:" AUTOID AT (RIGHT@78 25) FONT 1
     PUSHBUTTON "all" ID NotifyFormRecordAll 
 			AT (PrevRight+5 PrevTop AUTO AUTO) GROUP 1
@@ -558,7 +886,7 @@ BEGIN
 
     BUTTON "OK" ID DateBookNotifyFormOk AT (5 Bottom@135 40 AUTO)
     BUTTON "Cancel" ID DateBookNotifyFormCancel AT (PrevRight+5 PrevTop 40 AUTO)
-	BUTTON "Icon" ID DateBookNotifyFormMore AT (RIGHT@150 PrevTop AUTO AUTO)
+	BUTTON "More..." ID DateBookNotifyFormMore AT (RIGHT@150 PrevTop AUTO AUTO)
 END
 
 FORM ID DateBookNotifyMoreForm AT (2 18 156 140)
@@ -567,7 +895,7 @@ MODAL
 USABLE
 HELPID  DateBookNotifyMoreHelpString
 BEGIN
-    TITLE "Date Book Icon"
+    TITLE "DateBook Notify More"
 
     CHECKBOX "Icon Support" ID DateBookNotifyFormIcon 
 			at (7 25 AUTO AUTO) RIGHTANCHOR FONT 0 
@@ -576,11 +904,11 @@ BEGIN
     PUSHBUTTON "DateBk3" ID DateBookNotifyFormBk3 AT (PrevRight+1
             PrevTop AUTO AUTO) GROUP 1
 
-	LABEL "AN Icon Number:" ID DateBookNotifyANLabel AT (5 PrevBottom+5) 
+	LABEL "AN ICON Number:" ID DateBookNotifyANLabel AT (5 PrevBottom+5) 
 	FIELD ID DateBookNotifyANInput AT (PrevRight+5 PrevTop 30 AUTO) 
 		UNDERLINED MAXCHARS 3
 
-	LABEL "DateBk3 Icon:" ID DateBookNotifyBk3Label AT (5 PrevBottom+2) 
+	LABEL "DateBk3 ICON:" ID DateBookNotifyBk3Label AT (5 PrevBottom+2) 
     TABLE ID DateBookNotifyBk3Table AT (7 PrevBottom 143 40) ROWS 4 
 		COLUMNS 13 COLUMNWIDTHS 10 10 10 10 10 10 10 10 10 10 10 10 10
 
@@ -696,7 +1024,7 @@ MODAL
 HELPID AboutHelpString
 BEGIN
     TITLE "HappyDays"
-    LABEL "HappyDays 1.34" AUTOID AT (Center@80 20) FONT 1
+    LABEL "HappyDays 1.24" AUTOID AT (Center@80 20) FONT 1
     LABEL "(c) 1999-2000, JaeMok Jeong"
         AUTOID AT (Center@80 PrevBottom+5) FONT 0
     LABEL "<jmjeong@oopsla.snu.ac.kr>" AUTOID AT (Center@80 PrevBottom)
@@ -725,7 +1053,7 @@ BEGIN
 END
 
 APPLICATIONICONNAME 1000 "HappyDays"
-ICON "HD_large.bmp"
-SMALLICON "HD_small.bmp"
+ICON "happydays.pbitm"
+SMALLICON "happydays-small.pbitm"
 
-VERSION ID 1 "1.34"
+VERSION 1 "1.24"
