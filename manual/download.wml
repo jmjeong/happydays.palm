@@ -8,10 +8,10 @@ File Download
 </h2>
 <p>
 <a
-href="ftp://jmjeong.com/pub/happydays/happydays-2.1b1.zip">happydays-2.1b1.zip</a>
+href="ftp://jmjeong.com/pub/happydays/happydays-2.1b2.zip">happydays-2.1b2.zip</a>
 - English version and manual<br>
 <a
-href="ftp://jmjeong.com/pub/happydays/happydays-src-2.1b1.zip">happydays-src-2.1b1.zip</a>
+href="ftp://jmjeong.com/pub/happydays/happydays-src-2.1b2.zip">happydays-src-2.1b2.zip</a>
 - source file<br>
 
 </P>
@@ -30,7 +30,7 @@ To get the latest CVS sources do the following
 $ export CVSROOT=":pserver:cvs@coconut.snu.ac.kr:/export/cvsroot"
 $ cvs login
 ( password = anonymous )
-$ cvs -z3 checkout -rver_21b1 happydays
+$ cvs -z3 checkout -rver_21b2 happydays
 </pre>
 
 <p>
@@ -52,13 +52,13 @@ translate/english.msg file.)<p>
 
 HappyDays has been translated into the following languages:  <p>
 <ul>
-  <li> <a href="ftp://jmjeong.com/pub/happydays/happydays-2.1b1-ko.zip">
-  Korean</a>(2.1 Beta 1) - by Jaemok Jeong<br>
+  <li> <a href="ftp://jmjeong.com/pub/happydays/happydays-2.1b2-ko.zip">
+  Korean</a>(2.1 Beta 2) - by Jaemok Jeong<br>
 	  (happydays-k8.prc for 8x8 font,
 	  happydays-k11.prc for 11x11 font)
   <li> <a
-      href="ftp://jmjeong.com/pub/happydays/happydays-2.08-de.zip">
-			German</a>(2.08 beta1)
+      href="ftp://jmjeong.com/pub/happydays/happydays-2.1b2-de.zip">
+			German</a>(2.1 Beta 2)
       - by  Gunther Zagatta
 			(<a href="mailto:zagatta@web.de">zagatta@web.de</a>)
   <li><a
@@ -119,7 +119,7 @@ HappyDays has been translated into the following languages:  <p>
   href="ftp://jmjeong.com/pub/happydays/happydays1.xx/happydays-1.45-catalan.zip">
 			Catalan</a>(1.45)
       - by Paco Rivière
-			(<a href="mailto:friviere@teleline.es">friviere@teleline.es</a>)
+			(<a href="mailto:friviere@wanadoo.es">friviere@wanadoo.es</a>)
   <li><a
   href="ftp://jmjeong.com/pub/happydays/happydays1.xx/happydays-1.45-dutch.zip">
 			Dutch</a>(1.45)
