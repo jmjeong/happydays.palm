@@ -52,7 +52,16 @@ BEGIN
     "입력되는 날짜의 형식을 시스템과 일치시키세요. '년도' 부분은 생략"\
     "가능합니다. 년도가 100보다 적은 경우에는 19xx년대를 뜻합니다."\
     "확신이 들지 않는 경우 그냥 '1970'처럼 4자리로 입력하세요.\n\n"\
-    "자세한 건 매뉴얼을 참조하세요.\n"
+    "자세한 건 매뉴얼을 참조하세요.\n\n"\
+	"HappyDays에서 출력하는 name1, name2는 AddressBook/Preferences의 "\
+	"List by에 의해 결정됩니다.\n\n"\
+	"HappyDays에서 사용되는 날짜 format은 Palm의 Global/Preferences/Format에 "\
+	"의해 결정됩니다. M/D/Y 형태인 경우에는 2/12/00과 같이 출력되고 "\
+	"D/M/Y의 경우 12/2/00과 같은 형태로 출력이 됩니다. 이 값은 설정메뉴에서 "\
+	"수정할 수 있습니다.\n\n"\
+	"그래피티 영역에 숫자를 쓴 경우 숫자에 해당하는 달의 HappyDays "\
+	"레코드들이 선택되어 표시됩니다. 마찬가지로 'a'를 쓴 경우 'A'나 'a'로 "\
+	"시작하는 레코드들이 선택됩니다.\n"
 
     "long_cleanupAlertString" = ""\
     "알림 레코드의 메모 필드에 {HD 식별자}가 있는 경우 "\
@@ -212,8 +221,9 @@ BEGIN
 	"^1: ^2 HappyDays notify entries removed." = ""\
 	"^1: ^2 개의 HappyDays 알림 레코드가 제거되었습니다."
 
-	"(c) 1999-2000, JaeMok Jeong" = "(c) 1999-2000, 정 재목"
-    "Licensed under the GNU GPL" = "GNU GPL 라이센스에 따릅니다"
+	"(c) 1999-2000 JaeMok Jeong" = "(c) 1999-2000 정 재목"
+    "GPL free software" = "GPL free software"
+	"E-Mail & Web Page" = "이메일 & 웹페이지"
 
     "(not exist in this year)" = "(올해엔 없는 날입니다)"
     "Please run Date Book once first." = "먼저 일정관리를 한번 수행하세요."
@@ -247,8 +257,10 @@ BEGIN
 	"Event - First Last Year" = "행사 - 이름 성 나이"
 	"First Last Year" = "이름 성 나이"
 
-    
-
 	"Processing" = "진행중"
 	"Processed : " = "처리된것 : "
+
+	"Name" = "이름"
+	"Date" = "생일"
+	"Age" = "나이"
 END
