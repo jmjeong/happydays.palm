@@ -612,7 +612,7 @@ STRING ID DateBookFirstAlertString  "Please run Date Book once first."
 STRING ID DateBookNotifyDaysString "Days"
 
 STRING ID DateBookString		"Datebook"
-STRING ID ToDoString			"ToDo"
+STRING ID ToDoString			"To Do"
 
 FORM StartForm AT (0 0 160 160)
 NOFRAME
@@ -654,7 +654,7 @@ MENUID ViewFormMenu
 BEGIN
     TITLE "HappyDays View"
 
-    LABEL " " ID BirthdateCategory AT (158 0) FONT 0    
+	FIELD ID BirthdateCategory AT (82 0 74 AUTO) RIGHTALIGN NONEDITABLE FONT 0
     FIELD ID BirthdateFirst AT (6 30 148 AUTO) NONEDITABLE FONT 2
     FIELD ID BirthdateSecond AT (PrevLeft PrevBottom+5 148 AUTO) NONEDITABLE
         FONT 2
@@ -677,8 +677,8 @@ BEGIN
     BEGIN
         MENUITEM "DateBook Notify"   	MainFormMenuNotifyDatebook  "D"
         MENUITEM "Cleanup Datebook"     MainFormMenuCleanupDatebook "C"
-        MENUITEM "ToDo Notify"   		MainFormMenuNotifyTodo		"T"
-        MENUITEM "Cleanup Todo"       	MainFormMenuCleanupTodo 	"O"
+        MENUITEM "To Do Notify"   		MainFormMenuNotifyTodo		"T"
+        MENUITEM "Cleanup To Do"       	MainFormMenuCleanupTodo 	"O"
         MENUITEM SEPARATOR
         MENUITEM "Export to Memo Pad"   MainFormMenuExport  		"E" 
         MENUITEM SEPARATOR
@@ -993,7 +993,7 @@ MODAL
 HELPID AboutHelpString
 BEGIN
     TITLE "HappyDays"
-    LABEL "HappyDays 1.21b" AUTOID AT (Center@80 20) FONT 1
+    LABEL "HappyDays 1.21b2" AUTOID AT (Center@80 20) FONT 1
     LABEL "© 1999-2000, JaeMok Jeong"
         AUTOID AT (Center@80 PrevBottom+5) FONT 0
     LABEL "<jmjeong@oopsla.snu.ac.kr>" AUTOID AT (Center@80 PrevBottom)

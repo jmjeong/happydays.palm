@@ -269,8 +269,7 @@ static Boolean IsSameRecord(Char* notefield, BirthDate birth)
     if (notefield && (p = StrStr(notefield,gPrefsR->BirthPrefs.notifywith))) {
         p += StrLen(gPrefsR->BirthPrefs.notifywith);
 
-        StrPrintF(gAppErrStr, "%ld-%ld",
-                  birth.addrRecordNum, Hash(birth.name1,birth.name2));
+        StrPrintF(gAppErrStr, "%ld", Hash(birth.name1,birth.name2));
         
         if (StrCompare(gAppErrStr, p) ==0) return true;
     }
@@ -920,7 +919,7 @@ Boolean SelectCategoryPopup(DmOpenRef dbP, UInt16* selected,
         if ((name = LstGetSelectionText(lst, newSelection))) {
             *selected = CategoryFind(dbP, name);
 
-            MemSet(string, sizeof(string), 0);
+            MemSet(string, dmCategoryLength, 0);
             MemMove(string, name, StrLen(name));
 
             gPrefsRdirty = true;
@@ -1167,13 +1166,18 @@ static void SetBirthdateViewForm(Int16 index, DateType converted)
         //  and MainDB doesn't have the category information
         //  so read the AddressDB information
         //
-        //  INFO: gAppErrStr's length is 40(must be larger than
+        //  INFO: gAppErrStr's length is 255(must be larger than
         //  dmCategoryLength)
         //
         //
+
+        
+        // FrmSetCategoryLabel(frm, FrmGetObjectIndex(frm, BirthdateCategory),
+        //                    gAppErrStr);
+        // error? (suggested by Mike McCollister)
+
         CategoryGetName(AddressDB, addrattr, gAppErrStr);
-        FrmSetCategoryLabel(frm, FrmGetObjectIndex(frm, BirthdateCategory),
-                            gAppErrStr);
+        SetFieldTextFromStr(BirthdateCategory, gAppErrStr);
         
         MemHandleUnlock(recordH);
     }
@@ -1669,8 +1673,7 @@ static Int16 PerformNotifyDB(BirthDate birth, DateType when,
     else noteField[0] = 0;
 
     StrCat(noteField, gPrefsR->BirthPrefs.notifywith);
-    StrPrintF(gAppErrStr, "%ld-%ld", birth.addrRecordNum,
-              Hash(birth.name1, birth.name2));
+    StrPrintF(gAppErrStr, "%ld", Hash(birth.name1, birth.name2));
     StrCat(noteField, gAppErrStr);
     datebook.note = noteField;
 
@@ -1742,8 +1745,7 @@ static Int16 PerformNotifyTD(BirthDate birth, DateType when,
     todo.priority = gPrefsR->TDNotifyPrefs.priority;
 
     StrCopy(noteField, gPrefsR->BirthPrefs.notifywith);
-    StrPrintF(gAppErrStr, "%ld-%ld", birth.addrRecordNum,
-              Hash(birth.name1, birth.name2));
+    StrPrintF(gAppErrStr, "%ld", Hash(birth.name1, birth.name2));
     StrCat(noteField, gAppErrStr);
     todo.note = noteField;
 

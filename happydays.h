@@ -58,7 +58,7 @@ struct sDBNotifyPrefs
 struct sTDNotifyPrefs 
 {
     char priority;			// priority of TODO
-    char todoCategory[33];
+    char todoCategory[dmCategoryLength];
 };
 
 struct sBirthPrefs 
@@ -88,7 +88,7 @@ struct sPrefsR
     // HideSecretRecord in system global preference
     Boolean gHideSecretRecord;
     
-    char addrCategory[33];
+    char addrCategory[dmCategoryLength];
     char adrcdate[4], adrmdate[4];      // address book create/modify date
     char memcdate[4], memmdate[4];      // memo create/modify date
 };
