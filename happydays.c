@@ -1488,7 +1488,7 @@ static Char* gNotifyFormatString[5] =
 //
 // Memory is alloced, after calling this routine, user must free the memory
 //
-static Char* NotifyDescString(DateType when, BirthDate birth)
+static Char* NotifyDescString(DateType when, BirthDate birth, Boolean todo)
 {
     Char* description, *pDesc;
     Char* pfmtString;
@@ -1567,7 +1567,8 @@ static Char* NotifyDescString(DateType when, BirthDate birth)
                     pDesc += StrLen(pDesc);
                 }
                 if (birth.flag.bits.year) {
-                    if (!birth.flag.bits.solar || gPrefsR->DBNotifyPrefs.duration ==1) {
+                    if (!birth.flag.bits.solar 
+							|| gPrefsR->DBNotifyPrefs.duration ==1 || todo) {
                         age = CalculateAge(when, birth.date, birth.flag);
                         if (age >= 0) {
                             StrPrintF(gAppErrStr, " (%d)", age);
@@ -1576,8 +1577,7 @@ static Char* NotifyDescString(DateType when, BirthDate birth)
                     }
                     else if (birth.flag.bits.solar 
 								&& gPrefsR->DBNotifyPrefs.duration != 1) {
-                        StrPrintF(gAppErrStr, "%2d", 
-									(birth.date.year + 1904) % 100);
+                        StrPrintF(gAppErrStr, "%d", birth.date.year + 1904 );
                         StrCopy(pDesc, gAppErrStr);
                     }
                     pDesc += StrLen(pDesc);
@@ -1671,7 +1671,7 @@ static Int16 PerformNotifyDB(BirthDate birth, DateType when,
 
     // make the description
         
-    description = NotifyDescString(when, birth);
+    description = NotifyDescString(when, birth, false);	// todo = false
     datebook.description = description;
 
     if (existIndex < 0) {            // there is no same record
@@ -1743,7 +1743,7 @@ static Int16 PerformNotifyTD(BirthDate birth, DateType when,
 
     // make the description
         
-    description = NotifyDescString(when, birth);
+    description = NotifyDescString(when, birth, true);		// todo = true
     todo.description = description;
 
     // category adjust
