@@ -54,7 +54,6 @@ BEGIN
       "Wenn Sie im Graffiti Feld eine Zahl oder einen Buchstaben schreiben, wird die "\
       "passende Zeile markiert. Zum Beispiel wird bei 'a' der erste Eintrag markiert, der mit "\
       "'a' oder 'A' beginnt. Wenn Sie eine '3' schreiben, wird der erste Eintrag im März markiert.\n"
-
     "long_cleanupAlertString" =  ""\
       "Einträge werden als HappyDays Ereignis angenommen, wenn sie in der Notiz "\
       "die HappyDays ID enthalten. Wenn Sie diese auch in Ihren eigenen Einträgen "\
@@ -111,9 +110,9 @@ BEGIN
     "%d day(s) left" =  "Noch %d Tag(e)"
     "%d day(s) passed" =  "Vor %d Tag(en)"
 
-    "Name"= "Name"
-    "Date"= "Datum"
-    "Age"= "Alter"
+    "Name" =  "Name"
+    "Date" =  "Datum"
+    "Age" =  "Alter"
 
     "Collecting Information..." =  "Daten werden eingelesen..."
 
@@ -172,6 +171,9 @@ BEGIN
     "Custom field:" =  "Benutzerfeld:"
     "HappyDays ID:" =  "HappyDays ID:"
 
+    "Address Book:"= "Adressbuch"
+    "Built-in"= "intern"
+
     "OK" =  "OK"
     "Cancel" =  "Abbruch"
 
@@ -206,7 +208,7 @@ BEGIN
     "Repeat for:" =  "Wiederholung:"
     "years" =  "Jahr(e)"
 
-    "Icon"= "Icon"
+    "Icon" =  "Icon"
 
     "Date Book Icon" =  "Erweiterte Einstellungen"
 
@@ -252,5 +254,4 @@ BEGIN
 
     "Processing" =  "Arbeite"
     "Processed : " =  "Bearbeitet : "
-
 END

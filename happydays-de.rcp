@@ -74,7 +74,6 @@ BEGIN
       "Wenn Sie im Graffiti Feld eine Zahl oder einen Buchstaben schreiben, wird die "\
       "passende Zeile markiert. Zum Beispiel wird bei 'a' der erste Eintrag markiert, der mit "\
       "'a' oder 'A' beginnt. Wenn Sie eine '3' schreiben, wird der erste Eintrag im März markiert.\n"
-
     "long_cleanupAlertString" =  ""\
       "Einträge werden als HappyDays Ereignis angenommen, wenn sie in der Notiz "\
       "die HappyDays ID enthalten. Wenn Sie diese auch in Ihren eigenen Einträgen "\
@@ -131,9 +130,9 @@ BEGIN
     "%d day(s) left" =  "Noch %d Tag(e)"
     "%d day(s) passed" =  "Vor %d Tag(en)"
 
-    "Name"= "Name"
-    "Date"= "Datum"
-    "Age"= "Alter"
+    "Name" =  "Name"
+    "Date" =  "Datum"
+    "Age" =  "Alter"
 
     "Collecting Information..." =  "Daten werden eingelesen..."
 
@@ -192,6 +191,9 @@ BEGIN
     "Custom field:" =  "Benutzerfeld:"
     "HappyDays ID:" =  "HappyDays ID:"
 
+    "Address Book:"= "Adressbuch"
+    "Built-in"= "intern"
+
     "OK" =  "OK"
     "Cancel" =  "Abbruch"
 
@@ -226,7 +228,7 @@ BEGIN
     "Repeat for:" =  "Wiederholung:"
     "years" =  "Jahr(e)"
 
-    "Icon"= "Icon"
+    "Icon" =  "Icon"
 
     "Date Book Icon" =  "Erweiterte Einstellungen"
 
@@ -272,7 +274,6 @@ BEGIN
 
     "Processing" =  "Arbeite"
     "Processed : " =  "Bearbeitet : "
-
 END
 STRING ID DateBookNotifyHelpString "long_notifySettingString"
 STRING ID DateBookNotifyMoreHelpString "long_notifySettingMoreString"
@@ -480,12 +481,13 @@ BEGIN
     LABEL "Address Book:" AUTOID AT (10 PrevBottom)
     LIST 	"Built-in" 
 			"Address.kr" 
+			"Address Album"
 			"AddressBkR" 
 			"Address Plus(+)"
 			"Super Names" 
 			"TealPhone"
          ID PrefFormAddress
-         AT (PREVRIGHT+4 PREVTOP 70 AUTO) VISIBLEITEMS 6 NONUSABLE
+         AT (PREVRIGHT+4 PREVTOP 70 AUTO) VISIBLEITEMS 7 NONUSABLE
     POPUPTRIGGER "" ID PrefFormAddrTrigger
                  AT (PrevLeft PrevTop-1 40 13) LEFTANCHOR
     POPUPLIST ID PrefFormAddrTrigger PrefFormAddress
@@ -725,7 +727,7 @@ BEGIN
     TITLE "About HappyDays"
 
 	FORMBITMAP AT (6 18) BITMAP ID_BitmapIcon USABLE 
-    LABEL "HappyDays 1.44" AUTOID AT (PrevRight+38 PrevTop) FONT 1
+    LABEL "HappyDays 1.44b" AUTOID AT (PrevRight+38 PrevTop) FONT 1
     LABEL "GPL free software"
         AUTOID AT (PrevLeft PrevTop+ABOUT_LINE_SPACING) FONT 0
     LABEL "(c) 1999-2001 JaeMok Jeong"
