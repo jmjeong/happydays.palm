@@ -829,6 +829,7 @@ static Boolean Sl2LnFormHandleEvent(EventPtr e)
 
         case Sl2LnFormOk:
             FrmReturnToForm(0);
+			gFormID = MainForm;			// used for SpecialKeyDown
 
             handled = true;
             break;
@@ -871,6 +872,7 @@ static Boolean Ln2SlFormHandleEvent(EventPtr e)
         switch(e->data.ctlSelect.controlID) {
         case Ln2SlFormOk:
             FrmReturnToForm(0);
+			gFormID = MainForm;			// used for SpecialKeyDown
 
             handled = true;
             break;
@@ -1235,6 +1237,7 @@ static void MainFormLoadTable(FormPtr frm, Boolean redraw)
     int row;
 
     tableP = GetObjectPointer(frm, MainFormTable);
+	gFormID = MainForm;			// used for SpecialKeyDown
 
     if (redraw) {
         TblEraseTable(tableP);
@@ -1787,6 +1790,8 @@ static Boolean NotifyFormHandleEvent(EventPtr e)
                 MemPtrFree(info);
             } 
             FrmReturnToForm(0);
+			gFormID = MainForm;			// used for SpecialKeyDown
+
             handled = true;
             break;
         }
@@ -1796,6 +1801,8 @@ static Boolean NotifyFormHandleEvent(EventPtr e)
             WritePrefsRec();
 
             FrmReturnToForm(0);
+			gFormID = MainForm;			// used for SpecialKeyDown
+
             handled = true;
             break;
 
@@ -2171,6 +2178,8 @@ static Boolean BirthdateFormHandleEvent(EventPtr e)
         switch(e->data.ctlSelect.controlID) {
         case BirthdateDone:
             FrmReturnToForm(0);
+			gFormID = MainForm;			// used for SpecialKeyDown
+
             handled = true;
             break;
         case BirthdateNotify:
@@ -2584,11 +2593,13 @@ static Boolean SpecialKeyDown(EventPtr e)
             
         if (keyboardAlphaChr == chr) {
             gPrefsR->BirthPrefs.sort = '0';     // sort by name
+			SndPlaySystemSound(sndClick);
             FrmUpdateForm(MainForm, frmRedrawUpdateCode);
             return true;
         }
         else if (keyboardNumericChr == chr) {
             gPrefsR->BirthPrefs.sort = '1';     // sort by date
+			SndPlaySystemSound(sndClick);
             FrmUpdateForm(MainForm, frmRedrawUpdateCode);
             return true;
         }

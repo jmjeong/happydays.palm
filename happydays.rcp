@@ -769,7 +769,6 @@ BEGIN
     BUTTON "Convert" ID Sl2LnFormConvert AT
             (10 BOTTOM@153 40 AUTO)
     BUTTON "OK" ID Sl2LnFormOk AT (PrevRight+5 PrevTop 40 AUTO)
-	GRAFFITISTATEINDICATOR AT (PrevRight+5 PrevTop)
 
 END
 
@@ -794,7 +793,6 @@ BEGIN
     BUTTON "Convert" ID Ln2SlFormConvert AT
             (10 BOTTOM@153 40 AUTO)
     BUTTON "OK" ID Ln2SlFormOk AT (PrevRight+5 PrevTop 40 AUTO)
-	GRAFFITISTATEINDICATOR AT (PrevRight+5 PrevTop)
 
 END
 
@@ -840,7 +838,6 @@ BEGIN
 
     BUTTON "OK" ID NotifySettingFormOk AT (5 Bottom@135 40 AUTO)
     BUTTON "Cancel" ID NotifySettingFormCancel AT (PrevRight+5 PrevTop 40 AUTO)
-	GRAFFITISTATEINDICATOR AT (PrevRight+5 PrevTop)
 	BUTTON "More..." ID NotifySettingFormMore AT (RIGHT@150 PrevTop AUTO AUTO)
 END
 
