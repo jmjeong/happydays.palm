@@ -58,12 +58,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define PrefForm                    1300
 #define PrefFormCustomField         1301
-#define PrefFormInternal            1302
+#define PrefFormEmphasize           1302
 #define PrefFormOk					1303
 #define PrefFormCancel				1304
 #define PrefFormSortDate            1305
 #define PrefFormSortName            1306
 #define PrefFormNotifyWith          1307
+#define PrefFormScanNote          	1308
 
 #define NotifySettingForm           1400
 #define NotifySettingFormRecordAll  1401
@@ -77,7 +78,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define NotifySettingFormOk         1420
 #define NotifySettingFormCancel     1421
 #define NotifySettingFormDuration   1422
-#define NotifySettingFormBK3    	1423
+#define NotifySettingFormHide    	1423
+#define NotifySettingFormMore    	1424
+#define NotifySettingFormLabelDays	1425
+
+#define NotifySettingMoreForm		1450
+#define NotifySettingMoreFormOk		1451
+#define NotifySettingFormIcon		1453
+#define NotifySettingFormBk3		1454
+#define NotifySettingFormAN			1455
+#define NotifySettingBk3Table		1456
+
 #define NotifySettingHelpString     1499
 
 #define Sl2LnForm                   1500
@@ -137,5 +148,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define ExportHeaderString			1929
 #define ViewNotExistString			1930
 #define DateBookFirstAlertString	1931
+#define NotifySettingDaysString		1932
 
 #define ExportAlert                 1990

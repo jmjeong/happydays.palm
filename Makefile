@@ -49,7 +49,11 @@ $(TARGET)-km.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGE
 $(TARGET)-de.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGET).grc pref0000.$(TARGET).grc rloc0000.$(TARGET).grc bin-de.res
 	$(BUILDPRC) $(TARGET)-de.prc $(APPNAME) $(APPID) code0001.$(TARGET).grc code0000.$(TARGET).grc data0000.$(TARGET).grc *.bin pref0000.$(TARGET).grc rloc0000.$(TARGET).grc
 
-code0000.$(TARGET).grc: $(TARGET)
+code0000.$(TARGET)-de.grc: $(TARGET)-de
+	$(OBJRES) $(TARGET)
+	mv code0000.$(TARGET).grc code0000.$(TARGET)-de.grc
+
+code0000.$(TARGET)-en.grc: $(TARGET)-en
 	$(OBJRES) $(TARGET)
 
 code0001.$(TARGET).grc: code0000.$(TARGET).grc
@@ -77,7 +81,6 @@ bin-de.res: $(TARGET).rcp $(TARGET).pbitm
 	touch bin.res
 
 alwaysmake:
-	touch happydays.c
 	rm -f bin.res
 
 $(TARGET): $(OBJS)

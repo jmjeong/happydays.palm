@@ -44,11 +44,14 @@ struct sNotifyPrefs
     char records;
     char existing;
     char private;
-	char datebk3;			// datebk3 icon used? 
+	char hide_id;			// make HappyDays id in note field
     char alarm;             // alarm set?
+    char icon;              // icon?
+    char datebk3icon;       // datebook 3 icon
     int  notifybefore;      // prenotify duration
     int  duration;          // interval of notified records
     TimeType when;          // no-time
+    char an_icon[10];       // action name icon?
 };
 
 struct sBirthPrefs 
@@ -56,7 +59,8 @@ struct sBirthPrefs
     char custom[12+1];          // addr label length
     char notifywith[5+1];       // notify with (HD)
     char sort;                  // sorting order
-    char internal;              // internal option(used for emphasize lunar)
+    char emphasize;             // emphasize lunar
+    char scannote;              // scan from note field?
 };
 
 struct sPrefsR 

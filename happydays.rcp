@@ -558,6 +558,7 @@ STRING ID CantWritePrefsString  "Could not write prefs."
 STRING ID ExportHeaderString 	"HappyDays Export List"
 STRING ID ViewNotExistString	"(not exist in this year)"
 STRING ID DateBookFirstAlertString  "Please run Date Book once first."
+STRING ID NotifySettingDaysString "Days"
 
 FORM StartForm AT (0 0 160 160)
 NOFRAME
@@ -660,7 +661,7 @@ BEGIN
     END
 END
 
-FORM ID PrefForm AT (2 53 156 105)
+FORM ID PrefForm AT (2 33 156 125)
 FRAME
 MODAL
 USABLE
@@ -681,10 +682,14 @@ BEGIN
             PrevTop AUTO AUTO) GROUP 1
 
     LABEL "Emphasize Lunar:" AUTOID AT (RIGHT@88 PrevBottom+3) FONT 1
-    CHECKBOX " " ID PrefFormInternal at (PrevRight+3
+    CHECKBOX " " ID PrefFormEmphasize at (PrevRight+3
         PrevTop AUTO AUTO) RIGHTANCHOR FONT 0
 
-    BUTTON "OK" ID PrefFormOk AT (5 BOTTOM@98 40 AUTO)
+    LABEL "Scan from note:" AUTOID AT (RIGHT@88 PrevBottom+3) FONT 1
+    CHECKBOX " " ID PrefFormScanNote at (PrevRight+3
+        PrevTop AUTO AUTO) RIGHTANCHOR FONT 0
+
+    BUTTON "OK" ID PrefFormOk AT (5 BOTTOM@118 40 AUTO)
     BUTTON "Cancel" ID PrefFormCancel AT (PrevRight+5 PrevTop 40 AUTO)
 END
 
@@ -758,19 +763,20 @@ BEGIN
     CHECKBOX " " ID NotifySettingFormPrivate at (PrevRIght+3
         PrevTop AUTO AUTO) RIGHTANCHOR FONT 1 
 
-    LABEL "Datebk3 icon:" AUTOID AT (RIGHT@88 PrevBottom+1) FONT 1
-    CHECKBOX " " ID NotifySettingFormBK3 at (PrevRight+3
-            PrevTop AUTO AUTO) RIGHTANCHOR FONT 1 CHECKED
+    LABEL "HappyDays Id:" AUTOID AT (RIGHT@88 PrevBottom+1) FONT 1
+    CHECKBOX "note" ID NotifySettingFormHide at (PrevRIght+3
+        PrevTop AUTO AUTO) RIGHTANCHOR FONT 0 
 
     LABEL "Alarm:" AUTOID AT (RIGHT@88 PrevBottom+1) FONT 1
     CHECKBOX "" ID NotifySettingFormAlarm at (PrevRIght+3 PrevTop
-            AUTO AUTO) LEFTANCHOR FONT 1
+            AUTO AUTO) RIGHTANCHOR FONT 1
+    FIELD ID NotifySettingFormBefore AT (PrevRight+2 PrevTop 13 AUTO)
+        UNDERLINED MAXCHARS 2
+    FIELD  ID NotifySettingFormLabelDays AT (PrevRight PrevTop 30 AUTO) NONEDITABLE 
+
+    LABEL "Time:" AUTOID AT (RIGHT@88 PrevBottom+1) FONT 1
     SELECTORTRIGGER "" ID NotifySettingFormTime at (PrevRight+3 PrevTop
             AUTO AUTO) LEFTANCHOR FONT 0
-        
-    LABEL "# of days before:" AUTOID AT (RIGHT@88 PrevBottom) Font 1
-    FIELD ID NotifySettingFormBefore AT (PrevRight+3 PrevTop 13 AUTO)
-        UNDERLINED MAXCHARS 2
 
     LABEL "Repeat for:" AUTOID AT (RIGHT@88 PrevBottom+1) FONT 1
     FIELD ID NotifySettingFormDuration AT (PrevRight+3 PrevTop 13 AUTO)
@@ -779,6 +785,26 @@ BEGIN
 
     BUTTON "OK" ID NotifySettingFormOk AT (5 Bottom@135 40 AUTO)
     BUTTON "Cancel" ID NotifySettingFormCancel AT (PrevRight+5 PrevTop 40 AUTO)
+	BUTTON "More..." ID NotifySettingFormMore AT (RIGHT@150 PrevTop AUTO AUTO)
+END
+
+FORM ID NotifySettingMoreForm AT (2 18 156 140)
+FRAME
+MODAL
+USABLE
+HELPID  NotifySettingHelpString
+BEGIN
+    TITLE "Notify Settings"
+
+    CHECKBOX "Icon Support" ID NotifySettingFormIcon 
+			at (10 20 AUTO AUTO) RIGHTANCHOR FONT 0 
+    PUSHBUTTON "DateBk3" ID NotifySettingFormBk3 AT (PrevRight+3
+            PrevTop AUTO AUTO) GROUP 1
+    PUSHBUTTON "AN" ID NotifySettingFormAN AT (PrevRight+1
+            PrevTop AUTO AUTO) LEFTANCHOR GROUP 1
+    TABLE ID NotifySettingBk3Table AT (0 PrevBottom+10 160 48) ROWS 4 COLUMNS 13
+
+    BUTTON "OK" ID NotifySettingMoreFormOk AT (5 Bottom@135 40 AUTO)
 END
 
 ALERT ID ErrorAlert INFORMATION
@@ -839,7 +865,7 @@ MODAL
 HELPID AboutHelpString
 BEGIN
     TITLE "HappyDays"
-    LABEL "HappyDays 1.01" AUTOID AT (Center@80 20) FONT 1
+    LABEL "HappyDays 1.1" AUTOID AT (Center@80 20) FONT 1
     LABEL "(c) 1999-2000, JaeMok Jeong"
         AUTOID AT (Center@80 PrevBottom+5) FONT 0
     LABEL "<jmjeong@oopsla.snu.ac.kr>" AUTOID AT (Center@80 PrevBottom)
@@ -862,4 +888,4 @@ APPLICATIONICONNAME 1000 "HappyDays"
 ICON "happydays.pbitm"
 SMALLICON "happydays-small.pbitm"
 
-VERSION 1 "1.01"
+VERSION 1 "1.1"

@@ -57,11 +57,11 @@ VoidHand PrefsRecHandle, PrefsRHandle;
 UInt PrefsRecIndex;
 struct sPrefsR *gPrefsR;
 struct sPrefsR DefaultPrefsR = {
-    {  '0', '0', '0', '0', '1', 3, 1, {8, 0} },
+    {  '0', '0', '0', '1', '1', '0', '0', 3, 1, {8, 0}, "ICON: 145" },
 #ifdef GERMAN
-    {  "Birthday", "HD:", '1', '0' },
+    {  "Geburtstag", "HD:", '1', '0', '0' },
 #else
-    {  "Geburtstag", "HD:", '1', '0' },
+    {  "Birthday", "HD:", '1', '0', '0' },
 #endif
     0,
 #ifdef GERMAN
@@ -572,11 +572,11 @@ static void LoadPrefsFields()
     SetFieldTextFromStr(PrefFormCustomField, gPrefsR->BirthPrefs.custom);
     SetFieldTextFromStr(PrefFormNotifyWith, gPrefsR->BirthPrefs.notifywith);
 
-    if (gPrefsR->BirthPrefs.internal == '1') {
-        CtlSetValue(GetObjectPointer(frm, PrefFormInternal), 1);
+    if (gPrefsR->BirthPrefs.emphasize == '1') {
+        CtlSetValue(GetObjectPointer(frm, PrefFormEmphasize), 1);
     }
     else {
-        CtlSetValue(GetObjectPointer(frm, PrefFormInternal), 0);
+        CtlSetValue(GetObjectPointer(frm, PrefFormEmphasize), 0);
     }
 
     if (gPrefsR->BirthPrefs.sort == '0') {
@@ -585,6 +585,13 @@ static void LoadPrefsFields()
     else {
         CtlSetValue(GetObjectPointer(frm, PrefFormSortDate), 1);
     }
+    if (gPrefsR->BirthPrefs.scannote == '0') {
+        CtlSetValue(GetObjectPointer(frm, PrefFormScanNote), 0);
+    }
+    else {
+        CtlSetValue(GetObjectPointer(frm, PrefFormScanNote), 1);
+    }
+
 }
 
 static void UnloadPrefsFields()
@@ -612,9 +619,13 @@ static void UnloadPrefsFields()
     if (CtlGetValue(ptr)) gPrefsR->BirthPrefs.sort = '1';
     else gPrefsR->BirthPrefs.sort = '0';
 
-    ptr = GetObjectPointer(frm, PrefFormInternal);
-    if (CtlGetValue(ptr)) gPrefsR->BirthPrefs.internal = '1';
-    else gPrefsR->BirthPrefs.internal = '0';
+    ptr = GetObjectPointer(frm, PrefFormEmphasize);
+    if (CtlGetValue(ptr)) gPrefsR->BirthPrefs.emphasize = '1';
+    else gPrefsR->BirthPrefs.emphasize = '0';
+
+    ptr = GetObjectPointer(frm, PrefFormScanNote);
+    if (CtlGetValue(ptr)) gPrefsR->BirthPrefs.scannote = '1';
+    else gPrefsR->BirthPrefs.scannote = '0';
 }
 
 static Boolean PrefFormHandleEvent(EventPtr e)
@@ -1028,7 +1039,7 @@ static void MainFormDrawRecord(VoidPtr tableP, Word row, Word column,
 					 bounds->topLeft.x + bounds->extent.x -
 					 MAINTABLEAGEFIELD - width, y);
 
-        if (gPrefsR->BirthPrefs.internal == '1'
+        if (gPrefsR->BirthPrefs.emphasize == '1'
             && drawRecord.date.year != INVALID_CONV_DATE
             && (r.flag.bits.lunar || r.flag.bits.lunar_leap)) {
             // draw gray line
@@ -1264,23 +1275,25 @@ static void LoadNotifyPrefsFields(void)
     else {
         CtlSetValue(GetObjectPointer(frm, NotifySettingFormPrivate), 0);
     }
-
-    if (gPrefsR->NotifyPrefs.datebk3 == '1') {
-        CtlSetValue(GetObjectPointer(frm, NotifySettingFormBK3), 1);
+    if (gPrefsR->NotifyPrefs.hide_id == '1') {
+        CtlSetValue(GetObjectPointer(frm, NotifySettingFormHide), 1);
     }
     else {
-        CtlSetValue(GetObjectPointer(frm, NotifySettingFormBK3), 0);
+        CtlSetValue(GetObjectPointer(frm, NotifySettingFormHide), 0);
 	}
-
     if (gPrefsR->NotifyPrefs.alarm == '1') {
         CtlSetValue(GetObjectPointer(frm, NotifySettingFormAlarm), 1);
         FrmShowObject(frm, 
             FrmGetObjectIndex(frm, NotifySettingFormBefore));
+
+		SysCopyStringResource(gAppErrStr, NotifySettingDaysString);
+		SetFieldTextFromStr(NotifySettingFormLabelDays, gAppErrStr);
     }
     else {
         CtlSetValue(GetObjectPointer(frm, NotifySettingFormAlarm), 0);
         FrmHideObject(frm,
             FrmGetObjectIndex(frm, NotifySettingFormBefore));
+		ClearFieldText(NotifySettingFormLabelDays);
     }
     
     SetFieldTextFromStr(NotifySettingFormBefore,
@@ -1311,9 +1324,9 @@ static void UnloadNotifyPrefsFields()
     if ( CtlGetValue(ptr) ) gPrefsR->NotifyPrefs.private = '1';
     else gPrefsR->NotifyPrefs.private = '0';
 
-    ptr = GetObjectPointer(frm, NotifySettingFormBK3);
-    if (CtlGetValue(ptr)) gPrefsR->NotifyPrefs.datebk3 = '1';
-    else gPrefsR->NotifyPrefs.datebk3 = '0';
+    ptr = GetObjectPointer(frm, NotifySettingFormHide);
+    if (CtlGetValue(ptr)) gPrefsR->NotifyPrefs.hide_id = '1';
+    else gPrefsR->NotifyPrefs.hide_id = '0';
 
     ptr = GetObjectPointer(frm, NotifySettingFormAlarm);
     if ( CtlGetValue(ptr) ) gPrefsR->NotifyPrefs.alarm = '1';
@@ -1436,7 +1449,7 @@ static Int PerformNotify(BirthDate birth, DateType when,
 
 	// if datebook is datebk3, set icon
 	//
-	if (gPrefsR->NotifyPrefs.datebk3 == '1') {
+	if (gPrefsR->NotifyPrefs.icon == '1') {
     	datebook.note = DATEBK3_ICON;
 	}
 	else datebook.note = NULL;
@@ -1713,19 +1726,31 @@ static Boolean NotifyFormHandleEvent(EventPtr e)
             handled = true;
             break;
 
+		case NotifySettingFormMore:
+            FrmPopupForm(NotifySettingMoreForm);
+
+            handled = true;
+            break;
+
         case NotifySettingFormAlarm:
             if (CtlGetValue(GetObjectPointer(frm,
                                              NotifySettingFormAlarm))) {
                 FrmShowObject(frm,
                     FrmGetObjectIndex(frm, NotifySettingFormBefore));
+
+				SysCopyStringResource(gAppErrStr, NotifySettingDaysString);
+				FldDrawField(SetFieldTextFromStr(NotifySettingFormLabelDays, 
+							gAppErrStr));
             }
             else {
                 FrmHideObject(frm, 
                     FrmGetObjectIndex(frm, NotifySettingFormBefore));
+				FldDrawField(ClearFieldText(NotifySettingFormLabelDays));
             }
             
             handled = true;
             break;
+
         case NotifySettingFormTime:
         {
             TimeType startTime, endTime;
@@ -1754,6 +1779,106 @@ static Boolean NotifyFormHandleEvent(EventPtr e)
             break;
         }
             
+        default:
+            break;
+        }
+    case menuEvent:
+        MenuEraseStatus(NULL);
+        handled = true;
+        break;
+
+    default:
+        break;
+    }
+
+    CALLBACK_EPILOGUE;
+
+    return handled;
+}
+
+static void LoadNotifyPrefsFieldsMore(void)
+{
+    FormPtr frm;
+
+    if ((frm = FrmGetFormPtr(NotifySettingMoreForm)) == 0) return;
+
+    if (gPrefsR->NotifyPrefs.icon == '0') {
+        CtlSetValue(GetObjectPointer(frm, NotifySettingFormIcon), 0);
+        CtlSetUsable(GetObjectPointer(frm, NotifySettingFormBk3), false);
+        CtlSetUsable(GetObjectPointer(frm, NotifySettingFormAN), false);
+    }
+    else {
+        CtlSetValue(GetObjectPointer(frm, NotifySettingFormIcon), 1);
+    }
+    if (gPrefsR->NotifyPrefs.icon == '1') {
+        CtlSetValue(GetObjectPointer(frm, NotifySettingFormBk3), 1);
+    }
+    else {
+        CtlSetValue(GetObjectPointer(frm, NotifySettingFormAN), 1);
+    }
+}
+
+static void UnloadNotifyPrefsFieldsMore()
+{
+    FormPtr frm;
+    ControlPtr ptr;
+    
+    if ((frm = FrmGetFormPtr(NotifySettingMoreForm)) == 0) return;
+    
+    ptr = GetObjectPointer(frm, NotifySettingFormIcon);
+    if (!CtlGetValue(ptr)) gPrefsR->NotifyPrefs.icon = '0';
+    else {
+        ptr = GetObjectPointer(frm, NotifySettingFormBk3);
+        if (CtlGetValue(ptr)) gPrefsR->NotifyPrefs.icon = '1';
+        else gPrefsR->NotifyPrefs.icon = '2';
+    }
+}
+
+static Boolean NotifyFormMoreHandleEvent(EventPtr e)
+{
+    Boolean handled = false;
+    FormPtr frm = FrmGetActiveForm();
+
+    CALLBACK_PROLOGUE;
+    
+    switch (e->eType) {
+    case frmOpenEvent:
+        // LoadNotifyPrefsFields();
+        LoadNotifyPrefsFieldsMore();
+        FrmDrawForm(frm);
+        handled = true;
+        break;
+
+    case ctlSelectEvent:
+        switch(e->data.ctlSelect.controlID) {
+        case NotifySettingMoreFormOk: 
+        {
+            UnloadNotifyPrefsFieldsMore();
+            WritePrefsRec();
+            FrmReturnToForm(0);
+            handled = true;
+            break;
+        }
+        case NotifySettingFormIcon:
+        {
+            if (CtlGetValue(GetObjectPointer(frm,
+                                             NotifySettingFormIcon))) {
+                FrmShowObject(frm,
+                    FrmGetObjectIndex(frm, NotifySettingFormBk3));
+                FrmShowObject(frm,
+                    FrmGetObjectIndex(frm, NotifySettingFormAN));
+            }
+            else {
+                FrmHideObject(frm, 
+                    FrmGetObjectIndex(frm, NotifySettingFormBk3));
+                FrmHideObject(frm, 
+                    FrmGetObjectIndex(frm, NotifySettingFormAN));
+            }
+            
+            handled = true;
+            break;
+        }
+        
         default:
             break;
         }
@@ -1920,6 +2045,9 @@ static Boolean ApplicationHandleEvent(EventPtr e)
         case NotifySettingForm:
             FrmSetEventHandler(frm, NotifyFormHandleEvent);
             break;
+		case NotifySettingMoreForm:
+			FrmSetEventHandler(frm, NotifyFormMoreHandleEvent);
+			break;
         case Sl2LnForm:
             FrmSetEventHandler(frm, Sl2LnFormHandleEvent);
             break;
