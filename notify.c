@@ -810,16 +810,19 @@ static void NotifyDatebook(int mainDBIndex, DateType when, Int8 age,
             repeatInfo.repeatStartOfWeek = 0;
 
             if (gPrefsR.DBNotifyPrefs.duration > 1) {
-                // if solar date, make entry repeat
-                //
-                repeatInfo.repeatEndDate = when;
-                repeatInfo.repeatEndDate.year +=
-                    gPrefsR.DBNotifyPrefs.duration -1;
+				Int16 year;
+
+				year = when.year + gPrefsR.DBNotifyPrefs.duration - 1;
 
                 // if end year is more than 2301, set for ever
-                if (repeatInfo.repeatEndDate.year > lastYear) {
+				if (year > 2301-1904) 
                     DateToInt(repeatInfo.repeatEndDate) = -1;
-                }
+				else {
+                	// if solar date, make entry repeat
+                	//
+					repeatInfo.repeatEndDate = when;
+					repeatInfo.repeatEndDate.year = year;
+				}
 
                 // if duration > 1, 'when' is the birthdate;
                 if (r.flag.bits.year) when = r.date;
