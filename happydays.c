@@ -78,7 +78,7 @@ struct sPrefsR defaultPref = {
     {  "Birthday", "*HD:",                  // Prefs
        1, 1, 0, 0, 0, dfMDYWithSlashes },   
 #endif
-    {  1, 0, 0 },                           // Display Preferences
+    {  1, },                                // Display Preferences
     0,                                      // hide secret record
 #ifdef GERMAN
     "Alle",                                 // Address category
@@ -93,7 +93,6 @@ struct sPrefsR defaultPref = {
 enum ViewFormType { ViewType = 0,
                     ViewNext,
                     ViewSrc,
-                    ViewSrcExtra,
                     ViewAge,
                     ViewRemained,
                     ViewSpace
@@ -1611,18 +1610,6 @@ static void LoadDispPrefsFields()
 	else {
         CtlSetValue(GetObjectPointer(frm, DispPrefEmphasize), 0);
 	}
-    if (gPrefsR.DispPrefs.extrainfo == 1) {
-        CtlSetValue(GetObjectPointer(frm, DispPrefExtraInfo), 1);
-    }
-    else {
-        CtlSetValue(GetObjectPointer(frm, DispPrefExtraInfo), 0);
-    }
-    if (gPrefsR.DispPrefs.zodiac == 1) {
-        CtlSetValue(GetObjectPointer(frm, DispPrefZodiac), 1);
-    }
-    else {
-        CtlSetValue(GetObjectPointer(frm, DispPrefZodiac), 0);
-    }
 }
 
 static Boolean UnloadDispPrefsFields()
@@ -1639,12 +1626,6 @@ static Boolean UnloadDispPrefsFields()
     }
     gPrefsR.DispPrefs.emphasize = CtlGetValue(ptr);
     
-    ptr = GetObjectPointer(frm, DispPrefExtraInfo);
-    gPrefsR.DispPrefs.extrainfo = CtlGetValue(ptr);
-
-    ptr = GetObjectPointer(frm, DispPrefZodiac);
-    gPrefsR.DispPrefs.zodiac = CtlGetValue(ptr);
-
     return redraw;
 }
 
@@ -2247,17 +2228,7 @@ static void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column,
 
 
         if (r.flag.bits.year) {
-            if (r.flag.bits.lunar || r.flag.bits.lunar_leap ) {
-                if ( gPrefsR.DispPrefs.zodiac ) {
-                    // make zordiac display
-                    SysCopyStringResource(tempStr, MouseString
-                                          + (r.date.year+9+1904)%12);
-                    StrNCat(gAppErrStr, " [", AppErrStrLen);
-                    StrNCat(gAppErrStr, tempStr, AppErrStrLen);
-                    StrNCat(gAppErrStr, "]", AppErrStrLen);
-                }
-            }
-            else {
+            if ( !(r.flag.bits.lunar || r.flag.bits.lunar_leap) ) {
                 // make day of week
                 SysCopyStringResource(tempStr,
                                       DayOfWeek(r.date.month, r.date.day,
@@ -2271,12 +2242,6 @@ static void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column,
         length = StrLen(gAppErrStr);
         FntCharsInWidth(gAppErrStr, &width, &length, &ignored);
         WinDrawChars(gAppErrStr, length, x, y);
-        break;
-    }
-    case ViewSrcExtra:
-    {
-
-
         break;
     }
         
@@ -2427,12 +2392,7 @@ static void ViewFormLoadTable(FormPtr frm)
 
         TblSetRowSelectable(tableP, row, false);
 
-        if (tblItemIdx == ViewSrc && !gPrefsR.DispPrefs.extrainfo) {
-            tblItemIdx += 2;
-        }
-        else {
-            tblItemIdx++;
-        }
+        tblItemIdx++;
         
         TblSetRowUsable(tableP, row, true);
 

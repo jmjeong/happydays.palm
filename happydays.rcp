@@ -171,7 +171,7 @@ BEGIN
     END
 END
 
-FORM ID DispPrefForm AT (2 62 156 96)
+FORM ID DispPrefForm AT (2 92 156 66)
 FRAME
 MODAL
 USABLE
@@ -181,12 +181,11 @@ BEGIN
 
     CHECKBOX "Emphasize Lunar Date" ID DispPrefEmphasize 
 		AT (10 20 AUTO AUTO)
+/*        
     CHECKBOX "Display solar/lunar info in View" ID DispPrefExtraInfo
         AT (10 PrevBottom+3 AUTO AUTO)
-    CHECKBOX "Display zodiac sign in View" ID DispPrefZodiac
-        AT (10 PrevBottom+3 AUTO AUTO)
-
-    BUTTON "OK" ID DispPrefOk AT (5 BOTTOM@89 40 AUTO)
+*/
+    BUTTON "OK" ID DispPrefOk AT (5 BOTTOM@59 40 AUTO)
     BUTTON "Cancel" ID DispPrefCancel AT (PrevRight+5 PrevTop 40 AUTO)
 END
 
@@ -498,7 +497,7 @@ BEGIN
     TITLE "About HappyDays"
 
 	FORMBITMAP AT (6 18) BITMAP ID_BitmapIcon USABLE 
-    LABEL "HappyDays 2.0b" AUTOID AT (PrevRight+38 PrevTop) FONT 1
+    LABEL "HappyDays 2.0" AUTOID AT (PrevRight+38 PrevTop) FONT 1
     LABEL "GPL free software"
         AUTOID AT (PrevLeft PrevTop+ABOUT_LINE_SPACING) FONT 0
     LABEL "(c) 1999-2001 JaeMok Jeong"
@@ -568,4 +567,4 @@ SMALLICONFAMILY
 	TRANSPARENT 192 192 0
 
 APPLICATIONICONNAME 1000 "HappyDays"
-VERSION ID 1 "2.0b"
+VERSION ID 1 "2.0"

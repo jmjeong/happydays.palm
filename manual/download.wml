@@ -1,0 +1,98 @@
+#use "template.inc" select=Download
+
+<h1>
+HappyDays Download Page
+</h1>
+<h2>
+File Download
+</h2>
+<p>
+<a
+href="ftp://jmjeong.com/pub/happydays/happydays-1.45.zip">happydays-1.45.zip</a>
+- English version and a brief manual<br>
+<a
+href="ftp://jmjeong.com/pub/happydays/happydays-src-1.45.zip">happydays-src-1.45.zip</a>
+- source file<br>
+
+</P>
+You can download old version of HappyDays from <a
+href="ftp://jmjeong.com/pub/happydays/">here</a>.
+<p>
+Before you install the new version, you <b>*should*</b> uninstall the  old
+version due to a change in DB record format(If you have HappyDays prior to 1.2
+version).
+</p>
+
+<p>
+To get the latest CVS sources do the following
+
+<pre>
+$ export CVSROOT=":pserver:cvs@coconut.snu.ac.kr:/export/cvsroot"
+$ cvs login
+( password = anonymous )
+$ cvs -z3 checkout -rversion_1_45 happydays
+</pre>
+
+<br>
+For more info on CVS see <a href="http://www.cyclic.com">Cyclic</a>.
+</p>
+
+<!--  <h2> -->
+<!--  Known Bugs -->
+<!--  </h2> -->
+<!--  <p> -->
+<!--  Not yet. -->
+<!--  </p> -->
+
+<h2>
+Localizations
+</h2>
+
+<p>
+If you would like to translate HappyDays into your favorite language, please
+<a href="mailto:jmjeong@oopsla.snu.ac.kr">mail me</a> and let me know.  
+HappyDays has been translated into the following languages:  <br>
+
+<ul>
+  <li> <a href="ftp://jmjeong.com/pub/happydays/happydays-1.45-ko.zip">
+  Korean</a>(1.45) - by JaeMok Jeong<br>
+	  (happydays-kt.prc for hantip; fontwidth 8x8,
+	  happydays-km.prc for Hanme Hangul; fontwidth 11x11)
+  <li> <a
+      href="ftp://jmjeong.com/pub/happydays/happydays-1.45-de.zip">German</a>(1.45)
+      - by  Gunther Zagatta(<a href="mailto:zagatta@web.de">zagatta@web.de</a>)
+  <li><a
+      href="ftp://jmjeong.com/pub/happydays/happydays-1.45-ch.zip">Chinese</a>(1.45)
+      - by Daitau Aaron(<a
+		href="mailto:daitau@hotmail.com">daitau@hotmail.com</a>)<br>
+		(happydays-chi-gb5.prc for GB Encoding, happydays-chi-big5.prc for
+		Big5 encoding)
+  <li><a
+      href="ftp://jmjeong.com/pub/happydays/happydays-1.45-th.zip">Thai</a>(1.45)
+      - by Kaptan Teotrakool(<a
+      href="mailto:kteotrakool@hotmail.com">kteotrakool@hotmail.com</a>)<br>
+      Requires Thai Language Hack (ThaiPOS or ThaiHack)
+  <li><a
+  	  href="ftp://jmjeong.com/pub/happydays/happydays-1.45-sp.zip">Spanish</a>(1.45)
+	  - by Juan Fernando Calderón(<a href="mailto:jfcalderon@usa.net">jfcalderon@usa.net</a>)
+  <li><a
+      href="ftp://jmjeong.com/pub/happydays/happydays-1.45-fr.zip">French</a>(1.45)
+      - by Cyril-Vianney BEKIER(<a href="mailto:cyril@bekier.org">cyril@bekier.org</a>)
+  <li><a
+      href="ftp://jmjeong.com/pub/happydays/happydays-1.45-cz.zip">Czech</a>(1.45)
+      - by Petr 'PePa' Pavel(<a href="mailto:petr.pavel@quick.cz">petr.pavel@quick.cz</a>)
+  <li><a
+  href="ftp://jmjeong.com/pub/happydays/happydays-1.45-catalan.zip">Catalan</a>(1.45)
+      - by Paco Rivière(<a href="mailto:friviere@teleline.es">friviere@teleline.es</a>)
+  <li><a
+  href="ftp://jmjeong.com/pub/happydays/happydays-1.45-dutch.zip">Dutch</a>(1.45)
+      - by Roy Huijts
+</ul>
+</p>
+
+<h2>
+Change log 
+</h2>
+<UL>
+
+</UL>

@@ -75,8 +75,7 @@ struct sPrefs
 struct sDispPrefs
 {
     char emphasize;             // emphasize lunar
-    char extrainfo;             // display extra day information
-    char zodiac;                // zodiac sign in luar in view
+//    char extrainfo;             // display extra day information
 };
 
 struct sPrefsR 
