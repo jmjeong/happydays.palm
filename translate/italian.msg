@@ -6,9 +6,9 @@ BEGIN
 	"nulla verrà visualizzato.\n"
 
     "long_customErrorString" = ""\
-    "'Compleanno' è il nome predefinito del campo personale."\
+    "'Compleanno' è il nome predefinito del campo personale. "\
     "Per assegnare un nome predefinito diverso al campo personale,"\
-    " selezionare il menù 'Preferenze'.\n\n"\
+    " selezionare 'Preferenze'.\n\n"\
     "IMPORTANTE: Hai bisogno di lanciare la tua Rubrica e selezionare 'Opzioni/"\
     "Rinomina Campi Personali' per rinominare un campo personale come 'Compleanno'"\
     " o in qualsiasi altro nome che hai assegnato come nome del campo personale nelle Preferenze di "\
@@ -33,7 +33,7 @@ BEGIN
         "#) significa mese lunare bisestile"
 
     "long_cantFindAddrString" = ""\
-    "Non è possible trovare il campo personale nella Rubrica: '%s'\n"\
+    "Non è possible trovare il campo personale nella Rubrica: '%s'.\n"\
     "Per favore rinominare un campo personale della tua Rubrica."
 
     "Select Time" = "Seleziona Orario"
@@ -80,7 +80,7 @@ BEGIN
 	"Font..." = "Font..."
     "Preferences" = "Preferenze..."
 	"Display Preferences" = "Opzioni di visualizz..."
-    "About HappyDays" = "Info su HappyDays"
+    "About HappyDays" = "Informazioni HappyDays"
 
     "Edit" = "Modifica"
     "Undo" = "Annulla"
@@ -105,7 +105,7 @@ BEGIN
     "Y/M/D" = "A/M/G"  
     "Y.M.D" = "A.M.G"  
     "Y-M-D" = "A-M-G"  
-	"Address Autoscan" = "Esamina Indirizzo"
+	"Address Autoscan" = "Esamina Rubrica"
 	"Always" = "Sempre"
 	"Ask" = "Domanda"
 	"Never" = "Mai"
@@ -138,8 +138,7 @@ BEGIN
 
     "Solar to Lunar Convert" = "Da Solare a Lunare"
     "Enter Solar date:" = "Immetti la data Solare:"
-    "Year must be in 1881-2043" = "L'anno deve essere compreso "\
-    "fra 1881-2043"
+    "Year must be in 1881-2043" = "Anno incluso in 1881-2043"
     "Result Lunar date:" = "Data Lunare Risultante:"
 
     "Convert" = "Converti"
@@ -169,7 +168,7 @@ BEGIN
 
     "Notify warning" = "Avviso di notifica" 
 	"long_notifywarningString" = ""\
-  		"^1: Sei sicuro di voler creare notifiche dei "\
+  		"^1: Sei sicuro di voler creare le notifiche dei "\
 		"^2 registri HappyDays?" 
       
 /* Date Book Icon */

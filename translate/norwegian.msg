@@ -2,16 +2,16 @@ TRANSLATION "NORWEGIAN"
 BEGIN
 	"long_notifySettingMoreString" = ""\
 	"For å finne nummeret til et AN-ikon, må du slå opp i bruks-"\
-	"anvisningen for Action Names. DateBk3 ikonene hentes fra memoblokka."\ 
-	"Hvis du ikke har en DateBk3-ikon innføring i memoblokka, "\
+	"anvisningen for Action Names. DateBk3 ikonene hentes fra notisblokka."\ 
+	"Hvis du ikke har en DateBk3-ikon innføring i notisblokka, "\
 	"vil ikke HappyDays kunne bruke ikoner.\n"
 
     "long_customErrorString" = ""\
-    "'Fødselsdag' er standard navn for brukerfelt."\
-    "For å sette et annet standardnavn på brukerfeltet,"\
+    "'Fødselsdag' er standard navn for spesialfelt."\
+    "For å sette et annet standardnavn på spesialfeltet,"\
     " velg 'Preferanser'.\n\n"\
     "VIKTIG: Du må også starte Adresseboka og velge 'Options/"\
-    "Rename Custom Fields' for å døpe om et brukerfelt til 'Fødselsdag'"\
+    "Rename Custom Fields' for å døpe om et spesialfelt til 'Fødselsdag'"\
     " eller det du evt. valgte i Preferansene til HappyDays.\n"
 
     "long_aboutString" = ""\
@@ -24,7 +24,7 @@ BEGIN
 
     "long_cleanupAlertString" = ""\
     "Påminnelser regnes for å tilhøre HappyDays hvis de har "\
-	"{HappyDays ID} i memo-feltet. "\ 	
+	"{HappyDays ID} i notisfeltet. "\ 	
     "Hvis du bruker dette formatet i egne innføringer "\
     "kan de bli slettet.\n"
 
@@ -33,13 +33,13 @@ BEGIN
         "#) bet. skuddmåned i lunar"
 
     "long_cantFindAddrString" = ""\
-    "Finner ikke brukervalgt felt i adresseboka: '%s'\n"\
-    "Vennligst døp om et brukervalgt felt i adresseboka di."
+    "Finner ikke spesialfelt i adresseboka: '%s'\n"\
+    "Døp om et spesialfelt i adresseboka di."
 
     "Select Time" = "Velg tidspunkt"
     "No Time" = "No Time"
-    "Invalid input date" = "Du har oppgitt en gyldig dato"
-    "Export to Memo Pad is completed." = "Eksport til memoblokk er fullført."
+    "Invalid input date" = "Du har oppgitt en ugyldig dato"
+    "Export to Memo Pad is completed." = "Eksport til notisblokk er fullført."
 
     "SUN"   = "søn"
     "MON"   = "man"
@@ -62,15 +62,15 @@ BEGIN
 
     "HappyDays View" = "HappyDays dag"
     "Done"  = "Ferdig"
-    "DB" = "DB" 
-    "TD" = "TD"
+    "DB" = "Ab" 
+    "TD" = "Op"
     "Goto" = "Gå til"
 
-    "Utilities" = "Utilities"
-    "Date Book Notify" = "Påminn i dagboken"
-    "Cleanup Date Book"  = "Rydd i dagboken"
-    "To Do Notify" = "Påminn i Huskelista"
-    "Cleanup To Do"  = "Rydd i huskelista"
+    "Utilities" = "Verktøy"
+    "Date Book Notify" = "Påminn i avtaleboka"
+    "Cleanup Date Book"  = "Rydd i avtaleboka"
+    "To Do Notify" = "Påminn i oppgaver"
+    "Cleanup To Do"  = "Rydd i oppgaver"
     "Export to Memo Pad" = "Eksportér til notisblokk"
     "Solar to Lunar" = "Gregor. til lunar"
     "Lunar to Solar" = "Lunar til gregor."
@@ -138,7 +138,7 @@ BEGIN
 
     "Solar to Lunar Convert" = "Konvertér gregor. -> lunar kal."
     "Enter Solar date:" = "Oppgi gregor.  dato:"
-    "Year must be in 1881-2043" = "Årstall må være mellom  1881-2043"
+    "Year must be in 1881-2043" = "Året må være mellom 1881-2043"
     "Result Lunar date:" = "Korresp. lunar dato:"
 
     "Convert" = "Konvertér"
@@ -172,7 +172,7 @@ BEGIN
 		"^2 HappyDays oppføringer?" 
       
 /* Date Book Icon */
-    "Date Book Icon" = "Ikoner i dagboken"  
+    "Date Book Icon" = "Ikon i avtaleboken"  
       "Icon Support" = "Støtte for ikoner"  
       "AN" = "AN"  
       "DateBk3" = "DateBk3"  
@@ -192,9 +192,9 @@ BEGIN
 
     "HappyDays Export" = "HappyDays eksport"
     "Would you like to export HappyDays List to Memo Pad?" = ""\
-    	"Ønsker du å eksportere lista fra HappyDays til memoblokka?" 
+    	"Ønsker du å eksportere fra HappyDays til notisblokka?" 
 
-    "Custom Field Error" = "Feil i brukervalgt felt"
+    "Custom Field Error" = "Feil i spesialfelt"
     "Help" = "Hjelp" 
 
 
@@ -202,7 +202,7 @@ BEGIN
 
 	"long_invalidformatString" = ""\
     	"Adresseoppføringen for\n[^1]\n inneholder ugyldige data. "\
-		"Hva ønsker du å gjøre med det?" 
+		"Hva ønsker du å gjøre?" 
 
     "Ignore" = "Ignorér" 
     "Ignore all" = "Ignorér alle" 
@@ -219,7 +219,7 @@ BEGIN
     "Days" = "Dager"  
     "Date Book" = "Dagbok"  
     "To Do" = "Huskeliste"  
-    "Scan note field" = "Skann notisfeltet"  
+    "Scan note field" = "Søk gjennom notisfeltet"  
     "%ld days left" = "%ld dager igjen"  
     "%ld days passed" = "%ld dager siden"  
 
@@ -233,10 +233,10 @@ BEGIN
 /* HappyDays view */
 	"Type:" = "Type:"
 	"Next Date:" = "Neste Dato:"
-	"Origin:" = "Opphav:"
+	"Origin:" = "Begynt:"
 	"Age:" = "Alder:"
 	"UpTo Date:" = "Frem til dato:"
-	"%dY %dM %dD (%ld)" = "%dD %dM %dY (%ld)"
+	"%dD %dM %dY (%ld)" = "%dD %dM %dY (%ld)"
 
 	"Yes" = "Ja"
 	"No" = "Nei"

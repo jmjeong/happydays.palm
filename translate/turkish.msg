@@ -6,34 +6,34 @@ BEGIN
 
 	"long_notifySettingMoreString" = ""\
 	"Action Names ikon numarasý için AN manuelini inceleyiniz. DateBk3 ikonlarý"\
-	"MemoPad'den okunmaktadýr. MemoPad'de DateBk3 ikonlarý için kayýt yoksa, "\
-	"ikonlar gösterilemeyecektir.\n"
+	" MemoPad'den okunmaktadýr. MemoPad'de DateBk3 ikonlarý için kayýt yoksa,"\
+	" ikonlar gösterilmeyecektir.\n"
 
     "long_customErrorString" = ""\
     "'Birthday' öngörülmüþ tanýmlanabilir alan adýdýr (default custom field name)."\
-    "Baþka bir öngörülmüþ tanýmlanabilir alan adý seçmek için"\
-    "'Ayarlar' menü seçeneðinden deðiþiklik yapmanýz gerekmektedir.\n\n"\
-    "ÖNEMLÝ: Address Book'u baþlatýp 'Options' menüsünden/"\
-    "'Rename Custom Fields' seçeneðini seçerek, bir alan adýný 'Birthday'e"\
-    "ya da Happydays'in Ayarlar menüsünde seçtiðiniz tanýmlanabilir alan adýna"\
-    "deðiþtiriniz.\n"
+    " Baþka bir öngörülmüþ tanýmlanabilir alan adý seçmek için"\
+    " 'Ayarlar' menü seçeneðinden deðiþiklik yapmanýz gerekmektedir. \n\n"\
+    "ÖNEMLÝ: Address Book'u baþlatýp 'Options' menüsünden"\
+    " 'Rename Custom Fields' seçeneðini seçerek, bir alan adýný 'Birthday'e"\
+    " ya da Happydays'in Ayarlar menüsünde seçtiðiniz tanýmlanabilir alan adýna"\
+    " deðiþtiriniz.\n"
 
     "long_aboutString" = ""\
     "'HappyDays' arkadaþlarýnýzýn ve aile fertlerinizin doðum günlerini,"\
-    "yýl dönümlerini ve diðer önemli günlerini hatýrlamanýza yardýmcý olur.\n\n"\
-    "Happyday'i nasýl kullanabileceðinize dair detaylý bilgi için index.html ve"\
-    "manual.html dosyalarýný detaylý inceleyiniz\n\n"\
+    " yýl dönümlerini ve diðer önemli günlerini hatýrlamanýza yardýmcý olur.\n\n"\
+    "Happydays'i nasýl kullanabileceðinize dair detaylý bilgi için index.html ve"\
+    " manual.html dosyalarýný detaylý inceleyiniz\n\n"\
     "HappyDays'in daðýtýmý GNU General Public License version 2.0"\
-    "kurallarý altýnda yapýlmaktadýr.\n"
+    " kurallarý altýnda yapýlmaktadýr.\n"
 
     "long_cleanupAlertString" = ""\
     "Address Book ve To Do hatýrlatma kayýtlarý, 'note' alanlarýnda"\
-    "HappyDays Kayýt No var ise HappyDays'e aittirler. "\ 	
+    " HappyDays Kayýt No var ise HappyDays'e aittirler. "\ 	
     "Eðer siz de buna benzer þekilde 'note' alanýnda kayýt"\
-    "tutuyorsanýz, kayýtlarýnýz 'Temizle' komutu ile silinebilir.\n"
+    " tutuyorsanýz, kayýtlarýnýz 'Temizle' komutu ile silinebilir.\n"
 
     "long_sl2lnString" = ""\
-        "-) lunar takvimde normal ay demektir\n"\
+        "-) lunar takvimde (ay takviminde) normal ay demektir\n"\
         "#) lunar takvimde artýk (leap) ay demektir"
 
     "long_cantFindAddrString" = ""\
@@ -42,7 +42,7 @@ BEGIN
 
     "Select Time" = "Zaman Seçiniz"
     "No Time" = "Zamansýz"
-    "Invalid input date" = "Geçersiz giriþ tarihi"
+    "Invalid input date" = "Geçersiz tarih giriþi"
     "Export to Memo Pad is completed." = "Memo Pad'e transfer tamamlandý."
 
     "SUN"   = "PZR"
@@ -65,7 +65,7 @@ BEGIN
     "Look Up:" = "Bak:"
 
     "HappyDays View" = "HappyDays Ekraný"
-    "Done"  = "Tamamlandý"
+    "Done"  = "Tamam"
     "DB" = "DB" 
     "TD" = "TD"
     "Goto" = "Git"
@@ -101,7 +101,7 @@ BEGIN
 /* preferences screen */
     "Custom field:" = "Tanýmlanabilir alan:"
     "Instead of system date format" = "Sistem tarih biçemi yerine"  
-    "Use" = "Kullan"  
+    "Use" = "kullan"  
     "M/D/Y" = "A/G/Y"  
     "D/M/Y" = "G/A/Y"  
     "D.M.Y" = "G.A.Y"  
@@ -110,15 +110,15 @@ BEGIN
     "Y.M.D" = "Y.A.G"  
     "Y-M-D" = "Y-A-G"  
 	"Address Autoscan" = "Adresleri otomatik tara"
-	"Always" = "Her zaman"
+	"Always" = "Daima"
 	"Ask" = "Sor"
-	"Never" = "Hiç bir zaman"
+	"Never" = "Asla"
 
     "Notify Format:" = "Hatýrlatma biçemi:"  
     "[Last, First] E(1) Year" = "[Son, Ýlk] E(1) Yýl"  
     "[First Last] E(1) Year" = "[Ýlk Son] E(1) Yýl"  
-    "Event - Last, First Year" = "Önemli Gün - Son, Ýlk Yýl"  
-    "Event - First Last Year" = "Önemli Gün - Ýlk Son Yýl"  
+    "Event - Last, First Year" = "Önemli Gün Tipi - Son, Ýlk Yýl"  
+    "Event - First Last Year" = "Önemli Gün Tipi - Ýlk Son Yýl"  
     "First Last Year" = "Ýlk Son Yýl"  
     
 	"Address Book:" = "Adres Defteri:"
@@ -139,16 +139,16 @@ BEGIN
     "Cancel" = "Vazgeç"
 
     "Solar to Lunar Convert" = "Solar'dan Lunar'a Çevir"
-    "Enter Solar date:" = "Solar (Gregoryen/Miladi takvim) tarihi gir:"
+    "Enter Solar date:" = "Solar (Miladi) tarih gir:"
     "Year must be in 1881-2043" = "Yýl 1881-2043 arasýnda olmalýdýr"
-    "Result Lunar date:" = "Sonuç Lunar (Ay takvimi) tarihi:"
+    "Result Lunar date:" = "Sonuç Lunar (Ay) tarihi:"
 
     "Convert" = "Çevir"
 
     "Lunar to Solar Convert" = "Lunar'dan Solar'a Çevir"
-    "Enter Lunar date:" = "Lunar (Ay takvimi) tarihi gir:"
+    "Enter Lunar date:" = "Lunar (Ay) tarihi gir:"
     "Leap" = "Artýk (Leap)"
-    "Result Solar date:" = "Sonuç Solar (Gregoryen/Miladi takvimi) tarihi:"
+    "Result Solar date:" = "Sonuç Solar (Miladi) tarih:"
 
 
 /* Date Book & To Do Notify */
@@ -206,8 +206,8 @@ BEGIN
     	"\n[^1]\n adres kaydý geçersiz bir önemli gün kaydý içeriyor . "\
 		"Nasýl iþlem yapmak istersiniz?" 
 
-    "Ignore" = "Gözardý et" 
-    "Ignore all" = "Tümünü gözardý et" 
+    "Ignore" = "Yoksay" 
+    "Ignore all" = "Tümünü yoksay" 
 
     "Cleanup Done" = "Temizle Tamamlandý" 
 
@@ -218,7 +218,7 @@ BEGIN
     "(not exist in this year)" = "(bu yýlda mevcut deðil)" 
     "Please run Date Book once first." = "Date Book'u önce bir kere çalýþtýrýnýz."  
     
-    "Days" = "Günler"  
+    "Days" = "Gün"  
     "Date Book" = "Date Book"  
     "To Do" = "To Do"  
     "Scan note field" = "Note alanýný tara"  
