@@ -18,258 +18,253 @@
 
 #include "happydaysRsc.h"
 
-TRANSLATION "ENGLISH"
+TRANSLATION "CZECH"
 BEGIN
-    "Translator" = "English version"
-    "Translator's email" = ""
+    "Translator" = "Petr 'PePa' Pavel"
+    "Translator's email" = "petr.pavel@email.cz"
 
     "long_notifySettingString" = ""\
-    "* Records\n"\
-    "Tab 'all' if you'd like to "\
-    "make notification entries created for all of your events in this"\
-    " category."\
-    "Tab 'selected' if only the currently selected record should be "\
-    "taken into account.\n\n"\
-    "* Existing\n"\
-    "Tap 'keep' if existing HappyDays entries "\
-    "should be left untouched. Tap 'modify' if you'd like "\
-    "these entries to be changed.\n\n"\
+    "* Záznamy\n"\
+    "Zvol 'vše', chceš-li vytvoøit upozornìní pro všechny "\
+    "události v této kategorii. "\
+    "Monost 'zvolenı' vytvoøí událost pouze pro zvolenı záznam.\n\n"\
+    "* Existující\n"\
+    "Zvol 'nech bıt', pokud upozornìní (ji "\
+    "vytvoøená programem HappyDays) nechceš mìnit. "\
+    "Monost 'zmìò' tato upozornìní aktualizuje.\n\n"\
     "* Alarm\n"\
-    "will set the alarm notification in your datebook entry. Set "\
-	"the number of days in advance you'd like to get notified.\n\n"\
-    "* Time\n"\
-	"Time of the event\n\n"\
-    "* Repeat for\n"\
-    "is the interval of the notification record. "\
-    "-1 means repeat forever in case of solar event, and "\
-    "means repeat for 5 years in lunar event for convenience.\n"
+    "Aktivuje u pøidávanıch upozornìní alarm. "\
+    "Zvol kolik dní dopøedu chceš alarm nastavit.\n\n"\
+    "* Èas\n"\
+    "Kdy alarm spustí.\n\n"\
+    "* Opakuj\n"\
+    "Interval urèující, jak dlouho dopøedu se má upozornìní zobrazovat. "\
+    "-1 znamená pro události solárního kalendáøe navdy a pro lunární 5 let.\n"
 
-	"long_notifySettingMoreString" = ""\
-	"For AN Icon Number, consult Action Names manual. DateBk3Icon is "\
-	"read from MemoPad. If you don't have DateBk3 Icon entry in MemoPad, "\
-	"nothing is displayed.\n"
+    "long_notifySettingMoreString" = ""\
+    "Nápovìdu k ikonám pro Action Names (AN) najdeš v jeho manuálu. "\
+    "Ikony pro DateBk3/4 musejí bıt uloeny v Memo Padu. "\
+    "Pokud je tam nemáš, nic se nezobrazí.\n"
 
     "long_customErrorString" = ""\
-    "'Birthday' is the default custom field name."\
-    "To set a different default custom field"\
-    " name, tap 'Preferences'.\n\n"\
-    "IMPORTANT: You need to launch your Addressbook and select 'Options/"\
-    "Rename Custom Fields' to rename a custom field to 'Birthday'"\
-    " or whatever you set as a custom field name in the Preferences of "\
-    "HappyDays.\n"
+    "Název uivatelské poloky v Address Booku, "\
+    "ze které ète HappyDays datum narozenin a svátkù. "\
+    "Pokud ho chceš zmìnit, zvol 'Nastavení'.\n\n"\
+    "POZOR: Potøebuješ-li zmìnit názvy uivatelskıch poloek v Address Booku, "\
+    "spus jej a v menu 'Options' zvol monost 'Rename Custom Fields'. "\
+    "Název aspoò jedné takové poloky musí odpovídat názvu, kterı jsi "\
+    "zadal v HappyDays.\n"
 
     "long_aboutString" = ""\
-    "'HappyDays' will help you remember the birthdays and anniversaries "\
-    "of your friends and family members, as well as other events."\
-    "\n\nUse one of the custom fields in Address Book application "\
-    "and rename it to 'Birthday'."\
-    "\n\nExamples:\n"\
-    " Last Name: Jeong\n"\
-    " First name: JaeMok\n"\
+    "'HappyDays' ti pomùe pamatovat na narozeniny a svátky tvıch pøátel "\
+    "a èlenù rodiny.\n\n"\
+    "Pouívá k tomu jednu z uivatelskıch poloek Address Booku, kterou "\
+    "musíš pojmenovat stejnì, jako jsi uvedl v 'Nastavení' tohoto programu."\
+    "\n\nPøíklady:\n"\
+    " Pøíjmení: Jeong\n"\
+    " Køestní jméno: JaeMok\n"\
     " ...\n"\
-    " Birthday: -)12/4/70\n\n"\
-    "Formats:\n"\
-    " [-)|#)]Date\n"\
-    " -) means lunar calendar\n"\
-    " #) means lunar leap month\n\n"\
-    "Date format is automatically read from the system preferences. "\
-    "You can omit the year field. Year input below 100 is assumed to be "\
-    "year in the 20th century, If you are not sure of the year format, "\
-    "just write it in form of YYYY(e.g. 1970).\n\n"\
-    "To set multiple entry, refer the manual.\n"
+    " Narozeniny: -)12/4/70\n\n"\
+    "Formáty:\n"\
+    " [-)|#)]Datum\n"\
+    " -) pro lunární bìnı mìsíc\n"\
+    " #) pro lunární pøestupnı mìsíc\n\n"\
+    "Formát data se automaticky pøevezme z nastavení v Preferences. "\
+    "Rok mùeš vynechat. Je-li rok menší ne 100, pøedpokládá se, e jde "\
+    "o dvacáté století. Pokud si nejsi jistı, piš rok ètyøcifernì (napø. 1970).\n\n"\
+    "Potøebuješ-li zadat víc událostí, podívej se do manuálu.\n"
 
     "long_cleanupAlertString" = ""\
-    "Notification entries are considered HappyDays if they have "\
-	"{HappyDays ID} in their memo field. "\ 	
-    "If you use this format in your own "\
-    "entries, this record might also be removed by CleanUp.\n"
+    "Události Date Booku a To Do vytvoøené programem HappyDays, mají v poznámce "\
+    "èíselnı identifikátor nastavitelnı v 'Nastavení'. "\
+    "Pokud podobnı vloíš do poznámky nìkteré události ruènì, mùe se stát, "\
+    "e ji HappyDays smae také.\n"
 
     "long_prefFormString" = ""\
-	"* Instead of system date...\n"\
-	"Control the interpretation of the AddressDB Birthday custom field. "\
-	"By default this is the same as the system date format preference.\n\n"\
-	"* Scan note field\n"\
-	"To read note field in Address Book, check this option.\n\n"\
-    "* Emphasize Lunar Date\n"\
-    "If checkbox is on, the dashed line is drawed beneath lunar date.\n\n"\
-	"* Notify format\n"\
-	"The description format used for notification\n\n"\
-    "* Custom field\n"\
-    "The name of custom fields in Address Book used for INPUT\n\n"\
-    "* HappyDays ID\n"\
-    "Used for Notify and Cleanup\n"
+    "* Místo systémového formátu...\n"\
+    "Formát uivatelské poloky s daty narozenin nebo svátkù. "\
+    "Defaultnì je stejnı jako nastavení v systémovıch 'Preferences'.\n\n"\
+    "* Prohledej i poznámky\n"\
+    "HappyDays mùe hledat data událostí i v poznámkách kontaktù Address Booku.\n\n"\
+    "* Zvırazni lunární datum\n"\
+    "Zobrazí pod lunárním datem èárkovanou èáru.\n\n"\
+    "* Formát upozornìní\n"\
+    "Formát, kterı bude pouit pøi tvorbì upozornìní do Date Booku èi To Do.\n\n"\
+    "* Název poloky\n"\
+    "Název uivatelské poloky v Address Booku, v ní HappyDays hledá datum události.\n\n"\
+    "* Identifikátor\n"\
+    "Pouívá se pro oznaèení záznamù v Date Booku a To Do vytvoøenıch programem HappyDays.\n"
 
     "long_removeConfirmString" = ""\
-    "Are you sure you want to remove all "\
-    "HappyDays notify entries?"
+    "Urèitì chceš odstranit všechna "\
+    "upozornìní vytvoøená programem HappyDays?"
 
     "long_sl2lnString" = ""\
-        "-) means plain month in lunar\n"\
-        "#) means leap month in lunar"
+        "-) pro bìnı mìsíc lunárního kalendáøe\n"\
+        "#) pro pøestupnı mìsíc lunárního kalendáøe"
 
     "long_cantFindAddrString" = ""\
-    "Can't find custom address book field: '%s'\n"\
-    "Please rename a custom field of your address book."
+    "V Address Booku není ádná uivatelská poloka s názvem: '%s'\n"\
+    "Vytvoø takovou nebo zmìò její název v 'Nastavení' programu HappyDays."
 
-    "Select Time" = "Select Time"
-    "No Time" = "No Time"
-    "Invalid input date" = "Invalid input date"
-    "Export to Memo Pad is completed." = "Export to Memo Pad is completed."
+    "Select Time" = "Zvol èas"
+    "No Time" = "ádnı"
+    "Invalid input date" = "Neplatné datum"
+    "Export to Memo Pad is completed." = "Export do Memo Padu dokonèen."
 
-    "SUN"   = "SUN"
-    "MON"   = "MON"
-    "TUE"   = "TUE"
-    "WED"   = "WED"
-    "THU"   = "THU"
-    "FRI"   = "FRI"
-    "SAT"   = "SAT"
+    "SUN"   = "Ne"
+    "MON"   = "Po"
+    "TUE"   = "Út"
+    "WED"   = "St"
+    "THU"   = "Èt"
+    "FRI"   = "Pá"
+    "SAT"   = "So"
 
-    "Not enough memory" = "Not enough memory"
-    "%d notify entry is created.\n" = "%d notify entry is created.\n" 
-    "%d existing entry " = "%d existing entry "
-    "is kept untouched." = "is kept untouched."
-    "is modified." = "is modified."
+    "Not enough memory" = "Nedostatek pamìti"
+    "%d notify entry is created.\n" = "Vytvoøeno %d upozornìní.\n" 
+    "%d existing entry " = "%d existujících upozornìní "
+    "is kept untouched." = "ponecháno beze zmìny."
+    "is modified." = "zmìnìno."
 
     "Could not write prefs." = ""\
-		"Could not write prefs."
-    "Collecting Information..." = "Collecting Information..."
+    "Nemohu uloit nastavení."
+    "Collecting Information..." = "Sbírám informace..."
 
-    "HappyDays List" = "HappyDays List"
-    "Look up" = "Look up"
-    "Today" = "Today"
+    "HappyDays List" = "Seznam"
+    "Look up" = "Hledej"
+    "Today" = "Dnes"
 
-    "HappyDays View" = "HappyDays View"
-    "Done"  = "Done"
+    "HappyDays View" = "Detaily"
+    "Done"  = "OK"
     "DB" = "DB" 
     "TD" = "TD"
-    "Goto" = "Goto"
+    "Goto" = "Address Book"
 
-    "Utilities" = "Utilities"
-    "Date Book Notify" = "Date Book Notify"
-    "Cleanup Date Book"  = "Cleanup Date Book"
-    "To Do Notify" = "To Do Notify"
-    "Cleanup To Do"  = "Cleanup To Do"
-    "Export to Memo Pad" = "Export to Memo Pad"
-    "Solar to Lunar" = "Solar to Lunar"
-    "Lunar to Solar" = "Lunar to Solar"
-    "Options" = "Options"
-    "Preferences" = "Preferences"
-    "About HappyDays" = "About HappyDays"
+    "Utilities" = "Akce"
+    "Date Book Notify" = "Upozornìní Date Booku"
+    "Cleanup Date Book"  = "Vyèištìní Date Booku"
+    "To Do Notify" = "Upozornìní To Do"
+    "Cleanup To Do"  = "Vyèištìní To Do"
+    "Export to Memo Pad" = "Export do Memo Padu"
+    "Solar to Lunar" = "Solarní na lunární"
+    "Lunar to Solar" = "Lunární na solární"
+    "Options" = "Monosti"
+    "Preferences" = "Nastavení"
+    "About HappyDays" = "O aplikaci HappyDays"
 
-    "Edit" = "Edit"
-    "Undo" = "Undo"
-    "Cut" = "Cut"
-    "Copy" = "Copy" 
-    "Paste" = "Paste" 
-    "Select All" = "Select All" 
-    "Keyboard" = "Keyboard" 
+    "Edit" = "Uprav"
+    "Undo" = "Zpìt"
+    "Cut" = "Vyjmout"
+    "Copy" = "Kopírovat" 
+    "Paste" = "Vloit" 
+    "Select All" = "Oznaè vše" 
+    "Keyboard" = "Klávesnice" 
     "Graffiti" = "Graffiti"
 
-    "HappyDays Preferences" = "HappyDays Preferences"
-    "Custom field:" = "Custom field:"
-    "HappyDays ID:" = "HappyDays ID:"
-    "Emphasize Lunar Date" = "Emphasize Lunar Date"
+    "HappyDays Preferences" = "Nastavení"
+    "Custom field:" = "Název poloky:"
+    "HappyDays ID:" = "Identifikátor:"
+    "Emphasize Lunar Date" = "Zvırazni lunární datum"
 
     "OK" = "OK"
-    "Cancel" = "Cancel"
+    "Cancel" = "Storno"
 
-    "Solar to Lunar Convert" = "Solar to Lunar Convert"
-    "Enter Solar date:" = "Enter Solar date:"
-    "Year must be in 1881-2043" = "Year must be in 1881-2043"
-    "Result Lunar date:" = "Result Lunar date:"
+    "Solar to Lunar Convert" = "Solární na lunární"
+    "Enter Solar date:" = "Zadej solární datum:"
+    "Year must be in 1881-2043" = "Rok musí bıt mezi 1881 a 2043."
+    "Result Lunar date:" = "Vısledné lunární datum:"
 
-    "Convert" = "Convert"
+    "Convert" = "Pøevod"
 
-    "Lunar to Solar Convert" = "Lunar to Solar Convert"
-    "Enter Lunar date:" = "Enter Lunar date:"
-    "Leap" = "Leap"
-    "Result Solar date:" = "Result Solar date:"
+    "Lunar to Solar Convert" = "Lunární na solární"
+    "Enter Lunar date:" = "Zadej lunární datum:"
+    "Leap" = "pøestupnı"
+    "Result Solar date:" = "Vısledné solární datum:"
 
-    "Records:" = "Records:"
-      "all" = "all"
-      "selected" = "selected" 
-    "Existing:" = "Existing:"
-      "keep" = "keep"
-      "modify" = "modify"
-    "Priority:" = "Priority:"
-    "Category:" = "Category:"
-    "Private:" = "Private:"
+    "Records:" = "Záznamy:"
+      "all" = "vše"
+      "selected" = "zvolenı" 
+    "Existing:" = "Existující:"
+      "keep" = "nech bıt"
+      "modify" = "zmìò"
+    "Priority:" = "Priorita:"
+    "Category:" = "Kategorie:"
+    "Private:" = "Soukromé:"
     "Alarm:" = "Alarm:"
-    "Time:" = "Time:"
-    "More..." = "More..."
+    "Time:" = "Èas:"
+    "More..." = "Další..."
 
-    "Repeat for:" = "Repeat for:"
-    "years" = "years"
+    "Repeat for:" = "Opakuj:"
+    "years" = "rok(y)/let"
 
-    "HappyDays says" = "HappyDays says"
+    "HappyDays says" = "HappyDays"
 
-    "HappyDays Export" = "HappyDays Export"
+    "HappyDays Export" = "Export"
     "Would you like to export HappyDays List to Memo Pad?" = ""\
-    	"Would you like to export HappyDays List to Memo Pad?" 
+    	"Skuteènì chceš exportovat seznam události z HappyDays do Memo Padu?" 
 
-    "Custom Field Error" = "Custom Field Error"
-    "Help" = "Help" 
+    "Custom Field Error" = "Chybnı název poloky"
+    "Help" = "Nápovìda"
 
 
-    "HappyDays Cleanup" = "HappyDays Cleanup" 
+    "HappyDays Cleanup" = "Vyèisti" 
 
-    "Notify warning" = "Notify warning" 
+    "Notify warning" = "Upozornìní"
     "^1: Are you sure you want to create notify entries for ^2 HappyDays records?" = ""\
-  	"^1: Are you sure you want to create notify entries for ^2 HappyDays records?" 
+  	"^1: Urèitì chceš vytvoøit upozornìní pro ^2 poloek?" 
       
 
-    "Invalid event format" = "Invalid event format" 
+    "Invalid event format" = "Neplatnı formát události" 
 
     "The address record for ^1\n contains an invalid event. How would you like to handle it?" = ""\
-    "The address record for ^1\n contains an invalid event. How would you like to handle it?" 
+    "Záznam pro ^1\n má neplatnı formát. Co s tím mám dìlat?"
 
-    "Ignore" = "Ignore" 
-    "Ignore all" = "Ignore all" 
+    "Ignore" = "Ignoruj" 
+    "Ignore all" = "Ignoruj vše"
 
-    "Cleanup Done" = "Cleanup Done" 
+    "Cleanup Done" = "Vyèištìní dokonèeno" 
 
     "^1: ^2 HappyDays notify entries removed." = ""\
-    	"^1: ^2 HappyDays notify entries removed." 
+    	"^1: Odstranìno ^2 záznamù." 
 
-    "Birthday" = "Birthday" 
-    "All" = "All" 
-    "HappyDays Export List" = "HappyDays Export List" 
-    "(not exist in this year)" = "(not exist in this year)" 
-    "Please run Date Book once first." = "Please run Date Book once first."  
+    "Birthday" = "Narozeniny" 
+    "All" = "Všechny" 
+    "HappyDays Export List" = "Export" 
+    "(not exist in this year)" = "(v tomto roce se nevyskytuje)" 
+    "Please run Date Book once first." = "Nejdøív spuste aspoò jednou Date Book."  
     
-    "Instead of system date format" = "Instead of system date format"  
-    "Use" = "Use"  
-    "M/D/Y" = "M/D/Y"  
-    "D/M/Y" = "D/M/Y"  
-    "D.M.Y" = "D.M.Y"  
-    "D-M-Y" = "D-M-Y"  
-    "Y/M/D" = "Y/M/D"  
-    "Y.M.D" = "Y.M.D"  
-    "Y-M-D" = "Y-M-D"  
+    "Instead of system date format" = "Místo systémového formátu"
+    "Use" = "pouij"
+    "M/D/Y" = "M/D/R"
+    "D/M/Y" = "D/M/R"  
+    "D.M.Y" = "D.M.R"  
+    "D-M-Y" = "D-M-R"  
+    "Y/M/D" = "R/M/D"  
+    "Y.M.D" = "R.M.D"  
+    "Y-M-D" = "R-M-D"  
 
-    "Date Book Icon" = "Date Book Icon"  
-      "Icon Support" = "Icon Support"  
-      "AN" = "AN"  
-      "DateBk3" = "DateBk3"  
-      "AN Icon Number:" = "AN Icon Number:"  
-      "DateBk3 Icon:" = "DateBk3 Icon:"  
+    "Date Book Icon" = "Ikony"
+    "Icon Support" = "Ikony pro"  
+    "AN" = "AN"  
+    "DateBk3" = "DateBk3/4"  
+    "AN Icon Number:" = "Èíslo ikony pro AN:"  
+    "DateBk3 Icon:" = "Ikona pro DateBk3/4:"  
 
-    "Days" = "Days"  
+    "Days" = "dny"  
     "Date Book" = "Date Book"  
     "To Do" = "To Do"  
-    "Scan note field" = "Scan note field"  
-    "%d day(s) left" = "%d day(s) left"  
-    "Notify Format:" = "Notify Format:"  
-    "[Last, First] E(1) Year" = "[Last, First] E(1) Year"  
-    "[First Last] E(1) Year" = "[First Last] E(1) Year"  
-    "Event - Last, First Year" = "Event - Last, First Year"  
-    "Event - First Last Year" = "Event - First Last Year"  
-    "First Last Year" = "First Last Year"  
+    "Scan note field" = "Prohledej i poznámky"  
+    "%d day(s) left" = "Zbıvá %d dní"  
+    "Notify Format:" = "Formát upozornìní:"  
+    "[Last, First] E(1) Year" = "[pøíjm., køest.] u (rok)"  
+    "[First Last] E(1) Year" = "[køest. pøíjm.] u (rok)"  
+    "Event - Last, First Year" = "událost - pøíjm., køest. rok"  
+    "Event - First Last Year" = "událost - køest. pøíjm. rok"  
+    "First Last Year" = "køest. pøíjm. rok"  
     
-    "Processing" = "Processing"  
-    "Processed : " = "Processed : " 
+    "Processing" = "Vytváøím"  
+    "Processed : " = "Vytvoøeno: " 
 END
-
 STRING ID DateBookNotifyHelpString "long_notifySettingString"
 STRING ID DateBookNotifyMoreHelpString "long_notifySettingMoreString"
 STRING ID SelectDateString  "HappyDays"

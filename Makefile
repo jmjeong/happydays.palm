@@ -23,7 +23,7 @@ LANG = ENGLISH
 
 all: en
 
-all-lang: en ko de th dutch fr sp
+all-lang: en ko de th dutch fr sp cz
 
 en: $(TARGET).prc
 
@@ -40,6 +40,8 @@ dutch: $(TARGET)-dutch.prc
 fr: $(TARGET)-fr.prc
 
 sp: $(TARGET)-sp.prc
+
+cz: $(TARGET)-cz.prc
 
 .S.o:
 	$(CC) $(TARGETFLAGS) -c $<
@@ -73,6 +75,9 @@ $(TARGET)-fr.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGE
 
 $(TARGET)-sp.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGET).grc pref0000.$(TARGET).grc rloc0000.$(TARGET).grc bin-sp.res
 	$(BUILDPRC) $(TARGET)-sp.prc $(APPNAME) $(APPID) code0001.$(TARGET).grc code0000.$(TARGET).grc data0000.$(TARGET).grc *.bin pref0000.$(TARGET).grc rloc0000.$(TARGET).grc
+
+$(TARGET)-cz.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGET).grc pref0000.$(TARGET).grc rloc0000.$(TARGET).grc bin-cz.res
+	$(BUILDPRC) $(TARGET)-cz.prc $(APPNAME) $(APPID) code0001.$(TARGET).grc code0000.$(TARGET).grc data0000.$(TARGET).grc *.bin pref0000.$(TARGET).grc rloc0000.$(TARGET).grc
 
 code0000.$(TARGET).grc: $(TARGET)
 	$(OBJRES) $(TARGET)
@@ -121,6 +126,10 @@ bin-sp.res: $(TARGET)-sp.rcp
 	rm -f *.bin
 	$(PILRC) -L SPANISH $(TARGET)-sp.rcp .
 
+bin-cz.res: $(TARGET)-cz.rcp
+	rm -f *.bin
+	$(PILRC) -L CZECH $(TARGET)-cz.rcp .
+
 $(TARGET)-en.rcp: $(TARGET).rcp english.msg hdr.msg
 	cat hdr.msg english.msg $(TARGET).rcp > $(TARGET)-en.rcp
 
@@ -144,6 +153,9 @@ $(TARGET)-fr.rcp: $(TARGET).rcp french.msg hdr.msg
 
 $(TARGET)-sp.rcp: $(TARGET).rcp spanish.msg hdr.msg
 	cat hdr.msg spanish.msg $(TARGET).rcp > $(TARGET)-sp.rcp
+
+$(TARGET)-cz.rcp: $(TARGET).rcp czech.msg hdr.msg
+	cat hdr.msg czech.msg $(TARGET).rcp > $(TARGET)-cz.rcp
 
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(TARGET) $(LIBS)
