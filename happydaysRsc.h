@@ -193,19 +193,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define AgeStr						1939
 #define RemainedDayStr				1940
 
-#define MouseString                 1950
-#define CowString                   1951
-#define TigerString                 1952
-#define RabbitString                1953
-#define DragonString                1954
-#define SnakeString                 1955
-#define HorseString                 1956
-#define SheepString                 1957
-#define MonkeyString                1958   
-#define CockString                  1959
-#define DogString                   1960
-#define PigString                   1961
-
 #define ExportAlert                 1990
 #define AddrRescanAlert             1991
 

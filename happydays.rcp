@@ -47,19 +47,6 @@ STRING ID RemainedDayStr		"UpTo Date:"
 
 STRING ID FindHeaderString		"HappyDays"
 
-STRING ID MouseString           "Mouse"
-STRING ID CowString             "Cow"
-STRING ID TigerString           "Tiger"
-STRING ID RabbitString          "Rabbit"
-STRING ID DragonString          "Dragon"
-STRING ID SnakeString           "Snake"
-STRING ID HorseString           "Horse"
-STRING ID SheepString           "Sheep"
-STRING ID MonkeyString          "Monkey"
-STRING ID CockString            "Cock"
-STRING ID DogString             "Dog"
-STRING ID PigString             "Pig"
-
 FORM StartForm AT (0 0 160 160)
 NOFRAME
 SAVEBEHIND
