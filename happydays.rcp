@@ -42,10 +42,10 @@ STRING ID NotifyCreateString
 STRING ID ExistingEntryString   "%d existing entry "
 STRING ID UntouchedString       "is kept untouched."
 STRING ID ModifiedString        "is modified."
-STRING ID CantFindAddrString    "long_cantFindAddrString"
 STRING ID ExportHeaderString 	"HappyDays Export List"
 STRING ID ViewNotExistString	"(not exist in this year)"
 STRING ID DateBookFirstAlertString  "Please run Date Book once first."
+STRING ID ToDoFirstAlertString  "Please run Todo once first."
 STRING ID DateBookNotifyDaysString "Days"
 STRING ID AgeFormatString		"%dY %dM %dD (%ld)"
 
@@ -373,7 +373,7 @@ BEGIN
 			at (7 25 AUTO AUTO) RIGHTANCHOR FONT 0 
     FIELD ID DBNoteField AT (3 PrevBottom+10 143 61) FONT 0
         EDITABLE MULTIPLELINES UNDERLINED HASSCROLLBAR
-        MAXCHARS 25
+        MAXCHARS 125
     SCROLLBAR ID DBNoteScrollBar AT (PrevRight+2 PrevTop 7 PrevHeight)
         VALUE 0 MIN 0 MAX 0 PAGESIZE 0
 
@@ -454,14 +454,6 @@ BEGIN
     BUTTONS "OK" "Cancel"
 END
 
-ALERT ID CustomFieldAlert INFORMATION
-HELPID CustomErrorHelpString
-BEGIN
-    TITLE "Custom Field Error"
-    MESSAGE "^1"
-    BUTTONS "OK" "Help" "Preferences"
-END
-
 ALERT ID CleanupAlert CONFIRMATION
 HELPID CleanupAlertHelpString
 DEFAULTBUTTON 1
@@ -501,7 +493,7 @@ BEGIN
     TITLE "About HappyDays"
 
 	FORMBITMAP AT (6 18) BITMAP ID_BitmapIcon USABLE 
-    LABEL "HappyDays 2.12" AUTOID AT (PrevRight+38 PrevTop) FONT 1
+    LABEL "HappyDays 2.2" AUTOID AT (PrevRight+38 PrevTop) FONT 1
     LABEL "GPL free software"
         AUTOID AT (PrevLeft PrevTop+ABOUT_LINE_SPACING) FONT 0
     LABEL "(c) 1999-2002 Jaemok Jeong"
@@ -571,4 +563,4 @@ SMALLICONFAMILY
 	TRANSPARENT 192 192 0
 
 APPLICATIONICONNAME 1000 "HappyDays"
-VERSION ID 1 "2.12"
+VERSION ID 1 "2.2"

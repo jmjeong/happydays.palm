@@ -151,7 +151,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define ErrorAlert                  1900
 #define CleanupAlert                1901
 #define InvalidFormat               1902
-#define CustomFieldAlert            1903
+
 #define CustomErrorHelpString       1904
 #define NotifyWarning               1905
 #define CleanupAlertHelpString      1906
@@ -172,7 +172,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define ExistingEntryString         1920
 #define UntouchedString             1921
 #define ModifiedString              1922
-#define CantFindAddrString          1923
 #define SelectTimeString            1924
 #define NoTimeString                1925
 #define ExportDoneString            1926
@@ -194,6 +193,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define TDNoteString                1943
 #define BioRhythmStr				1944
 #define BioString					1945
+#define ToDoFirstAlertString	    1946
 
 #define JanString					1950		
 #define FebString					1951	
