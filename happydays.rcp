@@ -22,7 +22,7 @@ STRING ID SatString     "SAT"
 
 STRING ID WeekInitialString "SMTWTFS"
 
-STRING ID JanString		"Janunary"
+STRING ID JanString		"January"
 STRING ID FebString		"February"
 STRING ID MarString		"March"
 STRING ID AprString		"April"
@@ -38,10 +38,10 @@ STRING ID DecString		"December"
 STRING ID NotEnoughMemoryString
                 "Not enough memory"
 STRING ID NotifyCreateString
-                "%d notify entry is created.\n"
-STRING ID ExistingEntryString   "%d existing entry "
-STRING ID UntouchedString       "is kept untouched."
-STRING ID ModifiedString        "is modified."
+                "%d notify entries have been created.\n"
+STRING ID ExistingEntryString   "%d existing entries "
+STRING ID UntouchedString       "are kept untouched."
+STRING ID ModifiedString        "have been modified."
 STRING ID ExportHeaderString 	"HappyDays Export List"
 STRING ID ViewNotExistString	"(not exist in this year)"
 STRING ID DateBookFirstAlertString  "Please run Date Book once first."
@@ -285,7 +285,7 @@ BEGIN
         NONEDITABLE UNDERLINED MAXCHARS 15
 
     BUTTON "Convert" ID Sl2LnFormConvert AT
-            (10 BOTTOM@151 40 AUTO)
+            (10 BOTTOM@151 50 AUTO)
     BUTTON "OK" ID Sl2LnFormOk AT (PrevRight+5 PrevTop 40 AUTO)
 
 END
@@ -309,7 +309,7 @@ BEGIN
         NONEDITABLE UNDERLINED MAXCHARS 15
 
     BUTTON "Convert" ID Ln2SlFormConvert AT
-            (10 BOTTOM@151 40 AUTO)
+            (10 BOTTOM@151 50 AUTO)
     BUTTON "OK" ID Ln2SlFormOk AT (PrevRight+5 PrevTop 40 AUTO)
 
 END
@@ -492,7 +492,7 @@ BEGIN
     TITLE "About HappyDays"
 
 	FORMBITMAP AT (6 18) BITMAP ID_BitmapIcon USABLE 
-    LABEL "HappyDays 2.21" AUTOID AT (PrevRight+38 PrevTop) FONT 1
+    LABEL "HappyDays 2.22" AUTOID AT (PrevRight+38 PrevTop) FONT 1
     LABEL "GPL free software"
         AUTOID AT (PrevLeft PrevTop+ABOUT_LINE_SPACING) FONT 0
     LABEL "(c) 1999-2002 Jaemok Jeong"
@@ -502,7 +502,7 @@ BEGIN
                     FONT 1
     LABEL "happydays@jmjeong.com" AUTOID AT 	
 			(Center PrevTop+ABOUT_LINE_SPACING) Font 0
-    LABEL "jmjeong.com/palm/happydays"
+    LABEL "jmjeong.com/?HappyDays"
         AUTOID AT (Center PrevTop+ABOUT_LINE_SPACING) FONT 0
 
     LABEL "Translator" AUTOID AT (Center@80 PrevBottom+3) USABLE FONT 0
@@ -562,4 +562,4 @@ SMALLICONFAMILY
 	TRANSPARENT 192 192 0
 
 APPLICATIONICONNAME 1000 "HappyDays"
-VERSION ID 1 "2.21"
+VERSION ID 1 "2.22"

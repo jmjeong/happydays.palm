@@ -1,13 +1,15 @@
 TRANSLATION "FRENCH"
 BEGIN
-	"long_notifySettingMoreString" = ""\
-	"Réservé aux utilisateurs avancés\n\n"\
+    "sKst"= "sKst"
+
+    "long_notifySettingMoreString" =  ""\
+	"Réservé aux utilisateurs avancés.\n\n"\
 	"Cette note est utilisée pour des applications tierces de remplacement de l'Agenda "\
 	"telles que Action Names, DateBk3/4.\n\n"\
 	"Vous pouvez définir une icône, une police et d'autres paramètres en utilisant cette note.\n\n"\
 	"Pour plus d'informations, reportez-vous au manuel.\n"
-
-    "long_customErrorString" = ""\
+    "HappyDays"= "HappyDays"
+    "long_customErrorString" =  ""\
     "'Birthday' est le nom par défaut du champ personnalisé."\
     "Pour définir un autre nom de champ par défaut,"\
     " tapez 'Préférences'.\n\n"\
@@ -15,231 +17,280 @@ BEGIN
     "Renommer champs personnalisés' pour renommer l'un des champs personnalisés en 'Birthday'"\
     " ou tout autre chaîne que vous avez saisie dans les Préférences de "\
     "HappyDays.\n"
-
-    "long_aboutString" = ""\
+    "long_aboutString" =  ""\
     "'HappyDays' vous évite d'oublier les anniversaires et les fêtes "\
     "de vos amis et des membres de votre famille, ainsi que d'autres événements.\n\n"\
     "Reportez-vous aux fichiers index.html et manual.html pour des informations détaillées "\
     "sur le façon d'utiliser HappyDays\n\n"\
     "HappyDays est distribué selon les conditions générales GNU "\
     "Public License version 2.0.\n"
-
-    "long_cleanupAlertString" = ""\
+    "long_cleanupAlertString" =  ""\
     "Les enregistrements de notification (événements, notes ou tâches) de HappyDays sont reconnus s'ils comportent l'identifiant HappyDays "\
-	"{HappyDays ID} dans le champ Note. "\ 	
-    "Si vous utilisez également ce format pour vos propres "\
-    "enregistrements, ceux-ci sont susceptibles d'être effacés lors d'un nettoyage sous HappyDays.\n"
-
-    "long_sl2lnString" = ""\
+	"{ID HappyDays} dans le champ Note. "
+    "long_removeConfirmString" =  ""\
+    "Etes-vous sûr de vouloir supprimer tous "\
+    "les enregistrements de notification HappyDays ?"
+    "Invalid input date" =  "Date non valide"
+    "Select Time" =  "Choix heure"
+    "No Time" =  "Sans heure"
+    "Export to Memo Pad is completed." =  "L'export vers le Bloc-notes est terminé."
+    "long_sl2lnString" =  ""\
         "-) signifie mois lunaire plein\n"\
         "#) signifie mois lunaire intercalaire"
 
-    "long_cantFindAddrString" = ""\
-    "Impossible de trouver un champ personnalisé: '%s'\n"\
-    "Veuillez renommer un champ personnalisé du Carnet d'adresses."
+    "SUN" =  "Dim"
+    "MON" =  "Lun"
+    "TUE" =  "Mar"
+    "WED" =  "Mer"
+    "THU" =  "Jeu"
+    "FRI" =  "Ven"
+    "SAT" =  "Sam"
 
-    "Select Time" = "Choix heure"
-    "No Time" = "Sans heure"
-    "Invalid input date" = "Date non valide"
-    "Export to Memo Pad is completed." = "L'export vers le Bloc-notes est terminé."
+    "SMTWTFS"= "DLMMJVS"
 
-    "SUN"   = "DIM"
-    "MON"   = "LUN"
-    "TUE"   = "MAR"
-    "WED"   = "MER"
-    "THU"   = "JEU"
-    "FRI"   = "VEN"
-    "SAT"   = "SAM"
+    "January"= "Janvier"
+    "February"= "Février"
+    "March"= "Mars"
+    "April"= "Avril"
+    "May"= "Mai"
+    "June"= "Juin"
+    "July"= "Juillet"
+    "August"= "Août"
+    "September"= "Septembre"
+    "October"= "Octobre"
+    "November"= "Novembre"
+    "December"= "Décembre"
 
-    "Not enough memory" = "Mémoire insuffisante"
-    "%d notify entry is created.\n" = "%d enregistrements de notification ont été créés.\n" 
-    "%d existing entry " = "%d événements existants "
-    "is kept untouched." = "n'ont pas été modifiés."
-    "is modified." = "ont été modifiés."
+    "Not enough memory" =  "Mémoire insuffisante"
+    "%d notify entries have been created.\n"= "%d enregistrements de notification ont été créés.\n"
+    "%d existing entries "= "%d enregistrements existants "
+    "are kept untouched."= "ont été conservés."
+    "have been modified."= "ont été modifiés."
+    "HappyDays Export List" =  "Liste exportée par HappyDays" 
+    "(not exist in this year)" =  "(n'existe pas cette année)" 
+    "Please run Date Book once first." =  "Veuillez d'abord ouvrir l'Agenda."  
+    "Please run Todo once first."= "Veuillez d'abord ouvrir les Tâches"
+    "Days" =  "jour(s)"  
+    "%dY %dM %dD (%ld)" =  "%da %dm %dj (%ldj)"
 
-    "Collecting Information" = "Recherche d'informations"
+    "Date Book" =  "Agenda"  
+    "To Do" =  "Tâches"  
+    "%ld days left" =  "%ld jour(s) restant(s)"  
+    "%ld days passed" =  "échu depuis %ld jour(s)"  
 
-    "Look Up:" = "Aller à:"
+    "Type:" =  "Type:"
+    "Next Date:" =  "Prochain:"
+    "Origin:" =  "Origine:"
+    "Age:" =  "Age:"
+    "UpTo Date:" =  "A ce jour:"
+    "BioRhythm:"= "BioRythme"
+    "P(%s) E(%s) I(%s)"= "P(%s) E(%s) I(%s)"
 
-    "HappyDays View" = "Vue HappyDays"
-    "Done"  = "Terminé"
-    "DB" = "Ag" 
-    "TD" = "Tâ"
-    "Goto" = "Aller"
+    "Datebook Note"= "Note agenda"
+    "ToDo Note"= "Note tâches"
 
-    "Utilities" = "Utilitaires"
-    "Date Book Notify" = "Export vers Agenda"
-    "Cleanup Date Book"  = "Nettoyer Agenda"
-    "To Do Notify" = "Export vers Tâches"
-    "Cleanup To Do"  = "Nettoyer Tâches"
-    "Export to Memo Pad" = "Export vers Bloc-notes"
-    "Solar to Lunar" = "Solaire -> Lunaire"
-    "Lunar to Solar" = "Lunaire -> Solaire"
-	"Rescan Address Book" = "Relire le Carnet d'adresses"
+    "Collecting Information" =  "Recherche d'informations"
 
-    "Options" = "Options"
-	"Font..." = "Police de caractères..."
-    "Preferences" = "Préférences"
-	"Display Preferences" = "Préférences d'affichage"
-    "About HappyDays" = "A propos de HappyDays"
+    "HappyDays "= "HappyDays "
 
-    "Edit" = "Edition"
-    "Undo" = "Annuler"
-    "Cut" = "Couper"
-    "Copy" = "Copier" 
-    "Paste" = "Coller" 
-    "Select All" = "Sélectionner tout" 
-    "Keyboard" = "Keyboard" 
-    "Graffiti" = "Aide Graffiti"
+    "Look Up:" =  "Aller à:"
+    "N"= "N"
+    "D"= "D"
+    "A"= "A"
 
+    "HappyDays View" =  "Vue HappyDays"
 
-/* Font... */
+    "Done" =  "Terminé"
+    "DB" =  "Ag" 
+    "TD" =  "Tâ"
+    "Goto" =  "Aller à"
 
-/* preferences screen */
-    "Custom field:" = "Champ perso:"
-    "Instead of system date format" = "Remplacer format date système"  
-    "Use" = "Par"  
-    "M/D/Y" = "M/J/A"  
-    "D/M/Y" = "J/M/A"  
-    "D.M.Y" = "J.M.A"  
-    "D-M-Y" = "J-M-A"  
-    "Y/M/D" = "A/M/J"  
-    "Y.M.D" = "A.M.J"  
-    "Y-M-D" = "A-M-J"  
-	"Address Autoscan" = "Lect. auto. adresses"
-	"Always" = "Toujours"
-	"Ask" = "Demander"
-	"Never" = "Jamais"
+    "Utilities" =  "Utilitaires"
+    "Date Book Notify" =  "Exporter vers Agenda"
+    "Cleanup Date Book" =  "Nettoyer Agenda"
+    "C"= "N"
+    "To Do Notify" =  "Exporter vers Tâches"
+    "T"= "T"
+    "Cleanup To Do" =  "Nettoyer Tâches"
+    "O"= "A"
+    "Export to Memo Pad" =  "Exporter vers Bloc-notes"
+    "E"= "B"
+    "Solar to Lunar" =  "Solaire -> Lunaire"
+    "S"= "S"
+    "Lunar to Solar" =  "Lunaire -> Solaire"
+    "L"= "L"
+    "Rescan Address Book" =  "Relire le Carnet d'adresses"
 
-    "Notify Format:" = "Format de notification:"  
-    "[Last, First] E(1) Year" = "[Nom, Prénom] E(1) An"  
-    "[First Last] E(1) Year" = "[Prénom Nom] E(1) An"  
-    "Event - Last, First Year" = "Evénement - Nom, Prénom An"  
-    "Event - First Last Year" = "Evénement - Prénom Nom An"  
-    "First Last Year" = "Prénom Nom An"  
-    
-	"Address Book:" = "Carnet d'adresses:"
-	"Built-in" = "Standard"
+    "Options" =  "Options"
+    "Font..." =  "Police de caractères..."
+    "F"= "P"
+    "Preferences" =  "Préférences"
+    "R"= "R"
+    "Display Preferences" =  "Préférences d'affichage"
+    "About HappyDays" =  "A propos de HappyDays"
 
+    "Edit" =  "Edition"
+    "Undo" =  "Annuler"
+    "U"= "U"
+    "Cut" =  "Couper"
+    "X"= "X"
+    "Copy" =  "Copier" 
+    "Paste" =  "Coller" 
+    "P"= "P"
+    "Select All" =  "Sélectionner tout" 
+    "Keyboard" =  "Clavier" 
+    "K"= "C"
+    "Graffiti" =  "Aide Graffiti"
+    "G"= "G"
 
-/* Display preferences */
-    "Emphasize Lunar Date" = "Souligner les dates lunaires"
+    "Emphasize Lunar Date" =  "Souligner les dates lunaires"
+    "Display solar/lunar info in View"= "Afficher info solaire/lunaire dans la vue"
+    "OK" =  "OK"
+    "Cancel" =  "Annuler"
 
+    "Custom field:" =  "Champ perso:"
 
-/* About HappyDays */	
-	"GPL free software" = "Logiciel gratuit GPL"
-	"E-Mail & Web Page" = "Email & page web"
+    "Instead of system date format" =  "Remplacer format date syst."  
+    "Use" =  "Par"  
+    "M/D/Y" =  "M/J/A"  
+    "D/M/Y" =  "J/M/A"  
+    "D.M.Y" =  "J.M.A"  
+    "D-M-Y" =  "J-M-A"  
+    "Y/M/D" =  "A/M/J"  
+    "Y.M.D" =  "A.M.J"  
+    "Y-M-D" =  "A-M-J"  
 
-    "Translator" = "Traduction : Antoine"
-    "Translator's email" = "websearch@wanadoo.fr"
+    "Scan note field" =  "Scruter champ Note"  
+    "Ignore record with prefix '!'" =  "Ignorer enreg. avec préfixe '!'"
 
+    "Address Autoscan" =  "Lect. auto. adresses"
+    "Always" =  "Toujours"
+    "Ask" =  "Demander"
+    "Never" =  "Jamais"
 
-    "OK" = "OK"
-    "Cancel" = "Annuler"
+    "Notify Format:" =  "Format de notification:"  
+    "[Last, First] E(1) Year" =  "[Nom, Prénom] E(1) An"  
+    "[First Last] E(1) Year" =  "[Prénom Nom] E(1) An"  
+    "Event - Last, First Year" =  "Evénement - Nom, Prénom An"  
+    "Event - First Last Year" =  "Evénement - Prénom Nom An"  
+    "First Last Year" =  "Prénom Nom An"  
 
-    "Solar to Lunar Convert" = "Solaire -> Lunaire"
-    "Enter Solar date:" = "Entrez la date solaire:"
-    "Year must be in 1881-2043" = "Année comprise entre 1881 et 2043"
-    "Result Lunar date:" = "Résultat date lunaire:"
+    "Address Book:" =  "Carnet d'adresses:"
+    "Built-in" =  "Standard"
+    "Address Album"= "Address Album"
+    "AddressBkR"= "AddressBkR"
+    "Address Plus(+)"= "Address Plus(+)"
+    "Super Names"= "Super Names"
+    "TealPhone"= "TealPhone"
 
-    "Convert" = "Convertir"
+    "HappyDays ID:"= "ID HappyDays :"
 
-    "Lunar to Solar Convert" = "Lunaire -> Solaire"
-    "Enter Lunar date:" = "Entrez la date lunaire:"
-    "Leap" = "Intercalaire"
-    "Result Solar date:" = "Résultat date solaire:"
+    "Solar to Lunar Convert" =  "Solaire -> Lunaire"
+    "Enter Solar date:" =  "Entrez la date solaire:"
+    "Year must be in 1881-2043" =  "Année comprise entre 1881 et 2043"
 
+    "Result Lunar date:" =  "Résultat date lunaire:"
 
-/* Date Book & To Do Notify */
-    "Records:" = "Enregistrements:"
-      "all" = "tout"
-      "selected" = "sélectionné" 
-    "Existing:" = "Existants:"
-      "keep" = "garder"
-      "modify" = "modifier"
-    "Priority:" = "Priorité:"
-    "Category:" = "Categorie:"
-    "Private:" = "Personnel:"
-    "Alarm:" = "Alarme:"
-    "Time:" = "Heure:"
-    "Icon" = "Icône"
+    "Convert" =  "Convertir"
 
-    "Repeat for:" = "Répéter pendant:"
-    "years" = "an(s)"
+    "Lunar to Solar Convert" =  "Lunaire -> Solaire"
+    "Enter Lunar date:" =  "Entrez la date lunaire:"
+    "Leap" =  "Intercalaire"
 
-    "Notify warning" = "Avertissement" 
-	"long_notifywarningString" = ""\
-  		"^1: Etes-vous sûr de vouloir créer des enregistrements de notification "\
-		"^2 à partir des données HappyDays ?" 
-      
-/* Date Book Icon */
-    "Date Book Icon" = "Icône Agenda"  
-      "Icon Support" = "Gestion des icônes"  
-      "AN" = "AN"  
-      "DateBk3" = "DateBk3"  
-      "AN Icon Number:" = "N° icône AN:"  
-      "DateBk3 Icon:" = "Icône DateBk3:"  
+    "Result Solar date:" =  "Résultat date solaire:"
 
-/* HappyDays Cleanup */
-    "HappyDays Cleanup" = "Nettoyage HappyDays" 
+    "Records:" =  "Enreg.:"
+    "all" =  "tout"
+    "selected" =  "sélectionné" 
 
-    "long_removeConfirmString" = ""\
-    "Etes-vous sûr de vouloir supprimer tous "\
-    "les enregistrements de notification HappyDays ?"
+    "Existing:" =  "Existants:"
+    "keep" =  "garder"
+    "modify" =  "modifier"
 
+    "Private:" =  "Personnel:"
+    " "= " "
 
+    "Alarm:" =  "Alarme:"
 
-    "HappyDays says" = "HappyDays"
+    "Time:" =  "Heure:"
 
-    "HappyDays Export" = "HappyDays Export"
-    "Would you like to export HappyDays List to Memo Pad?" = ""\
+    "Repeat for:" =  "Répéter pdt:"
+    "years" =  "an(s)"
+
+    "Note"= "Note"
+
+    "Add the following note" =  "Ajouter la note suivante"
+
+    "Priority:" =  "Priorité:"
+    "1"= "1"
+    "2"= "2"
+    "3"= "3"
+    "4"= "4"
+    "5"= "5"
+
+    "Category:" =  "Catégorie:"
+
+    "HappyDays says" =  "HappyDays"
+    "^1"= "^1"
+
+    "Address Change" =  "Relire le Carnet d'adresses"
+    "AddressDB is changed. \nDo you want to rescan it?" =  ""\
+		"Le Carnet d'adresses a été modifié. \nVoulez-vous le relire ?"
+    "Yes" =  "Oui"
+    "No" =  "Non"
+
+    "HappyDays Export" =  "HappyDays Export"
+    "Would you like to export HappyDays List to Memo Pad?" =  ""\
     	"Voulez-vous exporter les données Happydays vers le Bloc-notes ?" 
 
-    "Custom Field Error" = "Erreur de champ personnalisé"
-    "Help" = "Aide" 
+    "HappyDays Cleanup" =  "Nettoyage HappyDays" 
+    "^1: ^2"= "^1: ^2"
 
+    "Notify warning" =  "Avertissement" 
+    "long_notifywarningString" =  ""\
+  		"^1: Etes-vous sûr de vouloir créer des enregistrements de notification "\
+		"à partir de ^2 données HappyDays ?" 
 
-    "Invalid event format" = "Format d'événemenent non valide" 
-
-	"long_invalidformatString" = ""\
+    "Invalid event format" =  "Format d'événemenent non valide" 
+    "long_invalidformatString" =  ""\
     	"Les données Happydays du Carnet d'adresses pour \n[^1]\n contiennent un événement non valide. "\
 		"Comment voulez-vous le traiter ?" 
+    "Ignore" =  "Ignorer" 
+    "Ignore all" =  "Ignorer tout" 
 
-    "Ignore" = "Ignorer" 
-    "Ignore all" = "Ignorer tout" 
-
-    "Cleanup Done" = "Nettoyage terminé" 
-
-    "^1: ^2 HappyDays notify entries removed." = ""\
+    "Cleanup Done" =  "Nettoyage terminé" 
+    "^1: ^2 HappyDays notify entries removed." =  ""\
     	"^1: ^2 enregistrements de notification HappyDays supprimé(s)." 
 
-    "HappyDays Export List" = "Liste exportée par HappyDays" 
-    "(not exist in this year)" = "(n'existe pas cette année)" 
-    "Please run Date Book once first." = "Veuillez d'abord ouvrir l'Agenda."  
-    
-    "Days" = "Jour"  
-    "Date Book" = "Agenda"  
-    "To Do" = "Tâches"  
-    "Scan note field" = "Scruter champ Note"  
-    "%ld days left" = "%ld jour(s) restant(s)"  
-    "%ld days passed" = "échu depuis %ld jour(s)"  
+    "HappyDays 2.21"= "Happydays 2.21"
+    "GPL free software" =  "Logiciel gratuit GPL"
+    "(c) 1999-2002 Jaemok Jeong"= "(c) 1999-2002 Jaemok Jeong"
 
-    "Processing" = "Traitement"  
-    "Processed : " = "Traité(s) : " 
+    "E-Mail & Web Page" =  "Email & page web"
+    "happydays@jmjeong.com"= "happydays@jmjeong.com"
+    "jmjeong.com/?HappyDays"= "jmjeong.com/?HappyDays"
 
-	"Address Change" = "Relire le Carnet d'adresses"
-	"AddressDB is changed. \nDo you want to rescan it?"= ""\
-		"Le Carnet d'adresses a été modifié. \nVoulez-vous le relire ?"
+    "Translator" =  "Traduction : Antoine"
+    "Translator's email" =  "antoine@freewarefrance.com"
 
-/* HappyDays view */
-	"Type:" = "Type:"
-	"Next Date:" = "Prochain:"
-	"Origin:" = "Origine:"
-	"Age:" = "Age:"
-	"UpTo Date:" = "A ce jour:"
-	"%dY %dM %dD (%ld)" = "%dA %dM %dJ (%ld)"
+    "Help" =  "Aide" 
 
-	"Yes" = "Oui"
-	"No" = "Non"
+    "Processing" =  "Traitement"  
+    "Processed : " =  "Traité(s) : " 
+
+    "bitmap/largeIconBW.bmp"= "bitmap/largeIconBW.bmp"
+
+    "bitmap/mediumIconBW.bmp"= "bitmap/mediumIconBW.bmp"
+
+    "bitmap/largeInvertedIconBW.bmp"= "bitmap/largeInvertedIconBW.bmp"
+
+    "bitmap/HD large.bmp"= "bitmap/HD large.bmp"
+    "bitmap/HD large color.bmp"= "bitmap/HD large color.bmp"
+
+    "bitmap/HD small.bmp"= "bitmap/HD small.bmp"
+    "bitmap/HD small color.bmp"= "bitmap/HD small color.bmp"
+
+    "2.21"= "2.21"
 END
+
 

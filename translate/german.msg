@@ -32,15 +32,15 @@ BEGIN
       "-) bedeutet normaler Monat im Lunarkalender\n"\
       "#) bedeutet Schaltmonat im Lunarkalender"
 
-    "SUN" =  "SON"
-    "MON" =  "MON"
-    "TUE" =  "DIE"
-    "WED" =  "MIT"
-    "THU" =  "DON"
-    "FRI" =  "FRE"
-    "SAT" =  "SAM"
+    "SUN" =  "SO"
+    "MON" =  "MO"
+    "TUE" =  "DI"
+    "WED" =  "MI"
+    "THU" =  "DO"
+    "FRI" =  "FR"
+    "SAT" =  "SA"
 
-    "SMTWTFS" =  "SMDMDFSA"
+    "SMTWTFS" =  "SMDMDFS"
 
     "Janunary" =  "Januar"
     "February" =  "Februar"
@@ -60,12 +60,10 @@ BEGIN
     "%d existing entry " =  "%d bestehende Einträge "
     "is kept untouched." =  "belassen."
     "is modified." =  "geändert."
-    "long_cantFindAddrString" =  ""\
-      "Kein Benutzerfeld '%s' im Adressbuch gefunden.\n"\
-      "Bitte ein Benutzerfeld umbenennen."
     "HappyDays Export List" =  "HappyDays Export Liste"
     "(not exist in this year)" =  "(in diesem Jahr nicht vorhanden)"
     "Please run Date Book once first." =  "Bitte vorher den Kalender einmal aufrufen."
+    "Please run Todo once first."= "Bitte vorher die Aufgaben einmal aufrufen"
     "Days" =  "Tage"
     "%dY %dM %dD (%ld)" =  "%dJ %dM %dT (%ld)"
 
@@ -79,9 +77,11 @@ BEGIN
     "Origin:" =  "Erster:"
     "Age:" =  "Alter:"
     "UpTo Date:" =  "Zeit:"
+    "BioRhythm:"= "Biorythmus:"
+    "P(%s) E(%s) I(%s)"= "P(%s) E(%s) I(%s)"
 
     "Datebook Note" =  "Kalender-Notiz"
-    "ToDo Note"= "Aufgaben-Notiz"
+    "ToDo Note" =  "Aufgaben-Notiz"
 
     "Collecting Information" =  "Daten werden eingelesen"
 
@@ -206,9 +206,6 @@ BEGIN
     "Would you like to export HappyDays List to Memo Pad?" =  ""\
       "Möchten Sie die HappyDays Liste als Merkzettel exportieren?"
 
-    "Custom Field Error" =  "Benutzerfeld Fehler"
-    "Help" =  "Hilfe"
-
     "HappyDays Cleanup" =  "Einträge entfernen"
 
     "Notify warning" =  "Warnung"
@@ -225,10 +222,12 @@ BEGIN
     "^1: ^2 HappyDays notify entries removed." =  ""\
       "^1: ^2 HappyDays Einträge gelöscht."
 
-
     "Translator" =  "Übersetzung: Gunther Zagatta"
     "Translator's email" =  "zagatta@web.de"
+
+    "Help" =  "Hilfe"
 
     "Processing" =  "Arbeite"
     "Processed : " =  "Bearbeitet : "
 END
+

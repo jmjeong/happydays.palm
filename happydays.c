@@ -111,15 +111,15 @@ static void MainFormResize(FormPtr frmP, Boolean draw);
 static void MainTableSelectItem(TablePtr table, Int16 row, Boolean selected);
 
 void MainFormDrawRecord(MemPtr tableP, Int16 row, Int16 column, 
-                               RectanglePtr bounds);
+                               RectanglePtr bounds) SECT2;
 
-Boolean MenuHandler(FormPtr frm, EventPtr e);
+Boolean MenuHandler(FormPtr frm, EventPtr e) SECT2;
 void MainFormScroll(Int16 newValue, Int16 oldValue, Boolean force_redraw);
-void MainFormScrollLines(Int16 lines, Boolean force_redraw) SECT1;
+void MainFormScrollLines(Int16 lines, Boolean force_redraw) SECT2;
 void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column, 
-                              RectanglePtr bounds) SECT1;
-void DrawTiny(int size,int x,int y,int n) SECT1;
-void DrawSilkMonth(int mon, int year, int day, int x, int y) SECT1;
+                              RectanglePtr bounds) SECT2;
+void DrawTiny(int size,int x,int y,int n) SECT2;
+void DrawSilkMonth(int mon, int year, int day, int x, int y) SECT2;
 
 ////////////////////////////////////////////////////////////////////
 // private database for HappyDays
@@ -571,7 +571,7 @@ static void ReadPrefsRec(void)
         gPrefsR.Prefs.dateformat = dfMDYWithSlashes;
  
 #if defined(GERMAN)
-        StrCopy( gPrefsR.Prefs.custom, "Geburstag");
+        StrCopy( gPrefsR.Prefs.custom, "Geburtstag");
         gPrefsR.Prefs.dateformat = dfDMYWithDots; 
 #elif defined(PORTUGUESE_BR)
         StrCopy( gPrefsR.Prefs.custom, "Aniversario");
@@ -2888,6 +2888,9 @@ static Boolean StartFormHandleEvent(EventPtr e)
 //
 //
 // $Log$
+// Revision 1.72  2003/01/13 23:42:51  jmjeong
+// (Fix) Datebook Alarm (reschedule alarm after notifying)
+//
 // Revision 1.71  2002/11/26 19:40:55  jmjeong
 // * Fix 'run datebook once' error(I hope)
 // * Rearrance preference record

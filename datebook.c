@@ -298,7 +298,8 @@ static void ApptPack(ApptDBRecordPtr s, ApptPackedDBRecordPtr d) {
  *  BY: Roger Flores
  *
  *************************************************************/
-static void ApptUnpack(ApptPackedDBRecordPtr src, ApptDBRecordPtr dest) {
+void ApptUnpack(ApptPackedDBRecordPtr src, ApptDBRecordPtr dest)
+{
     ApptDBRecordFlags   flags;
     char *p;
 

@@ -423,7 +423,12 @@ Int16 GotoAddress(Int16 index)
             SysUIAppSwitch(cardNo, dbID,
                            sysAppLaunchCmdGoTo,
                            (MemPtr) theGotoPointer);
-            
+			/*
+			 * return from address? (fatal?)
+            SysAppLaunch(cardNo, dbID, sysAppLaunchFlagNewThread,
+                           sysAppLaunchCmdGoTo,
+                           (MemPtr) theGotoPointer, &ret);
+			*/
             return 0;
         }
     }

@@ -51,6 +51,34 @@ typedef ApptAppInfoType * ApptAppInfoPtr;
 
 #define apptMaxDisplayableAlarms 10
 
+#define datebookVersionNum						3
+#define datebookPrefsVersionNum				4
+#define datebookPrefID							0x00
+#define datebookUnsavedPrefsVersionNum		1
+#define datebookUnsavedPrefID					0x00
+#define datebookDBName							"DatebookDB"
+
+// Default setting for the Details Dialog.
+#define defaultAlarmAdvance			5
+#define defaultAdvanceUnit				aauMinutes
+
+
+// Default databook app preference values
+#define defaultDayStartHour					(8)
+#define defaultDayEndHour						(18)
+#define defaultAlarmPresetAdvance			(apptNoAlarm)
+#define defaultAlarmPresetUnit				(aauMinutes)
+#define defaultSaveBackup						(true)
+#define defaultShowTimeBars					(true)
+#define defaultCompressDayView				(true)
+#define defaultShowTimedAppts					(true)
+#define defaultShowUntimedAppts				(false)
+#define defaultShowDailyRepeatingAppts		(false)
+#define defaultAlarmSoundRepeatCount		(3)
+#define defaultAlarmSoundRepeatInterval	(300)
+#define defaultAlarmSoundUniqueRecID		(0)
+#define defaultAlarmSnooze						(300)
+#define defaultRecentForm						(DayView)
 
 /************************************************************
  *
@@ -168,9 +196,6 @@ typedef struct {
     Char *					note;
 } ApptDBRecordType;
 
-typedef ApptDBRecordType * ApptDBRecordPtr;
-
-
 // ApptGetAppointments returns an array of the following structures.
 typedef struct {
     TimeType		startTime;
@@ -179,12 +204,59 @@ typedef struct {
 } ApptInfoType;
 typedef ApptInfoType * ApptInfoPtr;
 
+
+typedef struct {
+	UInt16		recordNum;
+	UInt32		alarmTime;
+} DatebookAlarmType;
+
+typedef struct {
+	UInt16 		recordNum;
+	UInt32		alarmTime;
+} PendingAlarmType;		// Moved from DateAlarm.c
+
+typedef struct {
+	UInt16					pendingCount;
+	PendingAlarmType	pendingAlarm [apptMaxDisplayableAlarms];
+	UInt16					dismissedCount;
+	UInt32					dismissedAlarm [apptMaxDisplayableAlarms];
+	UInt32					snoozeAnchorUniqueID;
+	UInt32					snoozeAnchorTime;
+	UInt16					snoozeDuration;
+} PendingAlarmQueueType;
+
+// This is the structure of the data that's saved to the state file.
+typedef struct {
+	UInt16					dayStartHour;
+	UInt16					dayEndHour;
+	AlarmInfoType		alarmPreset;
+	FontID				v20NoteFont;		// Changed for 2.0 compatibility (BGT)
+	Boolean				saveBackup;
+	Boolean				showTimeBars;
+	Boolean				compressDayView;
+	Boolean				showTimedAppts;
+	Boolean				showUntimedAppts;
+	Boolean				showDailyRepeatingAppts;
+	UInt8					reserved;
+	
+	// Version 3 preferences
+	UInt16 					alarmSoundRepeatCount;
+	UInt16 					alarmSoundRepeatInterval;
+	UInt32					alarmSoundUniqueRecID;
+	FontID				apptDescFont;
+	FontID				noteFont;		// Changed for 2.0 compatibility (BGT)
+	
+	// Version 4 preferences
+	UInt16					alarmSnooze;
+} DatebookPreferenceType;
+
+typedef ApptDBRecordType*   ApptDBRecordPtr;
+
 /************************************************************
  *
  * Appointment database routines.
  *
  *************************************************************/
-
 
 extern Err ApptNewRecord (DmOpenRef dbP, ApptDBRecordPtr r, UInt16 *index);
 extern MemHandle ApptGetAppointments (DmOpenRef dbP, DateType date,

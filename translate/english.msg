@@ -39,10 +39,10 @@ BEGIN
     "SAT"   = "SAT"
 
     "Not enough memory" = "Not enough memory"
-    "%d notify entry is created.\n" = "%d notify entry is created.\n" 
-    "%d existing entry " = "%d existing entry "
-    "is kept untouched." = "is kept untouched."
-    "is modified." = "is modified."
+    "%d notify entries have been created.\n" = "%d notify entries have been created.\n" 
+    "%d existing entries " = "%d existing entries "
+    "are kept untouched." = "are kept untouched."
+    "have been modified." = "have been modified."
 
     "Collecting Information" = "Collecting Information"
 
@@ -174,8 +174,6 @@ BEGIN
     "Are you sure you want to remove all "\
     "HappyDays notify entries?"
 
-
-
     "HappyDays says" = "HappyDays says"
 
     "HappyDays Export" = "HappyDays Export"
@@ -217,6 +215,10 @@ BEGIN
 	"Address Change" = "Address Rescan"
 	"AddressDB is changed. \nDo you want to rescan it?"= ""\
 		"Address DB is changed. \nDo you want to rescan it?"
+
+ 	"Ignore record with prefix '!'" = "Ignore record with prefix '!'"
+ 	"Databook note" = "Databook note"
+ 	"Add the following note" = "Add the following note"
 
 /* HappyDays view */
 	"Type:" = "Type:"

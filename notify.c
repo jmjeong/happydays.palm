@@ -58,6 +58,7 @@ static WhichString whichString;     // 1 = DB, 2 = ToDo
 ////////////////////////////////////////////////////////////////////
 
 extern Boolean TextMenuHandleEvent(UInt16 menuID, UInt16 objectID);
+extern void RescheduleAlarms (DmOpenRef dbP);
 
 static Boolean IsHappyDaysRecord(Char* notefield);
 static void LoadTDNotifyPrefsFields(void);
@@ -318,6 +319,12 @@ Boolean DBNotifyFormHandleEvent(EventPtr e)
             UnloadDBNotifyPrefsFields();
 
             NotifyAction(DateBookNotifyForm, NotifyDatebook);
+            // reschedule alarm
+            if (gPrefsR.DBNotifyPrefs.alarm &&
+                gPrefsR.DBNotifyPrefs.notifybefore >= 0) {
+                RescheduleAlarms(DatebookDB);
+            }
+    
             FrmReturnToForm(0);
 
             handled = true;
@@ -1140,7 +1147,7 @@ static void NotifyAction(UInt32 whatAlert,
 
         MemPtrFree(info);
     }
- Exit_Notify_All:                
+ Exit_Notify_All:
 
     return;
 }

@@ -1,16 +1,16 @@
 ## Makefile for HappyDays application
 
-VERSION = 2.2
+VERSION = 2.22
 TARGET = happydays
 APPNAME = "HappyDays"
 APPID = "Jmje"
 
 FILES = lun2sol.c sol2lun.c address.c datebook.c util.c \
 		birthdate.c happydays.c memodb.c s2lconvert.c \
-		todo.c notify.c
+		todo.c notify.c datealarm.c
 OBJS = obj/lun2sol.o obj/sol2lun.o obj/address.o obj/datebook.o obj/util.o \
 		obj/birthdate.o obj/happydays.o obj/memodb.o obj/s2lconvert.o \
-		obj/todo.o obj/notify.o \
+		obj/todo.o obj/notify.o obj/datealarm.o \
 		obj/happydays-sections.o
 
 CC = m68k-palmos-gcc
@@ -385,7 +385,7 @@ tags:
 
 clean:
 	@echo "Deleting obj files..." &&\
-	cd obj && \rm -f *
+	cd obj && \rm -rf *
 
 veryclean: clean
 	-rm -f $(TARGET)*.prc pilot.ram pilot.scratch
@@ -404,14 +404,12 @@ src:
 
 zip: prc/$(TARGET).prc 
 	-@echo "Making distribution file(happydays-$(VERSION).zip) ..." &&\
-	\rm -rf dist && mkdir dist && mkdir dist/img && \
-	cp prc/$(TARGET).prc dist && cp manual/*.html dist  && \
-	cp manual/img/*.gif dist/img && cp manual/img/*.png dist/img && \
+	\rm -rf dist && mkdir dist && \
+	cp prc/$(TARGET).prc dist && cp manual/README.txt dist  && \
 	cd dist && \
 	zip -r ../happydays-$(VERSION).zip *  && \rm -rf dist
 
-upload: zip src
-	scp *.zip jmjeong.com:~/public_html/palm/happydays/down
-	scp manual/*.html jmjeong.com:~/public_html/palm/happydays 
+upload: zip 
+	scp *.zip jmjeong.com:~/wikix/myfile/HappyDays
 
 -include .depend
