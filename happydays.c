@@ -86,6 +86,8 @@ struct sPrefsR defaultPref = {
     0,                                      // hide secret record
 #ifdef GERMAN
     "Alle",                                 // Address category
+#elif defined(PORTUGUESE_BR)
+    "All",                                 // Address category
 #else
     "All", 
 #endif

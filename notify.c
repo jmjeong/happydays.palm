@@ -41,6 +41,7 @@ extern TimeFormatType gPreftfmts;  	// happydas.h
 extern UInt32 gMmcdate, gMmmdate;   // Memo create/modify time
 extern Int16 gMainTableTotals;      // Main Form table total rows;
 extern Int16 gMainTableHandleRow;   // The row of birthdate view to display
+extern DateType gStartDate;			// staring date of birthday listing
 
 UInt16 gToDoCategory;               // todo category
 Char gDateBk3Icon[52][8];      	    // dateBk3 icon string
@@ -857,7 +858,8 @@ static void NotifyDatebook(int mainDBIndex, DateType when, Int8 age,
 
             // now use the same routine in lunar an lunar_leap
             //
-            DateSecondsToDate(TimGetSeconds(), &current);
+            // DateSecondsToDate(TimGetSeconds(), &current);
+			current = gStartDate;
 
             for (i=0; i < duration; i++) {
                 converted = r.date;
@@ -902,7 +904,8 @@ static void NotifyToDo(int mainDBIndex, DateType when, Int8 age,
             
             // now use the same routine in lunar an lunar_leap
             //
-            DateSecondsToDate(TimGetSeconds(), &current);
+            // DateSecondsToDate(TimGetSeconds(), &current);
+			current = gStartDate;
 
             converted = r.date;
             if (FindNearLunar(&converted, current,

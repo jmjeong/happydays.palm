@@ -3,6 +3,36 @@
 <h1>HappyDays FAQ</h1>
 
 <h2>
+Creating HappyDays tab from Outlook 2000(Contributed by Matt Rubb) - 
+<a href="local/HappyDays_Outlook_Form.zip">HappyDays_Outlook_Form.zip</a>
+
+</h2>
+
+<p>
+Changing Outlook 2000's default contact form
+<a href="http://support.microsoft.com/support/kb/articles/Q250/3/08.ASP">
+http://support.microsoft.com/support/kb/articles/Q250/3/08.ASP</a>
+
+<ol>
+<li> Create a backup of your Outlook profile
+<a href="http://office.microsoft.com/downloads/2000/Pfbackup.aspx">
+http://office.microsoft.com/downloads/2000/Pfbackup.aspx<a>
+<li> Double-click on HappyDays.oft
+<li> Select Tools - Forms - Publish Form
+<li> Change "Look In:" to "Personal Forms Library
+<li> Enter a name in "Display Name" field and note the "Message class:" value
+<li> Run "FormSwap.exe" which is in the Formsadmin.exe install
+<li> In the Outlook Forms Administrator select "Contact (IPM.Contact)" in the
+Target dropdown
+<li> Place the value from "Message class:" (step 4) into the two Compose
+fields and the Read field.
+<li> Press "Save"
+</ol>
+
+The HappyDays tab now appears when you create and open contacts
+<p>
+
+<h2>
 Can I set up not only birthday but also event or anniversary?
 </h2>
 
@@ -22,7 +52,11 @@ href="mailto:happydays@jmjeong.com">me</a>.
 <br>
 <li>Easter day - <a href="local/easter.txt">Easter.txt</a>(provided by 
 	Mitra YIP)
+<li>Chinese Lunar Festival - <a
+href="local/Chinese_Lunar_Festival.txt">Chinese_Lunar_Festival.txt</a>
+(provided by CN Leong)
 </ul>
+<p>
 
 <h2>
 I encountered the error message such as "The address record for ..
@@ -35,6 +69,7 @@ There are two possibilities to display this error message.
   <li>Input date format is not same as system date format.
   <li>Invalid record format. For more information, look up the manual.
 </ul>
+<p>
 
 <h2> How can I get the Datebook notify to display age instead of
 birth year?</h2>
@@ -44,6 +79,7 @@ If you want to display the age of the person, you must notify the date into
 datebook with 'repeat for' 1. If 'repeat for' is more than 2 or -1, recurring
 event(only one record) is created in datebook. Then you will see the
 same age every year. So I changed the age into year in this case.
+<p>
 
 <h2>
 Can I set up event that happens the first Monday of the month of
@@ -59,7 +95,7 @@ But there is a way to do this in original date book.(Contributed by Mitra YIP)
 <li> Create a new meeting on the first Monday of September this year.
 <li> Set it as repeat Monthly by Day and repeat for every 12 months.
 </ol>
-</P>
+<P>
 
 <h2>I want to translate HappyDays into my favorite language. What should
 I do?</h2>
@@ -79,6 +115,7 @@ favorite language.
 If you are working on it, please let <a
 href="mailto:happydays@jmjeong.com">me</a> know to prevent the
 duplicate work.
+<p>
 
 
 <h2>
@@ -97,6 +134,7 @@ format among several candidate. It becomes hard and time-consuming to decide
 it. So I use hash(well-known as good functionality) algorithm to map
 address book's user name into one long integer. With it, HappyDays can easily
 determine whether several records belongs to the same address book. 
+<p>
 
 <h2>
 Can you add data directly into HappyDays? The only way i see to have
@@ -114,6 +152,7 @@ has some advantages over directly input method.
 <li>It is easy to keep the integrity of data. 
 <li>Program size. :-)
 </ol>
+<p>
 
 <h2>
 I entered in events that began in the year 2000. 
@@ -121,7 +160,7 @@ HappyDays does not recognize that they will be 1 year old in the year 2001.
 </h2>
 <p>
 You must input not '00' but '2000' to represent the year 2000.
-
+<p>
 
 <h2>
 I am using HappyDays with ActionNames. How do I access icons for AN events?
@@ -135,6 +174,7 @@ But there is the easy way to know the AN icon number for AN events.
 Make the NEW MEETING with the appropriate icon in ActionNames Datebook.
 And open the built-in Date Book and look up the created event.
 You can see the AN icon number in the note field of the searched record.
+<p>
 
 <h2>
 I found when I convert lunar day "27-Apr-2001" to solar day,
@@ -146,4 +186,4 @@ the software show solar day is "20-May-2001",but accurately is
 According to korean calendar, 27-Apr-2001 in lunar falls on 20-May-2001 in
 solar date. I don't know why this discrepancy could happen.
 Any ideas?
-
+<p>

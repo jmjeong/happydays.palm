@@ -2,20 +2,20 @@ TRANSLATION "PORTUGUESE-BR"
 BEGIN
 	"long_notifySettingMoreString" = ""\
 	"Para o numero do ícone AN, consulte o manual do Action Names. "\
-	"o ícone do DateBk3 é lido a partir do Bloco de Notas. Se você não "\
-	"tem um registro DateBk3 Icon no Bloco de Notas, nada será mostrado.\n"
+	"o ícone do DateBk3 é lido a partir do Memo. Se você não "\
+	"tem um registro DateBk3 Icon no Memo, nada será mostrado.\n"
 
     "long_customErrorString" = ""\
-    "'Birthday' é o campo livre padrão."\
+    "'Aniversario' é o campo livre padrão."\
     "Para mudar o nome do campo livre, "\
     "selecione 'Preferências'.\n\n"\
     "IMPORTANTE: Você precisa lançar Contatos e selecionar 'Options/"\
-    "Rename Custom Fields' para renomear o campo livre para 'Birthday' "\
+    "Rename Custom Fields' para renomear o campo livre para 'Aniversario' "\
     "ou o que você ajuste como nome do campo livre nas Preferências do "\
     "HappyDays.\n"
 
     "long_aboutString" = ""\
-    "'HappyDays' ajudará você a lembrar os aniversários e comemorações "\
+    "'HappyDays' ajudará você a lembrar os Aniversários e comemorações "\
     " de seus amigos e familiares, bem como outros eventos.\n\n"\
     "Veja os arquivos index.html e manual.html para informações detalhadas "\
     "de como usar o HappyDays\n\n"\
@@ -24,7 +24,7 @@ BEGIN
 
     "long_cleanupAlertString" = ""\
     "As entradas de notificação serão consideradas do HappyDays se "\
-	"elas contiverem {HappyDays ID} nos seus campos de MEMO. "\ 	
+	"elas contiverem {HappyDays ID} nos seus campos de Memo. "\ 	
     "Se você usa este formato nas suas entradas este "\
     "registro também poderá ser removido pela Limpeza.\n"
 
@@ -34,16 +34,17 @@ BEGIN
 
     "long_cantFindAddrString" = ""\
     "Não foi possível encontra um campo livre: '%s'\n"\
-    "Por favor renomeie um campo livre no seu Contatos."
+    "Por favor renomeie um campo livre no Contatos."
 
     "Select Time" = "Selecionar Horário"
     "No Time" = "Sem Horário"
     "Invalid input date" = "Data Inválida"
-    "Export to Memo Pad is completed." = "Exportação para o Bloco de Notas completa."
+    "Export to Memo Pad is completed." = "Exportação para o Memo completa."
 
     "SUN"   = "DOM"
     "MON"   = "SEG"
-    "TUE"   = "TER"    "WED"   = "QUA"
+    "TUE"   = "TER"
+    "WED"   = "QUA"
     "THU"   = "QUI"
     "FRI"   = "SEX"
     "SAT"   = "SAB"
@@ -70,7 +71,7 @@ BEGIN
     "Cleanup Date Book"  = "Limpar Agenda"
     "To Do Notify" = "Notificar em Tarefas"
     "Cleanup To Do"  = "Limpar Tarefas"
-    "Export to Memo Pad" = "Exportar para Bloco de Notas"
+    "Export to Memo Pad" = "Exportar p/ Memo"
     "Solar to Lunar" = "Solar para Lunar"
     "Lunar to Solar" = "Lunar para Solar"
 	"Rescan Address Book" = "Reexaminar Contatos"
@@ -117,7 +118,7 @@ BEGIN
     "First Last Year" = "Nome Sobrenome Ano"  
 
 	"Address Book" = "Contatos"
-	"Bulit-in" = "Built-in"
+	"Bulit-in" = "Incluso"
 
 
 /* Display preferences */
@@ -191,7 +192,7 @@ BEGIN
 
     "HappyDays Export" = "Exportar HappyDays"
     "Would you like to export HappyDays List to Memo Pad?" = ""\
-    	"Você gostaria de exportar a lista do HappyDays para o Bloco de Notas?"
+    	"Você gostaria de exportar a lista do HappyDays para o Memo?"
 
     "Custom Field Error" = "Erro no Campo Livre"
     "Help" = "Ajuda"
