@@ -500,7 +500,7 @@ BEGIN
     LABEL "HappyDays 2.0" AUTOID AT (PrevRight+38 PrevTop) FONT 1
     LABEL "GPL free software"
         AUTOID AT (PrevLeft PrevTop+ABOUT_LINE_SPACING) FONT 0
-    LABEL "(c) 1999-2001 JaeMok Jeong"
+    LABEL "(c) 1999-2001 Jaemok Jeong"
         AUTOID AT (Center PrevTop+ABOUT_LINE_SPACING2) FONT 0
         
 	LABEL "E-Mail & Web Page" AUTOID AT (CENTER PrevTop+ABOUT_LINE_SPACING)
