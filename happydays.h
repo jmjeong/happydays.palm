@@ -25,10 +25,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define DEFAULT_DURATION    5
 
 #define HDAppID           	'Jmje'
-#define HDAppVer        	19
+#define HDAppVer        	20
 
 #define MainDBType          'DATA'
 #define MainDBName          "HappyDaysDB"
+#define MainAppID           'Jmje'
 #define DatebookAppID       'date'
 #define DatebookDBName      "DatebookDB"
 #define ToDoAppID           'todo'
@@ -48,7 +49,7 @@ struct sDBNotifyPrefs
     int  notifybefore;      // prenotify duration
     int  duration;          // interval of notified records
     TimeType when;          // no-time
-    char note[35];          // note field
+    char note[135];          // note field
 };
 
 /* ToDo Notify Preferences */
@@ -57,7 +58,7 @@ struct sTDNotifyPrefs
     char priority;			// priority of TODO
     char todoCategory[dmCategoryLength];
 	char usenote;			// use note?
-	char note[35];			// note field
+	char note[135];			// note field
 };
 
 struct sPrefs 
@@ -97,7 +98,6 @@ struct sPrefsR
     
     char addrCategory[dmCategoryLength];
     char adrcdate[4], adrmdate[4];      // address book create/modify date
-    char memcdate[4], memmdate[4];      // memo create/modify date
 
 	FontID listFont;		            // HappyDays list font
 };
