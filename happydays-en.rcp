@@ -495,9 +495,9 @@ BEGIN
     LABEL "Address auto scan" AUTOID AT (10 PrevBottom)
     LIST "Always" "Ask" "Never"
 		ID PrefFormAutoRescan
-		AT (PREVRIGHT PREVTOP 44 AUTO) VISIBLEITEMS 3 NONUSABLE
+		AT (PREVRIGHT PREVTOP 50 AUTO) VISIBLEITEMS 3 NONUSABLE
     POPUPTRIGGER "" ID PrefFormRescanTrigger
-                 AT (PREVLEFT PREVTOP-1 44 AUTO) LEFTANCHOR
+                 AT (PREVLEFT PREVTOP-1 50 AUTO) LEFTANCHOR
     POPUPLIST ID PrefFormRescanTrigger PrefFormAutoRescan
         
 	LABEL "Notify Format:" AUTOID AT (10 PrevBottom+1) 
