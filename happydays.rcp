@@ -304,7 +304,7 @@ BEGIN
     "HappyDays Cleanup" = "HappyDays Á¤¸®"
 
     "Notify warning" = "¾Ë¸² °æ°í"
-    "Are you sure you want to create notify entries in your datebook for all your ^1 HappyDays records?" = ""\
+    "Are you sure you want to create notify entries in your datebook for ^1 HappyDays records?" = ""\
     "Á¤¸»·Î ÀÏÁ¤°ü¸®¿¡ ^1 °³ÀÇ HappyDays ·¹ÄÚµå¸¦ ¸¸µé±â ¿øÇÏ½Ê´Ï±î?"
 
     "Invalid event format" = "Àß¸øµÈ ÀÌº¥Æ® Æ÷¸Ë"
@@ -536,7 +536,7 @@ BEGIN
     "HappyDays Cleanup" = "Termine entfernen"
 
     "Notify warning" = "Termin Warnung"
-    "Are you sure you want to create notify entries in your datebook for all your ^1 HappyDays records?" = ""\
+    "Are you sure you want to create notify entries in your datebook for ^1 HappyDays records?" = ""\
       "Möchten Sie wirklich Termine für alle HappyDays Einträge (^1) erzeugen?"
 
     "Invalid event format" = "Ungültiges Ereignis-Format"
@@ -665,7 +665,8 @@ BEGIN
         NONEDITABLE FONT 0
 
     BUTTON "Done" ID BirthdateDone AT (1 BOTTOM@159 AUTO AUTO)
-    BUTTON "Notify" ID BirthdateNotify AT (PrevRight+6 PrevTop AUTO AUTO)
+    BUTTON "DB" ID BirthdateNotifyDB AT (PrevRight+6 PrevTop AUTO AUTO)
+    BUTTON "TD" ID BirthdateNotifyTD AT (PrevRight+1 PrevTop AUTO AUTO)
     BUTTON "Goto" ID BirthdateGoto AT ( PrevRight+6 PrevTop AUTO AUTO)
 END
 
@@ -673,10 +674,9 @@ MENU ID MainFormMenu
 BEGIN
     PULLDOWN "Utilities"
     BEGIN
-        MENUITEM "Notify to DateBook"   MainFormMenuNotifyDatebook  "D"
+        MENUITEM "DateBook Notify"   	MainFormMenuNotifyDatebook  "D"
         MENUITEM "Cleanup Datebook"     MainFormMenuCleanupDatebook "C"
-        MENUITEM SEPARATOR
-        MENUITEM "Notify to Todo"   	MainFormMenuNotifyTodo		"T"
+        MENUITEM "ToDo Notify"   		MainFormMenuNotifyTodo		"T"
         MENUITEM "Cleanup Todo"       	MainFormMenuCleanupTodo 	"O"
         MENUITEM SEPARATOR
         MENUITEM "Export to Memo Pad"   MainFormMenuExport  		"E" 
@@ -741,8 +741,9 @@ BEGIN
 	    	"[First Last] *E1 Year" 
 			"Event - Last, First Year"
 			"Event - First Last Year"
+			"* First Last Year"
 		ID PrefFormNotifyFmts 
-			AT (20 PrevBottom 120 AUTO) VISIBLEITEMS 4 NONUSABLE
+			AT (20 PrevBottom 120 AUTO) VISIBLEITEMS 5 NONUSABLE
     POPUPTRIGGER "" ID PrefFormNotifyTrigger 
 			AT (PREVLEFT PREVTOP-1 40 13) LEFTANCHOR
     POPUPLIST ID PrefFormNotifyTrigger PrefFormNotifyFmts
@@ -835,7 +836,7 @@ BEGIN
 
     LABEL "Private:" AUTOID AT (RIGHT@78 PrevBottom+3) FONT 1
     CHECKBOX " " ID NotifyFormPrivate 
-			at (PrevRIght+3 PrevTop AUTO AUTO) RIGHTANCHOR FONT 1 
+			at (PrevRIght+5 PrevTop AUTO AUTO) RIGHTANCHOR FONT 1 
 
     LABEL "Alarm:" AUTOID AT (RIGHT@78 PrevBottom+3) FONT 1
     CHECKBOX "" ID DateBookNotifyFormAlarm at (PrevRight+5 PrevTop
@@ -869,13 +870,13 @@ BEGIN
 
     CHECKBOX "Icon Support" ID DateBookNotifyFormIcon 
 			at (10 20 AUTO AUTO) RIGHTANCHOR FONT 0 
-    PUSHBUTTON "AN" ID DateBookNotifyFormAN AT (PrevRight+3
+    PUSHBUTTON "AN" ID DateBookNotifyFormAN AT (PrevRight+5
             PrevTop AUTO AUTO) LEFTANCHOR GROUP 1
     PUSHBUTTON "DateBk3" ID DateBookNotifyFormBk3 AT (PrevRight+1
             PrevTop AUTO AUTO) GROUP 1
 
 	LABEL "AN ICON Number: " ID DateBookNotifyANLabel AT (5 PrevBottom+10) 
-	FIELD ID DateBookNotifyANInput AT (PrevRight+3 PrevTop 30 AUTO) 
+	FIELD ID DateBookNotifyANInput AT (PrevRight+5 PrevTop 30 AUTO) 
 		UNDERLINED MAXCHARS 3
 
 	LABEL "DateBk3 ICON" ID DateBookNotifyBk3Label AT (5 PrevBottom+2) 
@@ -899,7 +900,7 @@ BEGIN
     PUSHBUTTON "selected" ID NotifyFormRecordSlct 
 			AT (PrevRight+1 PrevTop AUTO AUTO) LEFTANCHOR GROUP 1
 
-    LABEL "Existing:" AUTOID AT (RIGHT@65 PrevBottom+3) FONT 1
+    LABEL "Existing:" AUTOID AT (RIGHT@65 PrevBottom+5) FONT 1
     PUSHBUTTON "keep" ID NotifyFormEntryKeep 
 			at (PrevRight+5 PrevTop AUTO AUTO) GROUP 2
     PUSHBUTTON "modify" ID NotifyFormEntryModify 
@@ -917,14 +918,14 @@ BEGIN
 	PUSHBUTTON "5" ID ToDoNotifyPri5 AT (PrevRight+1 PrevTop AUTO AUTO)
 		LEFTANCHOR GROUP 3
 
-	LABEL "Category:" AUTOID AT (RIGHT@65 PrevBottom+3) FONT 1
+	LABEL "Category:" AUTOID AT (RIGHT@65 PrevBottom+5) FONT 1
     POPUPTRIGGER "" ID ToDoPopupTrigger
             AT ( PrevRight+5 PrevTop AUTO AUTO ) LeftAnchor 
 	LIST "" ID ToDoNotifyCategory AT ( PrevLeft PrevTop 70 AUTO ) 
 		NONUSABLE 
     POPUPLIST ID ToDoPopupTrigger ToDoNotifyCategory
 	
-    LABEL "Private:" AUTOID AT (RIGHT@65 PrevBottom+3) FONT 1
+    LABEL "Private:" AUTOID AT (RIGHT@65 PrevBottom+5) FONT 1
     CHECKBOX " " ID NotifyFormPrivate 
 			at (PrevRight+5 PrevTop AUTO AUTO) RIGHTANCHOR FONT 1 
 
@@ -966,7 +967,7 @@ END
 ALERT ID NotifyWarning CONFIRMATION
 BEGIN
     TITLE "Notify warning"
-    MESSAGE "^1: Are you sure you want to create notify entries for all your ^2 HappyDays records?"
+    MESSAGE "^1: Are you sure you want to create notify entries for ^2 HappyDays records?"
     BUTTONS "OK" "Cancel"
 END
 
@@ -980,7 +981,7 @@ END
 ALERT ID CleanupDone INFORMATION
 BEGIN
     TITLE "Cleanup Done"
-    MESSAGE "^1: ^2 HappyDays notify entries removed from DateBook."
+    MESSAGE "^1: ^2 HappyDays notify entries removed."
     BUTTONS "OK"
 END
 
@@ -990,7 +991,7 @@ MODAL
 HELPID AboutHelpString
 BEGIN
     TITLE "HappyDays"
-    LABEL "HappyDays 1.19" AUTOID AT (Center@80 20) FONT 1
+    LABEL "HappyDays 1.2b" AUTOID AT (Center@80 20) FONT 1
     LABEL "(c) 1999-2000, JaeMok Jeong"
         AUTOID AT (Center@80 PrevBottom+5) FONT 0
     LABEL "<jmjeong@oopsla.snu.ac.kr>" AUTOID AT (Center@80 PrevBottom)
@@ -1009,8 +1010,17 @@ BEGIN
     BUTTON "Help" AboutFormHelp AT (PrevRight+6 PrevTop 44 AUTO) FONT 0
 END
 
+FORM ID ProgressForm AT (22 72 116 46)
+USABLE
+MODAL
+BEGIN
+	TITLE "Processing"
+	LABEL "Processed : " AUTOID AT (20 25) 
+	FIELD ID ProgressFormField AT (PrevRight+3 PrevTop 50 AUTO) NONEDITABLE
+END
+
 APPLICATIONICONNAME 1000 "HappyDays"
 ICON "happydays.pbitm"
 SMALLICON "happydays-small.pbitm"
 
-VERSION 1 "1.19"
+VERSION 1 "1.2b"

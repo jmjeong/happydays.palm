@@ -113,14 +113,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define BirthdateForm               1600
 #define BirthdateDone               1601
-#define BirthdateNotify             1602
-#define BirthdateGoto               1603
-#define BirthdateFirst              1604
-#define BirthdateSecond             1605
-#define BirthdateCustom             1606
-#define BirthdateDate               1607
-#define BirthdateCategory           1608
-#define BirthdateOrigin             1609
+#define BirthdateNotifyDB           1602
+#define BirthdateNotifyTD           1603
+#define BirthdateGoto               1604
+#define BirthdateFirst              1605
+#define BirthdateSecond             1606
+#define BirthdateCustom             1607
+#define BirthdateDate               1608
+#define BirthdateCategory           1609
+#define BirthdateOrigin             1610
 
 #define ToDoNotifyForm              1700
 #define ToDoNotifyPri1              1701
@@ -132,6 +133,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define ToDoPopupTrigger            1707
 #define ToDoNotifyFormOk            1708
 #define ToDoNotifyFormCancel        1709
+
+#define ProgressForm                1800
+#define ProgressFormField           1801
 
 #define ErrorAlert                  1900
 #define CleanupAlert                1901

@@ -187,17 +187,27 @@ MemPtr AppInfoGetPtr(DmOpenRef dbP)
 }   
 
 
-UInt16 Hash(Char* name1, Char* name2)
+// Elf hash
+//
+// A very good hash function. A return value should be
+// taken modulo m, where m is the prime number of buckets
+//
+UInt32 Hash(Char* name1, Char* name2)
 {
-    UInt16 hashVal = 0;
+    UInt32 h = 0, g;
 
     while (*name1) {
-        hashVal += *name1++ * 13;
+        h = ( h << 4) + *name1++;
+        g = h & 0xF0000000L;
+        if (g) h ^= g >> 24;
+        h &= ~g;
     }
-
     while (*name2) {
-        hashVal += *name2++ * 13;
+        h = ( h << 4) + *name2++;
+        g = h & 0xF0000000L;
+        if (g) h ^= g >> 24;
+        h &= ~g;
     }
 
-    return hashVal;
+    return h;
 }

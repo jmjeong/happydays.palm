@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "address.h"
 #include "datebook.h"
 #include "memodb.h"
+#include "todo.h"
 
 #include "happydays.h"
 #include "happydaysRsc.h"
@@ -29,6 +30,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "util.h"
 
 #define frmRescanUpdateCode (frmRedrawUpdateCode + 1)
+#define frmReloadUpdateCode (frmRedrawUpdateCode + 2)
 
 // global variable
 //
@@ -63,7 +65,7 @@ UInt16 PrefsRecIndex;
 struct sPrefsR *gPrefsR;
 struct sPrefsR DefaultPrefsR = {
     '0', '0', '0',              // all/selected, keep/modified, private
-    {   '1', '0', 9, 3, -1, {-1, -1}, "145" },
+    {   '1', '0', 9, 3, 1, {-1, -1}, "145" },
 #ifdef GERMAN
     {  '1', '0', "Alle" },
     {  "Geburtstag", "*HD:", '1', '1', 0, 0, dfDMYWithDots },
@@ -216,7 +218,7 @@ static Boolean IsSameRecord(Char* notefield, BirthDate birth)
     if (notefield && (p = StrStr(notefield,gPrefsR->BirthPrefs.notifywith))) {
         p += StrLen(gPrefsR->BirthPrefs.notifywith);
 
-        StrPrintF(gAppErrStr, "%ld-%d",
+        StrPrintF(gAppErrStr, "%ld-%ld",
                   birth.addrRecordNum, Hash(birth.name1,birth.name2));
         
         if (StrCompare(gAppErrStr, p) ==0) return true;
@@ -245,6 +247,39 @@ static int CleanupFromDB(DmOpenRef db)
             // deleted records are stored at the end of the database
             //
             DmMoveRecord(db, currIndex, DmNumRecords(DatebookDB));
+        }
+        else {
+            MemHandleUnlock(recordH);
+            currIndex++;
+        }
+    }
+    return ret;
+}
+
+static int CleanupFromTD(DmOpenRef db)
+{
+    UInt16 currIndex = 0;
+    MemHandle recordH;
+    ToDoDBRecordPtr toDoRec;
+    Char *note;
+    int ret = 0;
+    
+    while (1) {
+        recordH = DmQueryNextInCategory(db, &currIndex, dmAllCategories);
+        if (!recordH) break;
+
+        toDoRec = MemHandleLock(recordH);
+        note = GetToDoNotePtr(toDoRec);
+        
+        if (IsHappyDaysRecord(note)) {
+            // if it is happydays record?
+            //
+            ret++;
+            // remove the record
+            DmDeleteRecord(db, currIndex);
+            // deleted records are stored at the end of the database
+            //
+            DmMoveRecord(db, currIndex, DmNumRecords(ToDoDB));
         }
         else {
             MemHandleUnlock(recordH);
@@ -440,7 +475,7 @@ static Boolean MenuHandler(FormPtr frm, EventPtr e)
             int ret;
             
             // do clean up processing
-            ret = CleanupFromDB(ToDoDB);
+            ret = CleanupFromTD(ToDoDB);
             StrPrintF(gAppErrStr, "%d", ret);
 
             FrmCustomAlert(CleanupDone, tmp, gAppErrStr, " ");
@@ -517,6 +552,14 @@ static Boolean MainFormHandleEvent (EventPtr e)
             handled = 1;
 			break;
         }
+        else if (e->data.frmUpdate.updateCode == frmRedrawUpdateCode) {
+            // invoked by PrefFrom --> ignored
+			//
+            handled = 1;
+            break;
+        }
+        // frmReloadUpdateCode invoked by SpecialKeyDown
+        //
 		// else execute frmOpenEvent
 
     case frmOpenEvent:
@@ -759,14 +802,14 @@ static Boolean PrefFormHandleEvent(EventPtr e)
             FrmReturnToForm(0);
             if (rescan)
                 FrmUpdateForm(MainForm, frmRescanUpdateCode);
-			//  else 
-			//      FrmUpdateForm(MainForm, frmRedrawUpdateCode);
+			else 
+			    FrmUpdateForm(MainForm, frmRedrawUpdateCode);
 
             handled = true;
             break;
         case PrefFormCancel:
             
-            // FrmUpdateForm(StartForm, 0);
+            FrmUpdateForm(StartForm, 0);
             FrmReturnToForm(0);
 
             handled = true;
@@ -824,48 +867,6 @@ Boolean SelectCategoryPopup(DmOpenRef dbP, UInt16* selected,
     }
     CategoryFreeList(dbP, lst, false, false);
     return ret;
-}
-
-void SelectToDoCategoryPopup(DmOpenRef dbP)
-{
-    Int16 curSelection;
-    Int16 newSelection;
-    ListPtr lst;
-    Char *name;
-    FormPtr frm;
-    
-    frm = FrmGetActiveForm();
-    lst = GetObjectPointer(frm, ToDoNotifyCategory);
-
-    LstSetPosition(lst, 0, 0);
-    
-    /* Create a list of categories. */
-    CategoryCreateList(dbP, lst, gToDoCategory, true, true, 1, 0, true);
-
-    /* Display the category list. */
-    curSelection = LstGetSelection(lst);
-    newSelection = LstPopupList(lst);
-
-    /* Was a new category selected? */
-    if ((newSelection != curSelection) && (newSelection != -1)) {
-        if ((name = LstGetSelectionText(lst, newSelection))) {
-            gToDoCategory = CategoryFind(dbP, name);
-            /*
-             * Copy the category name into my preferences record and mark
-             * it dirty.
-             */
-            MemSet(gPrefsR->TDNotifyPrefs.todoCategory,
-                   sizeof(gPrefsR->TDNotifyPrefs.todoCategory), 0);
-            MemMove(gPrefsR->TDNotifyPrefs.todoCategory, name, StrLen(name));
-            /*
-             * No immediate need to write, so we just flag it for when the
-             * program ends.
-             */
-            gPrefsRdirty = true;
-        }
-    }
-
-    CategoryFreeList(dbP, lst, false, false);
 }
 
 static Int16 CalculateAge(DateType converted, DateType birthdate,
@@ -1369,6 +1370,35 @@ static Int16 CheckDatebookRecord(DateType when, BirthDate birth)
     return -1;
 }
 
+static Int16 CheckToDoRecord(DateType when, BirthDate birth)
+{
+    UInt16 currIndex = 0;
+    MemHandle recordH;
+    ToDoDBRecordPtr toDoRec;
+    Char *note;
+    
+    while (1) {
+        recordH = DmQueryNextInCategory(ToDoDB, &currIndex,
+                                        dmAllCategories);
+        if (!recordH) break;
+
+        toDoRec = MemHandleLock(recordH);
+        note = GetToDoNotePtr(toDoRec);
+        
+        if ((DateToInt(when) = DateToInt(toDoRec->dueDate))
+            && IsSameRecord(note, birth)) {
+            MemHandleUnlock(recordH);
+
+            return currIndex;
+        }
+        else {
+            MemHandleUnlock(recordH);
+            currIndex++;
+        }
+    }
+    return -1;
+}
+
 // check global notify preference, and make datebookDB entry private
 //
 static void ChkNMakePrivateRecord(DmOpenRef db, Int16 index)
@@ -1394,11 +1424,12 @@ static Char* DateBk3IconString()
     return bk3Icon;
 }
 
-static Char* gNotifyFormatString[4] =
+static Char* gNotifyFormatString[5] =
 { "[+L] +e +y",     // [Jeong, JaeMok] B 1970
   "[+F] +e +y",     // [JaeMok Jeong] B 1970
   "+E - +L +y",     // Birthday - Jeong, JaeMok 1970
-  "+E - +F +y"      // Birthday - JaeMok Jeong 1970
+  "+E - +F +y",     // Birthday - JaeMok Jeong 1970
+  "* +F +y",        // * JaeMok Jeong 1970
 };
 
 //
@@ -1513,7 +1544,7 @@ static Char* NotifyDescString(DateType when, BirthDate birth)
     return description;
 }
     
-static Int16 PerformNotify(BirthDate birth, DateType when,
+static Int16 PerformNotifyDB(BirthDate birth, DateType when,
                            RepeatInfoType* repeatInfoPtr,
                            Int16 *created, Int16 *touched)
 {
@@ -1523,7 +1554,7 @@ static Int16 PerformNotify(BirthDate birth, DateType when,
     Char* description = 0;
     Int16 existIndex;
     ApptDBRecordFlags changedFields;
-    static Char noteField[256];      // (datebk3: 10, AN:14), HD id: 5
+    Char noteField[256];        // (datebk3: 10, AN:14), HD id: 5
 
     // for the performance, check this first 
     if ( ((existIndex = CheckDatebookRecord(when, birth)) >= 0)
@@ -1580,7 +1611,8 @@ static Int16 PerformNotify(BirthDate birth, DateType when,
     else noteField[0] = 0;
 
     StrCat(noteField, gPrefsR->BirthPrefs.notifywith);
-    StrPrintF(gAppErrStr, "%ld-%d", birth.addrRecordNum, Hash(birth.name1, birth.name2));
+    StrPrintF(gAppErrStr, "%ld-%ld", birth.addrRecordNum,
+              Hash(birth.name1, birth.name2));
     StrCat(noteField, gAppErrStr);
     datebook.note = noteField;
 
@@ -1626,6 +1658,83 @@ static Int16 PerformNotify(BirthDate birth, DateType when,
     return 0;
 }
 
+static Int16 PerformNotifyTD(BirthDate birth, DateType when,
+                             Int16 *created, Int16 *touched)
+{
+    Char noteField[256];      // (datebk3: 10, AN:14), HD id: 5
+    ToDoItemType todo;
+    Char* description = 0;
+    
+    Int16 existIndex;
+
+    // for the performance, check this first 
+    if ( ((existIndex = CheckToDoRecord(when, birth)) >= 0)
+         && gPrefsR->existing == '0') {    // exist and keep the record
+        (*touched)++;
+        
+        return 0;
+    }
+
+    /* Zero the memory */
+    MemSet(&todo, sizeof(ToDoItemType), 0);
+
+    // set the date 
+    //
+    todo.dueDate = when;
+    todo.priority = gPrefsR->TDNotifyPrefs.priority - '0';
+
+    StrCopy(noteField, gPrefsR->BirthPrefs.notifywith);
+    StrPrintF(gAppErrStr, "%ld-%ld", birth.addrRecordNum,
+              Hash(birth.name1, birth.name2));
+    StrCat(noteField, gAppErrStr);
+    todo.note = noteField;
+
+    // make the description
+        
+    description = NotifyDescString(when, birth);
+    todo.description = description;
+
+    // category adjust
+    if (gToDoCategory == dmAllCategories) gToDoCategory = dmUnfiledCategory;
+    
+    if (existIndex < 0) {            // there is no same record
+        //
+        // if not exists
+        // write the new record (be sure to fill index)
+        //
+        ToDoNewRecord(ToDoDB, &todo, gToDoCategory, &existIndex);
+        // if private is set, make the record private
+        //
+        ChkNMakePrivateRecord(ToDoDB, existIndex);
+        (*created)++;
+    }
+    else {                                      // if exists
+        if (gPrefsR->existing == '0') {
+            // keep the record
+        }
+        else {
+            // modify
+
+            // remove the record
+            DmDeleteRecord(ToDoDB, existIndex);
+            // deleted records are stored at the end of the database
+            //
+            DmMoveRecord(ToDoDB, existIndex, DmNumRecords(ToDoDB));
+            
+            // make new record
+            ToDoNewRecord(ToDoDB, &todo, gToDoCategory, &existIndex);
+            // if private is set, make the record private
+            //
+            ChkNMakePrivateRecord(ToDoDB, existIndex);
+        }
+        (*touched)++;
+    }
+
+    if (description) MemPtrFree(description);
+    
+    return 0;
+}
+
 static void NotifyDatebook(int mainDBIndex, DateType when,
                            Int16 *created, Int16 *touched)
 {
@@ -1660,6 +1769,11 @@ static void NotifyDatebook(int mainDBIndex, DateType when,
                 repeatInfo.repeatEndDate.year +=
                     gPrefsR->DBNotifyPrefs.duration -1;
 
+                // if end year is more than 2301, set for ever
+                if (repeatInfo.repeatEndDate.year > lastYear) {
+                    DateToInt(repeatInfo.repeatEndDate) = -1;
+                }
+
                 // if duration > 1, 'when' is the birthdate;
                 if (r.flag.bits.year) when = r.date;
 
@@ -1667,7 +1781,7 @@ static void NotifyDatebook(int mainDBIndex, DateType when,
 				//   
 				if (when.year < 1970 - 1904) when.year = 1970 - 1904;
                 
-                PerformNotify(r, when, &repeatInfo, created, touched);
+                PerformNotifyDB(r, when, &repeatInfo, created, touched);
             }
             else if (gPrefsR->DBNotifyPrefs.duration == -1) {
                 // if duration > 1, 'when' is the birthdate;
@@ -1678,9 +1792,9 @@ static void NotifyDatebook(int mainDBIndex, DateType when,
 				if (when.year < 1970 - 1904) when.year = 1970 - 1904;
 
                 DateToInt(repeatInfo.repeatEndDate) = -1;
-                PerformNotify(r, when, &repeatInfo, created, touched);
+                PerformNotifyDB(r, when, &repeatInfo, created, touched);
             }
-            else PerformNotify(r, when, NULL, created, touched);
+            else PerformNotifyDB(r, when, NULL, created, touched);
         }
         else if (r.flag.bits.lunar || r.flag.bits.lunar_leap) {
             // if lunar date, make each entry
@@ -1701,7 +1815,7 @@ static void NotifyDatebook(int mainDBIndex, DateType when,
                 if (!FindNearLunar(&converted, current,
                                    r.flag.bits.lunar_leap)) break;
 
-                PerformNotify(r, converted, NULL, created, touched);
+                PerformNotifyDB(r, converted, NULL, created, touched);
 
                 // process next target day
                 //
@@ -1734,7 +1848,7 @@ static void NotifyToDo(int mainDBIndex, DateType when,
         UnpackBirthdate(&r, rp);
 
         if (r.flag.bits.solar) {
-            PerformNotify(r, when, NULL, created, touched);
+            PerformNotifyTD(r, when, created, touched);
         }
         else if (r.flag.bits.lunar || r.flag.bits.lunar_leap) {
             // if lunar date, make each entry
@@ -1748,7 +1862,7 @@ static void NotifyToDo(int mainDBIndex, DateType when,
             converted = r.date;
             if (FindNearLunar(&converted, current,
                               r.flag.bits.lunar_leap)) {
-                PerformNotify(r, converted, NULL, created, touched);
+                PerformNotifyTD(r, converted, created, touched);
             }
         }
         
@@ -1762,11 +1876,11 @@ static void NotifyAction(UInt32 whatAlert,
 {
     Int16 created = 0, touched = 0;
     LineItemPtr ptr;
+    FormPtr formPtr;
     Int16 i;
     Char* info = 0;
     Char tmp[25];
     Char temp[255];
-
 
     if (gMainTableTotals >0) {
         ptr = MemHandleLock(gTableRowHandle);
@@ -1782,13 +1896,29 @@ static void NotifyAction(UInt32 whatAlert,
             if (FrmCustomAlert(NotifyWarning, gAppErrStr, tmp, " ")
                 == 0) {             // user select OK button
 
+                formPtr = FrmInitForm(ProgressForm);
+                FrmDrawForm(formPtr);
+                FrmSetActiveForm(formPtr);
+                
                 for (i=0; i < gMainTableTotals; i++) {
                     if (ptr[i].date.year != INVALID_CONV_DATE) {
                         (*func)(ptr[i].birthRecordNum,
                                        ptr[i].date, &created,
                                        &touched);
                     }
+
+                    if ((i+1) % 20 == 0) {
+                        // Reset the auto-off timer to make sure we don't
+                        // fall asleep in the
+                        //  middle of the update
+                        EvtResetAutoOffTimer ();
+                    }
+
+                    StrPrintF(gAppErrStr, "%d/%d", i+1, gMainTableTotals);
+                    FldDrawField(SetFieldTextFromStr(ProgressFormField, gAppErrStr));
                 }
+
+                FrmReturnToForm(0);
             }
             else {
                 MemPtrUnlock(ptr);
@@ -1966,7 +2096,7 @@ static Boolean ToDoFormHandleEvent(EventPtr e)
             UnloadTDNotifyPrefsFields();
             WritePrefsRec();
 
-//            NotifyAction(ToDoNotifyForm, NotifyToDo);
+            NotifyAction(ToDoNotifyForm, NotifyToDo);
             FrmReturnToForm(0);
 
             handled = true;
@@ -2317,7 +2447,7 @@ static Boolean BirthdateFormHandleEvent(EventPtr e)
 
             handled = true;
             break;
-        case BirthdateNotify:
+        case BirthdateNotifyDB:
             //  Notify event into the datebook entry
             //
             gPrefsR->records = '1';
@@ -2325,6 +2455,16 @@ static Boolean BirthdateFormHandleEvent(EventPtr e)
 
             handled = true;
             break;
+
+        case BirthdateNotifyTD:
+            //  Notify event into the datebook entry
+            //
+            gPrefsR->records = '1';
+            FrmPopupForm(ToDoNotifyForm);
+
+            handled = true;
+            break;
+            
         case BirthdateGoto:
         {
             MemHandle recordH = 0;
@@ -2416,7 +2556,6 @@ static Boolean ApplicationHandleEvent(EventPtr e)
         case StartForm:
             FrmSetEventHandler(frm, StartFormHandlerEvent);
             break;
-
         case MainForm: 
         {
             FrmSetEventHandler(frm, MainFormHandleEvent);
@@ -2753,14 +2892,14 @@ static Boolean SpecialKeyDown(EventPtr e)
         if (keyboardAlphaChr == chr) {
             gPrefsR->BirthPrefs.sort = '0';     // sort by name
 			SndPlaySystemSound(sndClick);
-            FrmUpdateForm(MainForm, frmRedrawUpdateCode);
+            FrmUpdateForm(MainForm, frmReloadUpdateCode);
             WritePrefsRec();
             return true;
         }
         else if (keyboardNumericChr == chr) {
             gPrefsR->BirthPrefs.sort = '1';     // sort by date
 			SndPlaySystemSound(sndClick);
-            FrmUpdateForm(MainForm, frmRedrawUpdateCode);
+            FrmUpdateForm(MainForm, frmReloadUpdateCode);
             WritePrefsRec();
             return true;
         }

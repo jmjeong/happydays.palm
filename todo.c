@@ -24,6 +24,28 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "happydays.h"
 #include "happydaysRsc.h"
 
+/***********************************************************************
+ *
+ * FUNCTION:    GetToDoNotePtr
+ *
+ * DESCRIPTION: This routine returns a pointer to the note field in a to 
+ *              do record.
+ *
+ * PARAMETERS:  recordP - pointer to a ToDo record
+ *
+ * RETURNED:    pointer to a null-terminated note
+ *
+ * REVISION HISTORY:
+ *          Name    Date        Description
+ *          ----    ----        -----------
+ *          art 4/15/95 Initial Revision
+ *
+ ***********************************************************************/
+Char* GetToDoNotePtr (ToDoDBRecordPtr recordP)
+{
+    return (&recordP->description + StrLen (&recordP->description) + 1);
+}
+
 /************************************************************
  *
  *  FUNCTION: DateTypeCmp
@@ -45,13 +67,13 @@ static Int16 DateTypeCmp(DateType d1, DateType d2)
     
     result = d1.year - d2.year;
     if (result != 0)
-        {
+    {
         if (DateToInt(d1) == 0xffff)
             return 1;
         if (DateToInt(d2) == 0xffff)
             return -1;
         return result;
-        }
+    }
     
     result = d1.month - d2.month;
     if (result != 0)
@@ -120,7 +142,7 @@ MemHandle ToDoGetAppInfo (DmOpenRef dbP)
     ErrFatalDisplayIf (error,  "Get getting to do app info block");
 
     error = DmDatabaseInfo (cardNo, dbID, NULL, NULL, NULL, NULL, NULL, 
-            NULL, NULL, &appInfoID, NULL, NULL, NULL);
+                            NULL, NULL, &appInfoID, NULL, NULL, NULL);
     ErrFatalDisplayIf (error,  "Get getting to do app info block");
 
     return ((MemHandle) MemLocalIDToGlobal (appInfoID, cardNo));
@@ -160,7 +182,7 @@ static Int16 CategoryCompare (UInt8 attr1, UInt8 attr2, MemHandle appInfoH)
 
     result = category1 - category2;
     if (result != 0)
-        {
+    {
         if (category1 == dmUnfiledCategory)
             return (1);
         else if (category2 == dmUnfiledCategory)
@@ -168,11 +190,11 @@ static Int16 CategoryCompare (UInt8 attr1, UInt8 attr2, MemHandle appInfoH)
         
         appInfoP = MemHandleLock (appInfoH);
         result = StrCompare (appInfoP->categoryLabels[category1],
-                                    appInfoP->categoryLabels[category2]);
+                             appInfoP->categoryLabels[category2]);
 
         MemPtrUnlock (appInfoP);
         return result;
-        }
+    }
     
     return result;
 }
@@ -209,67 +231,67 @@ static Int16 CategoryCompare (UInt8 attr1, UInt8 attr2, MemHandle appInfoH)
  *************************************************************/
  
 static Int16 ToDoCompareRecords(ToDoDBRecordPtr r1, 
-    ToDoDBRecordPtr r2, Int16 sortOrder, 
-    SortRecordInfoPtr info1, SortRecordInfoPtr info2,
-    MemHandle appInfoH)
+                                ToDoDBRecordPtr r2, Int16 sortOrder, 
+                                SortRecordInfoPtr info1, SortRecordInfoPtr info2,
+                                MemHandle appInfoH)
 {
     Int16 result = 0;
 
     // Sort by priority, due date, and category.
     if (sortOrder == soPriorityDueDate)
-        {
+    {
         result = (r1->priority & priorityOnly) - (r2->priority & priorityOnly);
         if (result == 0)
-            {
+        {
             result = DateTypeCmp (r1->dueDate, r2->dueDate);
             if (result == 0)
-                {
+            {
                 result = CategoryCompare (info1->attributes, info2->attributes, appInfoH);
-                }
             }
         }
+    }
 
     // Sort by due date, priority, and category.
     else if (sortOrder == soDueDatePriority)
-        {
+    {
         result = DateTypeCmp(r1->dueDate, r2->dueDate);
         if (result == 0)
-            {
+        {
             result = (r1->priority & priorityOnly) - (r2->priority & priorityOnly);
             if (result == 0)
-                {
+            {
                 result = CategoryCompare (info1->attributes, info2->attributes, appInfoH);
-                }
             }
         }
+    }
     
     // Sort by category, priority, due date
     else if (sortOrder == soCategoryPriority)
-        {
+    {
         result = CategoryCompare (info1->attributes, info2->attributes, appInfoH);
         if (result == 0)
-            {
+        {
             result = (r1->priority & priorityOnly) - (r2->priority & priorityOnly);
             if (result == 0)
-                {
+            {
                 result = DateTypeCmp (r1->dueDate, r2->dueDate);
-                }
             }
         }
+    }
 
     // Sort by category, due date, priority
     else if (sortOrder == soCategoryDueDate)
-        {
+    {
         result = CategoryCompare (info1->attributes, info2->attributes, appInfoH);
         if (result == 0)
-            {
+        {
             result = DateTypeCmp (r1->dueDate, r2->dueDate);
             if (result == 0)
-                {
+            {
                 result = (r1->priority & priorityOnly) - (r2->priority & priorityOnly);
-                }
             }
         }
+    }
     
     return result;
 }
@@ -291,14 +313,14 @@ static Int16 ToDoCompareRecords(ToDoDBRecordPtr r1,
  *
  *************************************************************/
 static UInt16 ToDoFindSortPosition(DmOpenRef dbP, ToDoDBRecord *newRecord, 
-        SortRecordInfoPtr newRecordInfo)
+                                   SortRecordInfoPtr newRecordInfo)
 {
     int sortOrder;
     
     sortOrder = ToDoGetSortOrder (dbP);
         
     return (DmFindSortPosition (dbP, newRecord, newRecordInfo, 
-        (DmComparF *)ToDoCompareRecords, sortOrder));
+                                (DmComparF *)ToDoCompareRecords, sortOrder));
 }
 
 /************************************************************
@@ -350,15 +372,15 @@ Err ToDoNewRecord(DmOpenRef dbP, ToDoItemPtr item, UInt16 category, UInt16 *inde
 
     offset = (UInt32)&nilP->description;
     if (item->description)
-        {
+    {
         DmStrCopy(recordP, offset, item->description);
         offset += StrLen (item->description) + 1;
-        }
+    }
     else
-        {
+    {
         DmWrite(recordP, offset, &zero, 1);
         offset++;
-        }
+    }
     
     if (item->note) 
         DmStrCopy(recordP, offset, item->note);
@@ -381,7 +403,7 @@ Err ToDoNewRecord(DmOpenRef dbP, ToDoItemPtr item, UInt16 category, UInt16 *inde
     if (err) 
         MemHandleFree(recordH);
     else
-        {
+    {
         *index = newIndex;
 
         // Set the category.
@@ -389,185 +411,8 @@ Err ToDoNewRecord(DmOpenRef dbP, ToDoItemPtr item, UInt16 category, UInt16 *inde
         attr &= ~dmRecAttrCategoryMask;
         attr |= category;
         DmSetRecordInfo (dbP, newIndex, &attr, NULL);
-        }
+    }
 
     return err;
 }
 
-/************************************************************
- *
- *  FUNCTION: ToDoChangeRecord
- *
- *  DESCRIPTION: Change a record in the ToDo Database
- *
- *  PARAMETERS: database pointer
- *                   database index
- *                   database record
- *                   changed fields
- *
- *  RETURNS: ##0 if successful, errorcode if not
- *
- *  CREATED: 1/14/95 
- *
- *  BY: Roger Flores
- *
- *  COMMENTS:   Records are not stored with extra padding - they
- *  are always resized to their exact storage space.  This avoids
- *  a database compression issue.  The code works as follows:
- *  
- *
- *************************************************************/
-Err ToDoChangeRecord(DmOpenRef dbP, UInt16 *index, 
-    ToDoRecordFieldType changedField, void * data)
-{
-    Err                         err;
-    Int16                   cLen;
-    UInt16                  attr;
-    UInt16                  curSize;
-    UInt16                  newSize;
-    UInt16                  newIndex = 0;
-    UInt8                   priority;
-    UInt32                  offset;
-    Char *                  c;
-    MemHandle               recordH=0;
-    ToDoDBRecord            temp;
-    ToDoDBRecordPtr         src;
-    ToDoDBRecordPtr         nilP = 0;
-    SortRecordInfoType  sortInfo;
-    
-    // Get the record which we are going to change
-    recordH = DmQueryRecord(dbP, *index);
-    src = MemHandleLock (recordH);
-    
-
-    // If the  record is being change such that its sort position will 
-    // change,  move the record to its new sort position.
-    if ( (changedField == toDoPriority) || 
-          (changedField == toDoDueDate)  ||
-          (changedField == toDoCategory) )
-        {
-        MemSet (&sortInfo, sizeof (sortInfo), 0);
-        DmRecordInfo (dbP, *index, &attr, NULL, NULL);
-        sortInfo.attributes = attr;
-
-        if (changedField == toDoPriority)
-            {
-            temp.priority = *(UInt16 *) data;
-            temp.dueDate = src->dueDate;
-            sortInfo.attributes = attr;
-            }
-        else if (changedField == toDoDueDate) 
-            {
-            temp.priority = src->priority;
-            temp.dueDate = *((DatePtr)data);
-            sortInfo.attributes = attr;
-            }
-        else
-            {
-            temp.priority = src->priority;
-            temp.dueDate = src->dueDate;
-            sortInfo.attributes = *(UInt16 *) data;         
-            }
-
-        newIndex = ToDoFindSortPosition (dbP, &temp, &sortInfo);
-        DmMoveRecord (dbP, *index, newIndex);
-        if (newIndex > *index) newIndex--;
-        *index = newIndex;
-        }
-
-
-    if (changedField == toDoPriority)
-        {
-        priority = *(UInt16 *) data | (src->priority & completeFlag);
-        DmWrite (src, (UInt32)&nilP->priority, &priority, sizeof(src->priority));
-        goto exit;
-        }
-            
-    if (changedField == toDoComplete) 
-        {
-        priority = (*(UInt16 *) data << 7) |  (src->priority & priorityOnly);
-        DmWrite (src, (UInt32)&nilP->priority, &priority, sizeof(src->priority));
-        goto exit;
-        }
-    if (changedField == toDoDueDate)
-        { 
-        DmWrite (src, (UInt32)&nilP->dueDate, data, sizeof(src->dueDate));
-        goto exit;
-        }
-        
-    if (changedField == toDoCategory)
-        {
-        attr = (attr & ~dmRecAttrCategoryMask) | *(UInt16 *) data;
-        DmSetRecordInfo (dbP, newIndex, &attr, NULL);
-        goto exit;
-        }
-
-
-    // Calculate the size of the changed record. First,
-    // find the size of the data used from the old record.
-    newSize = sizeof (DateType) + 1;
-    newSize += StrLen((Char *) data) + 1;
-    c = &src->description;
-    cLen = StrLen(c) + 1;
-    if (changedField != toDoDescription)
-        newSize += cLen;
-    if (changedField != toDoNote)
-        {
-        c += cLen;
-        newSize += StrLen(c) + 1;
-        }
-        
-
-    // Change the description field.
-    if (changedField == toDoDescription)
-        {
-        // If the new description is longer, expand the record.
-        curSize = MemPtrSize (src);
-        if (newSize > curSize)
-            {
-            MemPtrUnlock (src);
-            err = MemHandleResize (recordH, newSize);
-            if (err) return (err);
-            src = MemHandleLock (recordH);
-            }
-        
-        // Move the note field.
-        offset = sizeof(DateType) + 1 + StrLen (data) + 1;
-        c = &src->description;
-        c += StrLen(c) + 1;
-        DmWrite (src, offset, c, StrLen(c) + 1);
-        
-        
-        // Write the new description field.
-        offset = sizeof(DateType) + 1;
-        DmStrCopy (src, offset, data);
-
-        // If the new description is shorter, shrink the record.
-        if (newSize < curSize)
-            MemPtrResize (recordH, newSize);
-        goto exit;
-        }
-
-
-    // Change the note field
-    if (changedField == toDoNote)
-        {
-        offset = sizeof(DateType) + 1 + StrLen((Char *)&src->description) + 1;
-        MemPtrUnlock (src);
-        err = MemHandleResize (recordH, newSize);
-        if (err) return (err);
-
-        src = MemHandleLock (recordH);
-        DmStrCopy (src, offset, data);
-        goto exit;
-        }
-
-exit:
-    MemPtrUnlock (src);
-
-#if ERROR_CHECK_LEVEL == ERROR_CHECK_FULL
-    ECToDoDBValidate (dbP);
-#endif
-
-    return 0;
-}
