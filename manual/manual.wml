@@ -15,7 +15,9 @@ Reference Guide for HappyDays 2.0x
       started. For more information, refer to the other part of Manual.
   <li><a href="#mainscreen">Main Screen of HappyDays</a>
   <li><a href="#preferences">Preferences</a>
-  <li><a href="#data_format">Input Date format</a>
+  <li><a href="#data_format">Input Date format</a> ( <font color="#663333">In 
+    the <b>single </b>record of Address, you can enter multiple instances of birthday 
+    or anniversaries entries. Check out this section </font>) 
   <li><a href="#tips">Some Useful Tips</a>
 </ul>
 
@@ -255,103 +257,69 @@ HappyDays display.
   <li>HappyDays Preferences
 
       <table> <tr>
-        <td>
-            
-            <img align="center" src="img/happydays_preferences.png"
-            alt="HappyDays preferences">
-
-        </td>
+        <td><img src="img/pref.gif" width="160" height="160"> </td>
       </tr>
       <tr> <td>
           <ol>
             <li><b>Custom field</b> <br>
-                Specify the name of custom field in Address Book used for
-                HappyDays.<br>
-
-                
-                <i>Defaults: Birthday; If use doesn't specify the event type,
-                this name is used for default event type.</i>
-                
+              Specify the name of custom field in Address Book used for HappyDays.<br>
+              <i>Defaults: Birthday; If use doesn't specify the event type, this 
+              name is used for default event type.</i> 
             <li><b>Instead of system date format Use ...</b> <br>
-
-                If you want to use the different date format from system date
-                format in HappyDays, check this option and select the preferred
-                date format. <br>
-
-                <i>Defaults: off</i>
-
+              If you want to use the different date format from system date format 
+              in HappyDays, check this option and select the preferred date format. 
+              <br>
+              <i>Defaults: off</i> 
             <li><b>Scan note field</b> <br>
-
-                If this check box is on, HappyDays scans not only custom field
-                but also note field of Address Book. For information about
-                entering the data in note field, refer <a
+              If this check box is on, HappyDays scans not only custom field but 
+              also note field of Address Book. For information about entering 
+              the data in note field, refer <a
                 href="#data_format">Data input format</a>.<br>
-
-                <i>Default: Off; it isn't needed by a lot of people</i>
-                
+              <i>Default: Off; it isn't needed by a lot of people</i> 
+            <li><b>Ignore note with prefix '!'</b><br>
+			If you check this option on, happydays record with prefix '!' is ignored.<br>
+			 <i>Default: on;</i>
+             
             <li><b>Address autoscan</b> <br>
-
-                When Address Book change is detected, HappyDays automatically
-                rescan Address Book. You can specify whether this option will be
-                on or off.<br>
-
-                <ul>
-                  <li>'Always' - always rescan AddressDB
-                  <li>'Ask' - Ask user if you want to rescan AddressDB.
-                  <li>'None' - never rescan AddressDB. You can force HappyDays
-                      to rescan AddressDB using 'Rescan Address Book' menu. 
-                </ul>
-
-                <i>Default: Always;</i>
-                
+              When Address Book change is detected, HappyDays automatically rescan 
+              Address Book. You can specify whether this option will be on or 
+              off.<br>
+              <ul>
+                <li>'Always' - always rescan AddressDB 
+                <li>'Ask' - Ask user if you want to rescan AddressDB. 
+                <li>'None' - never rescan AddressDB. You can force HappyDays to 
+                  rescan AddressDB using 'Rescan Address Book' menu. 
+              </ul>
+              <i>Default: Always;</i> 
             <li><b>Notify format:</b> <br>
-
-                When you notify event information into built-in Date Book or To Do
-                application, this format is used to generate notify string.
-                'Last' means by LastName, 'First' means by FirstName, 'E(1)'
-                means by the first character of Event type string, 'Event' means by
-                Event type string, and 'Year' means by source year of event.
-
-                <i> If you set 'Repeat for' to 1 in Date Book Notify, 'Year' is
-                changed into Age. </i>
-
-                <ul>
-                  <li><b>[Last, First] E(1) Year</b> : [Jeong, Jaemok] B 30<br>
-                      This format is preferable for ActionNames. ActionNames treats
-                      automatically the name between '[' and ']' as Contact
-                      information.
-                      
-                  <li><b>[First Last] E(1) Year</b> : [Jaemok Jeong] B 30<br>
-                      This format is preferable for ActionNames. ActionNames treats
-                      automatically the name between '[' and ']' as Contact
-                      information.
-                      
-                  <li><b>Event - Last, First Year</b> : Birthday - Jeong, Jaemok
-                      30<br>
-                      This format is preferable for built-in Date Book or
-                      DateBk3/4. 
-
-                  <li><b>Event - First Last Year</b> : Birthday - Jaemok Jeong
-                      30<br>
-                      This format is preferable for built-in Date Book or
-                      DateBk3/4. 
-                      
-                  <li><b>First Last Year</b> : Jaemok Jeong 30<br>
-                      This format is preferable for built-in Date Book or
-                      DateBk3/4. 
-
-                </ul>
-                
-                <i>Default: [First Last] E(1) Year; I use ActionNames, and this
-                notify string is preferable to ActionNames. :-)</i>
-                
+              When you notify event information into built-in Date Book or To 
+              Do application, this format is used to generate notify string. 'Last' 
+              means by LastName, 'First' means by FirstName, 'E(1)' means by the 
+              first character of Event type string, 'Event' means by Event type 
+              string, and 'Year' means by source year of event. <i> If you set 
+              'Repeat for' to 1 in Date Book Notify, 'Year' is changed into Age. 
+              </i> 
+              <ul>
+                <li><b>[Last, First] E(1) Year</b> : [Jeong, Jaemok] B 30<br>
+                  This format is preferable for ActionNames. ActionNames treats 
+                  automatically the name between '[' and ']' as Contact information. 
+                <li><b>[First Last] E(1) Year</b> : [Jaemok Jeong] B 30<br>
+                  This format is preferable for ActionNames. ActionNames treats 
+                  automatically the name between '[' and ']' as Contact information. 
+                <li><b>Event - Last, First Year</b> : Birthday - Jeong, Jaemok 
+                  30<br>
+                  This format is preferable for built-in Date Book or DateBk3/4. 
+                <li><b>Event - First Last Year</b> : Birthday - Jaemok Jeong 30<br>
+                  This format is preferable for built-in Date Book or DateBk3/4. 
+                <li><b>First Last Year</b> : Jaemok Jeong 30<br>
+                  This format is preferable for built-in Date Book or DateBk3/4. 
+              </ul>
+              <i>Default: [First Last] E(1) Year; I use ActionNames, and this 
+              notify string is preferable to ActionNames. :-)</i> 
             <li><b>Address Book:</b> <br>
-                
-                Specify the Address Book program where you jumps, when you
-                select 'Goto' button in HappyDays View.<br>
-
-                <i>Default: Builtin Address Book</i>
-                
+              Specify the Address Book program where you jumps, when you select 
+              'Goto' button in HappyDays View.<br>
+              <i>Default: Builtin Address Book</i> 
           </ol>
       </td>
     </tr>
@@ -431,29 +399,32 @@ HappyDays display.
 <li>DateBook Icon<br>
 
     <table>
-      <tr><td>
-    <img align="center" src="img/icon.png" alt="Date Book Icon">
-</td></tr>
+      <tr>
+        <td> 
+          <p><img align="top" src="img/icon.png" alt="Date Book Icon" width="160" height="160"> 
+            <img src="img/note.gif" width="160" height="160" align="top"></p>
+          </td>
+      </tr>
 <tr><td>
-    <ol>
-      <li><b>Icon support</b><br>
-          If you use the Date Book replacement program such as Action
-          Names or DateBk3/4, you can specify the icon in the notified
-          record. If you want to set icon in record, use this screen.<br>
-
-          For AN Icon Number, consult Action Names manual. But there is
-          easy way to know the AN icon number for AN events. Make the NEW
-          MEETING with the appropriate icon in ActionNames Datebook. And
-          open the built-in Date Book and look up the created event. You
-          can see the AN icon number in the note field of the searched
-          record.<br>
-
-          DateBk3/4 Icon is read from MemoPad. If you don't have DateBk3
-          Icon entry in MemoPad, nothing is displayed<br>
-
-          <i>Defaults: off</i>
-    </ol>
-</td></tr>
+          <ol>
+            <li><b>Icon support</b>(Before 2.0x version)<br>
+              If you use the Date Book replacement program such as Action Names 
+              or DateBk3/4, you can specify the icon in the notified record. If 
+              you want to set icon in record, use this screen.<br>
+              For AN Icon Number, consult Action Names manual. But there is easy 
+              way to know the AN icon number for AN events. Make the NEW MEETING 
+              with the appropriate icon in ActionNames Datebook. And open the 
+              built-in Date Book and look up the created event. You can see the 
+              AN icon number in the note field of the searched record.<br>
+              DateBk3/4 Icon is read from MemoPad. If you don't have DateBk3 Icon 
+              entry in MemoPad, nothing is displayed<br>
+              <i>Defaults: off</i> 
+            <li><b>Datebook Note(After 2.1 version)</b><br>
+			To give more flexibility to user, form of 'datebook icon' is changed into form of 'datebook note'. You can set the arbitrary note content in this field. In Datebk3/4 or ActionNames, note field is used for representing icon, font, and category etc. You could refer their manual to know the exact syntax to be entered. 
+          </ol>
+          
+        </td>
+      </tr>
 </table>
 <li>To Do Notify
 <table>
@@ -510,16 +481,17 @@ If you input the information in wrong date format, you will encounter
 
 If the first
 entry in this field starts with a digit, HappyDays will read this
-information. An example is:<p>
-
+information. An example is:
+<p>
 <pre>
 12/31/1970
 </pre>
-
-You can omit the year field. Year input below 100 is assumed to be year
-in 20th century. If you are not sure of the year format, just write it in
-form of YYYY(e.g. 1970). <b>Year must be in 1904 and 2301</b>, because
-HappyDays use the built-in date type of Palm OS for reducing DB size <p>
+<p>You can omit the year field. If you are not sure of the year format, just write 
+  it in form of YYYY(e.g. 1970). <b>Year must be in 1904 and 2301</b>, because 
+  HappyDays use the built-in date type of Palm OS for reducing DB size. <font color="#660033">Year 
+  number between 33 and 99 is assumed to be year in 20th century, and year number 
+  between 00-31 is assumed to be year in 21th century.(Changed in 2.1 version)</font></p>
+<p>
 
 If you want to input lunar date information, prepend '-)' or '#)' before
 date. '-)' means by date according to the lunar calendar, and '#)' means by
@@ -571,12 +543,15 @@ Second field: Name of Person/event (e.g. Jaemok)
 Third field: Initial Date of event (e.g. 12/31/1970)
 </pre>
 
-There may be no extra blanks in each field! So the type of event needs
-to go directly with the first "*", (e.g. "*Wedding", "*Holiday") If the name
-of the person or event consists of more than one word, use an
-underscore(e.g. "Grand_father"). Underscore is automatically interpreted
-into space ' '. <b>If you don't want to display a last name, add a dot('.')
-before the event name.</b> <p>
+<p>There may be no extra blanks in each field! So the type of event needs to go 
+  directly with the first "*", (e.g. "*Wedding", "*Holiday") If the name of the 
+  person or event consists of more than one word, use an underscore(e.g. "Grand_father"). 
+  Underscore is automatically interpreted into space ' '. <b>If you don't want 
+  to display a last name, add a dot('.') before the event name.</b> </p>
+<p>The record with prefix '!' could be ignored or read in Happydays depending 
+  on preference setting. It could be useful to record, which is not frequently 
+  looked up.</p>
+<p>
 
 <h3>Examples - Anniversaries</h3>
 
