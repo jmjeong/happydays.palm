@@ -79,6 +79,10 @@ struct sPrefsR defaultPref = {
     {  1, "All" },                          // Todo notify prefs
     {  "Aniversario", "*HD:",               // Prefs
        1, 1, 0, 0, 0, dfMDYWithSlashes },   
+#elif defined(ITALIAN)
+    {  1, "All" },                          // Todo notify prefs
+    {  "Compleanno", "*HD:",                // Prefs
+       1, 1, 0, 0, 0, dfMDYWithSlashes },   
 #else
     {  1, "All" },                          // Todo notify prefs
     {  "Birthday", "*HD:",                  // Prefs

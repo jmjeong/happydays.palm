@@ -57,7 +57,6 @@ BEGIN
 
     "Collecting Information..." = "Collecting Information..."
 
-    "HappyDays List" = "HappyDays List"
     "Look Up:" = "Look Up:"
 
     "HappyDays View" = "HappyDays View"

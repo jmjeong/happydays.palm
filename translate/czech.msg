@@ -33,8 +33,8 @@ BEGIN
         "#) pro pøestupný mìsíc lunárního kalendáøe"
 
     "long_cantFindAddrString" = ""\
-    "V Address Booku není uživatelská položka s názvem '%s'.\n"\
-    "Vytvoø takovou pomocí 'Nastavení'."
+    "V Address Booku chybí uživatelská položka '%s'. "\
+    "Vytvoø ji nebo zmìò její název pomocí 'Nastavení'."
 
     "Select Time" = "Zvol èas"
     "No Time" = "žádný"
@@ -74,10 +74,10 @@ BEGIN
     "Export to Memo Pad" = "Export do Memo Padu"
     "Solar to Lunar" = "Solarní na lunární"
     "Lunar to Solar" = "Lunární na solární"
-    "Rescan Address Book" = "Znovu prohledej Address Book"
+    "Rescan Address Book" = "Prohledání Address Booku"
 
     "Options" = "Možnosti"
-    "Font..." = "Písmo..."
+    "Font..." = "Písmo"
     "Preferences" = "Nastavení"
     "Display Preferences" = "Možnosti zobrazení"
     "About HappyDays" = "O aplikaci HappyDays"
@@ -105,10 +105,10 @@ BEGIN
     "Y/M/D" = "R/M/D"
     "Y.M.D" = "R.M.D"
     "Y-M-D" = "R-M-D"
-    "Address Autoscan" = "Address Book prohledej automaticky"
-    "Always" = "Vždy"
-    "Ask" = "Zeptej se"
-    "Never" = "Nikdy"
+    "Address Autoscan" = "Sleduj zmìny"
+    "Always" = "vždy"
+    "Ask" = "zeptej se"
+    "Never" = "nikdy"
 
     "Notify Format:" = "Formát upozornìní:"
     "[Last, First] E(1) Year" = "[pøíjm., køest.] u (rok)"
@@ -118,7 +118,7 @@ BEGIN
     "First Last Year" = "køest. pøíjm. rok"
    
     "Address Book:" = "Address Book:"
-    "Built-in" = "Zabudovaný"
+    "Built-in" = "standardní"
 
 
 /* Display preferences */
@@ -127,7 +127,7 @@ BEGIN
 
 /* About HappyDays */  
     "GPL free software" = "GPL free software"
-    "E-Mail & Web Page" = "E-Mail & Web Page"
+    "E-Mail & Web Page" = "e-mail & webová stránka"
 
     "Translator" = "Petr 'PePa' Pavel"
     "Translator's email" = "petr.pavel@centrum.cz"
@@ -217,15 +217,15 @@ BEGIN
     "Date Book" = "Date Book"
     "To Do" = "To Do"
     "Scan note field" = "Prohledej i poznámky"
-    "%d day(s) left" = "Zbývá %d dní."
-    "%d day(s) passed" = "%d dní uplynulo."
+    "%ld days left" = "Zbývá %ld dní."
+    "%ld days passed" = "%ld dní uplynulo."
 
     "Processing" = "Vytváøím"
     "Processed : " = "Vytvoøeno: " 
 
     "Address Change" = "Zmìna v adresáøi"
     "AddressDB is changed. \nDo you want to rescan it?"= ""\
-    "Databáze Address Booku se zmìnila. \nPøeješ si ji znovu prohledat?"
+    "Databáze Address Booku se zmìnila. \nMám ji znovu prohledat?"
 
 /* HappyDays view */
     "Type:" = "Typ:"
@@ -237,4 +237,8 @@ BEGIN
 
     "Yes" = "Ano"
     "No" = "Ne"
+
+	"N" = "J"
+	"D" = "D"
+	"A" = "U"
 END

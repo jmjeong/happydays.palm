@@ -33,10 +33,14 @@ obj/%.o : %.c
 all: en
 	ls -al prc/
 
-all-lang: en ko de th dutch fr sp cz catalan br chi
+all-lang: en it tur ko sp chi de br nor cz 
 
 PORTUGUESE_BR:
 	$(CC) -c -DPORTUGUESE_BR $(CFLAGS) $(CPPFLAGS) \
+			-o obj/happydays.o happydays.c
+
+ITALIAN:
+	$(CC) -c -DITALIAN $(CFLAGS) $(CPPFLAGS) \
 			-o obj/happydays.o happydays.c
 
 GERMAN:
@@ -47,6 +51,14 @@ ENGLISH:
 
 en: ENGLISH obj/$(TARGET).prc
 	mv obj/$(TARGET).prc prc
+
+it: ITALIAN obj/$(TARGET)-it.prc 
+	mv obj/$(TARGET)-it.prc prc
+	zip $(TARGET)-$(VERSION)-it.zip prc/$(TARGET)-it.prc 
+
+tur: ENGLISH obj/$(TARGET)-tur.prc 
+	mv obj/$(TARGET)-tur.prc prc
+	zip $(TARGET)-$(VERSION)-tur.zip prc/$(TARGET)-tur.prc 
 
 ko: ENGLISH obj/$(TARGET)-k8.prc obj/$(TARGET)-k11.prc
 	mv obj/$(TARGET)-k8.prc obj/$(TARGET)-k11.prc prc
@@ -101,6 +113,14 @@ obj/happydays-sections.s obj/happydays-sections.ld : happydays.def
 obj/$(TARGET).prc: obj/$(TARGET) obj/bin.res
 	@echo "Building program file ./obj/happydays.prc..." && \
 	$(BUILDPRC) -o obj/$(TARGET).prc happydays.def obj/*.bin obj/$(TARGET)
+
+obj/$(TARGET)-it.prc: obj/$(TARGET) obj/bin-it.res
+	@echo "Building program file ./obj/happydays-it.prc..." && \
+	$(BUILDPRC) -o obj/$(TARGET)-it.prc happydays.def obj/*.bin obj/$(TARGET)
+
+obj/$(TARGET)-tur.prc: obj/$(TARGET) obj/bin-tur.res
+	@echo "Building program file ./obj/happydays-tur.prc..." && \
+	$(BUILDPRC) -o obj/$(TARGET)-tur.prc happydays.def obj/*.bin obj/$(TARGET)
 
 obj/$(TARGET)-k8.prc: obj/$(TARGET) obj/bin-k8.res
 	@echo "Building program file ./obj/happydays-k8.prc..." && \
@@ -165,6 +185,16 @@ obj/bin-k8.res: obj/$(TARGET)-ko.rcp
 	@echo "Compiling resource happydays-ko.rcp..." &&\
 	(cd obj && rm -f *.bin ) && \
 	$(PILRC) -q -L KOREAN -Fkt obj/$(TARGET)-ko.rcp obj
+
+obj/bin-it.res: obj/$(TARGET)-it.rcp
+	@echo "Compiling resource happydays-it.rcp..." &&\
+	(cd obj && rm -f *.bin ) && \
+	$(PILRC) -q -L ITALIAN obj/$(TARGET)-it.rcp obj
+
+obj/bin-tur.res: obj/$(TARGET)-tur.rcp
+	@echo "Compiling resource happydays-tur.rcp..." &&\
+	(cd obj && rm -f *.bin ) && \
+	$(PILRC) -q -L TURKISH obj/$(TARGET)-tur.rcp obj
 
 obj/bin-k11.res: obj/$(TARGET)-ko.rcp
 	@echo "Compiling resource happydays-ko.rcp..." &&\
@@ -231,6 +261,16 @@ obj/$(TARGET)-en.rcp: $(TARGET).rcp translate/english.msg translate/hdr.msg
 	@echo "Generating happydays-en.rcp file..." && \
 	cat translate/hdr.msg translate/english.msg $(TARGET).rcp \
 			> obj/$(TARGET)-en.rcp
+
+obj/$(TARGET)-it.rcp: $(TARGET).rcp translate/italian.msg translate/hdr.msg
+	@echo "Generating happydays-it.rcp file..." && \
+	cat translate/hdr.msg translate/italian.msg $(TARGET).rcp \
+			> obj/$(TARGET)-it.rcp
+
+obj/$(TARGET)-tur.rcp: $(TARGET).rcp translate/turkish.msg translate/hdr.msg
+	@echo "Generating happydays-tur.rcp file..." && \
+	cat translate/hdr.msg translate/turkish.msg $(TARGET).rcp \
+			> obj/$(TARGET)-tur.rcp
 
 obj/$(TARGET)-ko.rcp: $(TARGET).rcp translate/korean.msg translate/hdr.msg
 	@echo "Generating happydays-ko.rcp file..." && \

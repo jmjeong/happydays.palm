@@ -57,7 +57,6 @@ BEGIN
     "Collecting Information..." = ""\
         "주소록으로부터 정보 수집중..."
 
-    "HappyDays List" = "해피데이즈 목록"
 	"Look Up:" = "기준일:"
 
     "HappyDays View" = "해피데이즈 보기"
@@ -117,7 +116,7 @@ BEGIN
 	"Event - First Last Year" = "행사 - 이름 성 나이"
 	"First Last Year" = "이름 성 나이"
 
-	"Address Book" = "주소록"
+	"Address Book:" = "주소록"
 	"Built-in" = "주소록"
 
 /* Display preferences */
@@ -232,4 +231,18 @@ BEGIN
 	"%dY %dM %dD (%ld)" = "%d년 %d월 %d일째 (%ld)"
 
 	"HappyDays " = "해피데이즈"
+
+    "Janunary"= "1월"
+    "February"= "2월"
+    "March"= "3월"
+    "April"= "4월"
+    "May"= "5월"
+    "June"= "6월"
+    "July"= "7월"
+    "August"= "8월"
+    "September"= "9월"
+    "October"= "10월"
+    "November"= "11월"
+    "December"= "12월"
+
 END

@@ -8,10 +8,10 @@ File Download
 </h2>
 <p>
 <a
-href="ftp://jmjeong.com/pub/happydays/happydays-2.06.zip">happydays-2.06.zip</a>
+href="ftp://jmjeong.com/pub/happydays/happydays-2.07.zip">happydays-2.07.zip</a>
 - English version and manual<br>
 <a
-href="ftp://jmjeong.com/pub/happydays/happydays-src-2.06.zip">happydays-src-2.06.zip</a>
+href="ftp://jmjeong.com/pub/happydays/happydays-src-2.07.zip">happydays-src-2.07.zip</a>
 - source file<br>
 
 </P>
@@ -30,7 +30,7 @@ To get the latest CVS sources do the following
 $ export CVSROOT=":pserver:cvs@coconut.snu.ac.kr:/export/cvsroot"
 $ cvs login
 ( password = anonymous )
-$ cvs -z3 checkout -rver_206 happydays
+$ cvs -z3 checkout -rver_207 happydays
 </pre>
 
 <p>
@@ -52,35 +52,35 @@ translate/english.msg file.)<p>
 
 HappyDays has been translated into the following languages:  <p>
 <ul>
-  <li> <a href="ftp://jmjeong.com/pub/happydays/happydays-2.06-ko.zip">
-  Korean</a>(2.06) - by Jaemok Jeong<br>
+  <li> <a href="ftp://jmjeong.com/pub/happydays/happydays-2.07-ko.zip">
+  Korean</a>(2.07) - by Jaemok Jeong<br>
 	  (happydays-k8.prc for 8x8 font,
 	  happydays-k11.prc for 11x11 font)
   <li> <a
-      href="ftp://jmjeong.com/pub/happydays/happydays-2.06-de.zip">
-			German</a>(2.06)
+      href="ftp://jmjeong.com/pub/happydays/happydays-2.07-de.zip">
+			German</a>(2.07 beta1)
       - by  Gunther Zagatta
 			(<a href="mailto:zagatta@web.de">zagatta@web.de</a>)
   <li><a
-  	  href="ftp://jmjeong.com/pub/happydays/happydays-2.06-sp.zip">
-			Spanish</a>(2.06)
+  	  href="ftp://jmjeong.com/pub/happydays/happydays-2.07-sp.zip">
+			Spanish</a>(2.07 beta1)
 	  - by Juan Fernando Calderón
 			(<a href="mailto:jfcalderon@usa.net">jfcalderon@usa.net</a>)
   <li><a
-  	  href="ftp://jmjeong.com/pub/happydays/happydays-2.06-br.zip">
-			Portuguese Brazilian </a>(2.06)
+  	  href="ftp://jmjeong.com/pub/happydays/happydays-2.07-br.zip">
+			Portuguese Brazilian </a>(2.07 beta1)
 	  - by Mauricio Montel
 			(<a href="mailto:maumontel@hotmail.com">maumontel@hotmail.com</a>)
   <li><a
-      href="ftp://jmjeong.com/pub/happydays/happydays-2.06-ch.zip">
-			Chinese</a>(2.06)
+      href="ftp://jmjeong.com/pub/happydays/happydays-2.07-ch.zip">
+			Chinese</a>(2.07 beta1)
       - by Daitau Aaron(<a
 		href="mailto:daitau@hotmail.com">daitau@hotmail.com</a>)<br>
 		(happydays-chi-gb.prc for GB Encoding, happydays-chi-big5.prc for
 		Big5 encoding)
   <li><a
-  	  href="ftp://jmjeong.com/pub/happydays/happydays-2.06-nor.zip">
-			Norwegian</a>(2.06 beta1)
+  	  href="ftp://jmjeong.com/pub/happydays/happydays-2.07-nor.zip">
+			Norwegian</a>(2.07 beta1)
 	  - by Knut Zakariassen
 			(<a href="mailto:jobb@zakariassen.net">jobb@zakariassen.net</a>)
   <li><a
@@ -88,6 +88,16 @@ HappyDays has been translated into the following languages:  <p>
 			Czech</a>(2.07 beta1)
       - by Petr 'PePa' Pavel
 			(<a href="mailto:petr.pavel@quick.cz">petr.pavel@quick.cz</a>)
+  <li><a
+      href="ftp://jmjeong.com/pub/happydays/happydays-2.07-tur.zip">
+			Turkish</a>(2.07 beta1)
+      - by Engin Utkan
+			(<a href="mailto:engin.utkan@usa.net">engin.utkan@usa.net</a>)
+  <li><a
+      href="ftp://jmjeong.com/pub/happydays/happydays-2.07-it.zip">
+			Italian</a>(2.07 beta2)
+      - by Andrea Monteriu'
+			(<a href="mailto:monteriu@tin.it">monteriu@tin.it</a>)
   <li><a
       href="ftp://jmjeong.com/pub/happydays/happydays1.xx/happydays-1.45-th.zip">
 		Thai</a>(1.45)
@@ -117,6 +127,12 @@ Change log
 You want to see changes before HappyDays 2.0, look up the
 <a href="change_log.html">change_log.html</a> file.
 <p>
+
+<b>HappyDays 2.07 version - 9/21/2001</b>
+<ul>
+	<li> Add calendar in HappyDays View screen in the case of Handera 330.
+	<li> Some modification
+</ul>
 
 <b>HappyDays 2.06 version - 7/25/2001</b>
 <ul>

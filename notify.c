@@ -816,7 +816,7 @@ static void NotifyDatebook(int mainDBIndex, DateType when, Int8 age,
 				year = when.year + gPrefsR.DBNotifyPrefs.duration - 1;
 
                 // if end year is more than 2301, set for ever
-				if (year > 2301-1904) 
+				if ((Int16)year > (Int16)2301-1904) 
                     DateToInt(repeatInfo.repeatEndDate) = -1;
 				else {
                 	// if solar date, make entry repeat
