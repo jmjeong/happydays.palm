@@ -1,0 +1,30 @@
+#use "template.inc" select=List
+
+<h1> Maling list </h1>
+
+<P>
+A HappyDays mailing list exists to provide a general discussion
+forum for users and developers.  The list is the main source for
+the latest news about HappyDays.</P>
+
+<p>
+To subscribe to the mailing list, send mail to <a
+href="mailto:majordomo@coconut.snu.ac.kr">
+majordomo@coconut.snu.ac.kr</a> with the phrases "subscribe happydays"
+(without the quotes) as the message body.</p>
+
+<p>
+Mail sent to happydays@coconut.snu.ac.kr will be distributed to all
+subscribers.</p>
+
+<p>
+The list is restricted to subscribers only.  Messages sent to the
+list by non-subscribers are manually screened before distribution;
+which may incur a significant delay before the message is actually
+seen be subscribers.  Any spam messages are happily redirected
+to /dev/null. </p>
+
+<p>
+The WWW archive of the mailing list is located at <a
+href="http://coconut.snu.ac.kr/cgi-bin/wilma/happydays">Mailing Archive</a>.
+</P>

@@ -11,8 +11,6 @@
 <BODY bgcolor=white 
       MARGINWIDTH=0 MARGINHEIGHT=0>
 
-<hr>
-
 # nav bar
 <center>
 <navbar:render name=jmjeong select=$(select)>

@@ -4,7 +4,7 @@
 Reference Guide for HappyDays 2.0
 </h1>
 
-<hr>
+<hr noshade size=1>
 
 <ul>
   <li><a href="#introduction">Introduction</a>
@@ -19,7 +19,7 @@ Reference Guide for HappyDays 2.0
   <li><a href="#tips">Some Useful Tips</a>
 </ul>
 
-<hr>
+<hr noshade size=1>
 
 <h2><a name="introduction">Introduction</a></h2>
 
@@ -32,7 +32,7 @@ application.  It supports the same categories as defined in
 the AddressBook.
 </p>
 
-<hr>
+<hr noshade size=1>
 <h2><a name="installation">Installing HappyDays</a></h2>
 <ol>
   <li>Obtain the HappyDays distribution file (you've probably done this
@@ -44,13 +44,13 @@ the AddressBook.
   <li> Install the happydays.prc file into your Palm OS device  
 </ol>
 
-<hr>
+<hr noshade size=1>
 <h2><a name="upgrade">Upgrading HappyDays</a></h2>
 
-v<p> If you have used HappyDays 1.x version, delete the old version before
+<p> If you have used HappyDays 1.x version, delete the old version before
 you install the new version. </p>
 
-<hr>
+<hr noshade size=1>
 
 <h2><a name="start"></a>Quick start</h2>
 
@@ -178,7 +178,7 @@ you install the new version. </p>
       If you don't want to display Lastname, add a dot('.') before the
       Firstname field in custom field.<p>
 
-      For more information, refer <a href="#data_foramt">Data input format</a>.
+      For more information, refer <a href="#data_format">Data input format</a>.
 
   </td>
 </tr>
@@ -186,9 +186,9 @@ you install the new version. </p>
 
 </table>
 
-<hr>
+<hr noshade size=1>
 
-<h2><a href="main_list">Main Screen of HappyDays</a></h2>
+<h2><a name="mainscreen">Main Screen of HappyDays</a></h2>
 
 <table border=1>
   <tr> <td>
@@ -232,14 +232,14 @@ This is HappyDays list view. All information gathered from Address Book is
             Julian(solar) calendar
             <r>
         <li><b>Rescan Address Book</b> - Force HappyDays to rescan Address
-            Book. It is useful if you set 'Adress Autoscan' to Never.
+            Book. It is useful if you set 'Address Autoscan' to Never.
       </ol>
   </td></tr>
       
   </table>
 
 
-  <hr>
+  <hr noshade size=1>
   
 <h2><a name="preferences">Preferences</a></h2>
 
@@ -327,16 +327,16 @@ HappyDays display. </p>
                   <li><b>Event - Last, First Year</b> : Birthday - Jeong, Jaemok
                       30<br>
                       This format is preferable for built-in Date Book or
-                      DateBook3/4. 
+                      DateBk3/4. 
 
                   <li><b>Event - First Last Year</b> : Birthday - Jaemok Jeong
                       30<br>
                       This format is preferable for built-in Date Book or
-                      DateBook3/4. 
+                      DateBk3/4. 
                       
                   <li><b>First Last Year</b> : Jaemok Jeong 30<br>
                       This format is preferable for built-in Date Book or
-                      DateBook3/4. 
+                      DateBk3/4. 
 
                 </ul>
                 
@@ -495,7 +495,7 @@ HappyDays display. </p>
 
 </p>
 
-<hr>
+<hr noshade size=1>
 
 <h2><a name="data_format">Input Data format of HappyDays</a></h2>
 
@@ -560,7 +560,7 @@ HappyDays expects a multi-line entry of a custom field or a note to look like:
 *Wedding Mother&Father 3/23/1940
 </pre>
 
-Each event in the note or field should be on a seperate line. The lines need
+Each event in the note or field should be on a separate line. The lines need
 to start with a "*" to be recognized by HappyDays. Each line consists of
 three fields which should be delimited by one or more blanks.
 
@@ -644,7 +644,7 @@ Another information....
 </pre>
 
 
-<hr>
+<hr noshade size=1>
 <h2><a name="tips">Some useful tips</a></h2>
 
 <ul>
@@ -654,7 +654,7 @@ Another information....
 
   <li> You can see the sorted view by tapping on 'D,N,A' button in bottom of
       HappyDays screen. If you tap 'A' button again, age sorting order is
-      changed into ascending/desceding order.
+      changed into ascending/descending order.
       
   <li> If you write character or number in graffiti area, the matching row is
       highlighted. For example, if you write 'a' in graffiti, the first record
@@ -676,10 +676,3 @@ Another information....
       record
       
 </ul>
-
-<hr>
-<address><a href="http://jmjeong.com/">Jae-Mok Jeong
-&lt;jmjeong@oopsla.snu.ac.kr&gt;</a></address>
-<!-- hhmts start -->
-Last modified: Wed Jun 20 23:31:54 KST 2001
-<!-- hhmts end -->

@@ -7,7 +7,7 @@
 
 	<navbar:button id=About txt="About" url="$(ROOT)/index.html">
 	<navbar:button id=Download txt="Download" url="$(ROOT)/download.html">
-	<navbar:button id=Manual txt="Manual" url="$(ROOT)/manual_en.html">
+	<navbar:button id=Manual txt="Manual" url="$(ROOT)/manual.html">
 	<navbar:button id=FAQ txt="FAQ" url="$(ROOT)/faq.html">
 	<navbar:button id=List txt="Mailing list" url="$(ROOT)/mailinglist.html">
 </navbar:define>
