@@ -100,13 +100,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define DateBookNotifyFormMore    	1423
 #define DateBookNotifyFormLabelDays	1424
 
-#define DateBookNotifyMoreForm		1450
-#define DateBookNotifyMoreFormOk	1451
+#define NotifyStringForm		    1450
+#define NotifyStringFormOk	        1451
 #define DBNoteCheckBox				1452
 #define DBNoteField					1453
 #define DBNoteScrollBar				1454
 
-#define DateBookNotifyMoreHelpString 1499
+#define NotifyStringHelpString      1499
 
 #define Sl2LnForm                   1500
 #define Sl2LnFormInput              1501
@@ -143,6 +143,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define ToDoPopupTrigger            1707
 #define ToDoNotifyFormOk            1708
 #define ToDoNotifyFormCancel        1709
+#define ToDoNotifyFormMore    	    1710
 
 #define ProgressForm                1800
 #define ProgressFormField           1801
@@ -189,7 +190,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define AgeStr						1939
 #define RemainedDayStr				1940
 #define AgeFormatString				1941
-
+#define DBNoteString                1942
+#define TDNoteString                1943
 
 #define JanString					1950		
 #define FebString					1951	

@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define UTIL_H__
 
 #include <PalmOS.h>
+#include "section.h"
 
 extern void * GetObjectPointer(FormPtr frm, UInt16 objID);
 extern FieldPtr SetFieldTextFromHandle(UInt16 fieldID, MemHandle txtH);
@@ -38,8 +39,10 @@ extern MemPtr AppInfoGetPtr(DmOpenRef dbP);
 extern Boolean FindNearLunar(DateType *dt, DateType base, Boolean leapyes);
 extern Int16 DateCompare (DateType d1, DateType d2); // defined in datebook.c
 
-void PrvMoveObject(FormPtr frmP, UInt16 objIndex, Coord y_diff, Boolean draw);
-void PrvResizeObject(FormPtr frmP, UInt16 objIndex, Coord y_diff, Boolean draw);
+extern void PrvMoveObject(FormPtr frmP, UInt16 objIndex, Coord y_diff, Boolean draw);
+extern void PrvResizeObject(FormPtr frmP, UInt16 objIndex, Coord y_diff, Boolean draw);
+
+Boolean TextMenuHandleEvent(UInt16 menuID, UInt16 objectID) SECT1;
 
 // Extract the bit at position index from bitfield.  0 is the high bit.
 #define BitAtPosition(pos)                ((UInt32)1 << (pos))

@@ -45,6 +45,13 @@ extern DateType gStartDate;			// staring date of birthday listing
 
 UInt16 gToDoCategory;               // todo category
 
+typedef enum {
+    DBSetting = 1,
+    ToDoSetting = 2,
+} WhichString;
+
+// to be used for loading Note String Form
+static WhichString whichString;     // 1 = DB, 2 = ToDo
 
 ////////////////////////////////////////////////////////////////////
 // function declaration 
@@ -83,16 +90,18 @@ static Boolean IsSameRecord(Char* notefield, HappyDays birth);
 Char* EventTypeString(HappyDays r)
 {
 	static char tmpString[4];
+    
     if (!r.custom[0]) {
         tmpString[0] = gPrefsR.Prefs.custom[0];
     }
     else tmpString[0] = r.custom[0];
     tmpString[1] = 0;
 
-    StrToLower(&tmpString[3], tmpString);     // use temporary
-    tmpString[3] = tmpString[3] - 'a' + 'A';  // make upper
+    StrToLower(&tmpString[2], tmpString);     // use temporary
+    tmpString[2] = tmpString[2] - 'a' + 'A';  // make upper
+    tmpString[3] = 0;
 
-    return &tmpString[3];
+    return &tmpString[2];
 }
 
 void PerformExport(Char * memo, int mainDBIndex, DateType when)
@@ -263,7 +272,15 @@ Boolean ToDoFormHandleEvent(EventPtr e)
             handled = true;
             break;
         }
+
+        case ToDoNotifyFormMore:
             
+            whichString = ToDoSetting;
+            FrmPopupForm(NotifyStringForm);
+
+            handled = true;
+            break;
+
         default:
             break;
         }
@@ -316,7 +333,9 @@ Boolean DBNotifyFormHandleEvent(EventPtr e)
             break;
 
 		case DateBookNotifyFormMore:
-            FrmPopupForm(DateBookNotifyMoreForm);
+            
+            whichString = DBSetting;
+            FrmPopupForm(NotifyStringForm);
 
             handled = true;
             break;
@@ -447,7 +466,7 @@ static void FieldPageScroll (FieldPtr fld, ScrollBarPtr bar, WinDirectionType di
 }
 
 
-Boolean DBNotifyFormMoreHandleEvent(EventPtr e)
+Boolean NotifyStringFormHandleEvent(EventPtr e)
 {
     Boolean handled = false;
     FormPtr frm = FrmGetActiveForm();
@@ -473,7 +492,7 @@ Boolean DBNotifyFormMoreHandleEvent(EventPtr e)
 
     case ctlSelectEvent:
         switch(e->data.ctlSelect.controlID) {
-        case DateBookNotifyMoreFormOk: 
+        case NotifyStringFormOk: 
         {
             UnloadDBNotifyPrefsFieldsMore();
 
@@ -633,14 +652,14 @@ static Char* NotifyDescString(DateType when, HappyDays birth,
                 }
                 if (birth.flag.bits.year) {
                     if (!birth.flag.bits.solar 
-                        || gPrefsR.DBNotifyPrefs.duration ==1 || todo) {
+                        || gPrefsR.DBNotifyPrefs.duration != -1 || todo) {
                         if (age >= 0) {
                             StrPrintF(gAppErrStr, " (%d)", age);
                             StrCopy(pDesc, gAppErrStr);
                         }
                     }
                     else if (birth.flag.bits.solar 
-                             && gPrefsR.DBNotifyPrefs.duration != 1) {
+                             && gPrefsR.DBNotifyPrefs.duration == -1) {
                         StrPrintF(gAppErrStr, "%d", birth.date.year + 1904 );
                         StrCopy(pDesc, gAppErrStr);
                     }
@@ -672,7 +691,7 @@ static Int16 PerformNotifyDB(HappyDays birth, DateType when, Int8 age,
     Char* description = 0;
     Int16 existIndex;
     ApptDBRecordFlags changedFields;
-    Char noteField[356];        // (datebk3: 10, AN:14), HD id: 5
+    Char noteField[100];        // (datebk3: 10, AN:14), HD id: 5
 
     // for the performance, check this first 
     if ( ((existIndex = CheckDatebookRecord(when, birth)) >= 0)
@@ -718,7 +737,7 @@ static Int16 PerformNotifyDB(HappyDays birth, DateType when, Int8 age,
 
 	// General note field edit
 	//
-    if (gPrefsR.DBNotifyPrefs.icon) {     
+    if (gPrefsR.DBNotifyPrefs.usenote) {     
         StrCopy(noteField, gPrefsR.DBNotifyPrefs.note);
         StrCat(noteField, "\n");
     }
@@ -774,7 +793,7 @@ static Int16 PerformNotifyDB(HappyDays birth, DateType when, Int8 age,
 static Int16 PerformNotifyTD(HappyDays birth, DateType when, Int8 age,
                              Int16 *created, Int16 *touched)
 {
-    Char noteField[256];      // (datebk3: 10, AN:14), HD id: 5
+    Char noteField[100];      // (datebk3: 10, AN:14), HD id: 5
     ToDoItemType todo;
     Char* description = 0;
     
@@ -796,7 +815,15 @@ static Int16 PerformNotifyTD(HappyDays birth, DateType when, Int8 age,
     todo.dueDate = when;
     todo.priority = gPrefsR.TDNotifyPrefs.priority;
 
-    StrCopy(noteField, gPrefsR.Prefs.notifywith);
+    // General note field edit
+	//
+    if (gPrefsR.TDNotifyPrefs.usenote) {
+        StrCopy(noteField, gPrefsR.TDNotifyPrefs.note);
+        StrCat(noteField, "\n");
+    }
+    else noteField[0] = 0;
+
+    StrCat(noteField, gPrefsR.Prefs.notifywith);
     StrPrintF(gAppErrStr, "%ld", Hash(birth.name1, birth.name2));
     StrCat(noteField, gAppErrStr);
     todo.note = noteField;
@@ -888,6 +915,7 @@ static void NotifyDatebook(int mainDBIndex, DateType when, Int8 age,
             repeatInfo.repeatOn = 0;
             repeatInfo.repeatStartOfWeek = 0;
 
+            /*
             if (gPrefsR.DBNotifyPrefs.duration > 1) {
                 UInt16 end_year;
 
@@ -913,7 +941,8 @@ static void NotifyDatebook(int mainDBIndex, DateType when, Int8 age,
                 
                 PerformNotifyDB(r, when, age, &repeatInfo, created, touched);
             }
-            else if (gPrefsR.DBNotifyPrefs.duration == -1) {
+            */
+            if (gPrefsR.DBNotifyPrefs.duration == -1) {
                 // if duration > 1, 'when' is the birthdate;
                 if (r.flag.bits.year) when = r.date;
 
@@ -924,7 +953,22 @@ static void NotifyDatebook(int mainDBIndex, DateType when, Int8 age,
                 DateToInt(repeatInfo.repeatEndDate) = -1;
                 PerformNotifyDB(r, when, age, &repeatInfo, created, touched);
             }
-            else PerformNotifyDB(r, when, age, NULL, created, touched);
+            else {
+                int duration = gPrefsR.DBNotifyPrefs.duration;
+                DateType converted = when;
+
+                for (i = 0; i < duration; i++) {
+                    if (converted.year > 2031 - 1904) break;
+
+                    // 존재하는지 확인
+                    if (converted.day <=
+                        DaysInMonth(converted.month, converted.year+firstYear))
+                        PerformNotifyDB(r, converted, age+i,
+                                        NULL, created, touched);
+
+                    converted.year++;
+                }
+            }
         }
         else if (r.flag.bits.lunar || r.flag.bits.lunar_leap) {
             // if lunar date, make each entry
@@ -937,20 +981,20 @@ static void NotifyDatebook(int mainDBIndex, DateType when, Int8 age,
             if (duration == -1) duration = DEFAULT_DURATION;
 
             // now use the same routine in lunar an lunar_leap
-            //
-            // DateSecondsToDate(TimGetSeconds(), &current);
 			current = gStartDate;
 
             for (i=0; i < duration; i++) {
                 converted = r.date;
-                if (!FindNearLunar(&converted, current,
-                                   r.flag.bits.lunar_leap)) break;
-
-                PerformNotifyDB(r, converted, age, NULL, created, touched);
-
+                if (FindNearLunar(&converted, current,
+                                  r.flag.bits.lunar_leap)) {
+                    PerformNotifyDB(r, converted, age+i,
+                                    NULL, created, touched);
+                }
+                
                 // process next target day
                 //
                 current = converted;
+                if (current.year > 2031 - 1904) break;
                 DateAdjust(&current, 1);
             }
         }
@@ -1058,7 +1102,6 @@ static void NotifyAction(UInt32 whatAlert,
                 MemPtrUnlock(ptr);
                 goto Exit_Notify_All;
             }
-                    
         }
         else {                                      // selected
             if (ptr[gMainTableHandleRow].date.year
@@ -1106,7 +1149,7 @@ static void HideNoteStuff()
 {
     FormPtr frm;
 
-    if ((frm = FrmGetFormPtr(DateBookNotifyMoreForm)) == 0) return;
+    if ((frm = FrmGetFormPtr(NotifyStringForm)) == 0) return;
 
     FrmHideObject(frm, FrmGetObjectIndex(frm, DBNoteField));
     FrmHideObject(frm, FrmGetObjectIndex(frm, DBNoteScrollBar));
@@ -1116,7 +1159,7 @@ static void ShowNoteStuff()
 {
     FormPtr frm;
 
-    if ((frm = FrmGetFormPtr(DateBookNotifyMoreForm)) == 0) return;
+    if ((frm = FrmGetFormPtr(NotifyStringForm)) == 0) return;
 
     FrmShowObject(frm, FrmGetObjectIndex(frm, DBNoteField));
     FrmShowObject(frm, FrmGetObjectIndex(frm, DBNoteScrollBar));
@@ -1126,16 +1169,32 @@ static void LoadDBNotifyPrefsFieldsMore(void)
 {
     FormPtr frm;
 
-    if ((frm = FrmGetFormPtr(DateBookNotifyMoreForm)) == 0) return;
+    if ((frm = FrmGetFormPtr(NotifyStringForm)) == 0) return;
 
-    CtlSetValue(GetObjectPointer(frm, DBNoteCheckBox), gPrefsR.DBNotifyPrefs.icon);
+    if (whichString == DBSetting) {
+        CtlSetValue(GetObjectPointer(frm, DBNoteCheckBox), gPrefsR.DBNotifyPrefs.usenote);
 
-    if (gPrefsR.DBNotifyPrefs.icon == 0) {
-        HideNoteStuff();
-    }
+        if (gPrefsR.DBNotifyPrefs.usenote == 0) {
+            HideNoteStuff();
+        }
     
-    SetFieldTextFromStr(DBNoteField,
-                        gPrefsR.DBNotifyPrefs.note);
+        SetFieldTextFromStr(DBNoteField,
+                            gPrefsR.DBNotifyPrefs.note);
+        SysCopyStringResource(gAppErrStr, DBNoteString);
+        FrmSetTitle(frm, gAppErrStr);
+    }
+    else {
+        CtlSetValue(GetObjectPointer(frm, DBNoteCheckBox), gPrefsR.TDNotifyPrefs.usenote);
+
+        if (gPrefsR.TDNotifyPrefs.usenote == 0) {
+            HideNoteStuff();
+        }
+        SetFieldTextFromStr(DBNoteField,
+                            gPrefsR.TDNotifyPrefs.note);
+        
+        SysCopyStringResource(gAppErrStr, TDNoteString);
+        FrmSetTitle(frm, gAppErrStr);
+    }
 
     return;
 }
@@ -1145,19 +1204,32 @@ static void UnloadDBNotifyPrefsFieldsMore()
     FormPtr frm;
     ControlPtr ptr;
     
-    if ((frm = FrmGetFormPtr(DateBookNotifyMoreForm)) == 0) return;
-    
+    if ((frm = FrmGetFormPtr(NotifyStringForm)) == 0) return;
+
     ptr = GetObjectPointer(frm, DBNoteCheckBox);
-    
-    gPrefsR.DBNotifyPrefs.icon = CtlGetValue(ptr);
-    
-    if (FldDirty(GetObjectPointer(frm, DBNoteField))) {
-        if (FldGetTextPtr(GetObjectPointer(frm, DBNoteField))) {
-            StrCopy(gPrefsR.DBNotifyPrefs.note,
-                    FldGetTextPtr(GetObjectPointer(frm, DBNoteField)));
+
+    if (whichString == DBSetting) {
+        gPrefsR.DBNotifyPrefs.usenote = CtlGetValue(ptr);
+        
+        if (FldDirty(GetObjectPointer(frm, DBNoteField))) {
+            if (FldGetTextPtr(GetObjectPointer(frm, DBNoteField))) {
+                StrCopy(gPrefsR.DBNotifyPrefs.note,
+                        FldGetTextPtr(GetObjectPointer(frm, DBNoteField)));
+            }
+        }
+    }
+    else {
+        gPrefsR.TDNotifyPrefs.usenote = CtlGetValue(ptr);
+        
+        if (FldDirty(GetObjectPointer(frm, DBNoteField))) {
+            if (FldGetTextPtr(GetObjectPointer(frm, DBNoteField))) {
+                StrCopy(gPrefsR.TDNotifyPrefs.note,
+                        FldGetTextPtr(GetObjectPointer(frm, DBNoteField)));
+            }
         }
     }
 }
+
 static void LoadDBNotifyPrefsFields(void)
 {
     FormPtr frm;
@@ -1361,6 +1433,7 @@ static Int16 CheckDatebookRecord(DateType when, HappyDays birth)
                     
                     MemHandleUnlock(recordH);
                     MemHandleUnlock(apptListH);
+                    MemHandleFree(apptListH);
 
                     return recordNum;
                 }
@@ -1368,6 +1441,7 @@ static Int16 CheckDatebookRecord(DateType when, HappyDays birth)
             }
         }
         MemHandleUnlock(apptListH);
+        MemHandleFree(apptListH);
     }
     return -1;
 }
@@ -1431,6 +1505,3 @@ static Boolean IsSameRecord(Char* notefield, HappyDays birth)
     }
     return false;
 }
-
-
-

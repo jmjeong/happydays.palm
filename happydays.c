@@ -532,8 +532,8 @@ static Boolean ApplicationHandleEvent(EventPtr e)
         case DateBookNotifyForm:
             FrmSetEventHandler(frm, DBNotifyFormHandleEvent);
             break;
-		case DateBookNotifyMoreForm:
-			FrmSetEventHandler(frm, DBNotifyFormMoreHandleEvent);
+		case NotifyStringForm:
+			FrmSetEventHandler(frm, NotifyStringFormHandleEvent);
 			break;
         case ToDoNotifyForm:
             FrmSetEventHandler(frm, ToDoFormHandleEvent);
@@ -2874,6 +2874,13 @@ static Boolean StartFormHandleEvent(EventPtr e)
 //
 //
 // $Log$
+// Revision 1.69  2002/04/23 19:29:18  jmjeong
+// Fix memory leaks in Datebook Notify
+// Fix a compabibility issue on Palm OS 3.3
+// Change Datebook Notify
+// (Rather than making repeating entries, make an individual entry to show age)
+// Add Todo Note Field
+//
 // Revision 1.68  2002/04/11 12:58:42  jmjeong
 // error msg in start screen
 //

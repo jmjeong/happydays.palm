@@ -2,7 +2,7 @@
 #define _NOTIFY_H__
 
 extern Boolean DBNotifyFormHandleEvent(EventPtr e);
-extern Boolean DBNotifyFormMoreHandleEvent(EventPtr e);
+extern Boolean NotifyStringFormHandleEvent(EventPtr e);
 extern Boolean ToDoFormHandleEvent(EventPtr e);
 extern int CleanupFromDB(DmOpenRef db);
 extern int CleanupFromTD(DmOpenRef db);

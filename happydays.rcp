@@ -1,6 +1,6 @@
 HEX "sKst" ID 1000 0x00 0x00 0x00 0x00
 
-STRING ID DateBookNotifyMoreHelpString "long_notifySettingMoreString"
+STRING ID NotifyStringHelpString "long_notifySettingMoreString"
 STRING ID SelectDateString  "HappyDays"
 STRING ID CustomErrorHelpString "long_customErrorString"
 STRING ID AboutHelpString "long_aboutString"
@@ -61,6 +61,9 @@ STRING ID AgeStr				"Age:"
 STRING ID RemainedDayStr		"UpTo Date:"
 
 STRING ID FindHeaderString		"HappyDays"
+
+STRING ID DBNoteString          "Datebook Note"
+STRING ID TDNoteString          "ToDo Note"
 
 FORM StartForm AT (0 0 160 160)
 NOFRAME
@@ -355,24 +358,24 @@ BEGIN
 	BUTTON "Note" ID DateBookNotifyFormMore AT (RIGHT@150 PrevTop AUTO AUTO)
 END
 
-FORM ID DateBookNotifyMoreForm AT (2 18 156 140)
+FORM ID NotifyStringForm AT (2 18 156 140)
 FRAME
 MODAL
 USABLE
 MENUID  TextMenu
-HELPID  DateBookNotifyMoreHelpString
+HELPID  NotifyStringHelpString
 BEGIN
-    TITLE "Datebook Note"
+    TITLE " "
 
     CHECKBOX "Add the following note" ID DBNoteCheckBox 
 			at (7 25 AUTO AUTO) RIGHTANCHOR FONT 0 
     FIELD ID DBNoteField AT (3 PrevBottom+10 143 61) FONT 0
-        EDITABLE MULTIPLELINES HASSCROLLBAR UNDERLINED DYNAMICSIZE
-        MAXCHARS 254
+        EDITABLE MULTIPLELINES UNDERLINED HASSCROLLBAR
+        MAXCHARS 25
     SCROLLBAR ID DBNoteScrollBar AT (PrevRight+2 PrevTop 7 PrevHeight)
         VALUE 0 MIN 0 MAX 0 PAGESIZE 0
 
-    BUTTON "OK" ID DateBookNotifyMoreFormOk AT (5 Bottom@135 40 AUTO)
+    BUTTON "OK" ID NotifyStringFormOk AT (5 Bottom@135 40 AUTO)
 	GRAFFITISTATEINDICATOR AT (PrevRight+5 PrevTop)
 END
 
@@ -421,6 +424,7 @@ BEGIN
 
     BUTTON "OK" ID ToDoNotifyFormOk AT (5 Bottom@125 40 AUTO)
     BUTTON "Cancel" ID ToDoNotifyFormCancel AT (PrevRight+5 PrevTop 40 AUTO)
+   	BUTTON "Note" ID ToDoNotifyFormMore AT (RIGHT@150 PrevTop AUTO AUTO)
 END
 
 ALERT ID ErrorAlert INFORMATION
@@ -495,7 +499,7 @@ BEGIN
     TITLE "About HappyDays"
 
 	FORMBITMAP AT (6 18) BITMAP ID_BitmapIcon USABLE 
-    LABEL "HappyDays 2.1" AUTOID AT (PrevRight+38 PrevTop) FONT 1
+    LABEL "HappyDays 2.12" AUTOID AT (PrevRight+38 PrevTop) FONT 1
     LABEL "GPL free software"
         AUTOID AT (PrevLeft PrevTop+ABOUT_LINE_SPACING) FONT 0
     LABEL "(c) 1999-2002 Jaemok Jeong"
@@ -565,4 +569,4 @@ SMALLICONFAMILY
 	TRANSPARENT 192 192 0
 
 APPLICATIONICONNAME 1000 "HappyDays"
-VERSION ID 1 "2.1"
+VERSION ID 1 "2.12"

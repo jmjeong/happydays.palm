@@ -19,7 +19,43 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <PalmOS.h>
 #include "util.h"
+#include "happydaysRsc.h"
 #include "calendar.h"
+
+Boolean TextMenuHandleEvent(UInt16 menuID, UInt16 objectID)
+{
+    FormPtr   form = FrmGetActiveForm();
+    FieldPtr  field = GetObjectPointer(form, objectID);
+
+    if (!field) return false;
+
+    switch (menuID) {
+    case TextMenuUndo:
+        FldUndo(field);
+        return true;
+    case TextMenuCut:
+        FldCut(field);
+        return true;
+    case TextMenuCopy:
+        FldCopy(field);
+        return true;
+    case TextMenuPaste:
+        FldPaste(field);
+        return true;
+    case TextMenuSAll:
+        FldSetSelection(field, 0, FldGetTextLength (field));
+        return true;
+    case TextMenuKBoard:
+        SysKeyboardDialog(kbdDefault);
+        return true;
+
+    case TextMenuGHelp:
+        SysGraffitiReferenceDialog(referenceDefault);
+        return true;
+    }
+
+    return false;
+}
 
 //
 // GetObjectPointer - return an object pointer given a form and objID
