@@ -247,9 +247,9 @@ BEGIN
 			"Super Names" 
 			"TealPhone"
          ID PrefFormAddress
-         AT (PREVRIGHT+4 PREVTOP 70 AUTO) VISIBLEITEMS 7 NONUSABLE
+         AT (PrevRight+4 PREVTOP-35 70 AUTO) VISIBLEITEMS 7 NONUSABLE
     POPUPTRIGGER "" ID PrefFormAddrTrigger
-                 AT (PrevLeft PrevTop-1 40 13) LEFTANCHOR
+                 AT (PrevLeft PrevTop+34 40 13) LEFTANCHOR
     POPUPLIST ID PrefFormAddrTrigger PrefFormAddress
 
 /*
@@ -352,31 +352,25 @@ BEGIN
 
     BUTTON "OK" ID DateBookNotifyFormOk AT (5 Bottom@135 40 AUTO)
     BUTTON "Cancel" ID DateBookNotifyFormCancel AT (PrevRight+5 PrevTop 40 AUTO)
-	BUTTON "Icon" ID DateBookNotifyFormMore AT (RIGHT@150 PrevTop AUTO AUTO)
+	BUTTON "Note" ID DateBookNotifyFormMore AT (RIGHT@150 PrevTop AUTO AUTO)
 END
 
 FORM ID DateBookNotifyMoreForm AT (2 18 156 140)
 FRAME
 MODAL
 USABLE
+MENUID  TextMenu
 HELPID  DateBookNotifyMoreHelpString
 BEGIN
-    TITLE "Date Book Icon"
+    TITLE "Datebook Note"
 
-    CHECKBOX "Icon Support" ID DateBookNotifyFormIcon 
+    CHECKBOX "Add the following note" ID DBNoteCheckBox 
 			at (7 25 AUTO AUTO) RIGHTANCHOR FONT 0 
-    PUSHBUTTON "AN" ID DateBookNotifyFormAN AT (PrevRight+5
-            PrevTop AUTO AUTO) LEFTANCHOR GROUP 1
-    PUSHBUTTON "DateBk3" ID DateBookNotifyFormBk3 AT (PrevRight+1
-            PrevTop AUTO AUTO) GROUP 1
-
-	LABEL "AN Icon Number:" ID DateBookNotifyANLabel AT (5 PrevBottom+5) 
-	FIELD ID DateBookNotifyANInput AT (PrevRight+5 PrevTop 30 AUTO) 
-		UNDERLINED MAXCHARS 3
-
-	LABEL "DateBk3 Icon:" ID DateBookNotifyBk3Label AT (5 PrevBottom+2) 
-    TABLE ID DateBookNotifyBk3Table AT (7 PrevBottom 143 40) ROWS 4 
-		COLUMNS 13 COLUMNWIDTHS 10 10 10 10 10 10 10 10 10 10 10 10 10
+    FIELD ID DBNoteField AT (3 PrevBottom+10 143 61) FONT 0
+        EDITABLE MULTIPLELINES HASSCROLLBAR UNDERLINED DYNAMICSIZE
+        MAXCHARS 254
+    SCROLLBAR ID DBNoteScrollBar AT (PrevRight+2 PrevTop 7 PrevHeight)
+        VALUE 0 MIN 0 MAX 0 PAGESIZE 0
 
     BUTTON "OK" ID DateBookNotifyMoreFormOk AT (5 Bottom@135 40 AUTO)
 	GRAFFITISTATEINDICATOR AT (PrevRight+5 PrevTop)
@@ -501,7 +495,7 @@ BEGIN
     TITLE "About HappyDays"
 
 	FORMBITMAP AT (6 18) BITMAP ID_BitmapIcon USABLE 
-    LABEL "HappyDays 2.09b1" AUTOID AT (PrevRight+38 PrevTop) FONT 1
+    LABEL "HappyDays 2.1b1" AUTOID AT (PrevRight+38 PrevTop) FONT 1
     LABEL "GPL free software"
         AUTOID AT (PrevLeft PrevTop+ABOUT_LINE_SPACING) FONT 0
     LABEL "(c) 1999-2002 Jaemok Jeong"
@@ -571,4 +565,4 @@ SMALLICONFAMILY
 	TRANSPARENT 192 192 0
 
 APPLICATIONICONNAME 1000 "HappyDays"
-VERSION ID 1 "2.09"
+VERSION ID 1 "2.1b1"
