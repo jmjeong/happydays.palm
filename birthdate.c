@@ -709,6 +709,7 @@ Boolean UpdateHappyDaysDB(FormPtr frm)
     MemHandle recordH = 0;
     UInt16 recordNum;
     int i = 0, indicateNext;
+    int step;
 
     // create the happydays cache db
     HappyDays   hd;
@@ -726,7 +727,7 @@ Boolean UpdateHappyDaysDB(FormPtr frm)
     CleanupHappyDaysCache(MainDB);
 
     recordNum = DmNumRecords(AddressDB);
-    indicateNext = recordNum / INDICATE_NUM;
+    indicateNext = step = recordNum / INDICATE_NUM;
 
     if (recordNum > 50) initIndicate();
             
@@ -737,9 +738,9 @@ Boolean UpdateHappyDaysDB(FormPtr frm)
         recordH = DmQueryNextInCategory(AddressDB, &currIndex,
                                         dmAllCategories);
         if (!recordH) break;
-        if (i++ == indicateNext+1) {
-            if (recordNum > 50) displayNextIndicate(i * INDICATE_NUM / recordNum);
-            indicateNext += recordNum / INDICATE_NUM;
+        if (i++ == indicateNext) {
+            if (recordNum > 50) displayNextIndicate( (i-1) / step);
+            indicateNext += step;
         }
 
         DmRecordInfo(AddressDB, currIndex, &addrattr, NULL, NULL);
@@ -845,6 +846,8 @@ Boolean UpdateHappyDaysDB(FormPtr frm)
         MemHandleUnlock(recordH);
         currIndex++;
     }
+    if (recordNum > 50) displayNextIndicate( INDICATE_NUM );
+    
 	return true;
 
 Update_ErrHandler:
