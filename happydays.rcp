@@ -6,7 +6,6 @@ STRING ID SelectDateString  "HappyDays"
 STRING ID CustomErrorHelpString "long_customErrorString"
 STRING ID AboutHelpString "long_aboutString"
 STRING ID CleanupAlertHelpString "long_cleanupAlertString"
-STRING ID PrefFormHelpString "long_prefFormString"
 STRING ID RemoveConfirmString "long_removeConfirmString"
 STRING ID InvalidDateString "Invalid input date"
 STRING ID SelectTimeString  "Select Time"
@@ -48,6 +47,19 @@ STRING ID AgeStr				"Age:"
 STRING ID RemainedDayStr		"UpTo Date:"
 
 STRING ID FindHeaderString		"HappyDays"
+
+STRING ID MouseString           "Mouse"
+STRING ID CowString             "Cow"
+STRING ID TigerString           "Tiger"
+STRING ID RabbitString          "Rabbit"
+STRING ID DragonString          "Dragon"
+STRING ID SnakeString           "Snake"
+STRING ID HorseString           "Horse"
+STRING ID SheepString           "Sheep"
+STRING ID MonkeyString          "Monkey"
+STRING ID CockString            "Cock"
+STRING ID DogString             "Doc"
+STRING ID PigString             "Pig"
 
 FORM StartForm AT (0 0 160 160)
 NOFRAME
@@ -160,7 +172,7 @@ BEGIN
     END
 END
 
-FORM ID DispPrefForm AT (2 2 156 156)
+FORM ID DispPrefForm AT (2 62 156 96)
 FRAME
 MODAL
 USABLE
@@ -171,11 +183,11 @@ BEGIN
     CHECKBOX "Emphasize Lunar Date" ID DispPrefEmphasize 
 		AT (10 20 AUTO AUTO)
     CHECKBOX "Display solar/lunar info in View" ID DispPrefExtraInfo
-        AT (10 PrevBottom+10 AUTO AUTO)
-    CHECKBOX "Display sexagenary cycle" ID DispPrefSexagen
-        AT (10 PrevBottom+10 AUTO AUTO)
+        AT (10 PrevBottom+3 AUTO AUTO)
+    CHECKBOX "Display zodiac sign in View" ID DispPrefZodiac
+        AT (10 PrevBottom+3 AUTO AUTO)
 
-    BUTTON "OK" ID DispPrefOk AT (5 BOTTOM@149 40 AUTO)
+    BUTTON "OK" ID DispPrefOk AT (5 BOTTOM@89 40 AUTO)
     BUTTON "Cancel" ID DispPrefCancel AT (PrevRight+5 PrevTop 40 AUTO)
 END
 
@@ -184,11 +196,15 @@ FRAME
 MODAL
 USABLE
 DEFAULTBTNID PrefFormCancel
-HELPID PrefFormHelpString
 BEGIN
     TITLE "Preferences"
+
+    LABEL "Custom field:" AUTOID AT (10 20)
+    FIELD ID PrefFormCustomField AT (PrevRight PrevTop 50 AUTO) UNDERLINED
+            MAXCHARS 12
+
     CHECKBOX "Instead of system date format" ID PrefFormOverrideSystemDate 
-			AT (10 20 AUTO AUTO)
+			AT (10 PrevBottom+1 AUTO AUTO)
     LABEL "Use" AUTOID AT (20 PREVBOTTOM)
     LIST "M/D/Y" "D/M/Y" "D.M.Y" "D-M-Y" "Y/M/D" "Y.M.D" "Y-M-D" 
 		ID PrefFormDateFmts 
@@ -200,7 +216,7 @@ BEGIN
 	CHECKBOX "Scan note field" ID PrefFormScanNote
 		AT (10 PrevBottom+1 AUTO AUTO)
         
-    LABEL "Address Autoscan" AUTOID AT (10 PrevBottom)
+    LABEL "Address Autoscan" AUTOID AT (10 PrevBottom+3)
     LIST "Always" "Ask" "Never"
 		ID PrefFormAutoRescan
 		AT (PREVRIGHT PREVTOP 50 AUTO) VISIBLEITEMS 3 NONUSABLE
@@ -208,7 +224,7 @@ BEGIN
                  AT (PREVLEFT PREVTOP-1 50 AUTO) LEFTANCHOR
     POPUPLIST ID PrefFormRescanTrigger PrefFormAutoRescan
         
-	LABEL "Notify Format:" AUTOID AT (10 PrevBottom+1) 
+	LABEL "Notify Format:" AUTOID AT (10 PrevBottom+3) 
     LIST 	"[Last, First] E(1) Year" 
 	    	"[First Last] E(1) Year" 
 			"Event - Last, First Year"
@@ -220,14 +236,7 @@ BEGIN
 			AT (PREVLEFT PREVTOP-1 40 13) LEFTANCHOR
     POPUPLIST ID PrefFormNotifyTrigger PrefFormNotifyFmts
 
-    LABEL "Custom field:" AUTOID AT (10 PrevBottom+1) 
-    FIELD ID PrefFormCustomField AT (85 PrevTop 50 AUTO) UNDERLINED
-            MAXCHARS 12
-    LABEL "HappyDays ID:" AUTOID AT (10 PrevBottom) 
-    FIELD ID PrefFormNotifyWith AT (85 PrevTop 28 AUTO) UNDERLINED
-            MAXCHARS 5
-
-    LABEL "Address Book:" AUTOID AT (10 PrevBottom+1)
+    LABEL "Address Book:" AUTOID AT (10 PrevBottom+3)
     LIST 	"Built-in" 
 			"Address.kr" 
 			"Address Album"
@@ -240,6 +249,12 @@ BEGIN
     POPUPTRIGGER "" ID PrefFormAddrTrigger
                  AT (PrevLeft PrevTop-1 40 13) LEFTANCHOR
     POPUPLIST ID PrefFormAddrTrigger PrefFormAddress
+
+/*
+    LABEL "HappyDays ID:" AUTOID AT (10 PrevBottom) 
+    FIELD ID PrefFormNotifyWith AT (85 PrevTop 28 AUTO) UNDERLINED
+            MAXCHARS 5
+*/
          
     BUTTON "OK" ID PrefFormOk AT (5 BOTTOM@149 40 AUTO)
     BUTTON "Cancel" ID PrefFormCancel AT (PrevRight+5 PrevTop 40 AUTO)
@@ -490,8 +505,10 @@ BEGIN
         AUTOID AT (PrevLeft PrevTop+ABOUT_LINE_SPACING) FONT 0
     LABEL "(c) 1999-2001 JaeMok Jeong"
         AUTOID AT (Center PrevTop+ABOUT_LINE_SPACING2) FONT 0
-	LABEL "E-Mail & Web Page" AUTOID AT (CENTER PrevTop+ABOUT_LINE_SPACING) FONT 1
-    LABEL "jmjeong@oopsla.snu.ac.kr" AUTOID AT 	
+        
+	LABEL "E-Mail & Web Page" AUTOID AT (CENTER PrevTop+ABOUT_LINE_SPACING)
+                    FONT 1
+    LABEL "happydays@jmjeong.com" AUTOID AT 	
 			(Center PrevTop+ABOUT_LINE_SPACING) Font 0
     LABEL "jmjeong.com/palm/happydays"
         AUTOID AT (Center PrevTop+ABOUT_LINE_SPACING) FONT 0

@@ -76,7 +76,7 @@ struct sDispPrefs
 {
     char emphasize;             // emphasize lunar
     char extrainfo;             // display extra day information
-    char sexagenary;            // sexagenary cycle
+    char zodiac;                // zodiac sign in luar in view
 };
 
 struct sPrefsR 

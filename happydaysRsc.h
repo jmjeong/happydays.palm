@@ -67,7 +67,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define PrefFormCustomField         1301
 #define PrefFormOk					1303
 #define PrefFormCancel				1304
-#define PrefFormNotifyWith          1305
 #define PrefFormOverrideSystemDate  1306
 #define PrefFormDateFmts            1307
 #define PrefFormDateTrigger         1308
@@ -84,7 +83,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define DispPrefCancel              1352
 #define DispPrefEmphasize           1353
 #define DispPrefExtraInfo           1354
-#define DispPrefSexagen             1355
+#define DispPrefZodiac              1355
 
 #define DateBookNotifyForm          1400
 #define NotifyFormRecordAll  		1401
@@ -182,7 +181,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define SelectTimeString            1925
 #define NoTimeString                1926
 #define ExportDoneString            1927
-#define PrefFormHelpString          1928
+
 #define ExportHeaderString			1929
 #define ViewNotExistString			1930
 #define DateBookFirstAlertString	1931
@@ -196,6 +195,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define AgeStr						1939
 #define RemainedDayStr				1940
 
+#define MouseString                 1950
+#define CowString                   1951
+#define TigerString                 1952
+#define RabbitString                1953
+#define DragonString                1955
+#define SnakeString                 1956
+#define HorseString                 1957
+#define SheepString                 1958
+#define MonkeyString                1959   
+#define CockString                  1960
+#define DogString                   1961
+#define PigString                   1962
+
 #define ExportAlert                 1990
 #define AddrRescanAlert             1991
 
@@ -203,9 +215,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define ABOUT_LINE_SPACING			12
 #define ABOUT_LINE_SPACING2			18
-
-#define AGE_FIELD_WIDTH				24
-#define DATE_FIELD_WIDTH			46
 
 #define MAXSLOT						24
 #define VISIBLESLOT					11

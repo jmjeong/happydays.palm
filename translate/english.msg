@@ -40,53 +40,17 @@ BEGIN
 
     "long_aboutString" = ""\
     "'HappyDays' will help you remember the birthdays and anniversaries "\
-    "of your friends and family members, as well as other events."\
-    "\n\nUse one of the custom fields in Address Book application "\
-    "and rename it to 'Birthday'."\
-    "\n\nExamples:\n"\
-    " Last Name: Jeong\n"\
-    " First name: JaeMok\n"\
-    " ...\n"\
-    " Birthday: -)12/4/70\n\n"\
-    "Formats:\n"\
-    " [-)|#)]Date\n"\
-    " -) means lunar calendar\n"\
-    " #) means lunar leap month\n\n"\
-    "Date format is automatically read from the system preferences. "\
-    "You can omit the year field. Year input below 100 is assumed to be "\
-    "year in the 20th century, If you are not sure of the year format, "\
-    "just write it in form of YYYY(e.g. 1970).\n\n"\
-    "To set multiple entry, refer the manual.\n\n" \
-	"Name1 & name2 displayed in HappyDays List is determined by "\
-	"'Address Book/Preferences/List by'. If you change this preferences, "\
-	"you can see the different views.\n\n"\
-	"Date format is determined by System/Prefs/Formats/Date Format.\n\n"\
-	"If you write character or number in graffiti area, the matching row "\
-	"is highlighted. For example, if you write 'a' in graffiti, the "\
-	"first record beginning with 'a' or 'A' is highlighted. "\
-	"If you write '1' in graffiti, the nearest incoming record after January "\
-	"is highlighted.\n"
+    "of your friends and family members, as well as other events.\n\n"\
+    "View the index.html and manual.html file for detailed information "\
+    "on how to use HappyDays\n\n"\
+    "HappyDays is distributed under the terms of the GNU General "\
+    "Public License version 2.0.\n"
 
     "long_cleanupAlertString" = ""\
     "Notification entries are considered HappyDays if they have "\
 	"{HappyDays ID} in their memo field. "\ 	
     "If you use this format in your own "\
     "entries, this record might also be removed by CleanUp.\n"
-
-    "long_prefFormString" = ""\
-	"* Instead of system date...\n"\
-	"Control the interpretation of the AddressDB Birthday custom field. "\
-	"By default this is the same as the system date format preference.\n\n"\
-	"* Scan note field\n"\
-	"To read note field in Address Book, check this option.\n\n"\
-    "* Emphasize Lunar Date\n"\
-    "If checkbox is on, the dashed line is drawed beneath lunar date.\n\n"\
-	"* Notify format\n"\
-	"The description format used for notification\n\n"\
-    "* Custom field\n"\
-    "The name of custom fields in Address Book used for INPUT\n\n"\
-    "* HappyDays ID\n"\
-    "Used for Notify and Cleanup\n"
 
     "long_checkDateString" = ""\
     "As HappyDays algorithms use the current date for various date "\

@@ -48,9 +48,9 @@ UInt32 gMmcdate, gMmmdate;      // Memo create/modify time
 Boolean gSortByCompany=true;    // sort by company is set in AddressBook?
 UInt16 gAddrCategory;           // address book category
 Int16 gMainTableTotals;       	// Main Form table total rows;
+Int16 gMainTableStart = 0;      // Main Form table starts
+Int16 gMainTablePageSize = 0;   // Page size of Maintable
 Int16 gMainTableHandleRow = -1; // The row of birthdate view to display
-Int16 gCurrentSelection = -1;   // current selection of table
-Int16 gLastStart = 0;           // Last table start
 DateFormatType gPrefdfmts;  	// global date format for Birthday field
 DateFormatType gSystemdfmts;  	// global system date format 
 TimeFormatType gPreftfmts;  	// global time format
@@ -113,8 +113,9 @@ static Int16 OpenDatabases(void);
 static void freememories(void);
 static void CloseDatabases(void);
 static void MainFormReadDB();
+static int CalcPageSize(FormPtr frm);
 
-static void ViewFormLoadTable(FormPtr frm, Int16 listOffset);
+static void ViewFormLoadTable(FormPtr frm);
 
 static Boolean MenuHandler(FormPtr frm, EventPtr e);
 
@@ -131,8 +132,7 @@ static void WritePrefsRec(void);
 static void MainFormLoadTable(FormPtr frm, Int16 listOffset);
 static void MainFormInit(FormPtr formP, Boolean resize);
 static void MainFormResize(FormPtr frmP, Boolean draw);
-static void MainFormSelectTableItem(Boolean selected, TablePtr table,
-                                    Int16 row, Int16 column);
+static void MainTableSelectItem(TablePtr table, Int16 row, Boolean selected);
 static void MainFormDrawRecord(MemPtr tableP, Int16 row, Int16 column, 
                                RectanglePtr bounds);
 
@@ -788,22 +788,25 @@ static void RereadHappyDaysDB(DateType start)
 
 static void HighlightAction(int selected, Boolean sound)
 {
-/*
   FormPtr frm = FrmGetActiveForm();
   TablePtr tableP = GetObjectPointer(frm, MainFormTable);
 
   if (sound) SndPlaySystemSound(sndClick);
 
-  if (gMainTableStart > selected
-  || selected >= (gMainTableStart + gMainTableRows) ) {
-  // if not exist in table view, redraw table
-  gMainTableStart = MAX(0, selected-4);
-  MainFormLoadTable(frm, true);
+  if (gCurrentSelection >= 0) {
+      // unhighlight the selection
+      MainTableSelectItem(tableP, gCurrentSelection, false);
   }
-  // highlight the selection
-  TblUnhighlightSelection(tableP);
-  TblSelectItem(tableP, (selected-gMainTableStart), 0);
-*/
+
+  if (gMainTableStart > selected
+      || selected >= (gMainTableStart + gMainTablePageSize) ) {
+      // if not exist in table view, redraw table
+      gMainTableStart = MAX(0, selected-4);
+      MainFormLoadTable(frm, gMainTableStart);
+      TblDrawTable(tableP);
+  }
+  gCurrentSelection = selected - gMainTableStart;
+  MainTableSelectItem(tableP, gCurrentSelection, true);
 }
 
 static void HighlightMatchRowDate(DateTimeType inputDate)
@@ -897,7 +900,7 @@ static void DoDateSelect()
 		gStartDate.month = dt.month;
 		gStartDate.day = dt.day;
 
-		gCurrentSelection = -1;
+		gMainTableHandleRow = -1;
 		FrmUpdateForm(MainForm, frmRedrawUpdateCode);
     }
 }
@@ -1172,17 +1175,16 @@ static void MainFormResize(FormPtr frmP, Boolean draw)
 	// Resize the table
 	PrvResizeObject(frmP, FrmGetObjectIndex(frmP, MainFormTable), 
 					y_diff, draw);
-
+    
+    barP = GetObjectPointer(frmP, MainFormScrollBar);
+    SclGetScrollBar(barP, &valueP, &minP, &maxP, &pageSizeP);
+    
 	if (draw) {
-		barP = GetObjectPointer(frmP, MainFormScrollBar);
-		SclGetScrollBar(barP, &valueP, &minP, &maxP, &pageSizeP);
-
 		MainFormLoadTable(frmP, valueP);
 		FrmDrawForm(frmP);
-		gCurrentSelection = -1;
+		gMainTableHandleRow = -1;
 	}
 }
-
 
 static void MainFormReadDB()
 {
@@ -1209,8 +1211,8 @@ static void HandlePrevKey(void)
         gCurrentSelection = 0;
     else {
         if (gCurrentSelection > 0) {
-			MainFormSelectTableItem(false, GetObjectPointer(frm, MainFormTable),
-                                    gCurrentSelection, 0);
+			MainTableSelectItem(GetObjectPointer(frm, MainFormTable),
+                                    gCurrentSelection, false);
             gCurrentSelection --;
 		}
         else {
@@ -1218,8 +1220,8 @@ static void HandlePrevKey(void)
         }
     }
 
-	MainFormSelectTableItem(true, GetObjectPointer(frm, MainFormTable),
-                            gCurrentSelection, 0);
+	MainTableSelectItem(GetObjectPointer(frm, MainFormTable),
+                            gCurrentSelection, true);
 }
 
 static void HandleNextKey(void)
@@ -1236,8 +1238,8 @@ static void HandleNextKey(void)
     else
     {
         if (gCurrentSelection < pageSizeP - 1) {
-			MainFormSelectTableItem(false, GetObjectPointer(frm, MainFormTable),
-                                    gCurrentSelection, 0);
+			MainTableSelectItem(GetObjectPointer(frm, MainFormTable),
+                                    gCurrentSelection, false);
 
             gCurrentSelection ++;
 		}
@@ -1246,8 +1248,8 @@ static void HandleNextKey(void)
         }
     }
 
-	MainFormSelectTableItem(true, GetObjectPointer(frm, MainFormTable),
-                            gCurrentSelection, 0);
+	MainTableSelectItem(GetObjectPointer(frm, MainFormTable),
+                            gCurrentSelection, true);
 }
 
 
@@ -1259,9 +1261,7 @@ static void MainFormHandleSelect(FormPtr frm, Int16 row)
 	barP = GetObjectPointer(frm, MainFormScrollBar);
 	SclGetScrollBar(barP, &valueP, &minP, &maxP, &pageSizeP);
 
-	gCurrentSelection = row;
 	gMainTableHandleRow = gCurrentSelection + valueP;
-    gLastStart = valueP;
 
 	FrmGotoForm(ViewForm);
 }
@@ -1287,21 +1287,32 @@ static Boolean MainFormHandleEvent (EventPtr e)
         //
 		// else execute frmOpenEvent
 		bformModify = false;
-        gCurrentSelection = -1;
+        gMainTableHandleRow = -1;
 
     case frmOpenEvent: 
     {
         MainFormInit(frm, bformModify);
+        gMainTablePageSize = CalcPageSize(frm);
 
-        // 실제 읽어들일 데이터를 처리
-        //
-        // gLastStart is set in 'MainFormHandleSelect'
-        MainFormLoadTable(frm, gLastStart);
-
+        if (gMainTableHandleRow >= 0) {
+            if (gMainTableStart > gMainTableHandleRow ||
+                gMainTableHandleRow >= (gMainTableStart + gMainTablePageSize) ) {
+                // if not exist in table view, redraw table
+            
+                gMainTableStart = MAX(0, gMainTableHandleRow-4);
+            }
+            gCurrentSelection = gMainTableHandleRow - gMainTableStart;
+        }
+        else {
+            gMainTableStart = 0;
+        }
+        MainFormLoadTable(frm, gMainTableStart);
+        
         FrmDrawForm(frm);
-        if (gCurrentSelection != -1) {
-            MainFormSelectTableItem(true, GetObjectPointer(frm, MainFormTable),
-                                    gCurrentSelection, 0);
+        
+        if (gCurrentSelection >= 0) {
+            MainTableSelectItem(GetObjectPointer(frm, MainFormTable),
+                                    gCurrentSelection, true);
         }
                 
         handled = true;
@@ -1448,8 +1459,8 @@ static Boolean MainFormHandleEvent (EventPtr e)
     case tblEnterEvent: 
     {
         if (gCurrentSelection != -1)
-            MainFormSelectTableItem(false, GetObjectPointer(frm, MainFormTable),
-                                    gCurrentSelection, 0);
+            MainTableSelectItem(GetObjectPointer(frm, MainFormTable),
+                                    gCurrentSelection, false);
 		break;
     }
 
@@ -1501,8 +1512,9 @@ static void LoadPrefsFields()
                 LstGetSelectionText(lstaddr,gPrefsR.Prefs.addrapp));
                     
     SetFieldTextFromStr(PrefFormCustomField, gPrefsR.Prefs.custom);
+/*
     SetFieldTextFromStr(PrefFormNotifyWith, gPrefsR.Prefs.notifywith);
-
+*/
     if (gPrefsR.Prefs.scannote == 1) {
         CtlSetValue(GetObjectPointer(frm, PrefFormScanNote), 1);
     }
@@ -1530,6 +1542,7 @@ static Boolean UnloadPrefsFields()
                                                     PrefFormCustomField)), 12);
         }
     }
+/*    
     if (FldDirty(GetObjectPointer(frm, PrefFormNotifyWith))) {
         if (FldGetTextPtr(GetObjectPointer(frm, PrefFormNotifyWith))) {
             StrNCopy(gPrefsR.Prefs.notifywith,
@@ -1537,7 +1550,7 @@ static Boolean UnloadPrefsFields()
                                                     PrefFormNotifyWith)), 5);
         }
     }
-
+*/
     // If effective date format has changed, we need to signal for a re-scan
     // of the address book database. This occurs if
     ptr = GetObjectPointer(frm, PrefFormOverrideSystemDate);
@@ -1603,11 +1616,11 @@ static void LoadDispPrefsFields()
     else {
         CtlSetValue(GetObjectPointer(frm, DispPrefExtraInfo), 0);
     }
-    if (gPrefsR.DispPrefs.sexagenary == 1) {
-        CtlSetValue(GetObjectPointer(frm, DispPrefSexagen), 1);
+    if (gPrefsR.DispPrefs.zodiac == 1) {
+        CtlSetValue(GetObjectPointer(frm, DispPrefZodiac), 1);
     }
     else {
-        CtlSetValue(GetObjectPointer(frm, DispPrefSexagen), 0);
+        CtlSetValue(GetObjectPointer(frm, DispPrefZodiac), 0);
     }
 }
 
@@ -1628,8 +1641,8 @@ static Boolean UnloadDispPrefsFields()
     ptr = GetObjectPointer(frm, DispPrefExtraInfo);
     gPrefsR.DispPrefs.extrainfo = CtlGetValue(ptr);
 
-    ptr = GetObjectPointer(frm, DispPrefSexagen);
-    gPrefsR.DispPrefs.sexagenary = CtlGetValue(ptr);
+    ptr = GetObjectPointer(frm, DispPrefZodiac);
+    gPrefsR.DispPrefs.zodiac = CtlGetValue(ptr);
 
     return redraw;
 }
@@ -1744,16 +1757,15 @@ static Boolean PrefFormHandleEvent(EventPtr e)
 }
 
 
-static void MainFormSelectTableItem(Boolean selected, TablePtr table,
-                                    Int16 row, Int16 column)
+static void MainTableSelectItem(TablePtr table, Int16 row, Boolean select)
 {
 	RectangleType r;
 
-	TblGetItemBounds(table, row, column, &r);
+	TblGetItemBounds(table, row, 0, &r);
 
-    if (!selected) {
+    if (!select) {
         WinEraseRectangle(&r, 0);
-        MainFormDrawRecord(table, row, column, &r);
+        MainFormDrawRecord(table, row, 0, &r);
     }
     else WinInvertRectangle(&r, 0);
 }
@@ -1942,6 +1954,25 @@ static void MainFormInitTable(FormPtr frm)
 	FntSetFont(currFont);
 }
 
+static int CalcPageSize(FormPtr frm)
+{
+    TablePtr 		tableP;
+	Int16 			tblRows, row_height;
+	RectangleType	rect;
+	FontID			currFont;
+
+    tableP = GetObjectPointer(frm, MainFormTable);
+	tblRows = TblGetNumberOfRows(tableP); 
+	
+	currFont = FntSetFont(gPrefsR.listFont);
+	row_height = FntLineHeight();
+	TblGetBounds(tableP, &rect);
+
+	FntSetFont(currFont);
+
+    return MIN(tblRows, rect.extent.y / row_height);
+}
+
 static void MainFormLoadTable(FormPtr frm, Int16 listOffset)
 {
     TablePtr 		tableP;
@@ -1978,12 +2009,16 @@ static void MainFormLoadTable(FormPtr frm, Int16 listOffset)
 		TblMarkRowInvalid(tableP, row);
 	}
 
+    gMainTableStart = listOffset;
+
 	barP = GetObjectPointer(frm, MainFormScrollBar);
-	if (gMainTableTotals > visibleRows)
+	if (gMainTableTotals > visibleRows) {
 		SclSetScrollBar(barP, listOffset, 0, 
                         gMainTableTotals - visibleRows, visibleRows);
-	else 
+    }
+	else {
 		SclSetScrollBar(barP, 0, 0, 0, gMainTableTotals);
+    }
 
 	FntSetFont(currFont);
 }
@@ -2019,10 +2054,77 @@ static void MainFormInit(FormPtr frm, Boolean bformModify)
 }
 
 
-static void ViewFormDrawRecord(MemPtr tableP, Int16 row, Int16 column, 
-                               RectanglePtr bounds)
+static void ViewTableDrawHdr(MemPtr tableP, Int16 row, Int16 column, 
+                             RectanglePtr bounds)
 {
     FontID currFont;
+    Int16 length, width;
+	Boolean ignored = true;
+    Int16 viewItem;
+
+	WinEraseRectangle(bounds, 0);
+    
+    if (gbVgaExists) {
+        currFont = FntSetFont(VgaBaseToVgaFont(stdFont));
+    }
+    else {
+        currFont = FntSetFont(stdFont);
+    }
+
+    viewItem = TblGetItemInt(tableP, row, column);
+
+    switch (viewItem) {
+    case ViewType:
+        ///////////////////////////////////
+        // Display the Type of Anniversary
+        ///////////////////////////////////
+        SysCopyStringResource(gAppErrStr, TypeStr);
+        break;
+    case ViewNext:
+        ///////////////////////////////////
+        // Display the Next Date
+        ///////////////////////////////////
+        SysCopyStringResource(gAppErrStr, NextDateStr);
+        
+        break;
+    case ViewSrc:
+        ///////////////////////////////////
+        // Display the Source Date
+        ///////////////////////////////////
+        SysCopyStringResource(gAppErrStr, SourceDateStr);
+        
+        break;
+        
+    case ViewAge:
+        ///////////////////////////////////
+        // Process Age
+        ///////////////////////////////////
+        SysCopyStringResource(gAppErrStr, AgeStr);
+
+        break;
+    case ViewRemained:
+        SysCopyStringResource(gAppErrStr, RemainedDayStr);
+
+        break;
+    default:
+        gAppErrStr[0] = 0;
+        break;
+    }
+    
+    length = StrLen(gAppErrStr);
+    width = bounds->extent.x;
+    FntCharsInWidth(gAppErrStr, &width, &length, &ignored);
+    WinDrawChars(gAppErrStr, length, bounds->topLeft.x, bounds->topLeft.y);
+
+    // restore font
+    FntSetFont (currFont);
+}
+
+static void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column, 
+                              RectanglePtr bounds)
+{
+    FontID currFont;
+    
     MemHandle recordH = 0;
     LineItemPtr ptr;
 	Boolean ignored = true;
@@ -2036,7 +2138,20 @@ static void ViewFormDrawRecord(MemPtr tableP, Int16 row, Int16 column,
 	DateType current;
 	char displayStr[25];
 
-	WinEraseRectangle(bounds, 0);
+    Int16 x,y;
+    Int16 width, length;
+    Int16 viewItem;
+
+    WinEraseRectangle(bounds, 0);
+    // current time
+    DateSecondsToDate(TimGetSeconds(), &current);
+
+    if (gbVgaExists) {
+        currFont = FntSetFont(VgaBaseToVgaFont(stdFont));
+    }
+    else {
+        currFont = FntSetFont(stdFont);
+    }
 
     // Read the necessary information from LineItem
     //
@@ -2046,222 +2161,177 @@ static void ViewFormDrawRecord(MemPtr tableP, Int16 row, Int16 column,
     age = ptr[gMainTableHandleRow].age;
     MemPtrUnlock(ptr);
 
-    // current time
-    DateSecondsToDate(TimGetSeconds(), &current);
-
-    if ((recordH = DmQueryRecord(MainDB, index))) {
-        Int16 x,y;
-        Int16 width, length;
-        Int16 viewItem;
+    recordH = DmQueryRecord(MainDB, index);
+    ErrFatalDisplayIf(!recordH, "Invalid record");
         
-        x = bounds->topLeft.x;
-        y = bounds->topLeft.y;
-        width = bounds->extent.x;
+    x = bounds->topLeft.x;
+    y = bounds->topLeft.y;
+    width = bounds->extent.x;
 
-        viewItem = TblGetItemInt(tableP, row, column);
-        rp = (PackedHappyDays *) MemHandleLock(recordH);
-        /*
-         * Build the unpacked structure for an AddressDB record.  It
-         * is just a bunch of pointers into the rp structure.
-         */
-        UnpackHappyDays(&r, rp);
+    viewItem = TblGetItemInt(tableP, row, column);
+    rp = (PackedHappyDays *) MemHandleLock(recordH);
+    UnpackHappyDays(&r, rp);
 
-        if (gbVgaExists) {
-            currFont = FntSetFont(VgaBaseToVgaFont(stdFont));
+    switch (viewItem) {
+    case ViewType: 
+    {
+        ///////////////////////////////////
+        // Display the Type of Anniversary
+        ///////////////////////////////////
+        char* p;
+                
+        if (!r.custom[0]) {         // custom does not exist
+            p = gPrefsR.Prefs.custom;
         }
         else {
-            currFont = FntSetFont(stdFont);
+            p = r.custom;
         }
-
-        switch (viewItem) {
-        case ViewType:
-            ///////////////////////////////////
-            // Display the Type of Anniversary
-            ///////////////////////////////////
-            if (column == 0) {
-                SysCopyStringResource(gAppErrStr, TypeStr);
-                length = StrLen(gAppErrStr);
-                FntCharsInWidth(gAppErrStr, &width, &length, &ignored);
-                WinDrawChars(gAppErrStr, length, x, y);
-            }
-            else {
-                char* p;
-                
-                if (!r.custom[0]) {         // custom does not exist
-                    p = gPrefsR.Prefs.custom;
-                }
-                else {
-                    p = r.custom;
-                }
-                length = StrLen(p);
-                FntCharsInWidth(p, &width, &length, &ignored);
-                WinDrawChars(p, length, x, y);
-            }
-            break;
-        case ViewNext:
-            ///////////////////////////////////
-            // Display the Next Date
-            ///////////////////////////////////
-            if (column == 0) {
-                SysCopyStringResource(gAppErrStr, NextDateStr);
-                length = StrLen(gAppErrStr);
-                FntCharsInWidth(gAppErrStr, &width, &length, &ignored);
-                WinDrawChars(gAppErrStr, length, x, y);
-            }
-            else {
-                char temp[5];
-                if (converted.year != INVALID_CONV_DATE) {
-                    DateToAsciiLong(converted.month, converted.day,
-                                    converted.year+ 1904, gPrefdfmts,
-                                    gAppErrStr);
-
-                    SysCopyStringResource(temp,
-                                          DayOfWeek(converted.month, converted.day,
-                                                    converted.year+1904) + SunString);
-                    StrNCat(gAppErrStr, " [", AppErrStrLen);
-                    StrNCat(gAppErrStr, temp, AppErrStrLen);
-                    StrNCat(gAppErrStr, "]", AppErrStrLen);
-                }
-                else {
-                    SysCopyStringResource(gAppErrStr, ViewNotExistString);
-                }
-                length = StrLen(gAppErrStr);
-                FntCharsInWidth(gAppErrStr, &width, &length, &ignored);
-                WinDrawChars(gAppErrStr, length, x, y);
-            }
-            break;
-        case ViewSrc:
-            ///////////////////////////////////
-            // Display the Source Date
-            ///////////////////////////////////
-
-            if (column == 0) {
-                SysCopyStringResource(gAppErrStr, SourceDateStr);
-                length = StrLen(gAppErrStr);
-                FntCharsInWidth(gAppErrStr, &width, &length, &ignored);
-                WinDrawChars(gAppErrStr, length, x, y);
-            }
-            else {
-                if (r.flag.bits.lunar) {
-                    StrCopy(displayStr, "-)");
-                }
-                else if (r.flag.bits.lunar_leap) {
-                    StrCopy(displayStr, "#)");
-                }
-                else displayStr[0] = 0;
-
-                if (r.flag.bits.year) {
-                    DateToAsciiLong(r.date.month, r.date.day, r.date.year + 1904,
-                                    gPrefdfmts, gAppErrStr);
-                }
-                else {
-                    DateToAsciiLong(r.date.month, r.date.day, -1, gPrefdfmts,
-                                    gAppErrStr);
-                }
-                StrCat(displayStr, gAppErrStr);
-
-                length = StrLen(displayStr);
-                FntCharsInWidth(displayStr, &width, &length, &ignored);
-                WinDrawChars(displayStr, length, x, y);
-            }
-            break;
-        case ViewAge:
-            ///////////////////////////////////
-            // Process Age
-            ///////////////////////////////////
-            if (column == 0) {
-                SysCopyStringResource(gAppErrStr, AgeStr);
-                length = StrLen(gAppErrStr);
-                FntCharsInWidth(gAppErrStr, &width, &length, &ignored);
-                WinDrawChars(gAppErrStr, length, x, y);
-            }
-            else {
-                if (r.flag.bits.year) {
-                    DateType solBirth;
-                    DateTimeType rtVal;
-                    UInt8 ret;
-                    Int16 d_diff = 0, m_diff = 0, y_diff = 0;
-            
-                    if (r.flag.bits.lunar || r.flag.bits.lunar_leap) {
-                        ret = !lun2sol(r.date.year+1904,
-                                       r.date.month,
-                                       r.date.day,
-                                       r.flag.bits.lunar_leap, &rtVal);
-                        if (ret) {
-                            solBirth.year = rtVal.year - 1904;
-                            solBirth.month = rtVal.month;
-                            solBirth.day = rtVal.day;
-                        }
-                     }
-                    else solBirth = r.date;
-            
-                    dateDiff = (Int16)(DateToDays(current)
-                                       - DateToDays(solBirth));
-
-                    if (dateDiff > (Int16)0) {
-                        if (current.day < solBirth.day) {
-                            d_diff = DaysInMonth(solBirth.month, solBirth.year+1904)
-                                + current.day- solBirth.day;
-                            m_diff--;
-                        }
-                        else {
-                            d_diff = current.day - solBirth.day;
-                        }
-                        
-                        if (current.month + m_diff  < solBirth.month) {
-                            m_diff = 12 + current.month - solBirth.month;
-                            y_diff--;
-                        }
-                        else {
-                            m_diff = current.month - solBirth.month;
-                        }
-                        y_diff += current.year - solBirth.year;
-                    
-                        StrPrintF(gAppErrStr, "%dY %dM %dD (%d)",
-                                  y_diff, m_diff, d_diff, dateDiff);
-                    }
-                    else StrCopy(gAppErrStr, "-");
-                }
-                else {
-                    StrCopy(gAppErrStr, "-");
-                }
-                length = StrLen(gAppErrStr);
-                FntCharsInWidth(gAppErrStr, &width, &length, &ignored);
-                WinDrawChars(gAppErrStr, length, x, y);
-            }
-            break;
-        case ViewRemained:
-            if (column == 0) {
-                SysCopyStringResource(gAppErrStr, RemainedDayStr);
-                    
-                length = StrLen(gAppErrStr);
-                FntCharsInWidth(gAppErrStr, &width, &length, &ignored);
-                WinDrawChars(gAppErrStr, length, x, y);
-            }
-            else {
-
-                dateDiff = DateToDays(converted) - DateToDays(current);
-
-                if (dateDiff >= (Int16)0) {
-                    SysCopyStringResource(displayStr, BirthLeftString);
-                    StrPrintF(gAppErrStr, displayStr, dateDiff);
-                }
-                else {
-                    SysCopyStringResource(displayStr, BirthPassedString);
-                    StrPrintF(gAppErrStr, displayStr, -1 * dateDiff);
-                }
-            }
-            
-            length = StrLen(gAppErrStr);
-            FntCharsInWidth(gAppErrStr, &width, &length, &ignored);
-            WinDrawChars(gAppErrStr, length, x, y);
-            break;
-        }
-        MemHandleUnlock(recordH);
-
-		// restore font
-		FntSetFont (currFont);
+        length = StrLen(p);
+        FntCharsInWidth(p, &width, &length, &ignored);
+        WinDrawChars(p, length, x, y);
     }
+    break;
+    case ViewNext:
+    {
+        ///////////////////////////////////
+        // Display the Next Date
+        ///////////////////////////////////
+        
+        char temp[5];
+        
+        if (converted.year != INVALID_CONV_DATE) {
+            DateToAsciiLong(converted.month, converted.day,
+                            converted.year+ 1904, gPrefdfmts,
+                            gAppErrStr);
+
+            SysCopyStringResource(temp,
+                                  DayOfWeek(converted.month, converted.day,
+                                            converted.year+1904) + SunString);
+            StrNCat(gAppErrStr, " [", AppErrStrLen);
+            StrNCat(gAppErrStr, temp, AppErrStrLen);
+            StrNCat(gAppErrStr, "]", AppErrStrLen);
+        }
+        else {
+            SysCopyStringResource(gAppErrStr, ViewNotExistString);
+        }
+        length = StrLen(gAppErrStr);
+        FntCharsInWidth(gAppErrStr, &width, &length, &ignored);
+        WinDrawChars(gAppErrStr, length, x, y);
+    }
+    break;
+    case ViewSrc:
+    {
+        ///////////////////////////////////
+        // Display the Source Date
+        ///////////////////////////////////
+            
+        if (r.flag.bits.lunar) {
+            StrCopy(displayStr, "-)");
+        }
+        else if (r.flag.bits.lunar_leap) {
+            StrCopy(displayStr, "#)");
+        }
+        else displayStr[0] = 0;
+
+        if (r.flag.bits.year) {
+            DateToAsciiLong(r.date.month, r.date.day, r.date.year + 1904,
+                            gPrefdfmts, gAppErrStr);
+        }
+        else {
+            DateToAsciiLong(r.date.month, r.date.day, -1, gPrefdfmts,
+                            gAppErrStr);
+        }
+        StrCat(displayStr, gAppErrStr);
+
+        length = StrLen(displayStr);
+        FntCharsInWidth(displayStr, &width, &length, &ignored);
+        WinDrawChars(displayStr, length, x, y);
+    }
+    break;
+    case ViewAge:
+    {
+        ///////////////////////////////////
+        // Process Age
+        ///////////////////////////////////
+        
+        if (r.flag.bits.year) {
+            DateType solBirth;
+            DateTimeType rtVal;
+            UInt8 ret;
+            Int16 d_diff = 0, m_diff = 0, y_diff = 0;
+            
+            if (r.flag.bits.lunar || r.flag.bits.lunar_leap) {
+                ret = !lun2sol(r.date.year+1904,
+                               r.date.month,
+                               r.date.day,
+                               r.flag.bits.lunar_leap, &rtVal);
+                if (ret) {
+                    solBirth.year = rtVal.year - 1904;
+                    solBirth.month = rtVal.month;
+                    solBirth.day = rtVal.day;
+                }
+            }
+            else solBirth = r.date;
+            
+            dateDiff = (Int16)(DateToDays(current)
+                               - DateToDays(solBirth));
+
+            if (dateDiff > (Int16)0) {
+                if (current.day < solBirth.day) {
+                    d_diff = DaysInMonth(solBirth.month, solBirth.year+1904)
+                        + current.day- solBirth.day;
+                    m_diff--;
+                }
+                else {
+                    d_diff = current.day - solBirth.day;
+                }
+                        
+                if (current.month + m_diff  < solBirth.month) {
+                    m_diff = 12 + current.month - solBirth.month;
+                    y_diff--;
+                }
+                else {
+                    m_diff = current.month - solBirth.month;
+                }
+                y_diff += current.year - solBirth.year;
+                    
+                StrPrintF(gAppErrStr, "%dY %dM %dD (%d)",
+                          y_diff, m_diff, d_diff, dateDiff);
+            }
+            else StrCopy(gAppErrStr, "-");
+        }
+        else {
+            StrCopy(gAppErrStr, "-");
+        }
+        length = StrLen(gAppErrStr);
+        FntCharsInWidth(gAppErrStr, &width, &length, &ignored);
+        WinDrawChars(gAppErrStr, length, x, y);
+    }
+    break;
+    case ViewRemained:
+    {
+        dateDiff = DateToDays(converted) - DateToDays(current);
+
+        if (dateDiff >= (Int16)0) {
+            SysCopyStringResource(displayStr, BirthLeftString);
+            StrPrintF(gAppErrStr, displayStr, dateDiff);
+        }
+        else {
+            SysCopyStringResource(displayStr, BirthPassedString);
+            StrPrintF(gAppErrStr, displayStr, -1 * dateDiff);
+        }
+            
+        length = StrLen(gAppErrStr);
+        FntCharsInWidth(gAppErrStr, &width, &length, &ignored);
+        WinDrawChars(gAppErrStr, length, x, y);
+    }
+    
+    break;
+    }
+    MemHandleUnlock(recordH);
+
+    // restore font
+    FntSetFont (currFont);
 }
 static void ViewFormInitTable(FormPtr frm)
 {
@@ -2288,13 +2358,13 @@ static void ViewFormInitTable(FormPtr frm)
 		TblSetItemStyle(tableP, row, 0, customTableItem);
 		TblSetItemStyle(tableP, row, 1, customTableItem);
 	}
-	TblSetCustomDrawProcedure(tableP, 0, ViewFormDrawRecord);
-	TblSetCustomDrawProcedure(tableP, 1, ViewFormDrawRecord);
+	TblSetCustomDrawProcedure(tableP, 0, ViewTableDrawHdr);
+	TblSetCustomDrawProcedure(tableP, 1, ViewTableDrawData);
 
 	FntSetFont(currFont);
 }
 
-static void ViewFormLoadTable(FormPtr frm, Int16 listOffset)
+static void ViewFormLoadTable(FormPtr frm)
 {
     TablePtr 		tableP;
 	Int16 			tblRows, row;
@@ -2410,7 +2480,7 @@ static void ViewFormInit(FormPtr frm, Boolean bformModify)
 		ViewFormResize(frm, false);
 	}
 
-	ViewFormLoadTable(frm, 0);
+	ViewFormLoadTable(frm);
     ViewFormSetInfo(frm);
 }
 
@@ -2441,32 +2511,30 @@ static Boolean ViewFormHandleEvent(EventPtr e)
     
             switch (e->data.keyDown.chr) {
             case vchrPageDown:
-            case vchrPrevField:
+            case vchrNextField:
                 if (gMainTableHandleRow < gMainTableTotals-1) {
                     gMainTableHandleRow++;
         
                     SndPlaySystemSound(sndInfo);
 
-                    ViewFormSetInfo(frm);
-                    ViewFormLoadTable(frm, 0);
-                    FrmDrawForm(FrmGetFormPtr(ViewForm));
-                    // TblDrawTable(tableP);
+//                    ViewFormSetInfo(frm);
+//                    ViewFormLoadTable(frm);
+//                    FrmDrawForm(FrmGetFormPtr(ViewForm));
 
                     handled = true;
                 }
                 break;
             case vchrPageUp:    
-            case vchrNextField:
+            case vchrPrevField:
                 if (gMainTableHandleRow > 0 ) {
                     gMainTableHandleRow--;
 
                     SndPlaySystemSound(sndInfo);
 
-                    ViewFormSetInfo(frm);
-                    ViewFormLoadTable(frm, 0);
-                    FrmDrawForm(FrmGetFormPtr(ViewForm));
+//                    ViewFormSetInfo(frm);
+//                    ViewFormLoadTable(frm);
+//                    FrmDrawForm(FrmGetFormPtr(ViewForm));
 
-                    // TblDrawTable(tableP);
 
                     handled = true;
                 }
