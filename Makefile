@@ -1,5 +1,6 @@
 ## Makefile for HappyDays application
 
+VERSION = 1.44
 TARGET = happydays
 APPNAME = "HappyDays"
 APPID = "Jmje"
@@ -19,6 +20,7 @@ OBJRES = m68k-palmos-obj-res
 NM = m68k-palmos-nm
 BUILDPRC = build-prc
 PILOTXFER = pilot-xfer
+ZIP = zip
 LANG = ENGLISH
 
 all: en
@@ -29,22 +31,31 @@ all-lang: en ko de th dutch fr sp cz catalan
 en: $(TARGET).prc
 
 ko: $(TARGET)-kt.prc $(TARGET)-km.prc
+	zip $(TARGET)-$(VERSION)-ko.zip $(TARGET)-kt.prc $(TARGET)-km.prc
 
 de: $(TARGET)-de.prc 
+	zip $(TARGET)-$(VERSION)-de.zip $(TARGET)-de.prc
 
 th: $(TARGET)-th.prc
+	zip $(TARGET)-$(VERSION)-th.zip $(TARGET)-th.prc
 
 chi: $(TARGET)-chi-big5.prc $(TARGET)-chi-gb.prc
+	zip $(TARGET)-$(VERSION)-ch.zip $(TARGET)-chi-big5.prc $(TARGET)-chi-gb.prc
 
 dutch: $(TARGET)-dutch.prc
+	zip $(TARGET)-$(VERSION)-dutch.zip $(TARGET)-dutch.prc
 
 fr: $(TARGET)-fr.prc
+	zip $(TARGET)-$(VERSION)-fr.zip $(TARGET)-fr.prc
 
 sp: $(TARGET)-sp.prc
+	zip $(TARGET)-$(VERSION)-sp.zip $(TARGET)-sp.prc
 
 cz: $(TARGET)-cz.prc
+	zip $(TARGET)-$(VERSION)-cz.zip $(TARGET)-cz.prc
 
 catalan: $(TARGET)-catalan.prc
+	zip $(TARGET)-$(VERSION)-catalan.zip $(TARGET)-catalan.prc
 
 .S.o:
 	$(CC) $(TARGETFLAGS) -c $<

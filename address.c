@@ -379,7 +379,7 @@ UInt32 AddrGotoCreatorId[] = {
     'addr',         // Built-in Addressbook
     'adKr',         // Address Kr
     'CiAe',         // AddressBkR
-	'addr', 		// Address Plus(+)
+	'addp', 		// Address Plus(+)
     'SNms',         // Super Names
     'TlPh'          // Teal Phone
 };

@@ -611,6 +611,7 @@ static Boolean MainFormHandleEvent (EventPtr e)
     case frmUpdateEvent:
         if (e->data.frmUpdate.updateCode == frmRescanUpdateCode)
         {
+			gMainTableStart = 0;      // Main Form table start point
             MemSet(&gPrefsR->adrmdate, 4, 0);  // force a re-scan
             FrmGotoForm(StartForm);
             handled = true;
