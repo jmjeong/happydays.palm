@@ -21,9 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <HandEra/Vga.h>
 
 #include "address.h"
-#include "datebook.h"
 #include "memodb.h"
-#include "todo.h"
 
 #include "birthdate.h"
 #include "happydays.h"
@@ -31,6 +29,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "calendar.h"
 #include "s2lconvert.h"
 #include "util.h"
+#include "notify.h"
 
 #define frmRescanUpdateCode (frmRedrawUpdateCode + 1)
 #define frmUpdateFontCode (frmRedrawUpdateCode + 2)
@@ -39,19 +38,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // 	Global variable
 ////////////////////////////////////////////////////////////////////
 
-Boolean gDateCheck = true;      // when program starts, check date
 MemHandle gTableRowHandle;
 
 Int16 gBirthDateField;
 Char gAppErrStr[AppErrStrLen];
 Char gLookupDate[12];			// date string of look up
-Char gDateBk3Icon[52][8];      	// dateBk3 icon string
-Boolean gDateBk3IconLoaded = false;     // datebk3 icon loaded
 UInt32 gAdcdate, gAdmdate;      // AddressBook create/modify time
 UInt32 gMmcdate, gMmmdate;      // Memo create/modify time
 Boolean gSortByCompany=true;    // sort by company is set in AddressBook?
 UInt16 gAddrCategory;           // address book category
-UInt16 gToDoCategory;           // todo category
 Int16 gMainTableTotals;       	// Main Form table total rows;
 Int16 gMainTableHandleRow = -1; // The row of birthdate view to display
 Int16 gCurrentSelection = -1;   // current selection of table
@@ -118,7 +113,6 @@ static Int16 OpenDatabases(void);
 static void freememories(void);
 static void CloseDatabases(void);
 static void MainFormReadDB();
-static Boolean ToDoFormHandleEvent(EventPtr e);
 
 static void ViewFormLoadTable(FormPtr frm, Int16 listOffset);
 
@@ -126,17 +120,14 @@ static Boolean MenuHandler(FormPtr frm, EventPtr e);
 
 static Boolean StartFormHandleEvent(EventPtr e);
 static Boolean PrefFormHandleEvent(EventPtr e);
+static Boolean DispPrefFormHandleEvent(EventPtr e);
 static Boolean ViewFormHandleEvent(EventPtr e);
 static Boolean MainFormHandleEvent(EventPtr e);
-static Boolean DBNotifyFormHandleEvent(EventPtr e);
-static Boolean DBNotifyFormMoreHandleEvent(EventPtr e);
 
 static void HighlightMatchRowDate(DateTimeType inputDate);
 static void HighlightMatchRowName(Char first);
 
 static void WritePrefsRec(void);
-static Boolean SelectCategoryPopup(DmOpenRef dbP, UInt16* selected,
-                                   UInt32 list, UInt32 trigger, Char *string);
 static void MainFormLoadTable(FormPtr frm, Int16 listOffset);
 static void MainFormInit(FormPtr formP, Boolean resize);
 static void MainFormResize(FormPtr frmP, Boolean draw);
@@ -144,11 +135,6 @@ static void MainFormSelectTableItem(Boolean selected, TablePtr table,
                                     Int16 row, Int16 column);
 static void MainFormDrawRecord(MemPtr tableP, Int16 row, Int16 column, 
                                RectanglePtr bounds);
-
-static void PrvMoveObject(FormPtr frmP, UInt16 objIndex, 
-                          Coord y_diff, Boolean draw);
-static void PrvResizeObject(FormPtr frmP, UInt16 objIndex, 
-                            Coord y_diff, Boolean draw);
 
 ////////////////////////////////////////////////////////////////////
 // private database for HappyDays
@@ -245,61 +231,14 @@ static void EventLoop(void)
     } while (e.eType != appStopEvent && !gProgramExit);
 }
 
-Int16 GotoPref()
-{
-    GoToParamsPtr theGotoPointer;
-    DmSearchStateType searchInfo;
-    UInt16 cardNo;
-    LocalID dbID;
-    UInt32 prefID = 'pref';
-
-    theGotoPointer = MemPtrNew(sizeof(GoToParamsType));
-    if (!theGotoPointer) return -1;
-    /* Set the owner of the pointer to be the
-       system. This is required because all memory
-       allocated by our application is freed when
-       the application quits. Our application will
-       quit the next time through our event
-       handler.
-    */
-    
-    
-    if ((MemPtrSetOwner(theGotoPointer, 0) == 0) &&
-        (DmGetNextDatabaseByTypeCreator(true, &searchInfo, 0,
-                                        prefID, true, &cardNo, &dbID)
-         == 0)) {
-
-        // copy all the goto information into the
-        // GotoParamsPtr structure
-        theGotoPointer->searchStrLen = 0;
-        theGotoPointer->dbCardNo = cardNo;
-        theGotoPointer->dbID = dbID;
-        theGotoPointer->recordNum = 0;
-        theGotoPointer->matchPos = 0;
-        theGotoPointer->matchFieldNum = 0;
-        theGotoPointer->matchCustom = 0;
-
-        if ((DmGetNextDatabaseByTypeCreator
-             (true, &searchInfo,
-            sysFileTApplication, prefID, true, &cardNo, &dbID) == 0)) {
-            SysUIAppSwitch(cardNo, dbID,
-                           sysAppLaunchCmdGoTo,
-                           (MemPtr) theGotoPointer);
-            return 0;
-        }
-    }
-
-	MemPtrFree(theGotoPointer);
-    return -1;
-}
-
 /* Get preferences, open (or create) app database */
 static UInt16 StartApplication(void)
 {
     Int8 err;
 	UInt32 version;
+
     gTableRowHandle = 0;
-    
+
 	if (_TRGVGAFeaturePresent(&version)) gbVgaExists = true;
 	else gbVgaExists = false;
 
@@ -308,13 +247,7 @@ static UInt16 StartApplication(void)
 
     // set current date to  the starting date
 	DateSecondsToDate(TimGetSeconds(), &gStartDate);
-
-    if (gDateCheck && FrmCustomAlert(DateCheck, "  ") != 0) {
-        GotoPref();
-    }
-    else gDateCheck = false;
     
-
     if ((err = OpenDatabases()) < 0) {
         if (!DatebookDB) {
             /*
@@ -572,6 +505,9 @@ static Boolean ApplicationHandleEvent(EventPtr e)
             break;
         case PrefForm:
             FrmSetEventHandler(frm, PrefFormHandleEvent);
+            break;
+        case DispPrefForm:
+            FrmSetEventHandler(frm, DispPrefFormHandleEvent);
             break;
         case DateBookNotifyForm:
             FrmSetEventHandler(frm, DBNotifyFormHandleEvent);
@@ -844,29 +780,6 @@ static Boolean SpecialKeyDown(EventPtr e)
 	
     return false;
 }
-static void DisplayCategory(UInt32 trigger, Char* string, Boolean redraw)
-{
-    ControlPtr ctl;
-    FontID currFont;
-    UInt16 categoryLen;
-    FormPtr frm = FrmGetActiveForm();
-
-	if (gbVgaExists) 
-		currFont = VgaBaseToVgaFont(stdFont);
-	else 
-		currFont = stdFont;
-
-    categoryLen = StrLen(string);
-    
-    ctl = GetObjectPointer(frm, trigger);
-    if ( redraw ) CtlEraseControl(ctl);
-
-    CtlSetLabel(ctl, string);
-
-    if (redraw) CtlDrawControl(ctl);
-    
-    FntSetFont (currFont);
-}
 
 static void RereadHappyDaysDB(DateType start)
 {
@@ -989,155 +902,7 @@ static void DoDateSelect()
     }
 }
 
-static Boolean IsHappyDaysRecord(Char* notefield)
-{
-    if (notefield && StrStr(notefield, gPrefsR.BirthPrefs.notifywith)) {
-        return true; 
-    }
-    return false;
-}
 
-// check if description has the information about name1 and name2
-//
-static Boolean IsSameRecord(Char* notefield, BirthDate birth)
-{
-    Char *p;
-    
-    if (notefield && (p = StrStr(notefield,gPrefsR.BirthPrefs.notifywith))) {
-        p += StrLen(gPrefsR.BirthPrefs.notifywith);
-
-        StrPrintF(gAppErrStr, "%ld", Hash(birth.name1,birth.name2));
-        
-        if (StrCompare(gAppErrStr, p) ==0) return true;
-    }
-    return false;
-}
-
-static int CleanupFromDB(DmOpenRef db)
-{
-    UInt16 currIndex = 0;
-    MemHandle recordH;
-    ApptDBRecordType apptRecord;
-    int ret = 0;
-    
-    while (1) {
-        recordH = DmQueryNextInCategory(db, &currIndex,
-                                        dmAllCategories);
-        if (!recordH) break;
-        ApptGetRecord(db, currIndex, &apptRecord, &recordH);
-        if (IsHappyDaysRecord(apptRecord.note)) {
-            // if it is happydays record?
-            //
-            ret++;
-            // remove the record
-            DmDeleteRecord(db, currIndex);
-            // deleted records are stored at the end of the database
-            //
-            DmMoveRecord(db, currIndex, DmNumRecords(DatebookDB));
-        }
-        else {
-            MemHandleUnlock(recordH);
-            currIndex++;
-        }
-    }
-    return ret;
-}
-
-static int CleanupFromTD(DmOpenRef db)
-{
-    UInt16 currIndex = 0;
-    MemHandle recordH;
-    ToDoDBRecordPtr toDoRec;
-    Char *note;
-    int ret = 0;
-    
-    while (1) {
-        recordH = DmQueryNextInCategory(db, &currIndex, dmAllCategories);
-        if (!recordH) break;
-
-        toDoRec = MemHandleLock(recordH);
-        note = GetToDoNotePtr(toDoRec);
-        
-        if (IsHappyDaysRecord(note)) {
-            // if it is happydays record?
-            //
-            ret++;
-            // remove the record
-            DmDeleteRecord(db, currIndex);
-            // deleted records are stored at the end of the database
-            //
-            DmMoveRecord(db, currIndex, DmNumRecords(ToDoDB));
-        }
-        else {
-            MemHandleUnlock(recordH);
-            currIndex++;
-        }
-    }
-    return ret;
-}
-
-// temporary return value;
-static Char* EventTypeString(BirthDate r)
-{
-	static char tmpString[4];
-    if (!r.custom[0]) {
-        tmpString[0] = gPrefsR.BirthPrefs.custom[0];
-    }
-    else tmpString[0] = r.custom[0];
-    tmpString[1] = 0;
-
-    StrToLower(&tmpString[3], tmpString);     // use temporary
-    tmpString[3] = tmpString[3] - 'a' + 'A';  // make upper
-
-    return &tmpString[3];
-}
-
-static void PerformExport(Char * memo, int mainDBIndex, DateType when)
-{
-    MemHandle recordH = 0;
-    PackedBirthDate* rp;
-    BirthDate r;
-    
-    if ((recordH = DmQueryRecord(MainDB, mainDBIndex))) {
-        rp = (PackedBirthDate *) MemHandleLock(recordH);
-        /*
-         * Build the unpacked structure for an AddressDB record.  It
-         * is just a bunch of pointers into the rp structure.
-         */
-        UnpackBirthdate(&r, rp);
-
-        StrNCat(memo, "\"", 4096);
-        StrNCat(memo, r.name1, 4096);
-        if (r.name2 && r.name2[0]) {
-            if (r.name1 && r.name1[0]) StrNCat(memo, ", ", 4096);
-            StrNCat(memo, r.name2, 4096);
-        }
-        StrNCat(memo, "\",", 4096);
-
-        if (r.flag.bits.lunar) {
-            StrNCat(memo, "-)", 4096);
-        }
-        else if (r.flag.bits.lunar_leap) {
-            StrNCat(memo, "#)", 4096);
-        }
-
-        if (r.flag.bits.year) {
-            StrNCat(memo, DateToAsciiLong(r.date.month, r.date.day,
-                                          r.date.year + 1904, gPrefdfmts,
-                                          gAppErrStr), 4096);
-        }
-        else {
-            StrNCat(memo, DateToAsciiLong(r.date.month, r.date.day,
-                                          -1, gPrefdfmts,
-                                          gAppErrStr), 4096);
-        }
-
-        StrNCat(memo, ",", 4096);
-        StrNCat(memo, EventTypeString(r), 4096);
-        
-        MemHandleUnlock(recordH);
-    }
-}
 
 static Boolean MenuHandler(FormPtr frm, EventPtr e)
 {
@@ -1150,7 +915,7 @@ static Boolean MenuHandler(FormPtr frm, EventPtr e)
     MenuEraseStatus(NULL);
     
     switch(e->data.menu.itemID) {
-    case MainFormMenuAbout: 
+    case MainMenuAbout: 
         frm = FrmInitForm(AboutForm);
 		
         if(gbVgaExists)
@@ -1169,7 +934,7 @@ static Boolean MenuHandler(FormPtr frm, EventPtr e)
         handled = true;
         break;
 
-	case MainFormMenuFont: {
+	case MainMenuFont: {
 		FontID fontID;
 
 		fontID = FontSelect(gPrefsR.listFont);
@@ -1182,13 +947,19 @@ static Boolean MenuHandler(FormPtr frm, EventPtr e)
 		break;
 	}
 
-    case MainFormMenuPref:
+    case MainMenuPref:
         FrmPopupForm(PrefForm);
             
         handled = true;
         break;
 
-    case MainFormMenuNotifyDatebook:
+    case MainMenuDispPref:
+        FrmPopupForm(DispPrefForm);
+            
+        handled = true;
+        break;
+        
+    case MainMenuNotifyDatebook:
 
         // Select Records to all and select is invalid
         //
@@ -1199,7 +970,7 @@ static Boolean MenuHandler(FormPtr frm, EventPtr e)
         handled = true;
         break;
 
-    case MainFormMenuCleanupDatebook: 
+    case MainMenuCleanupDatebook: 
     {
         SysCopyStringResource(tmpString, DateBookString);
 
@@ -1216,7 +987,7 @@ static Boolean MenuHandler(FormPtr frm, EventPtr e)
         handled = true;
         break;
     }
-    case MainFormMenuNotifyTodo:
+    case MainMenuNotifyTodo:
         // Select Records to all and select is invalid
         //
         gPrefsR.records = 3;
@@ -1226,7 +997,7 @@ static Boolean MenuHandler(FormPtr frm, EventPtr e)
         handled = true;
         break;
         
-    case MainFormMenuCleanupTodo: 
+    case MainMenuCleanupTodo: 
     {
         SysCopyStringResource(tmpString, ToDoString);
 
@@ -1245,7 +1016,7 @@ static Boolean MenuHandler(FormPtr frm, EventPtr e)
         break;
     }
     
-    case MainFormMenuExport:
+    case MainMenuExport:
     {
         LineItemPtr ptr;
         Int16 i;
@@ -1282,12 +1053,12 @@ static Boolean MenuHandler(FormPtr frm, EventPtr e)
         break;
     }
     
-    case MainFormMenuSl2Ln:
+    case MainMenuSl2Ln:
         FrmPopupForm(Sl2LnForm);
                 
         handled = true;
         break;
-    case MainFormMenuLn2Sl:
+    case MainMenuLn2Sl:
         FrmPopupForm(Ln2SlForm);   
 
         handled = true;
@@ -1400,47 +1171,6 @@ static void MainFormResize(FormPtr frmP, Boolean draw)
 	}
 }
 
-static void PrvMoveObject(FormPtr frmP, UInt16 objIndex, 
-                          Coord y_diff, Boolean draw)
-{
-    RectangleType r;
-
-	FrmGetObjectBounds(frmP, objIndex, &r);
-	if (draw) {
-		RctInsetRectangle(&r, -2);   //need to erase the frame as well
-		WinEraseRectangle(&r, 0);
-		RctInsetRectangle(&r, 2);
-	}
-	r.topLeft.y += y_diff;
-	FrmSetObjectBounds(frmP, objIndex, &r);
-}
-
-static void PrvResizeObject(FormPtr frmP, UInt16 objIndex, 
-                            Coord y_diff, Boolean draw)
-{
-    RectangleType r;
-
-	FrmGetObjectBounds(frmP, objIndex, &r);
-	if (draw) WinEraseRectangle(&r, 0);
-	r.extent.y += y_diff;
-	FrmSetObjectBounds(frmP, objIndex, &r);
-}
-
-/*
-static UInt16 PrvFrmGetGSI(FormPtr frmP)
-{
-    UInt16 i, numObjects;
-
-	numObjects = FrmGetNumberOfObjects(frmP);
-
-	for (i=0; i<numObjects; i++)
-	{
-		if (FrmGetObjectType(frmP, i) == frmGraffitiStateObj)
-			return(i);
-	}
-	return(-1);
-}
-*/
 
 static void MainFormReadDB()
 {
@@ -1731,21 +1461,28 @@ static Boolean MainFormHandleEvent (EventPtr e)
 static void LoadPrefsFields()
 {
     FormPtr frm;
-    ListPtr lstdate, lstnotify, lstaddr;
+    ListPtr lstdate, lstauto, lstnotify, lstaddr;
 
     if ((frm = FrmGetFormPtr(PrefForm)) == 0) return;
     
     CtlSetValue(GetObjectPointer(frm, PrefFormOverrideSystemDate),
                 gPrefsR.BirthPrefs.sysdateover);
+
     lstdate = GetObjectPointer(frm, PrefFormDateFmts);
     LstSetSelection(lstdate, gPrefsR.BirthPrefs.dateformat);
     CtlSetLabel(GetObjectPointer(frm, PrefFormDateTrigger),
                 LstGetSelectionText(lstdate, gPrefsR.BirthPrefs.dateformat));
 
+    lstauto = GetObjectPointer(frm, PrefFormAutoRescan);
+    LstSetSelection(lstauto, gPrefsR.BirthPrefs.autoscan);
+    CtlSetLabel(GetObjectPointer(frm, PrefFormRescanTrigger),
+                LstGetSelectionText(lstauto, gPrefsR.BirthPrefs.autoscan));
+
     lstnotify = GetObjectPointer(frm, PrefFormNotifyFmts);
     LstSetSelection(lstnotify, gPrefsR.BirthPrefs.notifyformat);
     CtlSetLabel(GetObjectPointer(frm, PrefFormNotifyTrigger),
                 LstGetSelectionText(lstnotify, gPrefsR.BirthPrefs.notifyformat));
+    
     lstaddr = GetObjectPointer(frm,PrefFormAddress);
     LstSetSelection(lstaddr, gPrefsR.BirthPrefs.addrapp);
     CtlSetLabel(GetObjectPointer(frm,PrefFormAddrTrigger),
@@ -1754,12 +1491,6 @@ static void LoadPrefsFields()
     SetFieldTextFromStr(PrefFormCustomField, gPrefsR.BirthPrefs.custom);
     SetFieldTextFromStr(PrefFormNotifyWith, gPrefsR.BirthPrefs.notifywith);
 
-    if (gPrefsR.DispPrefs.emphasize == 1) {
-        CtlSetValue(GetObjectPointer(frm, PrefFormEmphasize), 1);
-    }
-	else {
-        CtlSetValue(GetObjectPointer(frm, PrefFormEmphasize), 0);
-	}
     if (gPrefsR.BirthPrefs.scannote == 1) {
         CtlSetValue(GetObjectPointer(frm, PrefFormScanNote), 1);
     }
@@ -1824,13 +1555,15 @@ static Boolean UnloadPrefsFields()
     lstnotify = GetObjectPointer(frm, PrefFormNotifyFmts);
     gPrefsR.BirthPrefs.notifyformat = LstGetSelection(lstnotify);
 
+    // automatic scan of Address
+    lstaddr = GetObjectPointer(frm, PrefFormAutoRescan);
+    gPrefsR.BirthPrefs.autoscan = LstGetSelection(lstaddr);
+
+
     // addr goto application id
     lstaddr = GetObjectPointer(frm, PrefFormAddress);
     gPrefsR.BirthPrefs.addrapp = LstGetSelection(lstaddr);
     
-    ptr = GetObjectPointer(frm, PrefFormEmphasize);
-    gPrefsR.DispPrefs.emphasize = CtlGetValue(ptr);
-
     ptr = GetObjectPointer(frm, PrefFormScanNote);
     if (CtlGetValue(ptr) != gPrefsR.BirthPrefs.scannote ) {
         needrescan = 1;
@@ -1838,6 +1571,106 @@ static Boolean UnloadPrefsFields()
     gPrefsR.BirthPrefs.scannote = CtlGetValue(ptr);
 
     return needrescan;
+}
+
+static void LoadDispPrefsFields()
+{
+    FormPtr frm;
+    
+    if ((frm = FrmGetFormPtr(DispPrefForm)) == 0) return;
+
+    if (gPrefsR.DispPrefs.emphasize == 1) {
+        CtlSetValue(GetObjectPointer(frm, DispPrefEmphasize), 1);
+    }
+	else {
+        CtlSetValue(GetObjectPointer(frm, DispPrefEmphasize), 0);
+	}
+    if (gPrefsR.DispPrefs.extrainfo == 1) {
+        CtlSetValue(GetObjectPointer(frm, DispPrefExtraInfo), 1);
+    }
+    else {
+        CtlSetValue(GetObjectPointer(frm, DispPrefExtraInfo), 0);
+    }
+    if (gPrefsR.DispPrefs.sexagenary == 1) {
+        CtlSetValue(GetObjectPointer(frm, DispPrefSexagen), 1);
+    }
+    else {
+        CtlSetValue(GetObjectPointer(frm, DispPrefSexagen), 0);
+    }
+}
+
+static Boolean UnloadDispPrefsFields()
+{
+    FormPtr frm;
+    ControlPtr ptr;
+    Boolean redraw = 0;
+
+    if ((frm = FrmGetFormPtr(DispPrefForm)) == 0) return redraw;
+
+    ptr = GetObjectPointer(frm, DispPrefEmphasize);
+    if (gPrefsR.DispPrefs.emphasize != CtlGetValue(ptr)) {
+        redraw = 1;
+    }
+    gPrefsR.DispPrefs.emphasize = CtlGetValue(ptr);
+    
+    ptr = GetObjectPointer(frm, DispPrefExtraInfo);
+    gPrefsR.DispPrefs.extrainfo = CtlGetValue(ptr);
+
+    ptr = GetObjectPointer(frm, DispPrefSexagen);
+    gPrefsR.DispPrefs.sexagenary = CtlGetValue(ptr);
+
+    return redraw;
+}
+
+static Boolean DispPrefFormHandleEvent(EventPtr e)
+{
+    Boolean redraw;
+    Boolean handled = false;
+    FormPtr frm;
+    
+    switch (e->eType) {
+    case frmOpenEvent:
+        frm = FrmGetFormPtr(DispPrefForm);
+        if(gbVgaExists)
+       		VgaFormModify(frm, vgaFormModify160To240);
+
+        LoadDispPrefsFields();
+        FrmDrawForm(frm);
+        handled = true;
+        break;
+
+    case ctlSelectEvent:
+        switch(e->data.ctlSelect.controlID) {
+        case DispPrefOk:
+            redraw = UnloadDispPrefsFields();
+            
+            FrmReturnToForm(0);
+            
+            if (redraw) FrmUpdateForm(MainForm, frmRedrawUpdateCode);
+
+            handled = true;
+            break;
+        case DispPrefCancel:
+            FrmReturnToForm(0);
+
+            handled = true;
+            break;
+
+        default:
+            break;
+        }
+        break;
+
+    case menuEvent:
+        MenuEraseStatus(NULL);
+        break;
+        
+    default:
+        break;
+    }
+
+
+    return handled;
 }
 
 static Boolean PrefFormHandleEvent(EventPtr e)
@@ -1898,41 +1731,6 @@ static Boolean PrefFormHandleEvent(EventPtr e)
     return handled;
 }
 
-Boolean SelectCategoryPopup(DmOpenRef dbP, UInt16* selected,
-                            UInt32 list, UInt32 trigger, Char *string)
-{
-    FormPtr frm;
-    ListPtr lst;
-    Int16 curSelection, newSelection;
-    Char * name;
-    Boolean ret = false;
-
-    frm = FrmGetActiveForm();
-
-    lst = GetObjectPointer(frm, list);
-
-    // create a list of categories 
-    CategoryCreateList(dbP, lst, *selected, true, true, 1, 0, true);
-
-    // display the category list
-    curSelection = LstGetSelection(lst);
-    newSelection = LstPopupList(lst);
-
-    // was a new category selected? 
-    if ((newSelection != curSelection) && (newSelection != -1)) {
-        if ((name = LstGetSelectionText(lst, newSelection))) {
-            *selected = CategoryFind(dbP, name);
-
-            MemSet(string, dmCategoryLength, 0);
-            MemMove(string, name, StrLen(name));
-
-            DisplayCategory(trigger, string, true);
-            ret = true;
-        }
-    }
-    CategoryFreeList(dbP, lst, false, false);
-    return ret;
-}
 
 static void MainFormSelectTableItem(Boolean selected, TablePtr table,
                                     Int16 row, Int16 column)
@@ -2208,1282 +2006,6 @@ static void MainFormInit(FormPtr frm, Boolean bformModify)
     }
 }
 
-static void TimeToAsciiLocal(TimeType when, TimeFormatType timeFormat,
-                             Char * pString)
-{
-    if (TimeToInt(when) != noTime) {
-        TimeToAscii(when.hours, when.minutes, timeFormat, pString);
-    }
-    else {
-        SysCopyStringResource(gAppErrStr, NoTimeString);
-    }
-}
-
-static void LoadCommonPrefsFields(FormPtr frm)
-{
-    if (gPrefsR.records == 0) {
-        CtlSetValue(GetObjectPointer(frm, NotifyFormRecordAll), 1);
-    }
-    else if (gPrefsR.records == 1) {
-        CtlSetValue(GetObjectPointer(frm, NotifyFormRecordSlct), 1);
-    }
-    else {          //  '3' means that All is selected and slct is unusable
-        CtlSetValue(GetObjectPointer(frm, NotifyFormRecordAll), 1);
-        CtlSetUsable(GetObjectPointer(frm, NotifyFormRecordSlct), false);
-    }
-    if (gPrefsR.existing == 0) {
-        CtlSetValue(GetObjectPointer(frm, NotifyFormEntryKeep), 1);
-    }
-    else {
-        CtlSetValue(GetObjectPointer(frm, NotifyFormEntryModify), 1);
-    }
-
-    if (gPrefsR.private == 1) {
-        CtlSetValue(GetObjectPointer(frm, NotifyFormPrivate), 1);
-    }
-    else {
-        CtlSetValue(GetObjectPointer(frm, NotifyFormPrivate), 0);
-    }
-
-}
-
-static void UnloadCommonNotifyPrefs(FormPtr frm)
-{
-    ControlPtr ptr;
-    
-    ptr = GetObjectPointer(frm, NotifyFormRecordAll);
-    gPrefsR.records = !CtlGetValue(ptr);
-
-    ptr = GetObjectPointer(frm, NotifyFormEntryKeep);
-    gPrefsR.existing = !CtlGetValue(ptr);
-
-    ptr = GetObjectPointer(frm, NotifyFormPrivate);
-    gPrefsR.private = CtlGetValue(ptr);
-
-    return;
-}
-
-static void LoadDBNotifyPrefsFields(void)
-{
-    FormPtr frm;
-
-    if ((frm = FrmGetFormPtr(DateBookNotifyForm)) == 0) return;
-
-    LoadCommonPrefsFields(frm);  // all/selected, keep/modify, private
-    
-    if (gPrefsR.DBNotifyPrefs.alarm == 1) {
-        CtlSetValue(GetObjectPointer(frm, DateBookNotifyFormAlarm), 1);
-
-        FrmShowObject(frm, 
-                      FrmGetObjectIndex(frm, DateBookNotifyFormBefore));
-
-		SysCopyStringResource(gAppErrStr, DateBookNotifyDaysString);
-		SetFieldTextFromStr(DateBookNotifyFormLabelDays, gAppErrStr);
-    }
-    else {
-        CtlSetValue(GetObjectPointer(frm, DateBookNotifyFormAlarm), 0);
-        FrmHideObject(frm,
-                      FrmGetObjectIndex(frm, DateBookNotifyFormBefore));
-		ClearFieldText(DateBookNotifyFormLabelDays);
-    }
-    
-    SetFieldTextFromStr(DateBookNotifyFormBefore,
-                        StrIToA(gAppErrStr, gPrefsR.DBNotifyPrefs.notifybefore));
-    SetFieldTextFromStr(DateBookNotifyFormDuration,
-                        StrIToA(gAppErrStr, gPrefsR.DBNotifyPrefs.duration));
-    
-    TimeToAsciiLocal(gPrefsR.DBNotifyPrefs.when, gPreftfmts, gAppErrStr);
-    CtlSetLabel(GetObjectPointer(frm, DateBookNotifyFormTime), gAppErrStr);
-}
-
-static void UnloadDBNotifyPrefsFields()
-{
-    FormPtr frm;
-    ControlPtr ptr;
-    
-    if ((frm = FrmGetFormPtr(DateBookNotifyForm)) == 0) return;
-
-    UnloadCommonNotifyPrefs(frm);       // all/selected, keey/modify, private
-
-    ptr = GetObjectPointer(frm, DateBookNotifyFormAlarm);
-    gPrefsR.DBNotifyPrefs.alarm = CtlGetValue(ptr);
-
-    if (FldDirty(GetObjectPointer(frm, DateBookNotifyFormBefore))) {
-        gPrefsR.DBNotifyPrefs.notifybefore =
-            (int) StrAToI(FldGetTextPtr(
-                GetObjectPointer(frm, DateBookNotifyFormBefore)));
-    }
-    // notification duration
-    if (FldDirty(GetObjectPointer(frm, DateBookNotifyFormDuration))) {
-        gPrefsR.DBNotifyPrefs.duration =
-            (int) StrAToI(FldGetTextPtr(
-                GetObjectPointer(frm, DateBookNotifyFormDuration)));
-    }
-    
-    // DateBookNotifyFormTime is set by handler
-}
-
-
-static void LoadTDNotifyPrefsFields(void)
-{
-    FormPtr frm;
-
-    if ((frm = FrmGetFormPtr(ToDoNotifyForm)) == 0) return;
-
-    LoadCommonPrefsFields(frm);  // all/selected, keep/modify, private
-
-    switch (gPrefsR.TDNotifyPrefs.priority) {
-    case 1:
-        CtlSetValue(GetObjectPointer(frm, ToDoNotifyPri1), 1);
-        break;
-    case 2:
-        CtlSetValue(GetObjectPointer(frm, ToDoNotifyPri2), 1);
-        break;
-    case 3:
-        CtlSetValue(GetObjectPointer(frm, ToDoNotifyPri3), 1);
-        break;
-    case 4:
-        CtlSetValue(GetObjectPointer(frm, ToDoNotifyPri4), 1);
-        break;
-    case 5:
-        CtlSetValue(GetObjectPointer(frm, ToDoNotifyPri5), 1);
-        break;
-    default:
-    }
-    DisplayCategory(ToDoPopupTrigger, gPrefsR.TDNotifyPrefs.todoCategory, false);
-
-    // set gToDoCategory information
-    //
-    if ((gToDoCategory = CategoryFind(ToDoDB, gPrefsR.TDNotifyPrefs.todoCategory))
-        == dmAllCategories) {
-        MemSet(gPrefsR.TDNotifyPrefs.todoCategory,
-               sizeof(gPrefsR.TDNotifyPrefs.todoCategory), 0);
-        CategoryGetName(ToDoDB, gToDoCategory, gPrefsR.TDNotifyPrefs.todoCategory);
-    }
-}
-
-static void UnloadTDNotifyPrefsFields()
-{
-    FormPtr frm;
-    
-    if ((frm = FrmGetFormPtr(ToDoNotifyForm)) == 0) return;
-    UnloadCommonNotifyPrefs(frm);       // all/selected, keey/modify, private
-
-    if ( CtlGetValue(GetObjectPointer(frm, ToDoNotifyPri1)) )
-        gPrefsR.TDNotifyPrefs.priority = 1;
-    else if ( CtlGetValue(GetObjectPointer(frm, ToDoNotifyPri2)) )
-        gPrefsR.TDNotifyPrefs.priority = 2;
-    else if ( CtlGetValue(GetObjectPointer(frm, ToDoNotifyPri3)) )
-        gPrefsR.TDNotifyPrefs.priority = 3;
-    else if ( CtlGetValue(GetObjectPointer(frm, ToDoNotifyPri4)) )
-        gPrefsR.TDNotifyPrefs.priority = 4;
-    else
-        gPrefsR.TDNotifyPrefs.priority = 5;
-    
-    // ToDo Category is set by handler
-}
-
-
-static Int16 CheckDatebookRecord(DateType when, BirthDate birth)
-{
-    UInt16 numAppoints = 0;
-    MemHandle apptListH;
-    ApptDBRecordType dbRecord;
-    ApptInfoPtr apptList;
-    UInt16 recordNum;
-    MemHandle recordH;
-    Int16 i;
-
-    // check the exisiting records
-    //
-    apptListH = ApptGetAppointments(DatebookDB, when, &numAppoints);
-    if (apptListH) {
-        apptList = MemHandleLock(apptListH);
-        for (i = 0; i < numAppoints; i++) {
-            ApptGetRecord(DatebookDB, apptList[i].recordNum,
-                          &dbRecord, &recordH);
-            // if matched one is exists, return recordNum;
-            //
-            if (recordH) {
-                if (IsSameRecord(dbRecord.note, birth)) {
-                    recordNum = apptList[i].recordNum;
-                    
-                    MemHandleUnlock(recordH);
-                    MemHandleUnlock(apptListH);
-
-                    return recordNum;
-                }
-                else MemHandleUnlock(recordH);
-            }
-        }
-        MemHandleUnlock(apptListH);
-    }
-    return -1;
-}
-
-static Int16 CheckToDoRecord(DateType when, BirthDate birth)
-{
-    UInt16 currIndex = 0;
-    MemHandle recordH;
-    ToDoDBRecordPtr toDoRec;
-    Char *note;
-    
-    while (1) {
-        recordH = DmQueryNextInCategory(ToDoDB, &currIndex,
-                                        dmAllCategories);
-        if (!recordH) break;
-
-        toDoRec = MemHandleLock(recordH);
-        note = GetToDoNotePtr(toDoRec);
-        
-        if ((DateToInt(when) == DateToInt(toDoRec->dueDate))
-            && IsSameRecord(note, birth)) {
-            MemHandleUnlock(recordH);
-
-            return currIndex;
-        }
-        else {
-            MemHandleUnlock(recordH);
-            currIndex++;
-        }
-    }
-    return -1;
-}
-
-// check global notify preference, and make datebookDB entry private
-//
-static void ChkNMakePrivateRecord(DmOpenRef db, Int16 index)
-{
-    Int16 attributes;
-    // if private is set, make the record private
-    //
-    if (gPrefsR.private == 1) {
-        DmRecordInfo(db, index, &attributes,
-                     NULL,NULL);
-        attributes |= dmRecAttrSecret;
-        DmSetRecordInfo(db, index, &attributes, NULL);
-    }
-}
-
-static Char* DateBk3IconString()
-{
-    static Char bk3Icon[11];
-
-    StrCopy(bk3Icon, "##@@@@@@@\n");
-    bk3Icon[5] = gPrefsR.DBNotifyPrefs.datebk3icon + 'A';
-
-    return bk3Icon;
-}
-
-static Char* gNotifyFormatString[5] =
-{ "[+L] +e +y",     // [Jeong, JaeMok] B 1970
-  "[+F] +e +y",     // [JaeMok Jeong] B 1970
-  "+E - +L +y",     // Birthday - Jeong, JaeMok 1970
-  "+E - +F +y",     // Birthday - JaeMok Jeong 1970
-  "+F +y",        	// JaeMok Jeong 1970
-};
-
-//
-// Memory is allocated, after calling this routine, user must free the memory
-//
-static Char* NotifyDescString(DateType when, BirthDate birth, 
-							  Int8 age,Boolean todo)
-{
-    Char* description, *pDesc;
-    Char* pfmtString;
-    
-    // make the description
-    description = pDesc = MemPtrNew(1024);
-    SysCopyStringResource(gAppErrStr, NotEnoughMemoryString);
-    ErrFatalDisplayIf(!description, gAppErrStr);
-
-    // boundary check must be inserted
-    //
-    pfmtString = gNotifyFormatString[(int)gPrefsR.BirthPrefs.notifyformat];
-    while (*pfmtString) {
-        if (*pfmtString == '+') {
-            switch (*(pfmtString+1)) {
-            case 'L':       // LastName, FirstName
-                StrCopy(pDesc, birth.name1);
-                if (birth.name2 && birth.name2[0]) {
-                    if (birth.name1 && birth.name1[0])
-                        StrCat(pDesc, ", ");
-                    StrCat(pDesc, birth.name2);
-                }
-
-                pDesc += StrLen(pDesc);
-                break;
-
-            case 'F':       // FirstName LastName
-                StrCopy(pDesc, birth.name2);
-                
-                if (birth.name1 && birth.name1[0]) {
-                    if (birth.name2 && birth.name2[0])
-                        StrCat(pDesc, " ");
-                    StrCat(pDesc, birth.name1);
-                }
-
-                pDesc += StrLen(pDesc);
-                break;
-                
-            case 'e':       // Event Type (like 'B')
-                // set event type
-                *pDesc++ = EventTypeString(birth)[0];
-                
-                break;
-
-            case 'E':       // Event Type (like 'Birthday')
-                if (!birth.custom[0]) {
-                    StrCopy(pDesc, gPrefsR.BirthPrefs.custom);
-                }
-                else {
-                    StrCopy(pDesc, birth.custom);
-                }
-                pDesc += StrLen(pDesc);
-                break;
-
-            case 'y':       // Year and age
-                if (birth.flag.bits.lunar || birth.flag.bits.lunar_leap) {
-                    if (birth.flag.bits.lunar) {
-                        StrCopy(pDesc, "-)");
-                    }
-                    else if (birth.flag.bits.lunar_leap) {
-                        StrCopy(pDesc, "#)");
-                    }
-
-                    if (birth.flag.bits.year) {
-                        DateToAscii(birth.date.month, birth.date.day,
-                                    birth.date.year + 1904,
-                                    gPrefdfmts, gAppErrStr);
-                    }
-                    else {
-                        DateToAsciiLong(birth.date.month, birth.date.day, -1, gPrefdfmts,
-                                        gAppErrStr);
-                    }
-    
-                    StrCat(pDesc, gAppErrStr);
-                    pDesc += StrLen(pDesc);
-                }
-                if (birth.flag.bits.year) {
-                    if (!birth.flag.bits.solar 
-                        || gPrefsR.DBNotifyPrefs.duration ==1 || todo) {
-                        if (age >= 0) {
-                            StrPrintF(gAppErrStr, " (%d)", age);
-                            StrCopy(pDesc, gAppErrStr);
-                        }
-                    }
-                    else if (birth.flag.bits.solar 
-                             && gPrefsR.DBNotifyPrefs.duration != 1) {
-                        StrPrintF(gAppErrStr, "%d", birth.date.year + 1904 );
-                        StrCopy(pDesc, gAppErrStr);
-                    }
-                    pDesc += StrLen(pDesc);
-                }
-                break;
-
-            default:
-            }
-
-            pfmtString += 2;    // advance +char;
-        }
-        else {
-            *pDesc++ = *pfmtString++;
-        }
-    }
-    *pDesc = 0;
-    
-    return description;
-}
-    
-static Int16 PerformNotifyDB(BirthDate birth, DateType when, Int8 age,
-                             RepeatInfoType* repeatInfoPtr,
-                             Int16 *created, Int16 *touched)
-{
-    ApptDBRecordType datebook;
-    ApptDateTimeType dbwhen;
-    AlarmInfoType dbalarm;
-    Char* description = 0;
-    Int16 existIndex;
-    ApptDBRecordFlags changedFields;
-    Char noteField[256];        // (datebk3: 10, AN:14), HD id: 5
-
-    // for the performance, check this first 
-    if ( ((existIndex = CheckDatebookRecord(when, birth)) >= 0)
-         && !gPrefsR.existing ) {    // exist and keep the record
-        (*touched)++;
-        
-        return 0;
-    }
-
-    /* Zero the memory */
-    MemSet(&datebook, sizeof(ApptDBRecordType), 0);
-    MemSet(&dbwhen, sizeof(ApptDateTimeType), 0);
-    MemSet(&dbalarm, sizeof(AlarmInfoType), 0);
-    datebook.when = &dbwhen;
-    datebook.alarm = &dbalarm;
-
-    // set the date and time
-    //
-    dbwhen.date = when;
-    dbwhen.startTime = gPrefsR.DBNotifyPrefs.when;
-    dbwhen.endTime = gPrefsR.DBNotifyPrefs.when;
-
-    // if alarm checkbox is set, set alarm
-    //
-    if (gPrefsR.DBNotifyPrefs.alarm &&
-        gPrefsR.DBNotifyPrefs.notifybefore >= 0) {
-        dbalarm.advanceUnit = aauDays;
-        dbalarm.advance = gPrefsR.DBNotifyPrefs.notifybefore;
-        datebook.alarm = &dbalarm;
-    }
-    else {
-        dbalarm.advance = apptNoAlarm;
-        datebook.alarm = NULL;
-    }
-
-    // set the repeat
-    //
-    datebook.repeat = repeatInfoPtr;
-
-    // forget the exceptions 
-    //
-    datebook.exceptions = NULL;
-
-	// if datebook is datebk3 or AN, set icon
-	//
-    if (gPrefsR.DBNotifyPrefs.icon == 1) {     // AN
-        StrCopy(noteField, "ICON: ");
-        StrCat(noteField, gPrefsR.DBNotifyPrefs.an_icon);
-        StrCat(noteField, "\n#AN\n");
-    }
-	else if (gPrefsR.DBNotifyPrefs.icon == 2) {
-        StrCopy(noteField, DateBk3IconString());
-	}
-    else noteField[0] = 0;
-
-    StrCat(noteField, gPrefsR.BirthPrefs.notifywith);
-    StrPrintF(gAppErrStr, "%ld", Hash(birth.name1, birth.name2));
-    StrCat(noteField, gAppErrStr);
-    datebook.note = noteField;
-
-    // make the description
-        
-    description = NotifyDescString(when, birth, age, false);	// todo = false
-    datebook.description = description;
-
-    if (existIndex < 0) {            // there is no same record
-        //
-        // if not exists
-        // write the new record (be sure to fill index)
-        //
-        ApptNewRecord(DatebookDB, &datebook, &existIndex);
-        // if private is set, make the record private
-        //
-        ChkNMakePrivateRecord(DatebookDB, existIndex);
-        (*created)++;
-    }
-    else {                                      // if exists
-        if (gPrefsR.existing == 0) {
-            // keep the record
-        }
-        else {
-            // modify
-            changedFields.when = 1;
-            changedFields.description = 1;
-            changedFields.repeat = 1;
-            changedFields.alarm = 1;
-			changedFields.note = 1;
-
-            ApptChangeRecord(DatebookDB, &existIndex, &datebook,
-                             changedFields);
-            // if private is set, make the record private
-            //
-            ChkNMakePrivateRecord(DatebookDB, existIndex);
-        }
-        (*touched)++;
-    }
-
-    if (description) MemPtrFree(description);
-    
-    return 0;
-}
-
-static Int16 PerformNotifyTD(BirthDate birth, DateType when, Int8 age,
-                             Int16 *created, Int16 *touched)
-{
-    Char noteField[256];      // (datebk3: 10, AN:14), HD id: 5
-    ToDoItemType todo;
-    Char* description = 0;
-    
-    Int16 existIndex;
-
-    // for the performance, check this first 
-    if ( ((existIndex = CheckToDoRecord(when, birth)) >= 0)
-         && !gPrefsR.existing ) {    // exists and keep the record
-        (*touched)++;
-        
-        return 0;
-    }
-
-    /* Zero the memory */
-    MemSet(&todo, sizeof(ToDoItemType), 0);
-
-    // set the date 
-    //
-    todo.dueDate = when;
-    todo.priority = gPrefsR.TDNotifyPrefs.priority;
-
-    StrCopy(noteField, gPrefsR.BirthPrefs.notifywith);
-    StrPrintF(gAppErrStr, "%ld", Hash(birth.name1, birth.name2));
-    StrCat(noteField, gAppErrStr);
-    todo.note = noteField;
-
-    // make the description
-        
-    description = NotifyDescString(when, birth, age, true);		// todo = true
-    todo.description = description;
-
-    // category adjust
-    if (gToDoCategory == dmAllCategories) gToDoCategory = dmUnfiledCategory;
-    
-    if (existIndex < 0) {            // there is no same record
-        //
-        // if not exists
-        // write the new record (be sure to fill index)
-        //
-        ToDoNewRecord(ToDoDB, &todo, gToDoCategory, &existIndex);
-        // if private is set, make the record private
-        //
-        ChkNMakePrivateRecord(ToDoDB, existIndex);
-        (*created)++;
-    }
-    else {                                      // if exists
-        if (gPrefsR.existing == 0) {
-            // keep the record
-        }
-        else {
-            // modify
-
-            // remove the record
-            DmDeleteRecord(ToDoDB, existIndex);
-            // deleted records are stored at the end of the database
-            //
-            DmMoveRecord(ToDoDB, existIndex, DmNumRecords(ToDoDB));
-            
-            // make new record
-            ToDoNewRecord(ToDoDB, &todo, gToDoCategory, &existIndex);
-            // if private is set, make the record private
-            //
-            ChkNMakePrivateRecord(ToDoDB, existIndex);
-        }
-        (*touched)++;
-    }
-
-    if (description) MemPtrFree(description);
-    
-    return 0;
-}
-
-static void AdjustDesktopCompatible(DateType *when)
-{
-    int maxtry = 4;
-    // get current date
-    //
-    
-    if (when->year < 1990 - 1904) when->year = 1990 - 1904;
-                
-    while (DaysInMonth(when->month, when->year) < when->day && maxtry-- >0) {
-        when->year++;
-    }
-}
-
-static void NotifyDatebook(int mainDBIndex, DateType when, Int8 age,
-                           Int16 *created, Int16 *touched)
-{
-    MemHandle recordH = 0;
-    PackedBirthDate* rp;
-    BirthDate r;
-    RepeatInfoType repeatInfo;
-    Int16 i;
-    
-    // if duration is equal to 0, no notify record is created
-    //
-    if (gPrefsR.DBNotifyPrefs.duration == 0) return;
-
-    if ((recordH = DmQueryRecord(MainDB, mainDBIndex))) {
-        rp = (PackedBirthDate *) MemHandleLock(recordH);
-        /*
-         * Build the unpacked structure for an AddressDB record.  It
-         * is just a bunch of pointers into the rp structure.
-         */
-        UnpackBirthdate(&r, rp);
-
-        if (r.flag.bits.solar) {
-            repeatInfo.repeatType = repeatYearly;
-            repeatInfo.repeatFrequency = 1;
-            repeatInfo.repeatOn = 0;
-            repeatInfo.repeatStartOfWeek = 0;
-
-            if (gPrefsR.DBNotifyPrefs.duration > 1) {
-                // if solar date, make entry repeat
-                //
-                repeatInfo.repeatEndDate = when;
-                repeatInfo.repeatEndDate.year +=
-                    gPrefsR.DBNotifyPrefs.duration -1;
-
-                // if end year is more than 2301, set for ever
-                if (repeatInfo.repeatEndDate.year > lastYear) {
-                    DateToInt(repeatInfo.repeatEndDate) = -1;
-                }
-
-                // if duration > 1, 'when' is the birthdate;
-                if (r.flag.bits.year) when = r.date;
-
-				// Because Palm Desktop doesn't support events before 1970.
-				//
-                AdjustDesktopCompatible(&when);
-                PerformNotifyDB(r, when, age, &repeatInfo, created, touched);
-            }
-            else if (gPrefsR.DBNotifyPrefs.duration == -1) {
-                // if duration > 1, 'when' is the birthdate;
-                if (r.flag.bits.year) when = r.date;
-
-				// Because Palm Desktop doesn't support events before 1970.
-				//
-                AdjustDesktopCompatible(&when);
-
-                DateToInt(repeatInfo.repeatEndDate) = -1;
-                PerformNotifyDB(r, when, age, &repeatInfo, created, touched);
-            }
-            else PerformNotifyDB(r, when, age, NULL, created, touched);
-        }
-        else if (r.flag.bits.lunar || r.flag.bits.lunar_leap) {
-            // if lunar date, make each entry
-            //
-            int duration = gPrefsR.DBNotifyPrefs.duration;
-            DateType current, converted;
-            
-            // for the convenience, -1 means 5 year in lunar calendar.
-            //
-            if (duration == -1) duration = DEFAULT_DURATION;
-
-            // now use the same routine in lunar an lunar_leap
-            //
-            DateSecondsToDate(TimGetSeconds(), &current);
-
-            for (i=0; i < duration; i++) {
-                converted = r.date;
-                if (!FindNearLunar(&converted, current,
-                                   r.flag.bits.lunar_leap)) break;
-
-                PerformNotifyDB(r, converted, age, NULL, created, touched);
-
-                // process next target day
-                //
-                current = converted;
-                DateAdjust(&current, 1);
-            }
-        }
-        
-        MemHandleUnlock(recordH);
-    }
-}
-
-static void NotifyToDo(int mainDBIndex, DateType when, Int8 age,
-                       Int16 *created, Int16 *touched)
-{
-    MemHandle recordH = 0;
-    PackedBirthDate* rp;
-    BirthDate r;
-    
-    if ((recordH = DmQueryRecord(MainDB, mainDBIndex))) {
-        rp = (PackedBirthDate *) MemHandleLock(recordH);
-        /*
-         * Build the unpacked structure for an AddressDB record.  It
-         * is just a bunch of pointers into the rp structure.
-         */
-        UnpackBirthdate(&r, rp);
-
-        if (r.flag.bits.solar) {
-            PerformNotifyTD(r, when, age, created, touched);
-        }
-        else if (r.flag.bits.lunar || r.flag.bits.lunar_leap) {
-            // if lunar date, make each entry
-            //
-            DateType current, converted;
-            
-            // now use the same routine in lunar an lunar_leap
-            //
-            DateSecondsToDate(TimGetSeconds(), &current);
-
-            converted = r.date;
-            if (FindNearLunar(&converted, current,
-                              r.flag.bits.lunar_leap)) {
-                PerformNotifyTD(r, converted, age, created, touched);
-            }
-        }
-        
-        MemHandleUnlock(recordH);
-    }
-}
-
-static void NotifyAction(UInt32 whatAlert,
-                         void (*func)(int mainDBIndex, DateType when,
-							 	      Int8 age,	Int16 *created, 
-									  Int16 *touched))
-{
-    Int16 created = 0, touched = 0;
-    LineItemPtr ptr;
-    FormPtr formPtr;
-    Int16 i;
-    Char* info = 0;
-    Char tmp[25];
-    Char temp[255];
-
-    if (gMainTableTotals >0) {
-        ptr = MemHandleLock(gTableRowHandle);
-        if (gPrefsR.records == 0) {  // all
-            if (whatAlert == DateBookNotifyForm) {
-                SysCopyStringResource(gAppErrStr, DateBookString);
-            }
-            else {
-                SysCopyStringResource(gAppErrStr, ToDoString);
-            }
-
-            StrPrintF(tmp, "%d", gMainTableTotals);
-            if (FrmCustomAlert(NotifyWarning, gAppErrStr, tmp, " ")
-                == 0) {             // user select OK button
-
-                formPtr = FrmInitForm(ProgressForm);
-        		if(gbVgaExists)
-                    VgaFormModify(formPtr, vgaFormModify160To240);
-
-                FrmDrawForm(formPtr);
-                FrmSetActiveForm(formPtr);
-                
-                for (i=0; i < gMainTableTotals; i++) {
-                    if (ptr[i].date.year != INVALID_CONV_DATE) {
-                        (*func)(ptr[i].birthRecordNum,
-                                ptr[i].date, 
-								ptr[i].age,
-								&created,
-                                &touched);
-                    }
-
-                    if ((i+1) % 20 == 0) {
-                        // Reset the auto-off timer to make sure we don't
-                        // fall asleep in the
-                        //  middle of the update
-                        EvtResetAutoOffTimer ();
-                    }
-
-                    StrPrintF(gAppErrStr, "%d/%d", i+1, gMainTableTotals);
-                    FldDrawField(SetFieldTextFromStr(ProgressFormField, gAppErrStr));
-                }
-
-                FrmReturnToForm(0);
-            }
-            else {
-                MemPtrUnlock(ptr);
-                goto Exit_Notify_All;
-            }
-                    
-        }
-        else {                                      // selected
-            if (ptr[gMainTableHandleRow].date.year
-                != INVALID_CONV_DATE) {
-                (*func)(ptr[gMainTableHandleRow].birthRecordNum,
-                        ptr[gMainTableHandleRow].date,
-                        ptr[gMainTableHandleRow].age,
-                        &created, &touched);
-            }
-        }
-        MemPtrUnlock(ptr);
-
-        info = MemPtrNew(255);
-        SysCopyStringResource(gAppErrStr, NotEnoughMemoryString);
-        ErrFatalDisplayIf(!info, gAppErrStr);
-
-        SysCopyStringResource(gAppErrStr, NotifyCreateString);
-        StrPrintF(info, gAppErrStr, created);
-
-        SysCopyStringResource(temp, ExistingEntryString);
-        StrPrintF(gAppErrStr, temp, touched);
-        StrNCat(info, gAppErrStr, 255);
-
-        if (gPrefsR.existing == 0) {  // keep
-            SysCopyStringResource(temp, UntouchedString);
-            StrNCat(info, temp, 255);
-        }
-        else {                                      // modify
-            SysCopyStringResource(temp, ModifiedString);
-            StrNCat(info, temp, 255);
-        }
-
-        // notify the number of the created and touched record
-        //
-        FrmCustomAlert(ErrorAlert, info, " ", " ");
-
-        MemPtrFree(info);
-    }
- Exit_Notify_All:                
-
-    return;
-}
-
-
-static Boolean DBNotifyFormHandleEvent(EventPtr e)
-{
-    Boolean handled = false;
-    FormPtr frm = FrmGetFormPtr(DateBookNotifyForm);
-
-    switch (e->eType) {
-    case frmOpenEvent:
-        if(gbVgaExists)
-       		VgaFormModify(frm, vgaFormModify160To240);
-
-        LoadDBNotifyPrefsFields();
-        FrmDrawForm(frm);
-        handled = true;
-        break;
-
-    case ctlSelectEvent:
-        switch(e->data.ctlSelect.controlID) {
-        case DateBookNotifyFormOk: 
-        {
-            UnloadDBNotifyPrefsFields();
-
-            NotifyAction(DateBookNotifyForm, NotifyDatebook);
-            FrmReturnToForm(0);
-
-            handled = true;
-            break;
-        }
-        
-        case DateBookNotifyFormCancel:
-            UnloadDBNotifyPrefsFields();
-
-            FrmReturnToForm(0);
-
-            handled = true;
-            break;
-
-		case DateBookNotifyFormMore:
-            FrmPopupForm(DateBookNotifyMoreForm);
-
-            handled = true;
-            break;
-
-        case DateBookNotifyFormAlarm:
-            if (CtlGetValue(GetObjectPointer(frm,
-                                             DateBookNotifyFormAlarm))) {
-                FrmShowObject(frm,
-                              FrmGetObjectIndex(frm, DateBookNotifyFormBefore));
-
-				SysCopyStringResource(gAppErrStr, DateBookNotifyDaysString);
-				FldDrawField(SetFieldTextFromStr(DateBookNotifyFormLabelDays, 
-                                                 gAppErrStr));
-            }
-            else {
-                FrmHideObject(frm, 
-                              FrmGetObjectIndex(frm, DateBookNotifyFormBefore));
-				FldDrawField(ClearFieldText(DateBookNotifyFormLabelDays));
-            }
-            
-            handled = true;
-            break;
-
-        case DateBookNotifyFormTime:
-        {
-            TimeType startTime, endTime, lastTime;
-            Boolean untimed = false;
-
-            startTime = endTime = lastTime = gPrefsR.DBNotifyPrefs.when;
-            if (TimeToInt(startTime) == noTime) {
-                untimed = true;
-                // set dummy time
-                startTime.hours = endTime.hours  = 8;
-                startTime.minutes = endTime.minutes = 0;
-            }
-            
-            SysCopyStringResource(gAppErrStr, SelectTimeString);
-            if (SelectTimeV33(&startTime, &endTime, untimed, gAppErrStr,8)) {
-                gPrefsR.DBNotifyPrefs.when = startTime;
-                TimeToAsciiLocal(gPrefsR.DBNotifyPrefs.when, gPreftfmts,
-                                 gAppErrStr);
-            }
-			else {
-				TimeToAsciiLocal(lastTime, gPreftfmts, gAppErrStr);
-			}
-            
-			CtlSetLabel(GetObjectPointer(frm, DateBookNotifyFormTime),
-						gAppErrStr);
-
-            handled = true;
-            break;
-        }
-            
-        default:
-            break;
-        }
-    case menuEvent:
-        MenuEraseStatus(NULL);
-        handled = true;
-        break;
-
-    default:
-        break;
-    }
-
-    return handled;
-}
-
-static Boolean ToDoFormHandleEvent(EventPtr e)
-{
-    Boolean handled = false;
-    FormPtr frm = FrmGetFormPtr(ToDoNotifyForm);
-
-    switch (e->eType) {
-    case frmOpenEvent:
-        if(gbVgaExists)
-       		VgaFormModify(frm, vgaFormModify160To240);
-
-        LoadTDNotifyPrefsFields();
-        FrmDrawForm(frm);
-        handled = true;
-        break;
-
-    case ctlSelectEvent:
-        switch(e->data.ctlSelect.controlID) {
-        case ToDoNotifyFormOk: 
-        {
-            UnloadTDNotifyPrefsFields();
-
-            NotifyAction(ToDoNotifyForm, NotifyToDo);
-            FrmReturnToForm(0);
-
-            handled = true;
-            break;
-        }
-        
-        case ToDoNotifyFormCancel:
-            UnloadTDNotifyPrefsFields();
-
-            FrmReturnToForm(0);
-
-            handled = true;
-            break;
-
-        case ToDoPopupTrigger: 
-        {
-            SelectCategoryPopup(ToDoDB, &gToDoCategory,
-                                ToDoNotifyCategory, ToDoPopupTrigger,
-                                gPrefsR.TDNotifyPrefs.todoCategory);
-            handled = true;
-            break;
-        }
-            
-        default:
-            break;
-        }
-    case menuEvent:
-        MenuEraseStatus(NULL);
-        handled = true;
-        break;
-
-    default:
-        break;
-    }
-
-    return handled;
-}
-
-static int dec(char hex)
-{
-    if (hex >= '0' && hex <= '9') {
-        return hex - '0';
-    }
-    else if (hex >= 'A' && hex <= 'F') {
-        return hex - 'A' + 10;
-    }
-    else if (hex >= 'a' && hex <= 'f') {
-        return hex - 'a' + 10;
-    }
-    else return 0;  
-}
-
-static Int8 convertWord(char first, char second)
-{
-    return dec(first) * 16 + dec(second);
-}
-
-static void DateBk3CustomDrawTable(MemPtr tableP, Int16 row, Int16 column, 
-                                   RectanglePtr bounds)
-{
-    Int16 x, y;
-    Int8 drawItem = row * 13 + column;
-    Int8 drawFixel;
-    Int8 i, j;
-    
-    x = bounds->topLeft.x + (bounds->extent.x - 8) / 2;
-    y = bounds->topLeft.y + (bounds->extent.y - 8) / 2; 
-
-    for (i = 0; i < 8; i++) {
-        drawFixel = gDateBk3Icon[drawItem][i];
-        if (drawFixel) {        // if not 0
-            for (j=0; j < 8; j++) {
-                if (drawFixel & 1) {
-                    WinDrawLine(x+8-j, y+i+1, x+8-j, y+i+1);
-                }
-                drawFixel >>= 1;
-            }
-        }
-    }
-}
-
-static Boolean loadDatebk3Icon()
-{
-    UInt16 currIndex = 0;
-    MemHandle recordH = 0;
-    Char* rp;       // memoPad record
-    Boolean found = false;
-    Char IconString[16];
-    Char *p=0;
-
-    if ((MemCmp((char*) &gMmcdate, gPrefsR.memcdate, 4) == 0) &&
-        (MemCmp((char*) &gMmmdate, gPrefsR.memmdate, 4) == 0)) {
-        // if matched, use the original datebk3 icon set
-        //
-        return gDateBk3IconLoaded;
-    }
-
-    while (1) {
-        recordH = DmQueryNextInCategory(MemoDB, &currIndex,
-                                        dmAllCategories);
-        if (!recordH) break;
-
-        rp = (Char*)MemHandleLock(recordH);
-        if (StrNCompare(rp, DATEBK3_MEMO_STRING,
-                        StrLen(DATEBK3_MEMO_STRING)) == 0) {
-            p = StrChr(rp, '\n');
-            found = true;
-            break;
-        }
-            
-        MemHandleUnlock(recordH);
-        currIndex++;
-    }
-    if (found) {
-        Int8 i=0, j;
-        
-        while ((p = StrChr(p+1, '=')) && i < 52) {
-            MemMove(IconString, p+1, 16);
-
-            for (j = 0; j < 8; j++) {
-                gDateBk3Icon[i][j] =
-                    convertWord(IconString[j*2], IconString[j*2+1]);
-            }
-            i++;
-        }
-
-        for (; i < 52; i++) {
-            MemSet(gDateBk3Icon[i], 8, 0);
-        }
-        MemHandleUnlock(recordH);
-    }
-    
-    return (gDateBk3IconLoaded = found);
-}
-
-static Boolean DateBk3IconLoadTable(FormPtr frm, Boolean redraw)
-{
-    TablePtr tableP;
-    Int8 row, column, numRows, numColumns;
-    RectangleType rect;
-
-    if (!loadDatebk3Icon()) return false;
-
-    tableP = GetObjectPointer(frm, DateBookNotifyBk3Table);
-    if (redraw) {
-        TblEraseTable(tableP);
-    }
-
-    numRows = TblGetNumberOfRows(tableP);
-    numColumns = 13;
-    TblGetBounds(tableP, &rect);
-    
-    for (row=0; row < numRows; row++) {
-        for (column=0; column < numColumns; column++) {
-            TblSetItemStyle(tableP, row, column, customTableItem);
-        }
-        TblSetRowSelectable(tableP, row, true);
-
-        TblSetRowHeight(tableP, row, rect.extent.y / 4 +1);
-        TblSetRowUsable(tableP, row, true);
-    }
-
-    for (column=0; column < numColumns; column++) {
-        TblSetColumnUsable(tableP, column, true);
-        TblSetCustomDrawProcedure(tableP, column, DateBk3CustomDrawTable);
-    }
-
-    if (redraw) {
-        TblDrawTable(tableP);
-    }
-    return true;
-}
-
-static void HideIconStuff()
-{
-    FormPtr frm;
-
-    if ((frm = FrmGetFormPtr(DateBookNotifyMoreForm)) == 0) return;
-
-    FrmHideObject(frm, FrmGetObjectIndex(frm, DateBookNotifyFormBk3));
-    FrmHideObject(frm, FrmGetObjectIndex(frm, DateBookNotifyFormAN));
-}
-
-static void ShowIconStuff()
-{
-    FormPtr frm;
-
-    if ((frm = FrmGetFormPtr(DateBookNotifyMoreForm)) == 0) return;
-
-    FrmShowObject(frm, FrmGetObjectIndex(frm, DateBookNotifyFormBk3));
-    FrmShowObject(frm, FrmGetObjectIndex(frm, DateBookNotifyFormAN));
-}
-
-static Boolean LoadDBNotifyPrefsFieldsMore(void)
-{
-    FormPtr frm;
-
-    if ((frm = FrmGetFormPtr(DateBookNotifyMoreForm)) == 0) return false;
-
-    if (gPrefsR.DBNotifyPrefs.icon == 0) {
-        CtlSetValue(GetObjectPointer(frm, DateBookNotifyFormIcon), 0);
-        HideIconStuff();
-    }
-    else {
-        CtlSetValue(GetObjectPointer(frm, DateBookNotifyFormIcon), 1);
-    }
-    
-    if (gPrefsR.DBNotifyPrefs.icon == 1) {     // AN selected
-        CtlSetValue(GetObjectPointer(frm, DateBookNotifyFormAN), 1);
-    }
-    else {                                      // Datebk3 Icon selected 
-        CtlSetValue(GetObjectPointer(frm, DateBookNotifyFormBk3), 1);
-    }
-
-    SetFieldTextFromStr(DateBookNotifyANInput,
-                        gPrefsR.DBNotifyPrefs.an_icon);
-
-    return DateBk3IconLoadTable(frm, false);
-
-}
-
-static void UnloadDBNotifyPrefsFieldsMore()
-{
-    FormPtr frm;
-    ControlPtr ptr;
-    
-    if ((frm = FrmGetFormPtr(DateBookNotifyMoreForm)) == 0) return;
-    
-    ptr = GetObjectPointer(frm, DateBookNotifyFormIcon);
-    if (!CtlGetValue(ptr)) gPrefsR.DBNotifyPrefs.icon = 0;
-    else {
-        ptr = GetObjectPointer(frm, DateBookNotifyFormAN);
-        if (CtlGetValue(ptr)) gPrefsR.DBNotifyPrefs.icon = 1;
-        else gPrefsR.DBNotifyPrefs.icon = 2;
-    }
-    
-    if (FldDirty(GetObjectPointer(frm, DateBookNotifyANInput))) {
-        if (FldGetTextPtr(GetObjectPointer(frm, DateBookNotifyANInput))) {
-            StrNCopy(gPrefsR.DBNotifyPrefs.an_icon,
-                     FldGetTextPtr(GetObjectPointer(frm, DateBookNotifyANInput)), 9);
-        }
-    }
-}
-
-
-static Boolean DBNotifyFormMoreHandleEvent(EventPtr e)
-{
-    Boolean handled = false;
-    FormPtr frm = FrmGetActiveForm();
-    Boolean loadDateBk3Icon;
-
-    switch (e->eType) {
-    case frmOpenEvent: 
-    {
-        TablePtr tableP;
-        Int16 numColumns;
-
-        if(gbVgaExists) {
-       		VgaFormModify(frm, vgaFormModify160To240);
-        }
-
-        loadDateBk3Icon = LoadDBNotifyPrefsFieldsMore();
-        FrmDrawForm(frm);
-
-        if (loadDateBk3Icon) {
-            tableP = GetObjectPointer(frm, DateBookNotifyBk3Table);
-            numColumns = 13;
-            TblSelectItem(tableP, gPrefsR.DBNotifyPrefs.datebk3icon/numColumns,
-                          gPrefsR.DBNotifyPrefs.datebk3icon % numColumns);
-        }
-
-        handled = true;
-        break;
-    }
-
-    case ctlSelectEvent:
-        switch(e->data.ctlSelect.controlID) {
-        case DateBookNotifyMoreFormOk: 
-        {
-            UnloadDBNotifyPrefsFieldsMore();
-
-            FrmReturnToForm(0);
-            handled = true;
-            break;
-        }
-        case DateBookNotifyFormIcon:
-        {
-            if (CtlGetValue(GetObjectPointer(frm, DateBookNotifyFormIcon)))
-            {
-                ShowIconStuff();
-            }
-            else {
-                HideIconStuff();
-            }
-            
-            handled = true;
-            break;
-        }
-      
-        default:
-            break;
-        }
-    case tblSelectEvent: 
-    {
-        if (e->data.tblSelect.tableID == DateBookNotifyBk3Table) {
-            gPrefsR.DBNotifyPrefs.datebk3icon =
-                e->data.tblSelect.column + e->data.tblSelect.row * 13;
-
-            handled = true;
-            break;
-        }
-    }
-
-    case menuEvent:
-        MenuEraseStatus(NULL);
-        handled = true;
-        break;
-
-    default:
-        break;
-    }
-
-    return handled;
-}
 
 static void ViewFormDrawRecord(MemPtr tableP, Int16 row, Int16 column, 
                                RectanglePtr bounds)
@@ -3791,7 +2313,7 @@ static void ViewFormLoadTable(FormPtr frm, Int16 listOffset)
 
         TblSetRowSelectable(tableP, row, false);
 
-        if (tblItemIdx == ViewSrc && !gPrefsR.DispPrefs.dispextrainfo) {
+        if (tblItemIdx == ViewSrc && !gPrefsR.DispPrefs.extrainfo) {
             tblItemIdx += 2;
         }
         else {
