@@ -5,9 +5,7 @@ BEGIN
 	"아이콘, 폰트, 카테고리 정보 등을 나타냅니다.\n\n"\
     "일정관리 프로그램으로 이들 프로그램을 사용하는 경우에는 "\
 	"그 프로그램들의 매뉴얼을 참조하여 적절한 노트 내용을 작성하세요.\n"
-
-    "HappyDays"= "HappyDays"
-
+    "HappyDays" =  "HappyDays"
     "long_customErrorString" =  ""\
     "'Birthday'가 초기 사용자정의 필드 이름입니다."\
     "다른 이름을 설정하고 싶은 경우 "\
@@ -15,30 +13,22 @@ BEGIN
     "정보: 'Birthday' 사용자정의 필드를 바꾸기 위해서는 주소록을 수행시켜 "\
     "'Options/Rename Custom Fields'을 선택한 다음 수정하면 됩니다."\
     "혹은 해피데이즈의 설정 항목의 사용자정의 필드를 적절하게 수정하세요.\n"
-
     "long_aboutString" =  ""\
     "해피데이즈는 친구나 가족의 생일이나 기념일을 기억하는 것을 도와"\
     "줍니다. 더욱이 제사나 다른 이벤트 항목도 관리할 수 있습니다."\
 	"\n\n해피데이즈를 사용하는 법에 대한 자세한 정보는 index.html과 "\
 	"manual.html 파일을 참고하세요."\
 	"\n\n해피데이즈는 GNU GPL을 따릅니다.\n"
-
     "long_cleanupAlertString" =  ""\
     "알림 레코드의 메모 필드에 {HD 식별자}가 있는 경우 "\
     "해피데이즈 레코드로 "\
     "간주하고 삭제합니다. (주의 요망)\n"
-
     "long_removeConfirmString" =  ""\
     "모든 해피데이즈 알림 항목을 삭제하길 원하십니까?"
-
     "Invalid input date" =  "날짜 입력이 잘못되었습니다."
-
     "Select Time" =  "알람 시간"
-
     "No Time" =  "지정안됨"
-
     "Export to Memo Pad is completed." =  "메모장으로 전송이 완료되었습니다."
-
     "long_sl2lnString" =  ""\
         "-)는 음력 평달을 의미합니다.\n"\
         "#)은 음력 윤달을 의미합니다."
@@ -69,13 +59,11 @@ BEGIN
     "%d existing entry " =  "이미 있던 %d 개의 레코드"
     "is kept untouched." =  "를 그대로 유지했습니다."
     "is modified." =  "가 수정되었습니다."
-    "long_cantFindAddrString" =  ""\
-        "주소록에서 사용자정의 필드를 못 찾음: '%s'\n"\
-        "주소록의 사용자정의 필드 항목 이름을 변경하세요."
     "HappyDays Export List" =  "해피데이즈 목록"
     "(not exist in this year)" =  "(올해엔 없는 날입니다)"
     "Please run Date Book once first." =  "먼저 일정관리를 한번 수행하세요."
-    "Days" =  "일전"
+    "Please run Todo once first."= "먼저 TODO 프로그램을 한번 수행하세요."
+    
     "%dY %dM %dD (%ld)" =  "%d년 %d월 %d일째 (%ld)"
 
     "Date Book" =  "일정관리"
@@ -89,15 +77,18 @@ BEGIN
     "Age:" =  "연령:"
     "UpTo Date:" =  "남은 일:"
 
+    "Datebook Note" =  "일정관리 노트"
+    "ToDo Note"= "ToDo 노트"
+
     "Collecting Information" =  ""\
         "주소록으로부터 정보 수집중"
 
     "HappyDays " =  "해피데이즈"
 
     "Look Up:" =  "기준일:"
-    "N"= "N"
-    "D"= "D"
-    "A"= "A"
+    "N" =  "N"
+    "D" =  "D"
+    "A" =  "A"
 
     "HappyDays View" =  "해피데이즈 보기"
 
@@ -164,14 +155,14 @@ BEGIN
 
     "Address Book:" =  "주소록 : "
     "Built-in" =  "주소록"
-    "Address.kr"= "Address.kr"
-    "Address Album"= "Address Album"
-    "AddressBkR"= "AddressBkR"
-    "Address Plus(+)"= "Address Plus(+)"
-    "Super Names"= "Super Names"
-    "TealPhone"= "TealPhone"
+    "Address.kr" =  "Address.kr"
+    "Address Album" =  "Address Album"
+    "AddressBkR" =  "AddressBkR"
+    "Address Plus(+)" =  "Address Plus(+)"
+    "Super Names" =  "Super Names"
+    "TealPhone" =  "TealPhone"
 
-    "HappyDays ID:"= "HappyDays ID:"
+    "HappyDays ID:" =  "HappyDays ID:"
 
     "Solar to Lunar Convert" =  "양력을 음력으로 변환"
     "Enter Solar date:" =  "양력 날짜는 :"
@@ -204,36 +195,31 @@ BEGIN
     "Repeat for:" =  "몇 년간 :"
     "years" =  "년"
 
-    "Note"= "노트"
+    "Note" =  "노트"
 
-    "Datebook Note"= "일정관리 노트"
-
-    "Add the following note"= "아래 노트 추가"
+    "Add the following note" =  "아래 노트 추가"
 
     "Priority:" =  "우선순위 :"
-    "1"= "1"
-    "2"= "2"
-    "3"= "3"
-    "4"= "4"
-    "5"= "5"
+    "1" =  "1"
+    "2" =  "2"
+    "3" =  "3"
+    "4" =  "4"
+    "5" =  "5"
 
     "Category:" =  "카테고리 :"
 
     "HappyDays says" =  "정 보"
-    "^1"= "^1"
+    "^1" =  "^1"
 
     "Address Change" =  "주소록 변경"
     "AddressDB is changed. \nDo you want to rescan it?" =  ""\
 		"주소록이 변경되었습니다.\n다시 읽을까요?"
-    "Yes"= "예"
-    "No"= "아니오"
+    "Yes" =  "예"
+    "No" =  "아니오"
 
     "HappyDays Export" =  "해피데이즈 전송"
     "Would you like to export HappyDays List to Memo Pad?" =  ""\
         "메모장으로 해피데이즈 목록을 옮길까요?"
-
-    "Custom Field Error" =  "사용자정의 필드 에러"
-    "Help" =  "도움말"
 
     "HappyDays Cleanup" =  "해피데이즈 정리"
 
@@ -251,16 +237,17 @@ BEGIN
     "^1: ^2 HappyDays notify entries removed." =  ""\
 	"^1: ^2 개의 해피데이즈 알림 레코드가 제거되었습니다."
 
-    "HappyDays 2.1b1"= "HappyDays 2.1b1"
     "GPL free software" =  "GPL free software"
-    "(c) 1999-2002 Jaemok Jeong"= "(c) 1999-2002 Jaemok Jeong"
+    "(c) 1999-2002 Jaemok Jeong" =  "(c) 1999-2002 Jaemok Jeong"
 
     "E-Mail & Web Page" =  "이메일 & 웹페이지"
-    "happydays@jmjeong.com"= "happydays@jmjeong.com"
-    "jmjeong.com/palm/happydays"= "jmjeong.com/palm/happydays"
+    "happydays@jmjeong.com" =  "happydays@jmjeong.com"
+    "jmjeong.com/palm/happydays" =  "jmjeong.com/palm/happydays"
 
     "Translator" =  "한글 버젼"
     "Translator's email" =  "정재목"
+
+    "Help" =  "도움말"
 
     "Processing" =  "진행중"
     "Processed : " =  "처리된것 : "

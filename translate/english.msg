@@ -7,15 +7,6 @@ BEGIN
 	"You can set a icon, font, and more using this note.\n\n"\
 	"For more information, check their manual.\n"
 
-    "long_customErrorString" = ""\
-    "'Birthday' is the default custom field name."\
-    "To set a different default custom field"\
-    " name, tap 'Preferences'.\n\n"\
-    "IMPORTANT: You need to launch your Address Book and select 'Options/"\
-    "Rename Custom Fields' to rename a custom field to 'Birthday'"\
-    " or whatever you set as a custom field name in the Preferences of "\
-    "HappyDays.\n"
-
     "long_aboutString" = ""\
     "'HappyDays' will help you remember the birthdays and anniversaries "\
     "of your friends and family members, as well as other events.\n\n"\
@@ -33,10 +24,6 @@ BEGIN
     "long_sl2lnString" = ""\
         "-) means plain month in lunar\n"\
         "#) means leap month in lunar"
-
-    "long_cantFindAddrString" = ""\
-    "Can't find custom address book field: '%s'\n"\
-    "Please rename a custom field of your address book."
 
     "Select Time" = "Select Time"
     "No Time" = "No Time"
