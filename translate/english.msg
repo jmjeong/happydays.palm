@@ -117,8 +117,8 @@ BEGIN
     "Event - First Last Year" = "Event - First Last Year"  
     "First Last Year" = "First Last Year"  
     
-	"Address Book" = "Address Book"
-	"Bulit-in" = "Built-in"
+	"Address Book:" = "Address Book:"
+	"Built-in" = "Built-in"
 
 
 /* Display preferences */
@@ -237,5 +237,8 @@ BEGIN
 	"Age:" = "Age:"
 	"UpTo Date:" = "UpTo Date:"
 	"%dY %dM %dD (%ld)" = "%dY %dM %dD (%ld)"
+
+	"Yes" = "Yes"
+	"No" = "No"
 END
 

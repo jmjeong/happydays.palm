@@ -175,10 +175,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define UntouchedString             1921
 #define ModifiedString              1922
 #define CantFindAddrString          1923
-#define CantWritePrefsString        1924
-#define SelectTimeString            1925
-#define NoTimeString                1926
-#define ExportDoneString            1927
+#define SelectTimeString            1924
+#define NoTimeString                1925
+#define ExportDoneString            1926
 
 #define ExportHeaderString			1929
 #define ViewNotExistString			1930

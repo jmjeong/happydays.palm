@@ -11,8 +11,9 @@ BEGIN
     "以設定以上自訂欄目名稱\n"
 
     "long_aboutString" = ""\
-    "HappyDays 能幫助你紀錄每個重要事件的日期(例如你親朋戚友的生日及週年紀念等)\n\n"\
-    "詳細使用方法請參閱 index.html 及 manual.html。\n\n"\
+    "HappyDays 
+能幫助你紀錄每個重要事件的日期(例如你親朋戚友的生日及週年紀念等)\n\n"\
+    "詳細使用方法請參閱\ index.html 及 manual.html。\n\n"\
     "HappyDays 是根據 GNU GPL2.0 發行的軟體。\n"
 
     "long_cleanupAlertString" = ""\
@@ -26,7 +27,7 @@ BEGIN
     "在地址簿中找不到 '%s' 欄目\n"\
     "請在地址簿內設定以上自訂欄目名稱\n"
 
-    "Select Time" = "Select Time"
+    "Select Time" = "選擇時間"
     "No Time" = "不指定時間"
     "Invalid input date" = "不正確的日期"
     "Export to Memo Pad is completed." = "完成匯出記事本。"
@@ -52,9 +53,9 @@ BEGIN
 
     "HappyDays View" = "HappyDays 檢視"
     "Done"  = "完成"
-    "DB" = "行事曆"
-    "TD" = "待辦表"
-    "Goto" = "地址簿"
+    "DB" = "行事"
+    "TD" = "待辦"
+    "Goto" = "地址"
 
     "Utilities" = "工具"
     "Date Book Notify" = "行事曆提示"
@@ -165,7 +166,8 @@ BEGIN
 
     "Notify warning" = "提示"
 
-    "long_notifywarningString" = "^1: 你是否想建立 ^2 個 HappyDays 紀錄的提示？"
+    "long_notifywarningString" = "^1: 你是否想建立 ^2 個 HappyDays 
+紀錄的提示？"
 
 /* Date Book Icon */
     "Date Book Icon" = "行事曆圖示"
