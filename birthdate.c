@@ -379,12 +379,9 @@ Boolean AnalysisHappyDays(const char* field,
         return false;
 
     if (flag->bits.year) {
-        if (year > 0 && year < 100) *dYear = year + 1900;
-        else if (year >= 100) *dYear = year;
-        else if (year == 0) {
-            flag->bits.year = 0;
-            *dYear = 0;
-        }
+        if (year >= 0 && year <= 31) *dYear = year + 2000;          // 2000
+        else if (year > 31 && year <= 99) *dYear = year + 1900;     // 1900
+        else if (year >= 1900) *dYear = year;
         else return false;
     }
     *dMonth = month; *dDay = day;
