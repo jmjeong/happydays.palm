@@ -20,11 +20,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _HAPPYDATE_H_
 #define _HAPPYDATE_H_
 
-#define PREFSVERSION        11
+#define PREFSVERSION        12
 
 #define AppErrStrLen        256
 #define DEFAULT_DURATION    5
-#define MAINTABLEAGEFIELD   24
 
 #define MainAppID           'Jmje'
 #define MainDBType          'DATA'
@@ -133,6 +132,7 @@ typedef struct
 typedef struct 
 {
     UInt16 birthRecordNum;  // birthdate+ DB record num
+	Int8   age;				// calculated age	
     DateType    date;       // converted date(the incoming birthday)
 } LineItemType;
 

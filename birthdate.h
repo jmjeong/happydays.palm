@@ -39,6 +39,4 @@ Boolean AnalysisBirthDate(const char* birthdate,
 
 Int16 UpdateBirthdateDB(DmOpenRef dbP, FormPtr frm);
 
-
-
 #endif

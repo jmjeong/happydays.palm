@@ -91,6 +91,7 @@ static void WritePrefsRec(void);
 static Boolean SelectCategoryPopup(DmOpenRef dbP, UInt16* selected,
                                    UInt32 list, UInt32 trigger, Char *string);
 static void MainFormLoadTable(FormPtr frm, Boolean redraw);
+static void MainFormLoadHeader(FormPtr frm, Boolean redraw);
 
 /* private database */
 DmOpenRef MainDB;
@@ -607,7 +608,7 @@ static Boolean MainFormHandleEvent (EventPtr e)
     case frmOpenEvent:
         // Main Form table row settting
         //
-        gMainTableRows = TblGetNumberOfRows(tableP);
+        gMainTableRows = TblGetNumberOfRows(tableP); 
 
         DisplayCategory(MainFormPopupTrigger, gPrefsR->addrCategory, false);
 
@@ -621,11 +622,13 @@ static Boolean MainFormHandleEvent (EventPtr e)
 
         RereadBirthdateDB(gStartDate);
 		if (e->eType == frmOpenEvent) {
+			MainFormLoadHeader(frm, false);
 			MainFormLoadTable(frm, false);
 			FrmDrawForm(frm);
 			ShowScrollArrows(frm, gMainTableStart, gMainTableTotals);
 		}
 		else {
+			MainFormLoadHeader(frm, false);
 			MainFormLoadTable(frm, true);
 		}
 		// display starting date
@@ -706,11 +709,46 @@ static Boolean MainFormHandleEvent (EventPtr e)
 
     case tblSelectEvent: 
     {
-        gMainTableHandleRow = gMainTableStart + e->data.tblEnter.row;
+        switch(e->data.tblSelect.tableID) {
+			case MainFormTable:
+				gMainTableHandleRow = gMainTableStart + e->data.tblEnter.row;
 
-        FrmPopupForm(BirthdateForm);
-        handled = true;
-        break;
+				FrmPopupForm(BirthdateForm);
+				handled = true;
+				break;
+			case MainFormHeader: {
+				FormPtr frm = FrmGetActiveForm();
+				TablePtr tableP = GetObjectPointer(frm, MainFormHeader);
+				Boolean change = true;
+
+				switch (e->data.tblEnter.column) {
+					case 0:			// Name
+						if (gPrefsR->BirthPrefs.sort == 0) change = false;
+						else gPrefsR->BirthPrefs.sort = 0;	// sort by name
+
+						break;
+					case 1:			// Date
+						if (gPrefsR->BirthPrefs.sort == 1) change = false;
+						else gPrefsR->BirthPrefs.sort = 1; 	// sort by date
+						break;
+					case 2:			// Age
+						if (gPrefsR->BirthPrefs.sort == 2) 
+							gPrefsR->BirthPrefs.sort = 3;  	// sort by age(re)
+						else gPrefsR->BirthPrefs.sort = 2; 	// sort by age
+						break;
+				}
+				if (change) {
+					gMainTableStart = 0;
+					SndPlaySystemSound(sndClick);
+
+					FrmUpdateForm(MainForm, frmRedrawUpdateCode);
+					WritePrefsRec();
+					handled = true;
+				}
+				TblUnhighlightSelection(tableP);
+				break;
+			}
+		}
     }
     
     default:
@@ -919,33 +957,6 @@ Boolean SelectCategoryPopup(DmOpenRef dbP, UInt16* selected,
     return ret;
 }
 
-static Int16 CalculateAge(DateType converted, DateType birthdate,
-                          BirthdateFlag flag)
-{
-    DateTimeType rtVal;
-    Int16 age;
-    int dummy = 0;
-    int ret;
-    
-    if (flag.bits.lunar_leap || flag.bits.lunar) {
-        // lunar birthdate
-        //          change to lunar date
-        //
-        // converted solar is again converted into lunar day for calculation
-        ret = sol2lun(converted.year + 1904, converted.month, converted.day,
-                      &rtVal, &dummy);
-        if (ret) return -1;     // error
-
-        converted.year = rtVal.year - 1904;
-        converted.month = rtVal.month;
-        converted.day = rtVal.day;
-    }
-    
-    return converted.year - birthdate.year;
-    return age;
-}
-
-
 static void MainFormDrawRecord(MemPtr tableP, Int16 row, Int16 column, 
                                RectanglePtr bounds)
 {
@@ -958,6 +969,8 @@ static void MainFormDrawRecord(MemPtr tableP, Int16 row, Int16 column,
     LineItemPtr ptr;
     LineItemType drawRecord;
 	Boolean ignored = true;
+	Int16 ageFieldWidth = AGE_FIELD_WIDTH;		// age + categoryWidth 
+	Int16 dateFieldWidth = DATE_FIELD_WIDTH;	// date width
     
     /*
      * Set the standard font.  Save the current font.
@@ -976,7 +989,6 @@ static void MainFormDrawRecord(MemPtr tableP, Int16 row, Int16 column,
          DmQueryRecord(MainDB, drawRecord.birthRecordNum))) {
 		short categoryWidth;
 		Int16 width, length;
-		Int16 age;
         Char* eventType;
 
         rp = (PackedBirthDate *) MemHandleLock(recordH);
@@ -986,11 +998,8 @@ static void MainFormDrawRecord(MemPtr tableP, Int16 row, Int16 column,
          */
         UnpackBirthdate(&r, rp);
 
-		// category display
-		//
-		categoryWidth = FntCharWidth('W');
-		width = bounds->extent.x - MAINTABLEAGEFIELD;
-
+		// Display date(converted date)
+		// 
 		if (drawRecord.date.year != INVALID_CONV_DATE) {
 			DateToAscii(drawRecord.date.month, drawRecord.date.day,
 						drawRecord.date.year+ 1904, gPrefdfmts, gAppErrStr);
@@ -998,48 +1007,32 @@ static void MainFormDrawRecord(MemPtr tableP, Int16 row, Int16 column,
 		else {
 			StrCopy(gAppErrStr, "-");
 		}
-
+		width = dateFieldWidth;
 		length = StrLen(gAppErrStr);
-		FntCharsInWidth(gAppErrStr, &width,
-						&length, &ignored);
+		FntCharsInWidth(gAppErrStr, &width, &length, &ignored);
+		WinDrawChars(gAppErrStr, length,
+					 bounds->topLeft.x + bounds->extent.x -
+					 ageFieldWidth - width - 3, y);
 
-		nameExtent = bounds->extent.x - width - MAINTABLEAGEFIELD - 3; 
-
+		// Display name
+		// 
+		nameExtent = bounds->extent.x - dateFieldWidth - ageFieldWidth;
 		DrawRecordName(r.name1, r.name2, nameExtent, &x, y,
 					   false,
 					   r.flag.bits.priority_name1 || !gSortByCompany);
 
-		WinDrawChars(gAppErrStr, length,
-					 bounds->topLeft.x + bounds->extent.x -
-					 MAINTABLEAGEFIELD - width, y);
-
-        if (gPrefsR->BirthPrefs.emphasize 
-            && drawRecord.date.year != INVALID_CONV_DATE
-            && (r.flag.bits.lunar || r.flag.bits.lunar_leap)) {
-            // draw gray line
-            WinDrawGrayLine(bounds->topLeft.x,
-                            bounds->topLeft.y + bounds->extent.y-1,
-                            bounds->topLeft.x + bounds->extent.x -
-                            MAINTABLEAGEFIELD,
-                            bounds->topLeft.y + bounds->extent.y-1);
-        }
-        
-		if (drawRecord.date.year != INVALID_CONV_DATE 
-			&& r.flag.bits.year 
-			&& (age = CalculateAge(drawRecord.date, r.date, r.flag)) >= 0) {
-			// calculate age if year exists
-			//
-			StrPrintF(gAppErrStr, "%d", age);
-
+		// Display age
+		if (drawRecord.age >= 0) {
+			StrPrintF(gAppErrStr, "%d", drawRecord.age);
 		}
 		else {
 			StrCopy(gAppErrStr, "-");
 		}
-		width = MAINTABLEAGEFIELD - categoryWidth - 1;
+		categoryWidth = FntCharWidth('W');
+		width = ageFieldWidth - categoryWidth - 1;
 		length = StrLen(gAppErrStr);
 
 		FntCharsInWidth(gAppErrStr, &width, &length, &ignored);
-
 		WinDrawChars(gAppErrStr, length,
                      bounds->topLeft.x + bounds->extent.x - categoryWidth
                      - width - 1, y);
@@ -1048,12 +1041,25 @@ static void MainFormDrawRecord(MemPtr tableP, Int16 row, Int16 column,
         //
         eventType = EventTypeString(r);
         
+		// category display
+		//
         width = categoryWidth;
         length = 1;
         FntCharsInWidth(eventType, &width, &length, &ignored);
 		WinDrawChars(eventType, 1, bounds->topLeft.x +
                      bounds->extent.x - width - (categoryWidth - width)/2, y);
 
+        if (gPrefsR->BirthPrefs.emphasize 
+            && drawRecord.date.year != INVALID_CONV_DATE
+            && (r.flag.bits.lunar || r.flag.bits.lunar_leap)) {
+            // draw gray line
+            WinDrawGrayLine(bounds->topLeft.x,
+                            bounds->topLeft.y + bounds->extent.y-1,
+                            bounds->topLeft.x + bounds->extent.x -
+                            ageFieldWidth,
+                            bounds->topLeft.y + bounds->extent.y-1);
+        }
+        
         MemHandleUnlock(recordH);
     }
 
@@ -1065,7 +1071,7 @@ static void MainFormDrawRecord(MemPtr tableP, Int16 row, Int16 column,
 
 // IN : index - mainDB index
 //
-static void SetBirthdateViewForm(Int16 index, DateType converted)
+static void SetBirthdateViewForm(Int16 index, DateType converted, Int8 age)
 {
     FontID currFont;
     MemHandle recordH = 0;
@@ -1075,7 +1081,6 @@ static void SetBirthdateViewForm(Int16 index, DateType converted)
     Char displayStr[255];
     UInt16 addrattr;
 	Int16 dateDiff;
-    Int16 age = 0;
 	DateType current;
             
     if ((frm = FrmGetFormPtr(BirthdateForm)) == 0) return;
@@ -1116,10 +1121,7 @@ static void SetBirthdateViewForm(Int16 index, DateType converted)
                             converted.year+ 1904, gPrefdfmts,
                             displayStr);
 
-            if (r.flag.bits.year            // year exist 
-                && (age = CalculateAge(converted, r.date, r.flag)) >= 0) {
-                // calculate age if year exists
-                //
+			if (age>=0) {
                 StrPrintF(gAppErrStr, "   [%d -> %d]", age-1, age);
                 StrCat(displayStr, gAppErrStr);
             }
@@ -1216,6 +1218,83 @@ static void SetBirthdateViewForm(Int16 index, DateType converted)
     
     /* Restore the font */
     FntSetFont (currFont);
+}
+
+static void MainFormHeaderDrawTable(MemPtr tableP, Int16 row, Int16 column, 
+                               RectanglePtr bounds)
+{
+    FontID currFont;
+    Int16 x, y;
+	RectangleType rect;
+	Int16 length, width;
+	Boolean ignored = true;
+
+    /*
+     * Set the standard font.  Save the current font.
+     * It is a Pilot convention to not destroy the current font
+     * but to save and restore it.
+     */
+    currFont = FntSetFont(stdFont);
+
+	rect.topLeft.x = x = bounds->topLeft.x;
+    rect.topLeft.y = y = bounds->topLeft.y;
+
+	rect.extent.x = bounds->extent.x;
+	rect.extent.y = bounds->extent.y;
+
+	// draw header rectangle
+	WinDrawRectangle(&rect, 0);
+
+	switch(column) {
+		case 0: SysCopyStringResource(gAppErrStr, MainHdrNameStr);
+				break;
+		case 1: SysCopyStringResource(gAppErrStr, MainHdrDateStr);
+				break;
+		case 2: SysCopyStringResource(gAppErrStr, MainHdrAgeStr);
+				break;
+		default:
+
+	}
+
+	width = bounds->extent.x;
+	length = StrLen(gAppErrStr);
+
+	FntCharsInWidth(gAppErrStr, &width, &length, &ignored);
+	WinDrawInvertedChars(gAppErrStr, length, 
+				bounds->topLeft.x + (bounds->extent.x - width) / 2, y);
+
+    /* Restore the font */
+    FntSetFont (currFont);
+}
+
+static void MainFormLoadHeader(FormPtr frm, Boolean redraw)
+{
+    TablePtr tableP;
+    Int8 column, numColumns;
+
+    tableP = GetObjectPointer(frm, MainFormHeader);
+    if (redraw) {
+        TblEraseTable(tableP);
+    }
+
+    numColumns = 3;
+    
+	for (column=0; column < numColumns; column++) {
+		TblSetItemStyle(tableP, 0, column, customTableItem);
+	}
+	TblSetRowSelectable(tableP, 0, true);
+
+	TblSetRowHeight(tableP, 0, 11);
+	TblSetRowUsable(tableP, 0, true);
+
+    for (column=0; column < numColumns; column++) {
+        TblSetColumnUsable(tableP, column, true);
+        TblSetCustomDrawProcedure(tableP, column, MainFormHeaderDrawTable);
+    }
+
+    if (redraw) {
+        TblDrawTable(tableP);
+    }
 }
 
 static void MainFormLoadTable(FormPtr frm, Boolean redraw)
@@ -1528,13 +1607,13 @@ static Char* gNotifyFormatString[5] =
 };
 
 //
-// Memory is alloced, after calling this routine, user must free the memory
+// Memory is allocated, after calling this routine, user must free the memory
 //
-static Char* NotifyDescString(DateType when, BirthDate birth, Boolean todo)
+static Char* NotifyDescString(DateType when, BirthDate birth, 
+							  Int8 age,Boolean todo)
 {
     Char* description, *pDesc;
     Char* pfmtString;
-    Int16 age = 0;
     
     // make the description
     description = pDesc = MemPtrNew(1024);
@@ -1611,7 +1690,6 @@ static Char* NotifyDescString(DateType when, BirthDate birth, Boolean todo)
                 if (birth.flag.bits.year) {
                     if (!birth.flag.bits.solar 
                         || gPrefsR->DBNotifyPrefs.duration ==1 || todo) {
-                        age = CalculateAge(when, birth.date, birth.flag);
                         if (age >= 0) {
                             StrPrintF(gAppErrStr, " (%d)", age);
                             StrCopy(pDesc, gAppErrStr);
@@ -1640,7 +1718,7 @@ static Char* NotifyDescString(DateType when, BirthDate birth, Boolean todo)
     return description;
 }
     
-static Int16 PerformNotifyDB(BirthDate birth, DateType when,
+static Int16 PerformNotifyDB(BirthDate birth, DateType when, Int8 age,
                              RepeatInfoType* repeatInfoPtr,
                              Int16 *created, Int16 *touched)
 {
@@ -1713,7 +1791,7 @@ static Int16 PerformNotifyDB(BirthDate birth, DateType when,
 
     // make the description
         
-    description = NotifyDescString(when, birth, false);	// todo = false
+    description = NotifyDescString(when, birth, age, false);	// todo = false
     datebook.description = description;
 
     if (existIndex < 0) {            // there is no same record
@@ -1753,7 +1831,7 @@ static Int16 PerformNotifyDB(BirthDate birth, DateType when,
     return 0;
 }
 
-static Int16 PerformNotifyTD(BirthDate birth, DateType when,
+static Int16 PerformNotifyTD(BirthDate birth, DateType when, Int8 age,
                              Int16 *created, Int16 *touched)
 {
     Char noteField[256];      // (datebk3: 10, AN:14), HD id: 5
@@ -1785,7 +1863,7 @@ static Int16 PerformNotifyTD(BirthDate birth, DateType when,
 
     // make the description
         
-    description = NotifyDescString(when, birth, true);		// todo = true
+    description = NotifyDescString(when, birth, age, true);		// todo = true
     todo.description = description;
 
     // category adjust
@@ -1842,7 +1920,7 @@ static void AdjustDesktopCompatible(DateType *when)
     }
 }
 
-static void NotifyDatebook(int mainDBIndex, DateType when,
+static void NotifyDatebook(int mainDBIndex, DateType when, Int8 age,
                            Int16 *created, Int16 *touched)
 {
     MemHandle recordH = 0;
@@ -1887,7 +1965,7 @@ static void NotifyDatebook(int mainDBIndex, DateType when,
 				// Because Palm Desktop doesn't support events before 1970.
 				//
                 AdjustDesktopCompatible(&when);
-                PerformNotifyDB(r, when, &repeatInfo, created, touched);
+                PerformNotifyDB(r, when, age, &repeatInfo, created, touched);
             }
             else if (gPrefsR->DBNotifyPrefs.duration == -1) {
                 // if duration > 1, 'when' is the birthdate;
@@ -1898,9 +1976,9 @@ static void NotifyDatebook(int mainDBIndex, DateType when,
                 AdjustDesktopCompatible(&when);
 
                 DateToInt(repeatInfo.repeatEndDate) = -1;
-                PerformNotifyDB(r, when, &repeatInfo, created, touched);
+                PerformNotifyDB(r, when, age, &repeatInfo, created, touched);
             }
-            else PerformNotifyDB(r, when, NULL, created, touched);
+            else PerformNotifyDB(r, when, age, NULL, created, touched);
         }
         else if (r.flag.bits.lunar || r.flag.bits.lunar_leap) {
             // if lunar date, make each entry
@@ -1921,7 +1999,7 @@ static void NotifyDatebook(int mainDBIndex, DateType when,
                 if (!FindNearLunar(&converted, current,
                                    r.flag.bits.lunar_leap)) break;
 
-                PerformNotifyDB(r, converted, NULL, created, touched);
+                PerformNotifyDB(r, converted, age, NULL, created, touched);
 
                 // process next target day
                 //
@@ -1934,7 +2012,7 @@ static void NotifyDatebook(int mainDBIndex, DateType when,
     }
 }
 
-static void NotifyToDo(int mainDBIndex, DateType when,
+static void NotifyToDo(int mainDBIndex, DateType when, Int8 age,
                        Int16 *created, Int16 *touched)
 {
     MemHandle recordH = 0;
@@ -1950,7 +2028,7 @@ static void NotifyToDo(int mainDBIndex, DateType when,
         UnpackBirthdate(&r, rp);
 
         if (r.flag.bits.solar) {
-            PerformNotifyTD(r, when, created, touched);
+            PerformNotifyTD(r, when, age, created, touched);
         }
         else if (r.flag.bits.lunar || r.flag.bits.lunar_leap) {
             // if lunar date, make each entry
@@ -1964,7 +2042,7 @@ static void NotifyToDo(int mainDBIndex, DateType when,
             converted = r.date;
             if (FindNearLunar(&converted, current,
                               r.flag.bits.lunar_leap)) {
-                PerformNotifyTD(r, converted, created, touched);
+                PerformNotifyTD(r, converted, age, created, touched);
             }
         }
         
@@ -1974,7 +2052,8 @@ static void NotifyToDo(int mainDBIndex, DateType when,
 
 static void NotifyAction(UInt32 whatAlert,
                          void (*func)(int mainDBIndex, DateType when,
-                                      Int16 *created, Int16 *touched))
+							 	      Int8 age,	Int16 *created, 
+									  Int16 *touched))
 {
     Int16 created = 0, touched = 0;
     LineItemPtr ptr;
@@ -2005,7 +2084,9 @@ static void NotifyAction(UInt32 whatAlert,
                 for (i=0; i < gMainTableTotals; i++) {
                     if (ptr[i].date.year != INVALID_CONV_DATE) {
                         (*func)(ptr[i].birthRecordNum,
-                                ptr[i].date, &created,
+                                ptr[i].date, 
+								ptr[i].age,
+								&created,
                                 &touched);
                     }
 
@@ -2033,6 +2114,7 @@ static void NotifyAction(UInt32 whatAlert,
                 != INVALID_CONV_DATE) {
                 (*func)(ptr[gMainTableHandleRow].birthRecordNum,
                         ptr[gMainTableHandleRow].date,
+                        ptr[gMainTableHandleRow].age,
                         &created, &touched);
             }
         }
@@ -2531,7 +2613,8 @@ static void RecordViewScroll(Int16 chr)
             gMainTableHandleRow++;
             ptr = MemHandleLock(gTableRowHandle);
             SetBirthdateViewForm(ptr[gMainTableHandleRow].birthRecordNum,
-                                 ptr[gMainTableHandleRow].date);
+                                 ptr[gMainTableHandleRow].date,
+                                 ptr[gMainTableHandleRow].age);
             MemPtrUnlock(ptr);
         
             SndPlaySystemSound(sndInfo);
@@ -2544,7 +2627,8 @@ static void RecordViewScroll(Int16 chr)
 
             ptr = MemHandleLock(gTableRowHandle);
             SetBirthdateViewForm(ptr[gMainTableHandleRow].birthRecordNum,
-                                 ptr[gMainTableHandleRow].date);
+                                 ptr[gMainTableHandleRow].date,
+                                 ptr[gMainTableHandleRow].age);
             MemPtrUnlock(ptr);
         
             SndPlaySystemSound(sndInfo);
@@ -2574,7 +2658,8 @@ static Boolean BirthdateFormHandleEvent(EventPtr e)
         //
         LineItemPtr ptr = MemHandleLock(gTableRowHandle);
         SetBirthdateViewForm(ptr[gMainTableHandleRow].birthRecordNum,
-                             ptr[gMainTableHandleRow].date);
+                             ptr[gMainTableHandleRow].date,
+                             ptr[gMainTableHandleRow].age);
         MemPtrUnlock(ptr);
         
         FrmDrawForm(frm);
@@ -3060,8 +3145,10 @@ static Boolean SpecialKeyDown(EventPtr e)
 
     if (e->data.keyDown.modifiers & autoRepeatKeyMask) return false;
     if (e->data.keyDown.modifiers & poweredOnKeyMask) return false;
+    if (e->data.keyDown.modifiers & commandKeyMask) return false;
 
 	chr = e->data.keyDown.chr;
+/*
     if (e->data.keyDown.modifiers & commandKeyMask) {
         if (keyboardAlphaChr == chr) {
             gPrefsR->BirthPrefs.sort = 0;     // sort by name
@@ -3082,7 +3169,9 @@ static Boolean SpecialKeyDown(EventPtr e)
             return true;
         }
     }
-    else if (chr >= '0' && chr <= '9') {
+    else 
+*/
+	if (chr >= '0' && chr <= '9') {
         // numeric character
         //
         if ( (push_chr == '1') && (chr >= '0' && chr <= '2')) {
@@ -3093,7 +3182,7 @@ static Boolean SpecialKeyDown(EventPtr e)
         }
         if (month == 0) {
             push_chr = chr;
-            return true;
+            return false;
         }
 
         TimSecondsToDateTime(TimGetSeconds(), &dt);
@@ -3108,7 +3197,7 @@ static Boolean SpecialKeyDown(EventPtr e)
         push_chr = chr;
         
         HighlightMatchRowDate(dt);
-        return true;
+        return false;
     }
     else if ((chr >= 'A' && chr <= 'Z') || (chr >= 'a' && chr <= 'z')) {
         // is alpha?
@@ -3117,7 +3206,7 @@ static Boolean SpecialKeyDown(EventPtr e)
         if (chr >= 'a') chr -=  'a' - 'A';      // make capital
         HighlightMatchRowName(chr);
 
-		return true;
+		return false;
     }
     // else if ( chr == 0xA4 || (chr >= 0xA1 && chr <= 0xFE) ) {
     // is korean letter?

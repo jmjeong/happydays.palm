@@ -210,5 +210,6 @@ UInt32 Hash(Char* name1, Char* name2)
     }
 
     // more large number will be added.
-    return h & 65213L;
+    // return h & 65213L;
+    return h % 524289L;
 }

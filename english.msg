@@ -56,7 +56,16 @@ BEGIN
     "You can omit the year field. Year input below 100 is assumed to be "\
     "year in the 20th century, If you are not sure of the year format, "\
     "just write it in form of YYYY(e.g. 1970).\n\n"\
-    "To set multiple entry, refer the manual.\n"
+    "To set multiple entry, refer the manual.\n\n" \
+	"Name1 & name2 displayed in HappyDays List is determined by "\
+	"'AddressBook/Preferences/List by'. If you change this preferences, "\
+	"you can see the different views.\n\n"\
+	"Date format is determined by System/Prefs/Formats/Date Format.\n\n"\
+	"If you write character or number in graffiti area, the matching row "\
+	"is highlighted. For example, if you write 'a' in graffiti, the "\
+	"first record beginning with 'a' or 'A' is highlighted. "\
+	"If you write '1' in graffiti, the nearest incoming record after January "\
+	"is highlighted.\n"
 
     "long_cleanupAlertString" = ""\
     "Notification entries are considered HappyDays if they have "\
@@ -238,6 +247,7 @@ BEGIN
     "To Do" = "To Do"  
     "Scan note field" = "Scan note field"  
     "%d day(s) left" = "%d day(s) left"  
+    "%d day(s) passed" = "%d day(s) passed"  
     "Notify Format:" = "Notify Format:"  
     "[Last, First] E(1) Year" = "[Last, First] E(1) Year"  
     "[First Last] E(1) Year" = "[First Last] E(1) Year"  

@@ -24,9 +24,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define MainFormTable               1002
 #define MainFormPopupTrigger        1003
 #define MainFormAddrCategories      1004
+#define MainFormHeader              1005
 #define MainFormPageUp              1010
 #define MainFormPageDown            1011
 
+#define MainHdrNameStr				1091
+#define MainHdrDateStr				1092
+#define MainHdrAgeStr				1093
 #define SelectDateString            1099
 
 #define MainFormMenu		        1110
@@ -177,5 +181,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define DateBookString				1933
 #define ToDoString					1934
 
-
 #define ExportAlert                 1990
+
+#define ID_BitmapIcon				2000
+
+#define ABOUT_LINE_SPACING			12
+#define ABOUT_LINE_SPACING2			18
+
+#define AGE_FIELD_WIDTH				24
+#define DATE_FIELD_WIDTH			46

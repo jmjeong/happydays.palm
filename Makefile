@@ -112,7 +112,7 @@ bin-th.res: $(TARGET)-th.rcp
 
 bin-chi.res: $(TARGET)-chi.rcp
 	rm -f *.bin
-	$(PILRC) -L CHINESE $(TARGET)-chi.rcp .
+	$(PILRC) -L CHINESE -F5 $(TARGET)-chi.rcp .
 
 bin-dutch.res: $(TARGET)-dutch.rcp
 	rm -f *.bin

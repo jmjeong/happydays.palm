@@ -76,7 +76,16 @@ BEGIN
     "You can omit the year field. Year input below 100 is assumed to be "\
     "year in the 20th century, If you are not sure of the year format, "\
     "just write it in form of YYYY(e.g. 1970).\n\n"\
-    "To set multiple entry, refer the manual.\n"
+    "To set multiple entry, refer the manual.\n\n" \
+	"Name1 & name2 displayed in HappyDays List is determined by "\
+	"'AddressBook/Preferences/List by'. If you change this preferences, "\
+	"you can see the different views.\n\n"\
+	"Date format is determined by System/Prefs/Formats/Date Format.\n\n"\
+	"If you write character or number in graffiti area, the matching row "\
+	"is highlighted. For example, if you write 'a' in graffiti, the "\
+	"first record beginning with 'a' or 'A' is highlighted. "\
+	"If you write '1' in graffiti, the nearest incoming record after January "\
+	"is highlighted.\n"
 
     "long_cleanupAlertString" = ""\
     "Notification entries are considered HappyDays if they have "\
@@ -258,6 +267,7 @@ BEGIN
     "To Do" = "To Do"  
     "Scan note field" = "Scan note field"  
     "%d day(s) left" = "%d day(s) left"  
+    "%d day(s) passed" = "%d day(s) passed"  
     "Notify Format:" = "Notify Format:"  
     "[Last, First] E(1) Year" = "[Last, First] E(1) Year"  
     "[First Last] E(1) Year" = "[First Last] E(1) Year"  
@@ -310,6 +320,10 @@ STRING ID ToDoString			"To Do"
 STRING ID BirthLeftString		"%d day(s) left"
 STRING ID BirthPassedString     "%d day(s) passed"
 
+STRING ID MainHdrNameStr		"Name"
+STRING ID MainHdrDateStr		"Date"
+STRING ID MainHdrAgeStr			"Age"
+
 FORM StartForm AT (0 0 160 160)
 NOFRAME
 SAVEBEHIND
@@ -324,8 +338,13 @@ SAVEBEHIND
 MENUID MainFormMenu
 BEGIN
     TITLE "HappyDays"
-    TABLE ID MainFormTable AT (0 16 160 121) ROWS 11 COLUMNS 1
+
+    TABLE ID MainFormHeader AT (0 16 160 11) ROWS 1 COLUMNS 3 
+				COLUMNWIDTHS 160-DATE_FIELD_WIDTH-AGE_FIELD_WIDTH 
+				DATE_FIELD_WIDTH AGE_FIELD_WIDTH 
+    TABLE ID MainFormTable AT (0 28 160 110) ROWS 10 COLUMNS 1
                 COLUMNWIDTHS 160
+
     LABEL "Look Up:" AUTOID AT (1 BOTTOM@160-1) FONT 0
     SELECTORTRIGGER "" ID MainFormStart at (PrevRight+6 PrevTop
             AUTO AUTO) LEFTANCHOR FONT 0
@@ -692,18 +711,19 @@ USABLE
 MODAL
 HELPID AboutHelpString
 BEGIN
-    TITLE "HappyDays"
-    LABEL "HappyDays 1.37" AUTOID AT (Center@80 20) FONT 1
-    LABEL "(c) 1999-2000, JaeMok Jeong"
-        AUTOID AT (Center@80 PrevBottom+5) FONT 0
-    LABEL "<jmjeong@oopsla.snu.ac.kr>" AUTOID AT (Center@80 PrevBottom)
-        Font 0
-    LABEL "http://oopsla.snu.ac.kr/~jmjeong/"
-        AUTOID AT (Center@80 PrevBottom) FONT 0
-    LABEL "palm/happydays" AUTOID AT (PrevLeft+10 PrevBottom) FONT 0
+    TITLE "About HappyDays"
 
-    LABEL "Licensed under the GNU GPL" AUTOID AT (Center@80
-        PrevBottom+4) FONT 0
+	FORMBITMAP AT (6 18) BITMAP ID_BitmapIcon USABLE 
+    LABEL "HappyDays 1.4b" AUTOID AT (PrevRight+38 PrevTop) FONT 1
+    LABEL "GPL free software"
+        AUTOID AT (PrevLeft PrevTop+ABOUT_LINE_SPACING) FONT 0
+    LABEL "(c) 1999-2000 JaeMok Jeong"
+        AUTOID AT (Center PrevTop+ABOUT_LINE_SPACING2) FONT 0
+	LABEL "E-Mail & Web Page" AUTOID AT (CENTER PrevTop+ABOUT_LINE_SPACING) FONT 1
+    LABEL "jmjeong@oopsla.snu.ac.kr" AUTOID AT 	
+			(Center PrevTop+ABOUT_LINE_SPACING) Font 0
+    LABEL "jmjeong.com/palm/happydays"
+        AUTOID AT (Center PrevTop+ABOUT_LINE_SPACING) FONT 0
 
     LABEL "Translator" AUTOID AT (Center@80 PrevBottom+3) USABLE FONT 0
     LABEL "Translator's email" AUTOID AT (Center@80 PrevBottom) USABLE FONT 0
@@ -721,8 +741,20 @@ BEGIN
 	FIELD ID ProgressFormField AT (PrevRight+3 PrevTop 50 AUTO) NONEDITABLE
 END
 
-APPLICATIONICONNAME 1000 "HappyDays"
-ICON "HD_large.bmp"
-SMALLICON "HD_small.bmp"
+/////////////
+// Bitmaps //
+/////////////
+BitMapFamily ID ID_BitmapIcon
+	"HD_large.bmp" "HD_large.bmp" "" "HD_large.bmp"
+	COMPRESS
+	TRANSPARENT 204 204 0
 
-VERSION ID 1 "1.37"
+ICONFAMILY 
+	"HD_large.bmp" "HD_large.bmp" "" "HD_large.bmp"
+	TRANSPARENT 204 204 0
+SMALLICONFAMILY
+	"HD_small.bmp" "HD_small.bmp" "" "HD_small.bmp"
+	TRANSPARENT 204 204 0
+
+APPLICATIONICONNAME 1000 "HappyDays"
+VERSION ID 1 "1.4"

@@ -32,6 +32,8 @@ BEGIN
       "* Vorhandene\n"\
       "Wählen Sie \"lassen\" wenn existierende HappyDays Einträge unberührt bleiben sollen. "\
       "Wählen Sie \"ändern\" wenn diese Einträge geändert werden sollen.\n\n"\
+      "* Privat\n"\
+      "Erzeugt private Termine für die gewählten Ereignisse.\n\n"\
       "* Alarm\n"\
       "Erzeugt zusammen mit dem Eintrag einen Alarm. Geben Sie die "\
       "Anzahl Tage an, die Sie vor dem Ereignis informiert werden wollen.\n\n"\
@@ -128,8 +130,7 @@ BEGIN
     "Collecting Information..." = "Daten werden eingelesen..."
 
     "HappyDays List" = "HappyDays Liste"
-    "Look up" = "Gehe zu"
-    "Today" = "Heute"
+    "Look Up:" = "Gehe zu:"
 
 	"HappyDays View" = "HappyDays Ereignis"
     "Done"  = "Fertig"
@@ -252,6 +253,7 @@ BEGIN
 	"To Do" = "Aufgaben"
 	"Scan note field" = "Notiz auswerten"
     "%d day(s) left" = "Noch %d Tag(e)"
+	"%d day(s) passed" = "Vor %d Tag(en)"
 	"Notify Format:" = "Eintrag-Format:"
     "[Last, First] E(1) Year" = "[Nachn., Vorn.] E(1) Jahr"
 	"[First Last] E(1) Year" = "[Vorn. Nachn.] E(1) Jahr"
@@ -260,7 +262,8 @@ BEGIN
 	"First Last Year" = "Vorn. Nachn. Jahr"
 	
 	"Processing" = "Arbeite"
-	"Processed : " = "Bearbeitet : "	
+	"Processed : " = "Bearbeitet : "
+
 END
 STRING ID DateBookNotifyHelpString "long_notifySettingString"
 STRING ID DateBookNotifyMoreHelpString "long_notifySettingMoreString"
@@ -301,6 +304,7 @@ STRING ID DateBookNotifyDaysString "Days"
 STRING ID DateBookString		"Date Book"
 STRING ID ToDoString			"To Do"
 STRING ID BirthLeftString		"%d day(s) left"
+STRING ID BirthPassedString     "%d day(s) passed"
 
 FORM StartForm AT (0 0 160 160)
 NOFRAME
@@ -318,10 +322,10 @@ BEGIN
     TITLE "HappyDays"
     TABLE ID MainFormTable AT (0 16 160 121) ROWS 11 COLUMNS 1
                 COLUMNWIDTHS 160
-    BUTTON "Look up" ID MainFormLookup AT (1 BOTTOM@160-1 AUTO AUTO)
-    FIELD  ID MainFormField AT (PrevRight+3 PrevTop 30 AUTO) UNDERLINED
-            NONEDITABLE MAXCHARS 5
-    BUTTON "Today" ID MainFormToday AT (PrevRight+2 PrevTop AUTO AUTO)
+    LABEL "Look Up:" AUTOID AT (1 BOTTOM@160-1) FONT 0
+    SELECTORTRIGGER "" ID MainFormStart at (PrevRight+6 PrevTop
+            AUTO AUTO) LEFTANCHOR FONT 0
+
     POPUPTRIGGER "" ID MainFormPopupTrigger
             AT ( RIGHT@159 1 AUTO AUTO ) RIGHTANCHOR 
     LIST "" ID MainFormAddrCategories AT (PREVLEFT PREVTOP 70 AUTO)
@@ -685,7 +689,7 @@ MODAL
 HELPID AboutHelpString
 BEGIN
     TITLE "HappyDays"
-    LABEL "HappyDays 1.36" AUTOID AT (Center@80 20) FONT 1
+    LABEL "HappyDays 1.37" AUTOID AT (Center@80 20) FONT 1
     LABEL "(c) 1999-2000, JaeMok Jeong"
         AUTOID AT (Center@80 PrevBottom+5) FONT 0
     LABEL "<jmjeong@oopsla.snu.ac.kr>" AUTOID AT (Center@80 PrevBottom)
@@ -717,4 +721,4 @@ APPLICATIONICONNAME 1000 "HappyDays"
 ICON "HD_large.bmp"
 SMALLICON "HD_small.bmp"
 
-VERSION ID 1 "1.36"
+VERSION ID 1 "1.37"

@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "happydays.h"
 #include "address.h"
 #include "happydaysRsc.h"
+#include "calendar.h"
 
 void PackBirthdate(BirthDate *birthdate, void* recordP)
 {
@@ -101,7 +102,39 @@ static Int16 BirthPackedSize(BirthDate* birthdate)
 
 Int16 CompareBirthdateFunc(LineItemPtr p1, LineItemPtr p2, Int32 extra)
 {   
-    return DateCompare(p1->date, p2->date);
+    return DateCompare(p1->date, p2->date)*extra;
+}
+Int16 CompareAgeFunc(LineItemPtr p1, LineItemPtr p2, Int32 extra)
+{   
+	if (p1->age > p2->age) return 1*extra;
+	else if (p1->age < p2->age) return -1*extra;
+	else return 0;
+}
+
+static Int16 CalculateAge(DateType converted, DateType birthdate,
+                          BirthdateFlag flag)
+{
+    DateTimeType rtVal;
+    Int16 age;
+    int dummy = 0;
+    int ret;
+    
+    if (flag.bits.lunar_leap || flag.bits.lunar) {
+        // lunar birthdate
+        //          change to lunar date
+        //
+        // converted solar is again converted into lunar day for calculation
+        ret = sol2lun(converted.year + 1904, converted.month, converted.day,
+                      &rtVal, &dummy);
+        if (ret) return -1;     // error
+
+        converted.year = rtVal.year - 1904;
+        converted.month = rtVal.month;
+        converted.day = rtVal.day;
+    }
+    
+    return converted.year - birthdate.year;
+    return age;
 }
 
 UInt16 AddrGetBirthdate(DmOpenRef dbP, UInt16 AddrCategory, DateType start)
@@ -112,7 +145,9 @@ UInt16 AddrGetBirthdate(DmOpenRef dbP, UInt16 AddrCategory, DateType start)
     LineItemPtr ptr;
     PackedBirthDate* rp;
     BirthDate r;
+    DateType converted;          
     UInt16 currindex = 0;
+	Int16 age;
 
     // if exist, free the memory
     //
@@ -144,13 +179,15 @@ UInt16 AddrGetBirthdate(DmOpenRef dbP, UInt16 AddrCategory, DateType start)
                     // original r(in MainDB) not changed
                     //     local change for LineItemType
                     //
+					converted = r.date;
+
                     if (r.flag.bits.lunar || r.flag.bits.lunar_leap) {
 
-                        if (!FindNearLunar(&r.date, start,
+                        if (!FindNearLunar(&converted, start,
                                            r.flag.bits.lunar_leap)) {
                             // ignore the records
                             //
-                            r.date.year = INVALID_CONV_DATE;
+                            converted.year = INVALID_CONV_DATE;
                             // max year(for sorting)
                             //   indicate for invalid date
                             
@@ -163,35 +200,47 @@ UInt16 AddrGetBirthdate(DmOpenRef dbP, UInt16 AddrCategory, DateType start)
 						dt = start;
 
                         DateToInt(dt) = 
-							(DateToInt(dt) > DateToInt(r.date))
-                            ? DateToInt(dt) : DateToInt(r.date);
+							(DateToInt(dt) > DateToInt(converted))
+                            ? DateToInt(dt) : DateToInt(converted);
 
-                        if (r.date.month < dt.month ||
-                            ( r.date.month == dt.month
-                              && r.date.day < dt.day)) {
+                        if (converted.month < dt.month ||
+                            ( converted.month == dt.month
+                              && converted.day < dt.day)) {
                             // birthdate is in last year?
-                            while (DaysInMonth(r.date.month, ++dt.year) < r.date.day
+                            while (DaysInMonth(converted.month, ++dt.year) < converted.day
                                    && maxtry-- > 0) 
                                 ;
                         }
                         else {
-                            while (DaysInMonth(r.date.month, dt.year) < r.date.day
+                            while (DaysInMonth(converted.month, dt.year) < converted.day
                                    && maxtry-- >0) {
                                 dt.year++;
                             }
                             
                         }
 
-                        if (maxtry >0) r.date.year = dt.year;
+                        if (maxtry >0) converted.year = dt.year;
                         else {
-                            r.date.year = INVALID_CONV_DATE;
+                            converted.year = INVALID_CONV_DATE;
                             // max year
                             //   indicate for invalid date
                         }
                     }
+        
+					if (converted.year != INVALID_CONV_DATE 
+						&& r.flag.bits.year 
+						&& (age = CalculateAge(converted, r.date, r.flag)) >= 0) {
+						// calculate age if year exists
+						//
+						ptr[recordNum].age = age;
+					}
+					else {
+						ptr[recordNum].age = -1;
+					}
+
                     // save the converted data
                     //
-                    ptr[recordNum].date = r.date;
+                    ptr[recordNum].date = converted;
 
                     MemHandleUnlock(recordH);
                     currindex++;
@@ -200,9 +249,17 @@ UInt16 AddrGetBirthdate(DmOpenRef dbP, UInt16 AddrCategory, DateType start)
             
             // sort the order if sort order is converted date
             //
-            if (gPrefsR->BirthPrefs.sort == 1) {      // date sort
+            if (gPrefsR->BirthPrefs.sort == 1) {      	// date sort
                 SysInsertionSort(ptr, totalItems, sizeof(LineItemType),
-                                 (_comparF *)CompareBirthdateFunc, 0L);
+                                 (_comparF *)CompareBirthdateFunc, 1L);
+            }
+			else if (gPrefsR->BirthPrefs.sort == 2) {  	// age sort
+                SysInsertionSort(ptr, totalItems, sizeof(LineItemType),
+                                 (_comparF *)CompareAgeFunc, 1L);
+            }
+			else if (gPrefsR->BirthPrefs.sort == 3) {	// age sort(re)
+                SysInsertionSort(ptr, totalItems, sizeof(LineItemType),
+                                 (_comparF *)CompareAgeFunc, -1L);
             }
             
             MemPtrUnlock(ptr);

@@ -12,6 +12,8 @@ BEGIN
       "* Vorhandene\n"\
       "Wählen Sie \"lassen\" wenn existierende HappyDays Einträge unberührt bleiben sollen. "\
       "Wählen Sie \"ändern\" wenn diese Einträge geändert werden sollen.\n\n"\
+      "* Privat\n"\
+      "Erzeugt private Termine für die gewählten Ereignisse.\n\n"\
       "* Alarm\n"\
       "Erzeugt zusammen mit dem Eintrag einen Alarm. Geben Sie die "\
       "Anzahl Tage an, die Sie vor dem Ereignis informiert werden wollen.\n\n"\
@@ -108,8 +110,7 @@ BEGIN
     "Collecting Information..." = "Daten werden eingelesen..."
 
     "HappyDays List" = "HappyDays Liste"
-    "Look up" = "Gehe zu"
-    "Today" = "Heute"
+    "Look Up:" = "Gehe zu:"
 
 	"HappyDays View" = "HappyDays Ereignis"
     "Done"  = "Fertig"
@@ -232,6 +233,7 @@ BEGIN
 	"To Do" = "Aufgaben"
 	"Scan note field" = "Notiz auswerten"
     "%d day(s) left" = "Noch %d Tag(e)"
+	"%d day(s) passed" = "Vor %d Tag(en)"
 	"Notify Format:" = "Eintrag-Format:"
     "[Last, First] E(1) Year" = "[Nachn., Vorn.] E(1) Jahr"
 	"[First Last] E(1) Year" = "[Vorn. Nachn.] E(1) Jahr"
@@ -240,5 +242,6 @@ BEGIN
 	"First Last Year" = "Vorn. Nachn. Jahr"
 	
 	"Processing" = "Arbeite"
-	"Processed : " = "Bearbeitet : "	
+	"Processed : " = "Bearbeitet : "
+
 END
