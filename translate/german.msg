@@ -1,25 +1,5 @@
 TRANSLATION "GERMAN"
 BEGIN
-    "long_notifySettingString" =  ""\
-      "* Einträge\n"\
-      "Wählen Sie \"alle\" wenn im Kalender Einträge für "\
-      "alle Ereignisse dieser Kategorie erzeugt werden sollen. "\
-      "Wählen Sie \"Auswahl\" wenn nur die ausgewählten Ereignisse berücksichtigt werden "\
-      "sollen.\n\n"\
-      "* Vorhandene\n"\
-      "Wählen Sie \"lassen\" wenn existierende HappyDays Einträge unberührt bleiben sollen. "\
-      "Wählen Sie \"ändern\" wenn diese Einträge geändert werden sollen.\n\n"\
-      "* Privat\n"\
-      "Erzeugt private Termine für die gewählten Ereignisse.\n\n"\
-      "* Alarm\n"\
-      "Erzeugt zusammen mit dem Eintrag einen Alarm. Geben Sie die "\
-      "Anzahl Tage an, die Sie vor dem Ereignis informiert werden wollen.\n\n"\
-      "* Uhrzeit\n"\
-      "Uhrzeit des Alarms\n\n"\
-      "* Wiederholung\n"\
-      "Gibt an, wie oft das Ereignis wiederholt werden soll. "\
-      "Dabei bedeutet (-1) für den Gregorianischen Kalender unbegrenzt, "\
-      "für den Lunarkalender 5 Jahre.\n\n"
     "long_notifySettingMoreString" =  ""\
       "Die AN Icon Nummer schlagen Sie bitte im ActionNames Handbuch nach. "\
       "DateBk3 Icons werden aus dem entsprechenden Merkzettel gelesen. "\
@@ -33,46 +13,14 @@ BEGIN
     "long_aboutString" =  ""\
       "'HappyDays' hilft Ihnen, Geburtstage und ähnliche Ereignisse Ihrer Freunde "\
       "und Verwandten im Überblick zu behalten.\n\n"\
-      "Benennen sie eines der Benutzerfelder im Adressbuch 'Geburtstag'."\
-      "\n\nBeispiel:\n"\
-      " Nachname: Jeong\n"\
-      " Vorname: JaeMok\n"\
-      " ...\n"\
-      " Geburtstag: -)4.12.1970\n\n"\
-      "Formate:\n"\
-      " [-)|#)]Datum\n"\
-      " -) für Lunarkalender-Datum\n"\
-      " #) für Schaltmonat im Lunarkalender\n\n"\
-      "Das Datumsformat wird aus den Systemeinstellungen gelesen, wobei Sie das "\
-      "Jahr auch weglassen können. Jahreszahlen unter 100 werden dem 20. Jahrhundert zugeordnet. "\
-      "Wenn Sie unsicher sind bezüglich des Jahresformates, "\
-      "schreiben Sie einfach das Jahrhundert mit dazu (z.B. 1970).\n\n"\
-      "Zum Thema Mehrfach-Einträge lesen Sie bitte die Anleitung.\n\n"\
-      "Die beiden Namensbestandteile in der HappyDays Liste werden durch die "\
-      "'Feldreihenfolge' in den Adressbuch-Einstellungen bestimmt. Wenn Sie diese "\
-      "ändern, ändert sich auch die Darstellung in HappyDays.\n\n"\
-      "Wenn Sie im Graffiti Feld eine Zahl oder einen Buchstaben schreiben, wird die "\
-      "passende Zeile markiert. Zum Beispiel wird bei 'a' der erste Eintrag markiert, der mit "\
-      "'a' oder 'A' beginnt. Wenn Sie eine '3' schreiben, wird der erste Eintrag im März markiert.\n"
+      "Lesen Sie index.html und manual.html um detaillierte Informationen "\
+      "zum Gebrauch von HappyDays zu erhalten.\n\n"\
+      "HappyDays wird nach den Bedingungen der GNU General "\
+      "Public License version 2.0 vertrieben.\n"
     "long_cleanupAlertString" =  ""\
       "Einträge werden als HappyDays Ereignis angenommen, wenn sie in der Notiz "\
-      "die HappyDays ID enthalten. Wenn Sie diese auch in Ihren eigenen Einträgen "\
+      "die HappyDays ID im Notizfeld enthalten. Wenn Sie diese auch in Ihren eigenen Einträgen "\
       "verwenden, werden diese ebenfalls entfernt.\n"
-    "long_prefFormString" =  ""\
-      "* Statt System-Datumsformat\n"\
-      "Wenn Sie für Geburtstage ein anderes Datumsformat in Ihrem Adressbuch verwenden "\
-      "als das Systemformat, können Sie dieses entsprechend einstellen\n\n"\
-      "* Notiz auswerten\n"\
-      "Geburtstage und Ereignisse werden auch aus dem Notizfeld gelesen\n\n"\
-      "* Lunardatum zeigen\n"\
-      "Eine gestrichelte Linie wird unter Lunarkalender-Daten gezeichnet\n\n"\
-      "* Eintrag-Format\n"\
-      "Hier können Sie das Aussehen der Kalender- bzw. Aufgaben-Einträge wählen\n\n"\
-      "* Benutzerfeld\n"\
-      "Name des Benutzerfelds im Adressbuch, aus dem Geburtstage übernommen werden\n\n"\
-      "* HappyDays ID\n"\
-      "Wird beim Anlegen und Entfernen von HappyDays Einträgen benutzt, um diese "\
-      "zu identifizieren"
     "long_removeConfirmString" =  ""\
       "Wollen Sie wirklich alle HappyDays Einträge entfernen?"
     "Invalid input date" =  "Ungültige Datumseingabe"
@@ -104,21 +52,27 @@ BEGIN
     "(not exist in this year)" =  "(in diesem Jahr nicht vorhanden)"
     "Please run Date Book once first." =  "Bitte vorher den Kalender einmal aufrufen."
     "Days" =  "Tage"
+    "%dY %dM %dD (%ld)"= "%dJ %dM %dT (%ld)"
 
     "Date Book" =  "Kalender"
     "To Do" =  "Aufgaben"
-    "%d day(s) left" =  "Noch %d Tag(e)"
-    "%d day(s) passed" =  "Vor %d Tag(en)"
+    "%ld days left"= "Noch %ld Tag(e)"
+    "%ld days passed"= "Vor %ld Tag(en)"
 
-    "Name" =  "Name"
-    "Date" =  "Datum"
-    "Age" =  "Alter"
+    "Type:"= "Typ:"
+    "Next Date:"= "Nächstes:"
+    "Origin:"= "Erstes:"
+    "Age:"= "Alter:"
+    "UpTo Date:"= "Zeit:"
 
     "Collecting Information..." =  "Daten werden eingelesen..."
 
     "Look Up:" =  "Gehe zu:"
+    "N"= "N"
+    "D"= "D"
+    "A"= "A"
 
-    "HappyDays View" =  "HappyDays Eintrag"
+    "HappyDays View" =  "HappyDays Tag"
 
     "Done" =  "Fertig"
     "DB" =  "Kal"
@@ -133,9 +87,12 @@ BEGIN
     "Export to Memo Pad" =  "Merkzettel exportieren"
     "Solar to Lunar" =  "Gregor. -> Lunar"
     "Lunar to Solar" =  "Lunar -> Gregor."
+    "Rescan Address Book"= "Adressbuch neu lesen"
 
     "Options" =  "Optionen"
+    "Font..."= "Font..."
     "Preferences" =  "Einstellungen"
+    "Display Preferences"= "Anzeige Einstellung"
     "About HappyDays" =  "Über HappyDays"
 
     "Edit" =  "Bearb."
@@ -147,7 +104,13 @@ BEGIN
     "Keyboard" =  "Tastatur"
     "Graffiti" =  "Graffiti-Hilfe"
 
-    "HappyDays Preferences" =  "HappyDays Einstellungen"
+    "Emphasize Lunar Date" =  "Lunardatum hervorheben"
+    "Display solar/lunar info in View"= ""
+    "OK" =  "OK"
+    "Cancel" =  "Abbruch"
+
+    "Custom field:" =  "Benutzerfeld:"
+
     "Instead of system date format" =  "Statt System-Datumsformat"
     "Use" =  "Verwenden"
     "M/D/Y" =  "M/T/J"
@@ -159,7 +122,11 @@ BEGIN
     "Y-M-D" =  "J-M-T"
 
     "Scan note field" =  "Notiz auswerten"
-    "Emphasize Lunar Date" =  "Lunardatum zeigen"
+
+    "Address Autoscan"= "Adressbuch Autoscan"
+    "Always"= "immer"
+    "Ask"= "fragen"
+    "Never"= "nie"
 
     "Notify Format:" =  "Eintrag-Format:"
     "[Last, First] E(1) Year" =  "[Nachn., Vorn.] E(1) Jahr"
@@ -168,14 +135,10 @@ BEGIN
     "Event - First Last Year" =  "Ereign. - Vorn. Nachn. Jahr"
     "First Last Year" =  "Vorn. Nachn. Jahr"
 
-    "Custom field:" =  "Benutzerfeld:"
+    "Address Book:" =  "Adressbuch"
+    "Built-in" =  "intern"
+
     "HappyDays ID:" =  "HappyDays ID:"
-
-    "Address Book:"= "Adressbuch"
-    "Built-in"= "intern"
-
-    "OK" =  "OK"
-    "Cancel" =  "Abbruch"
 
     "Solar to Lunar Convert" =  "Gregor. -> Lunar"
     "Enter Solar date:" =  "Gregor. Datum eingeben:"
@@ -226,6 +189,11 @@ BEGIN
 
     "HappyDays says" =  "HappyDays meldet"
 
+    "Address Change"= "Adressänderung"
+    "AddressDB is changed. \nDo you want to rescan it?"= "Die Adressdatenbank wurde geändert.\nSoll sie neu gelesen werden?"
+    "Yes"= "Ja"
+    "No"= "Nein"
+
     "HappyDays Export" =  "HappyDays Export"
     "Would you like to export HappyDays List to Memo Pad?" =  ""\
       "Möchten Sie die HappyDays Liste als Merkzettel exportieren?"
@@ -236,11 +204,11 @@ BEGIN
     "HappyDays Cleanup" =  "Einträge entfernen"
 
     "Notify warning" =  "Warnung"
-    "^1: Are you sure you want to create notify entries for ^2 HappyDays records?" =  ""\
+    "long_notifywarningString"= ""\
       "^1: Möchten Sie wirklich Einträge für ^2 HappyDays Ereignis(se) erzeugen?"
 
     "Invalid event format" =  "Ungültiges Ereignis-Format"
-    "The address record for ^1\n contains an invalid event. How would you like to handle it?" =  ""\
+    "long_invalidformatString"= ""\
       "Der Adresseintrag für ^1\nenthält ein ungültiges Ereignis. Was soll geschehen?"
     "Ignore" =  "Ignorieren"
     "Ignore all" =  "Alle Ignor."
@@ -254,4 +222,5 @@ BEGIN
 
     "Processing" =  "Arbeite"
     "Processed : " =  "Bearbeitet : "
+
 END

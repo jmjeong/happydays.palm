@@ -27,30 +27,37 @@ ZIP = zip
 LANG = ENGLISH
 
 obj/%.o : %.c
-	@echo "Compiling $<..." &&\
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $<
+#	@echo "Compiling $<..." &&\
 
 all: en
 	ls -al prc/
 
 all-lang: en ko de th dutch fr sp cz catalan br chi
 
-en: obj/$(TARGET).prc
+GERMAN:
+	$(CC) -c -DGERMAN $(CFLAGS) $(CPPFLAGS) -o obj/happydays.o happydays.c
+
+ENGLISH:
+	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o obj/happydays.o happydays.c
+
+en: ENGLISH obj/$(TARGET).prc
 	mv obj/$(TARGET).prc prc
 
-ko: obj/$(TARGET)-k8.prc obj/$(TARGET)-k11.prc
+ko: ENGLISH obj/$(TARGET)-k8.prc obj/$(TARGET)-k11.prc
 	mv obj/$(TARGET)-k8.prc obj/$(TARGET)-k11.prc prc
 	zip $(TARGET)-$(VERSION)-ko.zip prc/$(TARGET)-k8.prc prc/$(TARGET)-k11.prc
 
-sp: obj/$(TARGET)-sp.prc
+sp: ENGLISH obj/$(TARGET)-sp.prc
 	zip $(TARGET)-$(VERSION)-sp.zip obj/$(TARGET)-sp.prc
 
-chi: obj/$(TARGET)-chi-big5.prc obj/$(TARGET)-chi-gb.prc
+chi: ENGLISH obj/$(TARGET)-chi-big5.prc obj/$(TARGET)-chi-gb.prc
 	zip $(TARGET)-$(VERSION)-ch.zip obj/$(TARGET)-chi-big5.prc \
 			obj/$(TARGET)-chi-gb.prc
 
-de: $(TARGET)-de.prc 
-	zip $(TARGET)-$(VERSION)-de.zip $(TARGET)-de.prc
+de: GERMAN obj/$(TARGET)-de.prc 
+	zip $(TARGET)-$(VERSION)-de.zip obj/$(TARGET)-de.prc
+
 
 th: $(TARGET)-th.prc
 	zip $(TARGET)-$(VERSION)-th.zip $(TARGET)-th.prc
@@ -111,8 +118,10 @@ obj/$(TARGET)-chi-gb.prc: obj/$(TARGET) obj/bin-chi-gb.res
 	$(BUILDPRC) -o obj/$(TARGET)-chi-gb.prc happydays.def \
 		obj/*.bin obj/$(TARGET)
 
-$(TARGET)-de.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGET).grc pref0000.$(TARGET).grc rloc0000.$(TARGET).grc bin-de.res
-	$(BUILDPRC) $(TARGET)-de.prc $(APPNAME) $(APPID) code0001.$(TARGET).grc code0000.$(TARGET).grc data0000.$(TARGET).grc *.bin pref0000.$(TARGET).grc rloc0000.$(TARGET).grc
+obj/$(TARGET)-de.prc: obj/$(TARGET) obj/bin-de.res
+	@echo "Building program file ./obj/happydays-de.prc..." && \
+	$(BUILDPRC) -o obj/$(TARGET)-de.prc happydays.def \
+		obj/*.bin obj/$(TARGET)
 
 $(TARGET)-th.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGET).grc pref0000.$(TARGET).grc rloc0000.$(TARGET).grc bin-th.res
 	$(BUILDPRC) $(TARGET)-th.prc $(APPNAME) $(APPID) code0001.$(TARGET).grc code0000.$(TARGET).grc data0000.$(TARGET).grc *.bin pref0000.$(TARGET).grc rloc0000.$(TARGET).grc
@@ -163,9 +172,10 @@ obj/bin-chi-gb.res: obj/$(TARGET)-chi-gb.rcp
 	(cd obj && rm -f *.bin ) && \
 	$(PILRC) -q -L CHINESE -F5 obj/$(TARGET)-chi-gb.rcp obj
 
-bin-de.res: $(TARGET)-de.rcp
-	rm -f *.bin
-	$(PILRC) -L GERMAN $(TARGET)-de.rcp .
+obj/bin-de.res: obj/$(TARGET)-de.rcp
+	@echo "Compiling resource happydays-de.rcp..." &&\
+	(cd obj && rm -f *.bin ) && \
+	$(PILRC) -q -L GERMAN obj/$(TARGET)-de.rcp obj
 
 bin-th.res: $(TARGET)-th.rcp
 	rm -f *.bin
@@ -207,12 +217,19 @@ obj/$(TARGET)-sp.rcp: $(TARGET).rcp translate/spanish.msg translate/hdr.msg
 			> obj/$(TARGET)-sp.rcp
 
 obj/$(TARGET)-chi-big5.rcp: $(TARGET).rcp translate/chinese.msg translate/hdr.msg
+	@echo "Generating happydays-chi-big5.rcp file..." && \
 	cat translate/hdr.msg translate/chinese.msg $(TARGET).rcp \
 			> obj/$(TARGET)-chi-big5.rcp
 
 obj/$(TARGET)-chi-gb.rcp: $(TARGET).rcp translate/schinese.msg translate/hdr.msg
+	@echo "Generating happydays-chi-gb.rcp file..." && \
 	cat translate/hdr.msg translate/schinese.msg $(TARGET).rcp \
 			> obj/$(TARGET)-chi-gb.rcp
+
+obj/$(TARGET)-de.rcp: $(TARGET).rcp translate/german.msg translate/hdr.msg
+	@echo "Generating happydays-de.rcp file..." && \
+	cat translate/hdr.msg translate/german.msg $(TARGET).rcp \
+			> obj/$(TARGET)-de.rcp
 
 $(TARGET)-de.rcp: $(TARGET).rcp german.msg hdr.msg
 	cat hdr.msg german.msg $(TARGET).rcp > $(TARGET)-de.rcp

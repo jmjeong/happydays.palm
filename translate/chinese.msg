@@ -1,9 +1,9 @@
 TRANSLATION "CHINESE"
 BEGIN
-	"long_notifySettingMoreString" = ""\
-      "關於 AN 圖示編號，請參考 Action Names 說明書"\
-      "DateBk3 圖示將由 Memo Pad 處取得。"\
-      "假如沒有設定，則不會顯示圖示。\n"
+    "long_notifySettingMoreString" = ""\
+    "關於 AN 圖示編號，請參考 Action Names 說明書"\
+    "DateBk3 圖示將由 Memo Pad 處取得。"\
+    "假如沒有設定，則不會顯示圖示。\n"
 
     "long_customErrorString" = ""\
     "'Birthday' 為預設的自訂欄目名稱。你可於'喜好設定'中更改此名稱\n\n"\
@@ -13,7 +13,6 @@ BEGIN
     "long_aboutString" = ""\
     "'HappyDays' 能幫助你紀錄每個重要事件的日期(例如你親朋戚友的生日及週年紀念等)\n\n"\
     "詳細使用方法請參閱 index.html 及 manual.html。\n\n"\
-    "on how to use HappyDays\n\n"\
     "HappyDays 是根據 GNU GPL2.0 發行的軟體。\n"
 
     "long_cleanupAlertString" = ""\
@@ -128,8 +127,8 @@ BEGIN
 
 
 /* About HappyDays */
-	"GPL free software" = "GPL 自由軟體"
-	"E-Mail & Web Page" = "電郵及網址"
+    "GPL free software" = "GPL 自由軟體"
+    "E-Mail & Web Page" = "電郵及網址"
 
     "Translator" = "中文版 - 大頭 ( 給 亞華 :)"
     "Translator's email" = "daitau@hotmail.com"
@@ -149,16 +148,15 @@ BEGIN
     "Leap" = "潤年"
     "Result Solar date:" = "陽曆："
 
-
 /* Date Book & To Do Notify */
     "Records:" = "紀錄："
-      "all" = "全部"
-      "selected" = "已選"
+    "all" = "全部"
+    "selected" = "已選"
     "Existing:" = "現有的："
-      "keep" = "保留"
-      "modify" = "修改"
+    "keep" = "保留"
+    "modify" = "修改"
     "Priority:" = "重要性："
-	  "Category:" = "類別："
+    "Category:" = "類別："
     "Private:" = "私人的："
     "Alarm:" = "響鬧："
     "Time:" = "時間："
@@ -167,11 +165,9 @@ BEGIN
     "Repeat for:" = "重覆："
     "years" = "年"
 
-
     "Notify warning" = "提示"
 
-    "long_notifywarningString" = "^1: 你是否想建立 ^2 個 HappyDays 
-紀錄的提示？"
+    "long_notifywarningString" = "^1: 你是否想建立 ^2 個 HappyDays 紀錄的提示？"
 
 /* Date Book Icon */
     "Date Book Icon" = "Date Book 圖示"
@@ -180,7 +176,6 @@ BEGIN
     "DateBk3" = "DateBook3"
     "AN Icon Number:" = "AN 圖示編號："
     "DateBk3 Icon:" = "DateBook3 圖示："
-
 
 /* HappyDays Cleanup */
     "HappyDays Cleanup" = "清理 HappyDays"
@@ -200,16 +195,16 @@ BEGIN
 
     "Invalid event format" = "不正確的事件格式"
 
-	"long_invalidformatString" = ""\
-    	"^1 的地址簿欄目\n 含有一個不合格式的事件，應怎處理？"
+    "long_invalidformatString" = ""\
+    "^1 的地址簿欄目\n 含有一個不合格式的事件，應怎處理？"
 
     "Ignore" = "略過"
-    "Ignore all" = " 全部略過"
+    "Ignore all" = "全部略過"
 
     "Cleanup Done" = "清理完畢"
 
     "^1: ^2 HappyDays notify entries removed." = ""\
-      "^1: ^2 個 HappyDays 提示被清除了."
+    "^1: ^2 個 HappyDays 提示被清除了."
 
     "HappyDays Export List" = "HappyDays 匯出列表"
     "(not exist in this year)" = "(本年度沒有)"
@@ -218,10 +213,9 @@ BEGIN
     "Days" = "日"
     "Date Book" = "Date Book"
     "To Do" = "To Do"
-    "Scan note field" = "Note 欄目也包含事件資訊"
+    "Scan note field" = "連 Note 欄目也一併檢查"
     "%d day(s) left" = "尚餘%d日"
     "%d day(s) passed" = "已經過了%d日"
-
 
     "Processing" = "處理中"
     "Processed : " = "處理了："
@@ -238,5 +232,4 @@ BEGIN
 	"UpTo Date:" = "距下一次："
 	"%dY %dM %dD (%d)" = "%d年 %d月 %d日 (%d)"
 END
-
 

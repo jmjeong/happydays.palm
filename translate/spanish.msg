@@ -60,7 +60,7 @@ BEGIN
     "HappyDays List" = "Lista HappyDays"
     "Look Up:" = "Buscar:"
 
-    "HappyDays View" = "Detalles HappyDays"
+    "HappyDays View" = "Detalle Evento"
     "Done"  = "Hecho"
     "DB" = "Agenda"
     "TD" = "Tareas"
@@ -74,7 +74,7 @@ BEGIN
     "Export to Memo Pad" = "Exportar a Bloc de notas"
     "Solar to Lunar" = "Solar -> Lunar"
     "Lunar to Solar" = "Lunar -> Solar"
-    "Rescan Address Book" = "Volver a leer Lista de Direcciones"
+    "Rescan Address Book" = "Actualizar Eventos"
 
     "Options" = "Opciones"
 	"Font..." = "Fuente..."
@@ -105,7 +105,7 @@ BEGIN
     "Y/M/D" = "A/M/D"
     "Y.M.D" = "A.M.D"
     "Y-M-D" = "A-M-D"
-	"Address Autoscan" = "Releer Direcciones"
+	"Address Autoscan" = "Actualizar Eventos"
 	"Always" = "Siempre"
 	"Ask" = "Preguntar"
 	"Never" = "Nunca"
@@ -166,7 +166,7 @@ BEGIN
     "years" = "año(s)"
 
     "Notify warning" = "Aviso"
-    "^1: Are you sure you want to create notify entries for ^2 HappyDays records?" = ""\
+	"long_notifywarningString" = ""\
       "^1: ¿Está seguro que desea crear notificaciones de HappyDays para ^2 registros?"
 
 
@@ -227,7 +227,7 @@ BEGIN
 
 	"Address Change" = "Actualización de Agenda"
 	"AddressDB is changed. \nDo you want to rescan it?"= ""\
-		"La Agenda ha cambiado. \n¿Desea reprocesarla?"
+		"La Lista de Direcciones. \n¿Desea actualizar los eventos?"
 
 /* HappyDays view */
 	"Type:" = "Tipo:"
