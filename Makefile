@@ -26,9 +26,9 @@ PILOTXFER = pilot-xfer
 ZIP = zip
 LANG = ENGLISH
 
-obj/%o : %.c
+obj/%.o : %.c
 	@echo "Compiling $<..." &&\
-	cd ./obj/ && $(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ ../$<
+	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $<
 
 all: en
 	ls -al prc/
@@ -74,12 +74,13 @@ br: $(TARGET)-br.prc
 .c.s:
 	$(CC) $(CSFLAGS) $<
 
-happydays-sections.o: happydays-sections.s
+obj/happydays-sections.o: obj/happydays-sections.s
 	@echo "Compiling happydays-sections.s..." && \
 	$(CC) -c happydays-sections.s -o obj/happydays-sections.o
 
-happydays-sections.s happydays-sections.ld : happydays.def
-	multigen happydays.def
+obj/happydays-sections.s obj/happydays-sections.ld : happydays.def
+	@echo "Making multi-section info files..." && \
+	cd obj && multigen ../happydays.def
 
 obj/$(TARGET).prc: obj/$(TARGET) bin.res
 	@echo "Building program file ./obj/happydays.prc..." && \
@@ -188,6 +189,7 @@ bin-br.res: $(TARGET)-br.rcp
 	$(PILRC) -L BRAZILIAN $(TARGET)-br.rcp .
 
 obj/$(TARGET)-en.rcp: $(TARGET).rcp translate/english.msg translate/hdr.msg
+	@echo "Generating happydays-en.rcp file..." && \
 	cat translate/hdr.msg translate/english.msg $(TARGET).rcp \
 			> obj/$(TARGET)-en.rcp
 
@@ -224,10 +226,10 @@ $(TARGET)-catalan.rcp: $(TARGET).rcp catalan.msg hdr.msg
 $(TARGET)-br.rcp: $(TARGET).rcp brazilian.msg hdr.msg
 	cat hdr.msg brazilian.msg $(TARGET).rcp > $(TARGET)-br.rcp
 
-obj/$(TARGET): $(OBJS) happydays-sections.ld
+obj/$(TARGET): $(OBJS) obj/happydays-sections.ld
 	@echo "Linking..." && \
-	$(CC) $(CFLAGS) $(OBJS) -o obj/$(TARGET) happydays-sections.ld
-	m68k-palmos-objdump --section-headers happydays
+	$(CC) $(CFLAGS) $(OBJS) -o obj/$(TARGET) obj/happydays-sections.ld
+	m68k-palmos-objdump --section-headers obj/happydays
 
 send: $(TARGET).prc
 	$(PILOTXFER) -i $(TARGET).prc
@@ -239,7 +241,8 @@ tags:
 	etags $(FILES) *.h
 
 clean:
-	cd obj && -rm -f *
+	@echo "Deleting obj files..." &&\
+	cd obj && \rm -f *
 
 veryclean: clean
 	-rm -f $(TARGET)*.prc pilot.ram pilot.scratch
