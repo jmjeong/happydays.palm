@@ -15,8 +15,8 @@ OBJS = lun2sol.o sol2lun.o address.o datebook.o util.o \
 
 CC = m68k-palmos-gcc
 
-CFLAGS = -Wall -O2 
-#CFLAGS = -Wall -g -O2
+#CFLAGS = -Wall -O2 
+CFLAGS = -Wall -g -O2
 
 PILRC = pilrc
 OBJRES = m68k-palmos-obj-res

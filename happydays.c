@@ -793,9 +793,9 @@ static void HighlightAction(int selected, Boolean sound)
 
   if (sound) SndPlaySystemSound(sndClick);
 
-  if (gCurrentSelection >= 0) {
+  if (gMainTableHandleRow >= 0) {
       // unhighlight the selection
-      MainTableSelectItem(tableP, gCurrentSelection, false);
+      MainTableSelectItem(tableP, gMainTableHandleRow - gMainTableStart, false);
   }
 
   if (gMainTableStart > selected
@@ -805,8 +805,8 @@ static void HighlightAction(int selected, Boolean sound)
       MainFormLoadTable(frm, gMainTableStart);
       TblDrawTable(tableP);
   }
-  gCurrentSelection = selected - gMainTableStart;
-  MainTableSelectItem(tableP, gCurrentSelection, true);
+  gMainTableHandleRow = selected;
+  MainTableSelectItem(tableP, selected, true);
 }
 
 static void HighlightMatchRowDate(DateTimeType inputDate)
@@ -1207,21 +1207,22 @@ static void HandlePrevKey(void)
     barP = GetObjectPointer(frm, MainFormScrollBar);
     SclGetScrollBar(barP, &valueP, &minP, &maxP, &pageSizeP);
 
-    if (gCurrentSelection == -1)
-        gCurrentSelection = 0;
+    if (gMainTableHandleRow == -1)
+        gMainTableHandleRow = gMainTableStart;
+    else if (gMainTableHandleRow > gMainTableStart) {
+        // unhighlight
+        MainTableSelectItem(GetObjectPointer(frm, MainFormTable),
+                            gMainTableHandleRow - gMainTableStart, false);
+        gMainTableHandleRow--;
+    }
     else {
-        if (gCurrentSelection > 0) {
-			MainTableSelectItem(GetObjectPointer(frm, MainFormTable),
-                                    gCurrentSelection, false);
-            gCurrentSelection --;
-		}
-        else {
-            if (valueP > minP) MainFormScrollLines(-1, true);
+        if (valueP > minP) {
+            MainFormScrollLines(-1, true);
+            gMainTableHandleRow--;
         }
     }
-
 	MainTableSelectItem(GetObjectPointer(frm, MainFormTable),
-                            gCurrentSelection, true);
+                        gMainTableHandleRow - gMainTableStart, true);
 }
 
 static void HandleNextKey(void)
@@ -1233,23 +1234,22 @@ static void HandleNextKey(void)
     barP = GetObjectPointer(frm, MainFormScrollBar);
     SclGetScrollBar(barP, &valueP, &minP, &maxP, &pageSizeP);
 
-    if (gCurrentSelection == -1)
-        gCurrentSelection = 0;
-    else
-    {
-        if (gCurrentSelection < pageSizeP - 1) {
-			MainTableSelectItem(GetObjectPointer(frm, MainFormTable),
-                                    gCurrentSelection, false);
+    if (gMainTableHandleRow == -1)
+        gMainTableHandleRow = gMainTableStart;
+    else if (gMainTableHandleRow < gMainTableStart + pageSizeP - 1) {
+        MainTableSelectItem(GetObjectPointer(frm, MainFormTable),
+                            gMainTableHandleRow - gMainTableStart, false);
 
-            gCurrentSelection ++;
-		}
-        else {
-            if (valueP <  maxP) MainFormScrollLines(1, true);
+        gMainTableHandleRow++;
+    }
+    else {
+        if (valueP <  maxP) {
+            MainFormScrollLines(1, true);
+            gMainTableHandleRow++;
         }
     }
-
 	MainTableSelectItem(GetObjectPointer(frm, MainFormTable),
-                            gCurrentSelection, true);
+                            gMainTableHandleRow - gMainTableStart, true);
 }
 
 
@@ -1261,7 +1261,7 @@ static void MainFormHandleSelect(FormPtr frm, Int16 row)
 	barP = GetObjectPointer(frm, MainFormScrollBar);
 	SclGetScrollBar(barP, &valueP, &minP, &maxP, &pageSizeP);
 
-	gMainTableHandleRow = gCurrentSelection + valueP;
+	gMainTableHandleRow = row + valueP;
 
 	FrmGotoForm(ViewForm);
 }
@@ -1301,7 +1301,6 @@ static Boolean MainFormHandleEvent (EventPtr e)
             
                 gMainTableStart = MAX(0, gMainTableHandleRow-4);
             }
-            gCurrentSelection = gMainTableHandleRow - gMainTableStart;
         }
         else {
             gMainTableStart = 0;
@@ -1310,9 +1309,9 @@ static Boolean MainFormHandleEvent (EventPtr e)
         
         FrmDrawForm(frm);
         
-        if (gCurrentSelection >= 0) {
+        if (gMainTableHandleRow >= 0) {
             MainTableSelectItem(GetObjectPointer(frm, MainFormTable),
-                                    gCurrentSelection, true);
+                                gMainTableHandleRow - gMainTableStart, true);
         }
                 
         handled = true;
@@ -1328,7 +1327,7 @@ static Boolean MainFormHandleEvent (EventPtr e)
         break;
 
 	case sclRepeatEvent:
-	   	gCurrentSelection =  -1; 
+	   	gMainTableHandleRow = -1; 
 		MainFormScroll(e->data.sclRepeat.newValue, 
                        e->data.sclRepeat.value, true);
 		break;
@@ -1353,7 +1352,7 @@ static Boolean MainFormHandleEvent (EventPtr e)
                                     MainFormAddrCategories, MainFormPopupTrigger,
                                     gPrefsR.addrCategory) ) {
                 // changed
-                gCurrentSelection = -1;
+                gMainTableHandleRow = -1;
                 RereadHappyDaysDB(gStartDate);
                 MainFormLoadTable(frm, 0);
 				FrmDrawForm(frm);
@@ -1420,13 +1419,13 @@ static Boolean MainFormHandleEvent (EventPtr e)
 
 		switch (e->data.keyDown.chr) {
 		case vchrPageUp:
-			gCurrentSelection = -1;			
+			gMainTableHandleRow = -1;			
 			MainFormScrollLines(-pageSizeP, true);
 			handled = true;
 			break;
 		
 		case vchrPageDown:
-			gCurrentSelection = -1;			
+			gMainTableHandleRow = -1;			
 			MainFormScrollLines(pageSizeP, true);
 			handled = true;
 			break;
@@ -1442,8 +1441,8 @@ static Boolean MainFormHandleEvent (EventPtr e)
 			break;
 
 		case chrCarriageReturn:
-			if (gCurrentSelection != -1) {
-				MainFormHandleSelect(frm, gCurrentSelection);
+			if (gMainTableHandleRow != -1) {
+				MainFormHandleSelect(frm, gMainTableHandleRow-gMainTableStart);
 			}
 			handled = true;
 			break;
@@ -1458,9 +1457,11 @@ static Boolean MainFormHandleEvent (EventPtr e)
     }
     case tblEnterEvent: 
     {
-        if (gCurrentSelection != -1)
+        if (gMainTableHandleRow >= 0) {
+            // unhighlight
             MainTableSelectItem(GetObjectPointer(frm, MainFormTable),
-                                    gCurrentSelection, false);
+                                    gMainTableHandleRow-gMainTableStart, false);
+        }
 		break;
     }
 
@@ -1981,6 +1982,7 @@ static void MainFormLoadTable(FormPtr frm, Int16 listOffset)
 	RectangleType	rect;
 	Int16			running_total, row_height;
 	FontID			currFont;
+    Int16           valueP, minP, maxP, pageSizeP;
 
     tableP = GetObjectPointer(frm, MainFormTable);
 	tblRows = TblGetNumberOfRows(tableP); 
@@ -2009,8 +2011,6 @@ static void MainFormLoadTable(FormPtr frm, Int16 listOffset)
 		TblMarkRowInvalid(tableP, row);
 	}
 
-    gMainTableStart = listOffset;
-
 	barP = GetObjectPointer(frm, MainFormScrollBar);
 	if (gMainTableTotals > visibleRows) {
 		SclSetScrollBar(barP, listOffset, 0, 
@@ -2019,6 +2019,8 @@ static void MainFormLoadTable(FormPtr frm, Int16 listOffset)
 	else {
 		SclSetScrollBar(barP, 0, 0, 0, gMainTableTotals);
     }
+    SclGetScrollBar(barP, &valueP, &minP, &maxP, &pageSizeP);
+    gMainTableStart = valueP;
 
 	FntSetFont(currFont);
 }
@@ -2137,6 +2139,7 @@ static void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column,
 	Int16 dateDiff;
 	DateType current;
 	char displayStr[25];
+    char tempStr[25];
 
     Int16 x,y;
     Int16 width, length;
@@ -2189,26 +2192,25 @@ static void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column,
         length = StrLen(p);
         FntCharsInWidth(p, &width, &length, &ignored);
         WinDrawChars(p, length, x, y);
+
+        break;
     }
-    break;
     case ViewNext:
     {
         ///////////////////////////////////
         // Display the Next Date
         ///////////////////////////////////
         
-        char temp[5];
-        
         if (converted.year != INVALID_CONV_DATE) {
             DateToAsciiLong(converted.month, converted.day,
                             converted.year+ 1904, gPrefdfmts,
                             gAppErrStr);
 
-            SysCopyStringResource(temp,
+            SysCopyStringResource(tempStr,
                                   DayOfWeek(converted.month, converted.day,
                                             converted.year+1904) + SunString);
             StrNCat(gAppErrStr, " [", AppErrStrLen);
-            StrNCat(gAppErrStr, temp, AppErrStrLen);
+            StrNCat(gAppErrStr, tempStr, AppErrStrLen);
             StrNCat(gAppErrStr, "]", AppErrStrLen);
         }
         else {
@@ -2217,37 +2219,67 @@ static void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column,
         length = StrLen(gAppErrStr);
         FntCharsInWidth(gAppErrStr, &width, &length, &ignored);
         WinDrawChars(gAppErrStr, length, x, y);
+        break;
     }
-    break;
     case ViewSrc:
     {
         ///////////////////////////////////
         // Display the Source Date
         ///////////////////////////////////
-            
+
         if (r.flag.bits.lunar) {
-            StrCopy(displayStr, "-)");
+            StrCopy(gAppErrStr, "-)");
         }
         else if (r.flag.bits.lunar_leap) {
-            StrCopy(displayStr, "#)");
+            StrCopy(gAppErrStr, "#)");
         }
-        else displayStr[0] = 0;
+        else gAppErrStr[0] = 0;
 
         if (r.flag.bits.year) {
             DateToAsciiLong(r.date.month, r.date.day, r.date.year + 1904,
-                            gPrefdfmts, gAppErrStr);
+                            gPrefdfmts, displayStr);
         }
         else {
             DateToAsciiLong(r.date.month, r.date.day, -1, gPrefdfmts,
-                            gAppErrStr);
+                            displayStr);
         }
-        StrCat(displayStr, gAppErrStr);
+        StrCat(gAppErrStr, displayStr);
 
-        length = StrLen(displayStr);
-        FntCharsInWidth(displayStr, &width, &length, &ignored);
-        WinDrawChars(displayStr, length, x, y);
+
+        if (r.flag.bits.year) {
+            if (r.flag.bits.lunar || r.flag.bits.lunar_leap ) {
+                if ( gPrefsR.DispPrefs.zodiac ) {
+                    // make zordiac display
+                    SysCopyStringResource(tempStr, MouseString
+                                          + (r.date.year+8+1904)%12);
+                    StrNCat(gAppErrStr, " [", AppErrStrLen);
+                    StrNCat(gAppErrStr, tempStr, AppErrStrLen);
+                    StrNCat(gAppErrStr, "]", AppErrStrLen);
+                }
+            }
+            else {
+                // make day of week
+                SysCopyStringResource(tempStr,
+                                      DayOfWeek(r.date.month, r.date.day,
+                                                r.date.year+1904) + SunString);
+                StrNCat(gAppErrStr, " [", AppErrStrLen);
+                StrNCat(gAppErrStr, tempStr, AppErrStrLen);
+                StrNCat(gAppErrStr, "]", AppErrStrLen);
+            }
+        }
+        
+        length = StrLen(gAppErrStr);
+        FntCharsInWidth(gAppErrStr, &width, &length, &ignored);
+        WinDrawChars(gAppErrStr, length, x, y);
+        break;
     }
-    break;
+    case ViewSrcExtra:
+    {
+
+
+        break;
+    }
+        
     case ViewAge:
     {
         ///////////////////////////////////
@@ -2517,9 +2549,9 @@ static Boolean ViewFormHandleEvent(EventPtr e)
         
                     SndPlaySystemSound(sndInfo);
 
-//                    ViewFormSetInfo(frm);
-//                    ViewFormLoadTable(frm);
-//                    FrmDrawForm(FrmGetFormPtr(ViewForm));
+                    ViewFormSetInfo(frm);
+                    ViewFormLoadTable(frm);
+                    FrmDrawForm(FrmGetFormPtr(ViewForm));
 
                     handled = true;
                 }
@@ -2531,10 +2563,9 @@ static Boolean ViewFormHandleEvent(EventPtr e)
 
                     SndPlaySystemSound(sndInfo);
 
-//                    ViewFormSetInfo(frm);
-//                    ViewFormLoadTable(frm);
-//                    FrmDrawForm(FrmGetFormPtr(ViewForm));
-
+                    ViewFormSetInfo(frm);
+                    ViewFormLoadTable(frm);
+                    FrmDrawForm(FrmGetFormPtr(ViewForm));
 
                     handled = true;
                 }
