@@ -846,7 +846,7 @@ Boolean UpdateHappyDaysDB(FormPtr frm)
         MemHandleUnlock(recordH);
         currIndex++;
     }
-    if (recordNum > 50) displayNextIndicate( INDICATE_NUM );
+    if (recordNum > 50) displayNextIndicate( INDICATE_NUM -1);
     
 	return true;
 
