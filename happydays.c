@@ -70,7 +70,7 @@ struct sPrefsR gPrefsR;
 struct sPrefsR defaultPref = {
     HDAppVer,
     0, 0, 0,              // all/selected, keep/modified, private
-    {   1, 0, 9, 3, 1, {-1, -1}, "145" },   // Datebook notify prefs
+    {   1, 0, 3, 1, {-1, -1}, " " },   // Datebook notify prefs
 #if defined(GERMAN)
     {  1, "Alle" },                         // Todo notify prefs
     {  "Geburtstag", "*HD:",                // Prefs
@@ -2799,10 +2799,12 @@ static Boolean StartFormHandleEvent(EventPtr e)
     // no event procedure
     //
     switch (e->eType) {
-	case frmUpdateEvent:
     case frmOpenEvent:
+        
         if(gbVgaExists) 
        		VgaFormModify(frm, vgaFormModify160To240);
+        
+    case frmUpdateEvent:        
 
         if (!FindHappyDaysField()) {
             char ErrStr[200];
@@ -2811,11 +2813,11 @@ static Boolean StartFormHandleEvent(EventPtr e)
             StrPrintF(gAppErrStr, ErrStr, gPrefsR.Prefs.custom);
 
             switch (FrmCustomAlert(CustomFieldAlert,
-                                   " ", " ", " ")) {
+                                   gAppErrStr, " ", " ")) {
             case 0:             // OK
                 gProgramExit = true;
                 break;
-            case 1:             // Help
+            case 1:             // Help 
                 FrmHelp(CustomErrorHelpString);
                 FrmUpdateForm(StartForm, 0);    // to redisplay startform
                 
@@ -2872,6 +2874,9 @@ static Boolean StartFormHandleEvent(EventPtr e)
 //
 //
 // $Log$
+// Revision 1.68  2002/04/11 12:58:42  jmjeong
+// error msg in start screen
+//
 // Revision 1.67  2002/02/14 14:33:37  jmjeong
 // add the routine to process prefix '!'
 //
