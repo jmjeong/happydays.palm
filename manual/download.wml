@@ -8,10 +8,10 @@ File Download
 </h2>
 <p>
 <a
-href="ftp://jmjeong.com/pub/happydays/happydays-2.05.zip">happydays-2.05.zip</a>
+href="ftp://jmjeong.com/pub/happydays/happydays-2.06.zip">happydays-2.06.zip</a>
 - English version and manual<br>
 <a
-href="ftp://jmjeong.com/pub/happydays/happydays-src-2.05.zip">happydays-src-2.05.zip</a>
+href="ftp://jmjeong.com/pub/happydays/happydays-src-2.06.zip">happydays-src-2.06.zip</a>
 - source file<br>
 
 </P>
@@ -30,7 +30,7 @@ To get the latest CVS sources do the following
 $ export CVSROOT=":pserver:cvs@coconut.snu.ac.kr:/export/cvsroot"
 $ cvs login
 ( password = anonymous )
-$ cvs -z3 checkout -rver_205 happydays
+$ cvs -z3 checkout -rver_206 happydays
 </pre>
 
 <p>
@@ -52,28 +52,28 @@ translate/english.msg file.)<p>
 
 HappyDays has been translated into the following languages:  <p>
 <ul>
-  <li> <a href="ftp://jmjeong.com/pub/happydays/happydays-2.05-ko.zip">
-  Korean</a>(2.05) - by Jaemok Jeong<br>
+  <li> <a href="ftp://jmjeong.com/pub/happydays/happydays-2.06-ko.zip">
+  Korean</a>(2.06) - by Jaemok Jeong<br>
 	  (happydays-k8.prc for 8x8 font,
 	  happydays-k11.prc for 11x11 font)
   <li> <a
-      href="ftp://jmjeong.com/pub/happydays/happydays-2.05-de.zip">
-			German</a>(2.05)
+      href="ftp://jmjeong.com/pub/happydays/happydays-2.06-de.zip">
+			German</a>(2.06)
       - by  Gunther Zagatta
 			(<a href="mailto:zagatta@web.de">zagatta@web.de</a>)
   <li><a
-  	  href="ftp://jmjeong.com/pub/happydays/happydays-2.05-sp.zip">
-			Spanish</a>(2.05)
+  	  href="ftp://jmjeong.com/pub/happydays/happydays-2.06-sp.zip">
+			Spanish</a>(2.06)
 	  - by Juan Fernando Calderón
 			(<a href="mailto:jfcalderon@usa.net">jfcalderon@usa.net</a>)
   <li><a
-  	  href="ftp://jmjeong.com/pub/happydays/happydays-2.05-br.zip">
-			Portuguese Brazilian </a>(2.05)
+  	  href="ftp://jmjeong.com/pub/happydays/happydays-2.06-br.zip">
+			Portuguese Brazilian </a>(2.06)
 	  - by Mauricio Montel
 			(<a href="mailto:maumontel@hotmail.com">maumontel@hotmail.com</a>)
   <li><a
-      href="ftp://jmjeong.com/pub/happydays/happydays-2.05-ch.zip">
-			Chinese</a>(2.05)
+      href="ftp://jmjeong.com/pub/happydays/happydays-2.06-ch.zip">
+			Chinese</a>(2.06)
       - by Daitau Aaron(<a
 		href="mailto:daitau@hotmail.com">daitau@hotmail.com</a>)<br>
 		(happydays-chi-gb.prc for GB Encoding, happydays-chi-big5.prc for
@@ -112,6 +112,15 @@ Change log
 You want to see changes before HappyDays 2.0, look up the
 <a href="change_log.html">change_log.html</a> file.
 <p>
+
+<b>HappyDays 2.06 version - 7/25/2001</b>
+<ul>
+	<li> Fix the bug which makes Palm crash if one try to edit the erraneous
+	note field(Reported by Hendrik and Jeff).
+	<li> Fix a bug : When the entry is notified into DateBook or ToDo, 
+		the entry in lunar is not affected by 'Look up' Selector(Reported by
+		Inyeol Lee).
+</ul>
 
 <b>HappyDays 2.05 version - 6/29/2001</b>
 <ul>
