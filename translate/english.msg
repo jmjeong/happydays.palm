@@ -1,9 +1,10 @@
 TRANSLATION "ENGLISH"
 BEGIN
 	"long_notifySettingMoreString" = ""\
-	"For AN Icon Number, consult Action Names manual. DateBk3Icon is "\
-	"read from MemoPad. If you don't have DateBk3 Icon entry in MemoPad, "\
-	"nothing is displayed.\n"
+	"This note is used for third-party datebook replacement program "\
+	"such as Action Names, DateBk3/4.\n\n"\
+	"You can set a icon, font, and more using this note.\n\n"\
+	"For more information, check their manual.\n"
 
     "long_customErrorString" = ""\
     "'Birthday' is the default custom field name."\

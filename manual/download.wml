@@ -8,10 +8,10 @@ File Download
 </h2>
 <p>
 <a
-href="ftp://jmjeong.com/pub/happydays/happydays-2.08.zip">happydays-2.08.zip</a>
+href="ftp://jmjeong.com/pub/happydays/happydays-2.1b1.zip">happydays-2.1b1.zip</a>
 - English version and manual<br>
 <a
-href="ftp://jmjeong.com/pub/happydays/happydays-src-2.08.zip">happydays-src-2.08.zip</a>
+href="ftp://jmjeong.com/pub/happydays/happydays-src-2.1b1.zip">happydays-src-2.1b1.zip</a>
 - source file<br>
 
 </P>
@@ -30,7 +30,7 @@ To get the latest CVS sources do the following
 $ export CVSROOT=":pserver:cvs@coconut.snu.ac.kr:/export/cvsroot"
 $ cvs login
 ( password = anonymous )
-$ cvs -z3 checkout -rver_208 happydays
+$ cvs -z3 checkout -rver_21b1 happydays
 </pre>
 
 <p>
@@ -52,8 +52,8 @@ translate/english.msg file.)<p>
 
 HappyDays has been translated into the following languages:  <p>
 <ul>
-  <li> <a href="ftp://jmjeong.com/pub/happydays/happydays-2.08-ko.zip">
-  Korean</a>(2.08) - by Jaemok Jeong<br>
+  <li> <a href="ftp://jmjeong.com/pub/happydays/happydays-2.1b1-ko.zip">
+  Korean</a>(2.1 Beta 1) - by Jaemok Jeong<br>
 	  (happydays-k8.prc for 8x8 font,
 	  happydays-k11.prc for 11x11 font)
   <li> <a
@@ -133,6 +133,21 @@ Change log
 You want to see changes before HappyDays 2.0, look up the
 <a href="change_log.html">change_log.html</a> file.
 <p>
+
+<b>Happydays 2.1(beta 1) version - 4/11/2002</b>
+<ul>
+  <li> Add a general note field in DateBook Notify
+  for Action Names, DateBk3/4, and old icon stuff is removed.<br>
+  Now you can add category, font, and icon information of Action Names,
+  DateBk3/4 in Datebook Notify.
+  Refer Action Names, DateBk3/4 manual for more information.
+  <li> Add the option : <b>Ignore record with prefix '!'</b><br>
+  You can put `!' before the entry of a happydays field in Address book.
+  This record can be hidden in Happydays with check option.
+  <li> Date parsing routine is changed. <br>
+  Year number between 0 and 31 is used for the year 2000-2031,
+  and Year number between 32 and 99 is used for the year 1932-1999.
+</ul>
 
 <b>Happydays 2.08 version - 2/3/2002</b>
 <ul>
