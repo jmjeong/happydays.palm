@@ -377,7 +377,6 @@ void DrawRecordName(
 //
 UInt32 AddrGotoCreatorId[] = {
     'addr',         // Built-in Addressbook
-    'adKr',         // Address Kr
 	'AAlb', 		// Address Album
     'CiAe',         // AddressBkR
 	'addp', 		// Address Plus(+)

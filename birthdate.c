@@ -629,7 +629,6 @@ Boolean FindHappyDaysField()
     }
     if (gHappyDaysField < 0) {
         // Custom field에 일치하는 게 없는 경우에는 note field를 조사
-        gHappyDaysField = note;
         return true;
     }
     return true;
@@ -753,7 +752,7 @@ Boolean UpdateHappyDaysDB(FormPtr frm)
          */
         AddrUnpack(rp, &r);
 
-        if (!r.fields[gHappyDaysField]
+        if ((gHappyDaysField <= 0 || !r.fields[gHappyDaysField])
             && !(gPrefsR.Prefs.scannote && r.fields[note]
                  && StrStr(r.fields[note], gPrefsR.Prefs.notifywith) ) ) {
             // not exist in happydays field or note field
@@ -776,7 +775,9 @@ Boolean UpdateHappyDaysDB(FormPtr frm)
         name1 = hd.name1;
         name2 = hd.name2;
 
-        whichField = (r.fields[gHappyDaysField]) ? gHappyDaysField : note;
+        if (gHappyDaysField >= 0 && r.fields[gHappyDaysField])
+            whichField = gHappyDaysField;
+        else whichField = note;
 
         while (whichField >= 0) {
 
@@ -831,7 +832,7 @@ Boolean UpdateHappyDaysDB(FormPtr frm)
 					goto Update_ErrHandler;
             }
                 
-            if (whichField == gHappyDaysField       // next is note field
+            if (whichField == gHappyDaysField  // next is note field
                 && (gPrefsR.Prefs.scannote     // scanNote & exists
                     && r.fields[note]       
                     && StrStr(r.fields[note], gPrefsR.Prefs.notifywith)) ) {
