@@ -1,7 +1,7 @@
 TRANSLATION "CZECH"
 BEGIN
     "Translator" = "Petr 'PePa' Pavel"
-    "Translator's email" = "petr.pavel@email.cz"
+    "Translator's email" = "petr.pavel@quick.cz"
 
     "long_notifySettingString" = ""\
     "* Záznamy\n"\
@@ -23,23 +23,23 @@ BEGIN
 
     "long_notifySettingMoreString" = ""\
     "Nápovìdu k ikonám pro Action Names (AN) najdeš v jeho manuálu. "\
-    "Ikony pro DateBk3/4 musejí bıt uloeny v Memo Padu. "\
+    "Ikony pro DateBk3/4 jsou uloeny v Memo Padu. "\
     "Pokud je tam nemáš, nic se nezobrazí.\n"
 
     "long_customErrorString" = ""\
     "Název uivatelské poloky v Address Booku, "\
-    "ze které ète HappyDays datum narozenin a svátkù. "\
-    "Pokud ho chceš zmìnit, zvol 'Nastavení'.\n\n"\
+    "ze které ète HappyDays datum narozenin a svátkù, je defaultnì 'Birthday'. "\
+    "Pokud chceš pouívat jinou, zvol 'Nastavení'.\n\n"\
     "POZOR: Potøebuješ-li zmìnit názvy uivatelskıch poloek v Address Booku, "\
     "spus jej a v menu 'Options' zvol monost 'Rename Custom Fields'. "\
-    "Název aspoò jedné takové poloky musí odpovídat názvu, kterı jsi "\
+    "Název aspoò jedné takové poloky však musí odpovídat názvu, kterı jsi "\
     "zadal v HappyDays.\n"
 
     "long_aboutString" = ""\
     "'HappyDays' ti pomùe pamatovat na narozeniny a svátky tvıch pøátel "\
     "a èlenù rodiny.\n\n"\
     "Pouívá k tomu jednu z uivatelskıch poloek Address Booku, kterou "\
-    "musíš pojmenovat stejnì, jako jsi uvedl v 'Nastavení' tohoto programu."\
+    "musíš pojmenovat tak, jak jsi uvedl v 'Nastavení' tohoto programu."\
     "\n\nPøíklady:\n"\
     " Pøíjmení: Jeong\n"\
     " Køestní jméno: JaeMok\n"\
@@ -49,16 +49,25 @@ BEGIN
     " [-)|#)]Datum\n"\
     " -) pro lunární bìnı mìsíc\n"\
     " #) pro lunární pøestupnı mìsíc\n\n"\
-    "Formát data se automaticky pøevezme z nastavení v Preferences. "\
+    "Formát pro datum se automaticky pøevezme z nastavení v aplikaci Prefs (Formats/Date). "\
     "Rok mùeš vynechat. Je-li rok menší ne 100, pøedpokládá se, e jde "\
     "o dvacáté století. Pokud si nejsi jistı, piš rok ètyøcifernì (napø. 1970).\n\n"\
-    "Potøebuješ-li zadat víc událostí, podívej se do manuálu.\n"
+    "Potøebuješ-li zadat víc událostí, podívej se do manuálu.\n\n"\
+
+    "Co se bude ukazovat v seznamu událostí programu HappyDays, "\
+    "rozhoduje nastavení ostatních programù. "\
+    "Zobrazované jméno mùeš zmìnit v Address Booku (Preferences/List by), "\
+    "formát data v Prefs (Formats/Date). "\
+    "Zaèneš-li psát v seznamu znak nebo èíslo, zvırazní se øádka, která ho obsahuje. "\
+    "Napø.: Kdy napíšeš 'j' (do èásti obrazovky pro psaní graffiti), "\
+    "zvolí se událost zaèínající znakem 'j' nebo 'J' (tøeba 'Jeong, JaeMok'). "\
+    "Kdy napíšeš '5', zvırazní se první událost v kvìtnu.\n"
 
     "long_cleanupAlertString" = ""\
     "Události Date Booku a To Do vytvoøené programem HappyDays, mají v poznámce "\
     "èíselnı identifikátor nastavitelnı v 'Nastavení'. "\
     "Pokud podobnı vloíš do poznámky nìkteré události ruènì, mùe se stát, "\
-    "e ji HappyDays smae také.\n"
+    "e ji HappyDays smae nebo zmìní.\n"
 
     "long_prefFormString" = ""\
     "* Místo systémového formátu...\n"\
@@ -84,21 +93,21 @@ BEGIN
         "#) pro pøestupnı mìsíc lunárního kalendáøe"
 
     "long_cantFindAddrString" = ""\
-    "V Address Booku není ádná uivatelská poloka s názvem: '%s'\n"\
-    "Vytvoø takovou nebo zmìò její název v 'Nastavení' programu HappyDays."
+    "V Address Booku není ádná uivatelská poloka s názvem '%s'.\n"\
+    "Vytvoø takovou nebo zmìò její název pomocí 'Nastavení'."
 
     "Select Time" = "Zvol èas"
     "No Time" = "ádnı"
     "Invalid input date" = "Neplatné datum"
     "Export to Memo Pad is completed." = "Export do Memo Padu dokonèen."
 
-    "SUN"   = "Ne"
-    "MON"   = "Po"
-    "TUE"   = "Út"
-    "WED"   = "St"
-    "THU"   = "Èt"
-    "FRI"   = "Pá"
-    "SAT"   = "So"
+    "SUN" = "Ne"
+    "MON" = "Po"
+    "TUE" = "Út"
+    "WED" = "St"
+    "THU" = "Èt"
+    "FRI" = "Pá"
+    "SAT" = "So"
 
     "Not enough memory" = "Nedostatek pamìti"
     "%d notify entry is created.\n" = "Vytvoøeno %d upozornìní.\n" 
@@ -111,20 +120,19 @@ BEGIN
     "Collecting Information..." = "Sbírám informace..."
 
     "HappyDays List" = "Seznam"
-    "Look up" = "Hledej"
-    "Today" = "Dnes"
+    "Look Up:" = "Hledej"
 
     "HappyDays View" = "Detaily"
-    "Done"  = "OK"
+    "Done" = "OK"
     "DB" = "DB" 
     "TD" = "TD"
     "Goto" = "Address Book"
 
     "Utilities" = "Akce"
     "Date Book Notify" = "Upozornìní Date Booku"
-    "Cleanup Date Book"  = "Vyèištìní Date Booku"
+    "Cleanup Date Book" = "Vyèištìní Date Booku"
     "To Do Notify" = "Upozornìní To Do"
-    "Cleanup To Do"  = "Vyèištìní To Do"
+    "Cleanup To Do" = "Vyèištìní To Do"
     "Export to Memo Pad" = "Export do Memo Padu"
     "Solar to Lunar" = "Solarní na lunární"
     "Lunar to Solar" = "Lunární na solární"
@@ -181,18 +189,16 @@ BEGIN
 
     "HappyDays Export" = "Export"
     "Would you like to export HappyDays List to Memo Pad?" = ""\
-    	"Skuteènì chceš exportovat seznam události z HappyDays do Memo Padu?" 
+    	"Skuteènì chceš exportovat seznam událostí z HappyDays do Memo Padu?" 
 
     "Custom Field Error" = "Chybnı název poloky"
     "Help" = "Nápovìda"
-
 
     "HappyDays Cleanup" = "Vyèisti" 
 
     "Notify warning" = "Upozornìní"
     "^1: Are you sure you want to create notify entries for ^2 HappyDays records?" = ""\
-  	"^1: Urèitì chceš vytvoøit upozornìní pro ^2 poloek?" 
-      
+    "^1: Urèitì chceš vytvoøit upozornìní pro ^2 poloek?" 
 
     "Invalid event format" = "Neplatnı formát události" 
 
@@ -205,43 +211,44 @@ BEGIN
     "Cleanup Done" = "Vyèištìní dokonèeno" 
 
     "^1: ^2 HappyDays notify entries removed." = ""\
-    	"^1: Odstranìno ^2 záznamù." 
+    "^1: Odstranìno ^2 záznamù." 
 
     "Birthday" = "Narozeniny" 
     "All" = "Všechny" 
     "HappyDays Export List" = "Export" 
     "(not exist in this year)" = "(v tomto roce se nevyskytuje)" 
-    "Please run Date Book once first." = "Nejdøív spuste aspoò jednou Date Book."  
+    "Please run Date Book once first." = "Nejdøív spuste aspoò jednou Date Book."
     
     "Instead of system date format" = "Místo systémového formátu"
     "Use" = "pouij"
     "M/D/Y" = "M/D/R"
-    "D/M/Y" = "D/M/R"  
-    "D.M.Y" = "D.M.R"  
-    "D-M-Y" = "D-M-R"  
-    "Y/M/D" = "R/M/D"  
-    "Y.M.D" = "R.M.D"  
-    "Y-M-D" = "R-M-D"  
+    "D/M/Y" = "D/M/R"
+    "D.M.Y" = "D.M.R"
+    "D-M-Y" = "D-M-R"
+    "Y/M/D" = "R/M/D"
+    "Y.M.D" = "R.M.D"
+    "Y-M-D" = "R-M-D"
 
     "Date Book Icon" = "Ikony"
-    "Icon Support" = "Ikony pro"  
-    "AN" = "AN"  
-    "DateBk3" = "DateBk3/4"  
-    "AN Icon Number:" = "Èíslo ikony pro AN:"  
-    "DateBk3 Icon:" = "Ikona pro DateBk3/4:"  
+    "Icon Support" = "Ikony pro"
+    "AN" = "AN"
+    "DateBk3" = "DateBk3/4"
+    "AN Icon Number:" = "Èíslo ikony pro AN:"
+    "DateBk3 Icon:" = "Ikona pro DateBk3/4:"
 
-    "Days" = "dny"  
-    "Date Book" = "Date Book"  
-    "To Do" = "To Do"  
-    "Scan note field" = "Prohledej i poznámky"  
-    "%d day(s) left" = "Zbıvá %d dní"  
-    "Notify Format:" = "Formát upozornìní:"  
-    "[Last, First] E(1) Year" = "[pøíjm., køest.] u (rok)"  
-    "[First Last] E(1) Year" = "[køest. pøíjm.] u (rok)"  
-    "Event - Last, First Year" = "událost - pøíjm., køest. rok"  
-    "Event - First Last Year" = "událost - køest. pøíjm. rok"  
-    "First Last Year" = "køest. pøíjm. rok"  
+    "Days" = "dny"
+    "Date Book" = "Date Book"
+    "To Do" = "To Do"
+    "Scan note field" = "Prohledej i poznámky"
+    "%d day(s) left" = "Zbıvá %d dní."
+    "%d day(s) passed" = "%d dní uplynulo."
+    "Notify Format:" = "Formát upozornìní:"
+    "[Last, First] E(1) Year" = "[pøíjm., køest.] u (rok)"
+    "[First Last] E(1) Year" = "[køest. pøíjm.] u (rok)"
+    "Event - Last, First Year" = "událost - pøíjm., køest. rok"
+    "Event - First Last Year" = "událost - køest. pøíjm. rok"
+    "First Last Year" = "køest. pøíjm. rok"
     
-    "Processing" = "Vytváøím"  
+    "Processing" = "Vytváøím"
     "Processed : " = "Vytvoøeno: " 
 END

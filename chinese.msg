@@ -42,11 +42,18 @@ BEGIN
       " #) 代表潤月\n\n"\
       "日期格式則從系統設定中自動讀取。"\
       "年份可省略。"\
-      "少於 100 的年份會被當成二十世紀的日期，假如你不肯定，請用 YYYY 的格式 (如 1970)\n\n"\
-      "如要同時設定多項事件，請參考說明書。\n"
+      "少於 100 的年份會被當成二十世紀的日期，假如你不肯定，"\
+      "請用 YYYY 的格式 (如 1970)\n\n"\
+      "如要同時設定多項事件，請參考說明書。\n\n"\
+      "在 HappyDays 中列出名字之姓/名次序，可在地 Address Book 內使用 "\
+      "'Preferences/List By' 中更改。"\
+      "至於日期格式則由 Prefs 中 Formats/Date 決定。\n\n"\
+      "你可以在手寫區中寫要尋找名字的首個字母以快捷地搜尋。"\
+      "你亦可以寫月份來尋找該月之紀錄。\n\n"
 
     "long_cleanupAlertString" = ""\
-      "假如你選擇清除，所有帶有 HappyDays 記號 (包括你自己輸入) 的日誌將被清除\n"
+      "假如你選擇清除，所有帶有 HappyDays 記號 (包括你自己輸入) 
+的日誌將被清除\n"
 
     "long_prefFormString" = ""\
       "* 不使用系統日期格式\n"\
@@ -176,12 +183,14 @@ BEGIN
     "HappyDays Cleanup" = "清理 HappyDays"
 
     "Notify warning" = "提示"
-    "^1: Are you sure you want to create notify entries for ^2 HappyDays records?" = ""\
+    "^1: Are you sure you want to create notify entries for ^2 HappyDays 
+records?" = ""\
       "^1: 你是否想建立 ^2 個 HappyDays 紀錄的提示？"
 
     "Invalid event format" = "不正確的事件格式"
 
-    "The address record for ^1\n contains an invalid event. How would you like to handle it?" = ""\
+    "The address record for ^1\n contains an invalid event. How would you 
+like to handle it?" = ""\
       "^1 的地址簿欄目\n 含有一個不合格式的事件，應怎處理？"
 
     "Ignore" = "略過"
@@ -232,7 +241,16 @@ BEGIN
 
 	"Processing" = "處理中"
 	"Processed : " = "處理了："
+
+/* new in 1.40 */
+  "GPL free software"="GPL 自由軟體"
+  "E-Mail & Web Page"="電郵及網址"
+  "Name"="姓名"
+  "Date"="日期"
+  "Age"="歲"
+  "%d day(s) passed"="過了 %d 天"
 END
+
 
 
 

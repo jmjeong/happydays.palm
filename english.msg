@@ -257,5 +257,10 @@ BEGIN
     
     "Processing" = "Processing"  
     "Processed : " = "Processed : " 
+
+	"Name" = "Name"
+	"Date" = "Date"
+	"Age" = "Age"
+
 END
 

@@ -110,7 +110,7 @@ BEGIN
     "Collecting Information..." = "Recolectando información..."
 
     "HappyDays List" = "Lista HappyDays"
-    "Look up" = "Buscar"
+    "Look Up" = "Buscar"
     "Today" = "Hoy"
 
     "HappyDays View" = "Detalles HappyDays"
@@ -208,6 +208,10 @@ BEGIN
     "^1: ^2 HappyDays notify entries removed." = ""\
       "^1: ^2 notificaciones de HappyDays eliminadas."
 
+    "(c) 1999-2000 JaeMok Jeong" = "(c) 1999-2000 JaeMok Jeong"
+    "GPL free software" = "Software gratuito GPL"
+	"E-Mail & Web Page" = "E-Mail & Página Web"
+
     "Birthday" = "Nacimiento"
     "All" = "Todos"
     "HappyDays Export List" = "Exportar Lista HappyDays"
@@ -237,6 +241,9 @@ BEGIN
 	"Scan note field" = "Buscar en Notas"
 
     "%d day(s) left" = "%d días para el evento"  
+    "%d day(s) passed" = "%d días transcurridos"
+
+
       "Notify Format:" = "Formato de Notificación:"
       "[Last, First] E(1) Year" = "[Apellido, Nombre] E(1) Año"
 	"[First Last] E(1) Year" = "[Nombre Apellido] E(1) Año"
@@ -247,5 +254,9 @@ BEGIN
     
       "Processing" = "Procesando"
 	"Processed : " = "Procesado : "	
+
+      "Name" = "Nombre"
+	"Date" = "Fecha"
+	"Age"  = "Edad"
 
 END

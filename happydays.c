@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "memodb.h"
 #include "todo.h"
 
+#include "birthdate.h"
 #include "happydays.h"
 #include "happydaysRsc.h"
 #include "calendar.h"
@@ -150,7 +151,7 @@ static void HighlightAction(int selected, Boolean sound)
     if (gMainTableStart > selected
         || selected >= (gMainTableStart + gMainTableRows) ) {
         // if not exist in table view, redraw table
-        gMainTableStart = MAX(0, selected-5);
+        gMainTableStart = MAX(0, selected-4);
         MainFormLoadTable(frm, true);
     }
     // highlight the selection
@@ -585,6 +586,18 @@ static Boolean MenuHandler(FormPtr frm, EventPtr e)
     return handled;
 }
 
+static void MainFormReadDB()
+{
+	// category information of MainDB is same as AddressDB
+	//
+	if ((gAddrCategory = CategoryFind(AddressDB, gPrefsR->addrCategory)) ==
+		dmAllCategories) {
+		MemSet(gPrefsR->addrCategory, sizeof(gPrefsR->addrCategory), 0);
+		CategoryGetName(AddressDB, gAddrCategory, gPrefsR->addrCategory);
+	}
+	RereadBirthdateDB(gStartDate);
+}
+
 static Boolean MainFormHandleEvent (EventPtr e)
 {
     Boolean handled = false;
@@ -598,7 +611,7 @@ static Boolean MainFormHandleEvent (EventPtr e)
         {
             MemSet(&gPrefsR->adrmdate, 4, 0);  // force a re-scan
             FrmGotoForm(StartForm);
-            handled = 1;
+            handled = true;
 			break;
         }
         // frmRedrawUpdateCode invoked by SpecialKeyDown
@@ -606,21 +619,12 @@ static Boolean MainFormHandleEvent (EventPtr e)
 		// else execute frmOpenEvent
 
     case frmOpenEvent:
-        // Main Form table row settting
-        //
-        gMainTableRows = TblGetNumberOfRows(tableP); 
+		// Main Form table row settting
+		//
+		gMainTableRows = TblGetNumberOfRows(tableP); 
 
         DisplayCategory(MainFormPopupTrigger, gPrefsR->addrCategory, false);
 
-        // category information of MainDB is same as AddressDB
-        //
-        if ((gAddrCategory = CategoryFind(AddressDB, gPrefsR->addrCategory)) ==
-            dmAllCategories) {
-            MemSet(gPrefsR->addrCategory, sizeof(gPrefsR->addrCategory), 0);
-            CategoryGetName(AddressDB, gAddrCategory, gPrefsR->addrCategory);
-        }
-
-        RereadBirthdateDB(gStartDate);
 		if (e->eType == frmOpenEvent) {
 			MainFormLoadHeader(frm, false);
 			MainFormLoadTable(frm, false);
@@ -628,7 +632,7 @@ static Boolean MainFormHandleEvent (EventPtr e)
 			ShowScrollArrows(frm, gMainTableStart, gMainTableTotals);
 		}
 		else {
-			MainFormLoadHeader(frm, false);
+			// MainFormLoadHeader(frm, false);
 			MainFormLoadTable(frm, true);
 		}
 		// display starting date
@@ -749,12 +753,20 @@ static Boolean MainFormHandleEvent (EventPtr e)
 				break;
 			}
 		}
+		break;
     }
+	case frmGotoEvent: {
+		// recordNum has the selected position
+		//
+		HighlightAction(e->data.frmGoto.recordNum, false);
+
+		handled = true;
+		break;
+	}
     
     default:
         break;
     }
-
 
     return handled;
 }
@@ -2763,7 +2775,10 @@ static Boolean StartFormHandlerEvent(EventPtr e)
                 break;
             }
         }
-        else FrmGotoForm(MainForm);
+        else {
+			MainFormReadDB();
+			FrmGotoForm(MainForm);
+		}
         handled = true;
         break;
     default:
@@ -2789,10 +2804,8 @@ static Boolean ApplicationHandleEvent(EventPtr e)
             FrmSetEventHandler(frm, StartFormHandlerEvent);
             break;
         case MainForm: 
-        {
             FrmSetEventHandler(frm, MainFormHandleEvent);
             break;
-        }
         case PrefForm:
             FrmSetEventHandler(frm, PrefFormHandleEvent);
             break;
@@ -3116,7 +3129,6 @@ static UInt16 StartApplication(void)
 	// set current date to  the starting date
 	DateSecondsToDate(TimGetSeconds(), &gStartDate);
 
-    FrmGotoForm(StartForm);     // read the address db and so
     
     return 0;
 }
@@ -3235,6 +3247,214 @@ static void EventLoop(void)
     } while (e.eType != appStopEvent && !gProgramExit);
 }
 
+/***********************************************************************
+ *
+ * FUNCTION:    GoToItem
+ *
+ * DESCRIPTION: This routine is a entry point of this application.
+ *              It is generally call as the result of hiting of 
+ *              "Go to" button in the text search dialog.
+ *
+ * PARAMETERS:    recordNum - 
+ ***********************************************************************/
+static void GoToItem (GoToParamsPtr goToParams, Boolean launchingApp)
+{
+   	UInt16 recordNum;
+   	EventType event;
+	LineItemPtr ptr;
+	Int16 selected = -1;
+	Int16 i;
+
+   	recordNum = goToParams->recordNum;
+
+  	// If the application is already running, close all the open forms.  If
+   	// the current record is blank, then it will be deleted, so we'll 
+   	// the record's unique id to find the record index again, after all 
+   	// the forms are closed.
+   	if (! launchingApp) {
+		UInt32 uniqueID;
+		DmRecordInfo (MainDB, recordNum, NULL, &uniqueID, NULL);
+      	FrmCloseAllForms ();
+      	DmFindRecordByID (MainDB, uniqueID, &recordNum);
+   	}
+
+	// initialize category
+	//
+	StrCopy(gPrefsR->addrCategory, "All");
+
+	MainFormReadDB();
+
+
+	// find the inital gMainTableStart 
+	// 
+	if (gMainTableTotals <= 0) return;
+	if ((ptr = MemHandleLock(gTableRowHandle))) {
+		for (i = 0; i < gMainTableTotals; i++) {
+			if (ptr[i].birthRecordNum == recordNum) {
+				selected = i;
+				break;
+			}
+		}
+		MemPtrUnlock(ptr);
+	}
+
+	gMainTableStart = MAX(0, selected-4);
+	FrmGotoForm(MainForm);
+   	MemSet (&event, sizeof(EventType), 0);
+
+   	// Send an event to goto a form and select the matching text.
+   	event.eType = frmGotoEvent;
+   	event.data.frmGoto.formID = MainForm;
+	// trick selected number is returned by recordNum
+   	event.data.frmGoto.recordNum = selected;
+   	event.data.frmGoto.matchPos = goToParams->matchPos;
+   	event.data.frmGoto.matchLen = goToParams->searchStrLen;
+   	event.data.frmGoto.matchFieldNum = goToParams->matchFieldNum;
+   	EvtAddEventToQueue (&event);
+}
+
+static void DrawSearchLine(BirthDate birthdate, RectangleType r)
+{
+	DrawRecordName(birthdate.name1, birthdate.name2, 
+			r.extent.x, &r.topLeft.x, 
+			r.topLeft.y, false,
+		   	birthdate.flag.bits.priority_name1);
+	return;
+
+	/*
+	 *  display original birthday field
+	 *  (bug!!! must handle gPrefdfmts variable, 
+	 *  Find function must not use the global variable)
+	 *
+		Int16 width, length;
+		Boolean ignored = true;
+		// Char displayStr[255];
+		Int16 x = r.topLeft.x;
+
+		if (birthdate.flag.bits.lunar) {
+			StrCopy(displayStr, "-)");
+		}
+		else if (birthdate.flag.bits.lunar_leap) {
+			StrCopy(displayStr, "#)");
+		}
+		else displayStr[0] = 0;
+
+		if (birthdate.flag.bits.year) {
+			DateToAsciiLong(birthdate.date.month, birthdate.date.day, 
+							birthdate.date.year + 1904,
+							gPrefdfmts, displayStr + StrLen(displayStr));
+		}
+		else {
+			DateToAsciiLong(birthdate.date.month, birthdate.date.day, -1, 
+							gPrefdfmts, displayStr + StrLen(displayStr));
+		}
+
+		width = 60;
+		length = StrLen(displayStr);
+		FntCharsInWidth(displayStr, &width, &length, &ignored);
+		WinDrawChars(displayStr, length,
+					 r.topLeft.x + r.extent.x - width, 
+					 r.topLeft.y);
+	*/
+}
+
+static void Search(FindParamsPtr findParams)
+{
+   	UInt16         	pos;
+   	UInt16         	fieldNum;
+   	UInt16         	cardNo = 0;
+   	UInt16          recordNum;
+   	Char*        	header;
+   	Boolean        	done;
+   	MemHandle       recordH;
+   	MemHandle       headerH;
+   	LocalID        	dbID;
+   	DmOpenRef       dbP;
+   	RectangleType   r;
+   
+   	// unless told otherwise, there are no more items to be found
+   	findParams->more = false;  
+
+	// refind this code(**************)
+	//
+   	// Open the happydays database.
+   	// dbP = DmOpenDatabase(cardNo, dbID, findParams->dbAccesMode);
+	// 
+	// refind this code(**************)
+	dbID = DmFindDatabase(cardNo, MainDBName);
+   	dbP = DmOpenDatabase(cardNo, dbID, findParams->dbAccesMode);
+   	if (! dbP) return;
+
+   	// Display the heading line.
+   	headerH = DmGetResource(strRsc, FindHeaderString);
+   	header = MemHandleLock(headerH);
+   	done = FindDrawHeader(findParams, header);
+   	MemHandleUnlock(headerH);
+   	if (done) {
+      	findParams->more = true;
+   	}
+   	else {
+      	// Search all the fields; start from the last record searched.
+      	recordNum = findParams->recordNum;
+      	for(;;) {
+         	Boolean match = false;
+         	BirthDate       birthdate;
+         
+         	// Because applications can take a long time to finish a find 
+         	// users like to be able to stop the find.  Stop the find 
+         	// if an event is pending. This stops if the user does 
+         	// something with the device.  Because this call slows down 
+         	// the search we perform it every so many records instead of 
+         	// every record.  The response time should still be short 
+         	// without introducing much extra work to the search.
+         
+         	// Note that in the implementation below, if the next 16th 
+         	// record is secret the check doesn't happen.  Generally 
+         	// this shouldn't be a problem since if most of the records 
+         	// are secret then the search won't take long anyway!
+         	if ((recordNum & 0x000f) == 0 &&       // every 16th record
+            	EvtSysEventAvail(true)) {
+            	// Stop the search process.
+            	findParams->more = true;
+            	break;
+         	}
+         
+         	recordH = DmQueryNextInCategory(dbP, &recordNum, dmAllCategories);
+         	// Have we run out of records?
+         	if (! recordH) break;
+         
+         	// Search each of the fields of the birthdate
+      
+         	UnpackBirthdate(&birthdate, MemHandleLock(recordH));
+         
+         	if ((match = FindStrInStr((Char*) birthdate.name1, 
+						findParams->strToFind, &pos)) != false)
+            	fieldNum = 1;
+         	else if ((match = FindStrInStr((Char*) birthdate.name2, 
+						findParams->strToFind, &pos)) != false)
+            	fieldNum = 2;
+            
+         	if (match) {
+           	 	done = FindSaveMatch(findParams, recordNum, pos, fieldNum, 0, cardNo, dbID);
+            	if (done) break;
+   
+            	// Get the bounds of the region where we will draw the results.
+            	FindGetLineBounds(findParams, &r);
+            
+            	// Display the title of the description.
+				DrawSearchLine(birthdate, r);
+
+            	findParams->lineNumber++;
+         	}
+         	MemHandleUnlock(recordH);
+
+         	if (done) break;
+         	recordNum++;
+      	}
+   	}  
+   	DmCloseDatabase(dbP);   
+} 
+
 /* Main entry point; it is unlikely you will need to change this except to
    handle other launch command codes */
 UInt32 PilotMain(UInt16 cmd, MemPtr cmdPBP, UInt16 launchFlags)
@@ -3245,10 +3465,35 @@ UInt32 PilotMain(UInt16 cmd, MemPtr cmdPBP, UInt16 launchFlags)
         err = StartApplication();
         if (err) return err;
 
+		FrmGotoForm(StartForm);     // read the address db and so
         EventLoop();
         StopApplication();
-
-    } else {
+	}
+	// Launch code sent to running app before sysAppLaunchCmdFind
+	// or other action codes that will cause data searches or manipulation.                      
+	else if (cmd == sysAppLaunchCmdSaveData) {
+   		FrmSaveAllForms();
+   	}
+   	else if (cmd == sysAppLaunchCmdFind) {
+      	Search((FindParamsPtr)cmdPBP);
+    } 
+	// This launch code might be sent to the app when it's already running
+   	else if (cmd == sysAppLaunchCmdGoTo) {
+      	Boolean  launched;
+      	launched = launchFlags & sysAppLaunchFlagNewGlobals;
+      
+      	if (launched) {
+         	err = StartApplication();
+         	if (!err) {
+            	GoToItem((GoToParamsPtr) cmdPBP, launched);
+            	EventLoop();
+            	StopApplication();   
+         	}
+      	} else {
+         	GoToItem((GoToParamsPtr) cmdPBP, launched);
+      	}
+   	}
+	else {
         return sysErrParamErr;
     }
 

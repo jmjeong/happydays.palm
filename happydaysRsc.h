@@ -180,6 +180,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define DateBookNotifyDaysString	1932
 #define DateBookString				1933
 #define ToDoString					1934
+#define FindHeaderString			1935	
 
 #define ExportAlert                 1990
 

@@ -62,8 +62,14 @@ BEGIN
       " #) 代表潤月\n\n"\
       "日期格式則從系統設定中自動讀取。"\
       "年份可省略。"\
-      "少於 100 的年份會被當成二十世紀的日期，假如你不肯定，請用 YYYY 的格式 (如 1970)\n\n"\
-      "如要同時設定多項事件，請參考說明書。\n"
+      "少於 100 的年份會被當成二十世紀的日期，假如你不肯定，"\
+      "請用 YYYY 的格式 (如 1970)\n\n"\
+      "如要同時設定多項事件，請參考說明書。\n\n"\
+      "在 HappyDays 中列出名字之姓/名次序，可在地 Address Book 內使用 "\
+      "'Preferences/List By' 中更改。"\
+      "至於日期格式則由 Prefs 中 Formats/Date 決定。\n\n"\
+      "你可以在手寫區中寫要尋找名字的首個字母以快捷地搜尋。"\
+      "你亦可以寫月份來尋找該月之紀錄。\n\n"
 
     "long_cleanupAlertString" = ""\
       "假如你選擇清除，所有帶有 HappyDays 記號 (包括你自己輸入) 的日誌將被清除\n"
@@ -252,7 +258,16 @@ BEGIN
 
 	"Processing" = "處理中"
 	"Processed : " = "處理了："
+
+/* new in 1.40 */
+  "GPL free software"="GPL 自由軟體"
+  "E-Mail & Web Page"="電郵及網址"
+  "Name"="姓名"
+  "Date"="日期"
+  "Age"="歲"
+  "%d day(s) passed"="過了 %d 天"
 END
+
 
 
 
@@ -297,6 +312,10 @@ STRING ID ToDoString			"To Do"
 STRING ID BirthLeftString		"%d day(s) left"
 STRING ID BirthPassedString     "%d day(s) passed"
 
+STRING ID MainHdrNameStr		"Name"
+STRING ID MainHdrDateStr		"Date"
+STRING ID MainHdrAgeStr			"Age"
+
 FORM StartForm AT (0 0 160 160)
 NOFRAME
 SAVEBEHIND
@@ -311,8 +330,13 @@ SAVEBEHIND
 MENUID MainFormMenu
 BEGIN
     TITLE "HappyDays"
-    TABLE ID MainFormTable AT (0 16 160 121) ROWS 11 COLUMNS 1
+
+    TABLE ID MainFormHeader AT (0 16 160 11) ROWS 1 COLUMNS 3 
+				COLUMNWIDTHS 160-DATE_FIELD_WIDTH-AGE_FIELD_WIDTH 
+				DATE_FIELD_WIDTH AGE_FIELD_WIDTH 
+    TABLE ID MainFormTable AT (0 28 160 110) ROWS 10 COLUMNS 1
                 COLUMNWIDTHS 160
+
     LABEL "Look Up:" AUTOID AT (1 BOTTOM@160-1) FONT 0
     SELECTORTRIGGER "" ID MainFormStart at (PrevRight+6 PrevTop
             AUTO AUTO) LEFTANCHOR FONT 0
@@ -679,18 +703,19 @@ USABLE
 MODAL
 HELPID AboutHelpString
 BEGIN
-    TITLE "HappyDays"
-    LABEL "HappyDays 1.37" AUTOID AT (Center@80 20) FONT 1
-    LABEL "(c) 1999-2000, JaeMok Jeong"
-        AUTOID AT (Center@80 PrevBottom+5) FONT 0
-    LABEL "<jmjeong@oopsla.snu.ac.kr>" AUTOID AT (Center@80 PrevBottom)
-        Font 0
-    LABEL "http://oopsla.snu.ac.kr/~jmjeong/"
-        AUTOID AT (Center@80 PrevBottom) FONT 0
-    LABEL "palm/happydays" AUTOID AT (PrevLeft+10 PrevBottom) FONT 0
+    TITLE "About HappyDays"
 
-    LABEL "Licensed under the GNU GPL" AUTOID AT (Center@80
-        PrevBottom+4) FONT 0
+	FORMBITMAP AT (6 18) BITMAP ID_BitmapIcon USABLE 
+    LABEL "HappyDays 1.4" AUTOID AT (PrevRight+38 PrevTop) FONT 1
+    LABEL "GPL free software"
+        AUTOID AT (PrevLeft PrevTop+ABOUT_LINE_SPACING) FONT 0
+    LABEL "(c) 1999-2000 JaeMok Jeong"
+        AUTOID AT (Center PrevTop+ABOUT_LINE_SPACING2) FONT 0
+	LABEL "E-Mail & Web Page" AUTOID AT (CENTER PrevTop+ABOUT_LINE_SPACING) FONT 1
+    LABEL "jmjeong@oopsla.snu.ac.kr" AUTOID AT 	
+			(Center PrevTop+ABOUT_LINE_SPACING) Font 0
+    LABEL "jmjeong.com/palm/happydays"
+        AUTOID AT (Center PrevTop+ABOUT_LINE_SPACING) FONT 0
 
     LABEL "Translator" AUTOID AT (Center@80 PrevBottom+3) USABLE FONT 0
     LABEL "Translator's email" AUTOID AT (Center@80 PrevBottom) USABLE FONT 0
@@ -708,8 +733,20 @@ BEGIN
 	FIELD ID ProgressFormField AT (PrevRight+3 PrevTop 50 AUTO) NONEDITABLE
 END
 
-APPLICATIONICONNAME 1000 "HappyDays"
-ICON "HD_large.bmp"
-SMALLICON "HD_small.bmp"
+/////////////
+// Bitmaps //
+/////////////
+BitMapFamily ID ID_BitmapIcon
+	"HD_large.bmp" "HD_large.bmp" "" "HD_large.bmp"
+	COMPRESS
+	TRANSPARENT 204 204 0
 
-VERSION ID 1 "1.37"
+ICONFAMILY 
+	"HD_large.bmp" "HD_large.bmp" "" "HD_large.bmp"
+	TRANSPARENT 204 204 0
+SMALLICONFAMILY
+	"HD_small.bmp" "HD_small.bmp" "" "HD_small.bmp"
+	TRANSPARENT 204 204 0
+
+APPLICATIONICONNAME 1000 "HappyDays"
+VERSION ID 1 "1.4"

@@ -1,20 +1,20 @@
 TRANSLATION "THAI"
 BEGIN
     "Translator" = "แปลโดย: กัปตัน เตียวตระกูล"
-    "Translator's email" = "kteotrakool@hotmail.com"
+    "Translator's email" = "KTeotrakool@hotmail.com"
 
     "long_notifySettingString" = ""\
-    "* ระเบียน\n"\
+    "• ระเบียน\n"\
     "แตะ 'ทั้งหมด' ถ้าต้องการเตือนทุกเหตุการณ์ที่อยู่ในหมวดนี้\n"\
     "แตะ 'ที่เลือก' ถ้าต้องการระเบียนที่เลือกเท่านั้น\n\n"\
-    "* ที่มีอยู่\n"\
+    "• ที่มีอยู่\n"\
     "แตะ 'เก็บ' ถ้าไม่ต้องการแก้ไขรายการเตือนที่สร้างโดย HappyDays ที่มีอยู่แล้ว\n"\
     "แตะ 'เปลี่ยน' ถ้าต้องการแก้ไขเพิ่มเติมรายการเตือนที่สร้างโดย HappyDays ที่มีอยู่แล้ว\n\n"\
-    "* เตือน\n"\
+    "• เตือน\n"\
     "ตั้งเตือนใน DateBook ล่วงหน้าตามจำนวนวันที่กำหนด\n\n"\
-    "* เวลา\n"\
+    "• เวลา\n"\
     "เวลาเตือน\n\n"\
-    "* ซํ้านาน\n"\
+    "• ซํ้านาน\n"\
     "จำนวนปีที่ต้องการเตือน\n"\
     "-1 สำหรับสุริยคติจะเตือน\nตลอดไป และ"\
     "จะเตือนเป็นเวลา 5 ปีสำหรับจันทรคติ\n"
@@ -24,11 +24,11 @@ BEGIN
 	"ถ้าไม่มีก็จะไม่เห็นอะไรปรากฏ\n"
 
     "long_customErrorString" = ""\
-    "'Birthday' เป็นค่าเริ่มต้นของ custom field ที่ใช้โดย HappyDays "\
+    "'Birthday' เป็นค่าปกติของ custom field ที่ใช้โดย HappyDays "\
     "ถ้าต้องการเปลี่ยน ให้ไปที่ตั้งค่าตัวเลือก\n\n"\
     "สำคัญ: ถ้าต้องการแก้ไข\ncustom field ใน AddressBook "\
     "เลือก 'Options/Rename Custom Fields' แล้วแก้เป็น 'Birthday' "\
-    "หรือเหมือนกับ custom field ในตัวเลือกของ HappyDays"
+    "หรือแก้ให้เหมือนกับ custom field ในตัวเลือกของ HappyDays"
 
     "long_aboutString" = ""\
     "'HappyDays' ใช้สำหรับเตือน\nวันเกิดและวันครบรอบต่างๆ ของเพื่อนและครอบครัว "\
@@ -46,7 +46,16 @@ BEGIN
     "รูปแบบวันที่จะใช้เหมือนกับที่ตั้งไว้ในค่าตัวเลือกของ\nระบบ สามารถละปีได้\n"\
     "ถ้าปีที่ใส่น้อยกว่า 100 จะถือเป็นปีในศตวรรษที่ 20 (19xx)"\
     "ถ้าไม่แน่ใจ ให้เขียนโดยใช้รูปแบบ YYYY (ต.ย. 1970)\n\n"\
-    "ถ้าต้องการใส่หลายเหตุการณ์ โปรดอ่านคู่มือ\n"
+    "ถ้าต้องการใส่หลายเหตุการณ์ โปรดอ่านคู่มือ\n\n"\
+          "Name1 & name2 ที่ปรากฏใน HappyDays List ใช้ตาม\n"\
+          "ตัวเลือก 'AddressBook/\nPreferences/List by' และถ้าคุณเปลี่ยนค่าตัวเลือกนี้ "\
+          "คุณจะเห็นความแตกต่าง\n\n"\
+          "รูปแบบวันที่นั้นใช้ตามตัวเลือก System/Prefs/Formats/Date Format.\n\n"\
+          "ถ้าคุณเขียนตัวอักษรหรือตัวเลขในบริเวณที่ใช้เขียนกราฟิตี แถวที่ตรงกัน "\
+          "จะถูกเน้น ตัวอย่างเช่น ถ้าคุณเขียน 'a' "\
+          "ระเบียนที่เริ่มด้วย 'a' หรือ 'A' จะถูกเน้น "\
+          "หรือถ้าคุณเขียน '1' ระเบียนถัดไปเริ่มจากเดือน\nมกราคม "\
+          "จะถูกเน้น\n"
 
     "long_cleanupAlertString" = ""\
     "รายการเตือนของ HappyDays จะมี "\
@@ -55,18 +64,19 @@ BEGIN
     "รายการเหล่า\nนั้นอาจถูกลบด้วยเช่นกัน\n"
 
     "long_prefFormString" = ""\
-	"* ไม่ใช้รูปแบบวันที่ตามระบบ...\n"\
+    "• ไม่ใช้รูปแบบวันที่ตามระบบ...\n"\
 	"บังคับการแปลความหมาย\nของ custom field สำหรับ Birthday ใน AddressDB\n"\
 	"โดยปกติ รูปแบบวันที่ที่ใช้จะเหมือนกับที่ตั้งไว้ในค่าตัว\nเลือกของระบบ\n\n"\
-	"* สแกนใน note\n"\
+    "• สแกนใน note\n"\
 	"ถ้าเลือก จะสแกนหาข้อมูลใน note ของ Address Book\n\n"\
-    "* ขีดเส้นเน้นจันทรคติ\n"\
+    "• ขีดเส้นเน้นจันทรคติ\n"\
     "ถ้าเลือก จะขีดเส้นประใต้วันที่ที่เป็นจันทรคติ\n\n"\
-	"* รูปแบบที่ใช้เตือน\n"\
+    "• รูปแบบที่ใช้เตือน\n"\
 	"รูปแบบรายการเตือน\n\n"\
-    "* Custom field\n"\
-    "ชื่อของ custom field ใน Address Book ที่ใช้เป็นข้อมูล\n\n"\
-    "* HappyDays ID\n"\
+    "• Custom field\n"\
+    "ชื่อของ custom field ใน Address Book ที่ใช้เป็นข้อมูล\n"\
+    "วันที่เหตุการณ์ต่างๆ\n\n"\
+    "• HappyDays ID\n"\
     "ใช้สร้างและลบรายการเตือน\n"
 
     "long_removeConfirmString" = ""\
@@ -103,10 +113,9 @@ BEGIN
     "Collecting Information..." = "กำลังรวบรวมข้อมูล..."
 
     "HappyDays List" = "HappyDays List"
-    "Look up" = "ค้นหา"
-    "Today" = "วันนี้"
+    "Look Up:" = "ค้นหา"
 
-	"HappyDays View" = "HappyDays View"
+    "HappyDays View" = "HappyDays View"
     "Done"  = "เสร็จ"
     "DB" = "DB"
     "TD" = "TD"
@@ -120,7 +129,6 @@ BEGIN
     "Export to Memo Pad" = "ส่งข้อมูลไป Memo Pad"
     "Solar to Lunar" = "สุริยคติ -> จันทรคติ"
     "Lunar to Solar" = "จันทรคติ -> สุริยคติ"
-
     "Options" = "ตัวเลือก"
     "Preferences" = "ตั้งค่า"
     "About HappyDays" = "เกี่ยวกับ HappyDays"
@@ -142,18 +150,14 @@ BEGIN
     "OK" = "ตกลง"
     "Cancel" = "ยกเลิก"
 
-    "Solar to Lunar" = "สุริยคติ -> จันทรคติ"
-    "Lunar to Solar" = "จันทรคติ -> สุริยคติ"
-
-
-    "Solar to Lunar Convert" = "สุริยคติ -> จันทรคติ"
+    "Solar to Lunar Convert" = "เปลี่ยน สุริยคติ -> จันทรคติ"
     "Enter Solar date:" = "ใส่วันที่ตามสุริยคติ:"
     "Year must be in 1881-2043" = "ปีต้องอยู่ระหว่าง ค.ศ. 1881 - 2043"
     "Result Lunar date:" = "ผลวันที่ตามจันทรคติ:"
 
     "Convert" = "เปลี่ยน"
 
-    "Lunar to Solar Convert" = "จันทรคติ -> สุริยคติ"
+    "Lunar to Solar Convert" = "เปลี่ยน จันทรคติ -> สุริยคติ"
     "Enter Lunar date:" = "ใส่วันที่ตามจันทรคติ:"
     "Leap" = "อธิกมาส   "
     "Result Solar date:" = "ผลวันที่ตามสุริยคติ:"
@@ -165,11 +169,11 @@ BEGIN
       "keep" = "เก็บ"
       "modify" = "เปลี่ยน"
     "Priority:" = "ลำดับ:"
-	"Category:" = "หมวด:"
+    "Category:" = "หมวด:"
     "Private:" = "ส่วนตัว:"
     "Alarm:" = "เตือน:"
     "Time:" = "เวลา:"
-    "More..." = "ต่อ..."
+    "Icon" = "ไอคอน"
 
     "Repeat for:" = "ซํ้านาน:"
     "years" = "ปี"
@@ -180,7 +184,7 @@ BEGIN
     "Would you like to export HappyDays List to Memo Pad?" = ""\
       "ต้องการส่งข้อมูลใน HappyDays List ไป Memo Pad หรือไม่?"
 
-    "Custom Field Error" = "Custom Field Error"
+    "Custom Field Error" = "มีข้อผิดพลาดใน Custom Field"
     "Help" = "วิธีใช้"
 
 
@@ -219,25 +223,28 @@ BEGIN
     "Y.M.D" = "ป.ด.ว"
     "Y-M-D" = "ป-ด-ว"
 
-	"DateBook Notify More" = "เตือนใน DateBook (ต่อ)"
-      "Icon Support" = "สนับสนุนไอคอน       "
-	  "AN" = "AN"
-	  "DateBk3" = "DBk3"
-      "AN ICON Number:" = "เลขไอคอนใน AN:   "
-      "DateBk3 ICON:" = "ไอคอนใน DateBk3:"
+    "Date Book Icon" = "ไอคอนใน Date Book"
+    "Icon Support" = "สนับสนุนไอคอน       "
+    "AN Icon Number:" = "เลขไอคอนใน AN:   "
+    "DateBk3 Icon:" = "ไอคอนใน DateBk3:"
 
     "Days" = "วัน"
-	"Date Book" = "Date Book"
-	"To Do" = "To Do"
-	"Scan note field" = "สแกนใน note      "
+    "Date Book" = "Date Book"
+    "To Do" = "To Do"
+    "Scan note field" = "สแกนใน note      "
+    "%d day(s) left" = "เหลือ %d วัน"  
+    "%d day(s) passed" = "ผ่านไป %d วัน"  
+    "Notify Format:" = "รูปแบบที่ใช้เตือน:"
+    "[Last, First] E(1) Year" = "[นามสกุล, ชื่อ] E(1) ปี"
+    "[First Last] E(1) Year" = "[ชื่อ นามสกุล] E(1) ปี"
+    "Event - Last, First Year" = "เหตุการณ์ - นามสกุล, ชื่อ ปี"
+    "Event - First Last Year" = "เหตุการณ์ - ชื่อ นามสกุล ปี"
+    "First Last Year" = "ชื่อ นามสกุล อายุ"
 	
-	"Notify Format:" = "รูปแบบที่ใช้เตือน:"
-    "[Last, First] E(1) Year" = "[นามสกุล, ชื่อ] E(1) อายุ"
-	"[First Last] E(1) Year" = "[ชื่อ นามสกุล] E(1) อายุ"
-	"Event - Last, First Year" = "Event - นามสกุล, ชื่อ อายุ"
-	"Event - First Last Year" = "Event - ชื่อ นามสกุล อายุ"
-	"First Last Year" = "ชื่อ นามสกุล อายุ"
-	
-	"Processing" = "กำลังโปรเซสข้อมูล"
-	"Processed : " = "เสร็จแล้ว: "
+    "Processing" = "กำลังโปรเซสข้อมูล"
+    "Processed : " = "เสร็จแล้ว: "
+
+    "Name" = "ชื่อ"
+    "Date" = "วันที่"
+    "Age" = "อายุ"
 END
