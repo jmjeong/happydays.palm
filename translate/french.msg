@@ -11,7 +11,7 @@ BEGIN
   "long_aboutString" =  ""\
     "'HappyDays' vous évite d'oublier les anniversaires et les fêtes "\
     "de vos amis et des membres de votre famille, ainsi que d'autres événements.\n\n"\
-    "Reportez-vous aux fichiers index.html et manual.html pour des informations détaillées "\
+    "Reportez-vous au manuel disponible en ligne pour des informations détaillées "\
     "sur la façon d'utiliser HappyDays\n\n"\
     "HappyDays est distribué selon les conditions générales GNU "\
     "Public License version 2.0.\n"
@@ -161,7 +161,7 @@ BEGIN
     "Scan note field" =  "Scruter champ Note"  
     "Ignore record with prefix '!'" =  "Ignorer enreg. avec préfixe '!'"
 
-    "Address Autoscan" =  "Lect. auto. adresses"
+    "Address Autoscan:" =  "Lect. auto. adresses"
     "Always" =  "Toujours"
     "Ask" =  "Demander"
     "Never" =  "Jamais"

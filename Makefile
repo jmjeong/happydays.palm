@@ -1,6 +1,6 @@
 ## Makefile for HappyDays application
 
-VERSION = 2.27
+VERSION = 2.28
 TARGET = happydays
 APPNAME = "HappyDays"
 APPID = "Jmje"

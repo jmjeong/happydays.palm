@@ -110,7 +110,7 @@ Int16 CompareAgeFunc(LineItemPtr p1, LineItemPtr p2, Int32 extra)
 {   
 	if (p1->age > p2->age) return 1*extra;
 	else if (p1->age < p2->age) return -1*extra;
-	else return 0;
+	else return DateCompare(p1->date, p2->date)*extra;
 }
 
 static Int16 CalculateAge(DateType converted, DateType origin,
