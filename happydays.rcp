@@ -37,7 +37,8 @@ BEGIN
     "* Alarm\n"\
     "will set the alarm notification in your datebook entry. Set "\
 	"the number of days in advance you'd like to get notified.\n\n"\
-    "* Time\n\n"\
+    "* Time\n"\
+	"Time of the event"\
     "* Repeat for\n"\
     "is the interval of the notification record. "\
     "-1 means repeat forever in case of solar event, and "\
@@ -284,7 +285,8 @@ BEGIN
     "Datebk3 icon:" = "Datebk3 ¾ÆÀÌÄÜ :"
 
     "Alarm:" = "¾Ë¶÷ :"
-    "# of days before:" = "¸î ÀÏÀü :"
+    "Time:" = "½Ã°£:"
+    "More..." = "´õ..."
 
     "Repeat for:" = "¸î ³â°£ :"
     "years" = "³â"
@@ -339,6 +341,7 @@ BEGIN
 	"Icon Support" = "¾ÆÀÌÄÜ Áö¿ø"
 	"AN ICON Number: " = "AN ¾ÆÀÌÄÜ ¹øÈ£: "
 	"DateBk3 ICON" = "DateBook3 ¾ÆÀÌÄÜ"
+    "Days" = "ÀÏÀü"
 END
 
 TRANSLATION "GERMAN"
@@ -360,9 +363,10 @@ BEGIN
       "* Datebk3 Icon\n"\
       "Trägt das Geburtstagskuchen-Icon für Termine ein.\n\n"\
       "* Alarm\n"\
-      "Erzeugt zusammen mit dem Termin einen Alarm zur gewählten Zeit.\n\n"\
-      "* Tage vorher\n"\
-      "Setzt die Anzahl Tage, die Sie vor dem Ereignis informiert werden wollen.\n\n"\
+      "Erzeugt zusammen mit dem Termin einen Alarm. Geben Sie die "\
+      "Anzahl Tage an, die Sie vor dem Ereignis informiert werden wollen.\n\n"\
+      "* Zeit\n"\
+      "Uhrzeit des Alarms\n\n"\
       "* Wiederholung\n"\
       "Gibt an, wie oft das Ereignis wiederholt werden soll. "\
       "Dabei bedeutet (-1) für den Gregorianischen Kalender unbegrenzt, "\
@@ -408,6 +412,9 @@ BEGIN
       "verwenden, werden diese Einträge ebenfalls entfernt.\n"
 
     "long_prefFormString" = ""\
+      "* Statt System-Datumsformat\n"\
+      "Wenn Sie für Geburtstage ein anderes Datumsformat in Ihrem Adreßbuch verwenden "\
+      "als das Systemformat, können Sie dieses entsprechend einstellen\n\n"\
       "* Benutzerfeld\n"\
       "Name des Benutzerfelds im Adreßbuch, aus dem Geburtstage übernommen werden\n\n"\
       "* HappyDays ID\n"\
@@ -511,7 +518,8 @@ BEGIN
     "Private:" = "Privat:"
     "Datebk3 icon:" = "Datebk3 Icon:"
     "Alarm:" = "Alarm:"
-    "# of days before:" = "Tage vorher:"
+    "Time:" = "Uhrzeit:"
+    "More..." = "Mehr..."
 
     "Repeat for:" = "Wiederholung:"
     "years" = "Jahr(e)"
@@ -565,6 +573,7 @@ BEGIN
     "Icon Support" = "Icons verwenden"
     "AN ICON Number: " = "AN Icon Nummer: "
     "DateBk3 ICON" = "DateBk3 Icon"
+    "Days" = "Tage"
 END
 
 STRING ID NotifySettingHelpString "long_notifySettingString"
