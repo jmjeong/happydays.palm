@@ -88,6 +88,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define NotifySettingFormBk3		1454
 #define NotifySettingFormAN			1455
 #define NotifySettingBk3Table		1456
+#define NotifySettingBk3Label		1457
+#define NotifySettingANLabel		1458
+#define NotifySettingANInput		1459
 
 #define NotifySettingHelpString     1499
 

@@ -747,13 +747,13 @@ USABLE
 HELPID  NotifySettingHelpString
 BEGIN
     TITLE "Notify Settings"
-    LABEL "Records:" AUTOID AT (RIGHT@88 20) FONT 1
+    LABEL "Records:" AUTOID AT (RIGHT@88 25) FONT 1
     PUSHBUTTON "all" ID NotifySettingFormRecordAll AT (PrevRight+3
             PrevTop AUTO AUTO) GROUP 1
     PUSHBUTTON "selected" ID NotifySettingFormRecordSlct AT (PrevRight+1
             PrevTop AUTO AUTO) LEFTANCHOR GROUP 1
 
-    LABEL "Existing entries:" AUTOID AT (RIGHT@88 PrevBottom+1) FONT 1
+    LABEL "Existing entries:" AUTOID AT (RIGHT@88 PrevBottom+3) FONT 1
     PUSHBUTTON "keep" ID NotifySettingFormEntryKeep at (PrevRight+3
             PrevTop AUTO AUTO) GROUP 2
     PUSHBUTTON "modify" ID NotifySettingFormEntryModify at (PrevRight+1
@@ -763,22 +763,19 @@ BEGIN
     CHECKBOX " " ID NotifySettingFormPrivate at (PrevRIght+3
         PrevTop AUTO AUTO) RIGHTANCHOR FONT 1 
 
-    LABEL "HappyDays Id:" AUTOID AT (RIGHT@88 PrevBottom+1) FONT 1
-    CHECKBOX "note" ID NotifySettingFormHide at (PrevRIght+3
-        PrevTop AUTO AUTO) RIGHTANCHOR FONT 0 
-
-    LABEL "Alarm:" AUTOID AT (RIGHT@88 PrevBottom+1) FONT 1
-    CHECKBOX "" ID NotifySettingFormAlarm at (PrevRIght+3 PrevTop
+    LABEL "Alarm:" AUTOID AT (RIGHT@88 PrevBottom+3) FONT 1
+    CHECKBOX "" ID NotifySettingFormAlarm at (PrevRight+3 PrevTop
             AUTO AUTO) RIGHTANCHOR FONT 1
     FIELD ID NotifySettingFormBefore AT (PrevRight+2 PrevTop 13 AUTO)
         UNDERLINED MAXCHARS 2
-    FIELD  ID NotifySettingFormLabelDays AT (PrevRight PrevTop 30 AUTO) NONEDITABLE 
+    FIELD  ID NotifySettingFormLabelDays AT (PrevRight PrevTop 30 AUTO) 
+		NONEDITABLE 
 
-    LABEL "Time:" AUTOID AT (RIGHT@88 PrevBottom+1) FONT 1
+    LABEL "Time:" AUTOID AT (RIGHT@88 PrevBottom+3) FONT 1
     SELECTORTRIGGER "" ID NotifySettingFormTime at (PrevRight+3 PrevTop
             AUTO AUTO) LEFTANCHOR FONT 0
 
-    LABEL "Repeat for:" AUTOID AT (RIGHT@88 PrevBottom+1) FONT 1
+    LABEL "Repeat for:" AUTOID AT (RIGHT@88 PrevBottom+3) FONT 1
     FIELD ID NotifySettingFormDuration AT (PrevRight+3 PrevTop 13 AUTO)
             UNDERLINED MAXCHARS 2
     LABEL "years" AUTOID AT (PrevRight+3 PrevTop) FONT 0
@@ -796,13 +793,23 @@ HELPID  NotifySettingHelpString
 BEGIN
     TITLE "Notify Settings"
 
+    CHECKBOX "Hide HappyDays ID" ID NotifySettingFormHide at (10 20 AUTO AUTO) 
+		RIGHTANCHOR FONT 0 
+
     CHECKBOX "Icon Support" ID NotifySettingFormIcon 
-			at (10 20 AUTO AUTO) RIGHTANCHOR FONT 0 
-    PUSHBUTTON "DateBk3" ID NotifySettingFormBk3 AT (PrevRight+3
-            PrevTop AUTO AUTO) GROUP 1
-    PUSHBUTTON "AN" ID NotifySettingFormAN AT (PrevRight+1
+			at (10 PrevBottom AUTO AUTO) RIGHTANCHOR FONT 0 
+    PUSHBUTTON "AN" ID NotifySettingFormAN AT (PrevRight+3
             PrevTop AUTO AUTO) LEFTANCHOR GROUP 1
-    TABLE ID NotifySettingBk3Table AT (0 PrevBottom+10 160 48) ROWS 4 COLUMNS 13
+    PUSHBUTTON "DateBk3" ID NotifySettingFormBk3 AT (PrevRight+1
+            PrevTop AUTO AUTO) GROUP 1
+
+	LABEL "AN ICON String: " ID NotifySettingANLabel AT (5 PrevBottom+5) 
+	FIELD ID NotifySettingANInput AT (PrevRight+3 PrevTop 60 AUTO) 
+		UNDERLINED MAXCHARS 9
+
+	LABEL "DateBk3 ICON" ID NotifySettingBk3Label AT (5 PrevBottom+2) 
+    TABLE ID NotifySettingBk3Table AT (7 PrevBottom 130 40) ROWS 4 
+		COLUMNS 13 COLUMNWIDTHS 10 10 10 10 10 10 10 10 10 10 10 10 10
 
     BUTTON "OK" ID NotifySettingMoreFormOk AT (5 Bottom@135 40 AUTO)
 END
@@ -865,7 +872,7 @@ MODAL
 HELPID AboutHelpString
 BEGIN
     TITLE "HappyDays"
-    LABEL "HappyDays 1.1" AUTOID AT (Center@80 20) FONT 1
+    LABEL "HappyDays 1.1pre0" AUTOID AT (Center@80 20) FONT 1
     LABEL "(c) 1999-2000, JaeMok Jeong"
         AUTOID AT (Center@80 PrevBottom+5) FONT 0
     LABEL "<jmjeong@oopsla.snu.ac.kr>" AUTOID AT (Center@80 PrevBottom)
@@ -888,4 +895,4 @@ APPLICATIONICONNAME 1000 "HappyDays"
 ICON "happydays.pbitm"
 SMALLICON "happydays-small.pbitm"
 
-VERSION 1 "1.1"
+VERSION 1 "1.1pre0"

@@ -24,64 +24,44 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "address.h"
 #include "happydaysRsc.h"
 
-void PackBirthdate(BirthDate *birthdate, VoidHand BirthEntry)
+void PackBirthdate(BirthDate *birthdate, void* recordP)
 {
-    UInt length = 0;
-    CharPtr s;
     UInt offset = 0;
 
-    // StrLen does not accept NULL string, so I did check null.
-    //
-    if (birthdate->name1) length += StrLen(birthdate->name1);
-    if (birthdate->name2) length += StrLen(birthdate->name2);
-    if (birthdate->custom) length += StrLen(birthdate->custom);
-    
-    length += sizeof(birthdate->addrRecordNum) +
-        sizeof(birthdate->flag) + sizeof(birthdate->date) +3;
-    // +2 for string terminator
+    DmWrite(recordP, offset, (CharPtr)&birthdate->addrRecordNum,
+            sizeof(birthdate->addrRecordNum));
+    offset += sizeof(birthdate->addrRecordNum);
+    DmWrite(recordP, offset, (CharPtr)&birthdate->date,
+            sizeof(birthdate->date));
+    offset += sizeof(birthdate->date);
+    DmWrite(recordP, offset, (CharPtr)&birthdate->flag,
+            sizeof(birthdate->flag));
+    offset += sizeof(birthdate->flag);  // for corealign
 
-    // resize the VoidHand
-    if (MemHandleResize(BirthEntry,length) == 0) {
-        // copy the field
-        s = MemHandleLock(BirthEntry);
-        offset = 0;
-        DmWrite(s, offset, (CharPtr)&birthdate->addrRecordNum,
-                sizeof(birthdate->addrRecordNum));
-        offset += sizeof(birthdate->addrRecordNum);
-        DmWrite(s, offset, (CharPtr)&birthdate->date,
-                sizeof(birthdate->date));
-        offset += sizeof(birthdate->date);
-        DmWrite(s, offset, (CharPtr)&birthdate->flag,
-                sizeof(birthdate->flag));
-        offset += sizeof(birthdate->flag);  // for corealign
-
-        if (birthdate->name1) {
-            DmStrCopy(s, offset, (CharPtr)birthdate->name1);
-            offset += StrLen(birthdate->name1) +1;
-        }
-        else {
-            DmStrCopy(s, offset, "\0");
-            offset += 1;
-        }
+    if (birthdate->name1) {
+        DmStrCopy(recordP, offset, (CharPtr)birthdate->name1);
+        offset += StrLen(birthdate->name1) +1;
+    }
+    else {
+        DmStrCopy(recordP, offset, "\0");
+        offset += 1;
+    }
         
-        if (birthdate->name2) {
-            DmStrCopy(s, offset, (CharPtr)birthdate->name2);
-            offset += StrLen(birthdate->name2) +1;
-        }
-        else {
-            DmStrCopy(s, offset,"\0");
-            offset += 1;
-        }
+    if (birthdate->name2) {
+        DmStrCopy(recordP, offset, (CharPtr)birthdate->name2);
+        offset += StrLen(birthdate->name2) +1;
+    }
+    else {
+        DmStrCopy(recordP, offset,"\0");
+        offset += 1;
+    }
 
-        if (birthdate->custom) {
-            DmStrCopy(s, offset, (CharPtr)birthdate->custom);
-        }
-        else {
-            DmStrCopy(s, offset,"\0");
-            offset += 1;
-        }
-
-        MemHandleUnlock(BirthEntry);
+    if (birthdate->custom) {
+        DmStrCopy(recordP, offset, (CharPtr)birthdate->custom);
+    }
+    else {
+        DmStrCopy(recordP, offset,"\0");
+        offset += 1;
     }
 }
 
@@ -100,6 +80,23 @@ void UnpackBirthdate(BirthDate *birthdate,
     s += StrLen(s) + 1;
     birthdate->custom = s;
     s += StrLen(s) + 1;
+}
+
+static Int BirthPackedSize(BirthDate* birthdate)
+{
+    Int size;
+
+    size = sizeof(PackedBirthDate) - sizeof(char);    // corect
+    if (birthdate->name1) size += StrLen(birthdate->name1) +1;
+    else size += 1;     // '\0'
+
+    if (birthdate->name2) size += StrLen(birthdate->name2) +1;
+    else size += 1;     // '\0'
+
+    if (birthdate->custom) size+= StrLen(birthdate->custom) +1;
+    else size+= 1;
+
+    return size;
 }
 
 Int CompareBirthdateFunc(LineItemPtr p1, LineItemPtr p2, Long extra)
@@ -366,12 +363,105 @@ static void UnderscoreToSpace(Char *src)
     }
 }
 
+static void BirthFindKey(PackedBirthDate* r, char **key, Int* whichKey)
+{
+    if (*whichKey == 1) {       // start
+        if (r->name[0] == 0) {
+            *whichKey = 3;      // end
+            *key =  &r->name[1];
+            return;
+        }
+        else {
+            *whichKey = 2;      // second
+            *key = r->name;
+            return;
+        }
+    }
+    else if (*whichKey == 2) {
+        *whichKey = 3;
+        *key = r->name + StrLen(r->name) + 1;
+        return;
+    }
+    else {
+        *key = NULL;
+        return;
+    }
+}
+
+static Int BirthComparePackedRecords(PackedBirthDate *rec1,
+                                     PackedBirthDate *rec2,
+                                     Int unusedInt,
+                                     SortRecordInfoPtr unused1,
+                                     SortRecordInfoPtr unused2,
+                                     VoidHand appInfoH)
+{
+    Int result;
+    Int whichKey1 = 1, whichKey2 = 1;
+    char *key1, *key2;
+
+    do {
+        BirthFindKey(rec1, &key1, &whichKey1);
+        BirthFindKey(rec2, &key2, &whichKey2);
+
+        if (key1 == NULL) {
+            if (key2 == NULL) {
+                return 0;
+            }
+            else return -1;
+        }
+        else if (key2 == NULL) return 1;
+        else {
+            result = StrCaselessCompare(key1, key2);
+            if (result == 0)
+                result = StrCompare(key1, key2);
+        }
+    } while (!result);
+
+    return result;
+}
+
+static Int BirthFindSortPosition(DmOpenRef dbP, PackedBirthDate* newRecord)
+{
+    return DmFindSortPosition(dbP, (void*)newRecord, 0,
+                               (DmComparF *)BirthComparePackedRecords, 0);
+}
+
+static Int BirthNewRecord(DmOpenRef dbP, BirthDate *r, Int *index)
+{
+    VoidHand recordH;
+    PackedBirthDate* recordP;
+    Err err;
+    Int newIndex;
+
+    // 1) and 2) (make a new chunk with the correct size)
+    recordH = DmNewHandle(dbP, (Int)BirthPackedSize(r));
+    if (recordH == NULL)
+        return dmErrMemError;
+
+    // 3) Copy the data from the unpacked record to the packed one.
+    recordP = MemHandleLock(recordH);
+    PackBirthdate(r, recordP);
+
+    // Get the index
+    newIndex = BirthFindSortPosition(dbP, recordP);
+    MemPtrUnlock(recordP);
+
+    // 4) attach in place
+    err = DmAttachRecord(dbP, &newIndex, (Handle)recordH, 0);
+    if (err)
+        MemHandleFree(recordH);
+    else *index = newIndex;
+
+    return err;
+}
+
+                          
 static Int AnalOneRecord(UInt addrattr, Char* src,
                   BirthDate* birthdate, Boolean *ignore)
 {
     Char* p;
-    UInt        index;
-    VoidHand    h;
+    UInt index;
+    Err err;
     Int year, month, day;
 
 	while (*src == ' ' || *src == '\t') src++;     // skip white space
@@ -392,8 +482,13 @@ static Int AnalOneRecord(UInt addrattr, Char* src,
 
         else goto ErrHandler;
 
-        birthdate->name1 = src;
-        birthdate->name2 = 0;
+        if (src[0] == '.') {
+            birthdate->name1 = src+1;
+            birthdate->name2 = 0;
+        }
+        else {
+            birthdate->name2 = src;
+        }
         
         UnderscoreToSpace(src);
         
@@ -415,11 +510,10 @@ static Int AnalOneRecord(UInt addrattr, Char* src,
     birthdate->date.month = month;
     birthdate->date.day = day;
 
-    // maintain address book order
+    // maintain address book order(name order)
     //      list order is determined by sort
-    index = dmMaxRecordIndex;
-    h = DmNewRecord(MainDB, &index, 1);
-    if (h) {
+    err = BirthNewRecord(MainDB, birthdate, &index);
+    if (!err) {
         UInt attr;
         // set the category of the new record to the category
         // it belongs in
@@ -429,7 +523,6 @@ static Int AnalOneRecord(UInt addrattr, Char* src,
 
         DmSetRecordInfo(MainDB, index, &attr, NULL);
 
-        PackBirthdate(birthdate, h);
         DmReleaseRecord(MainDB, index, true);
     }
     return 0;
@@ -493,7 +586,7 @@ Int UpdateBirthdateDB(DmOpenRef dbP, FormPtr frm)
         Boolean     ignore = false;         // ignore error record
         Char*       birthdateField;
         UInt        addrattr;
-        Char*       p, *q;
+        Char        *p, *q;
 
         // display collecting information
         //
@@ -504,6 +597,7 @@ Int UpdateBirthdateDB(DmOpenRef dbP, FormPtr frm)
         CleanupBirthdateCache(MainDB);
             
         while (1) {
+            char *name1, *name2;
             recordH = DmQueryNextInCategory(AddressDB, &currIndex,
                                             dmAllCategories);
             if (!recordH) break;
@@ -535,6 +629,10 @@ Int UpdateBirthdateDB(DmOpenRef dbP, FormPtr frm)
                 birthdate.flag.bits.priority_name1 = 1;
             }
 
+            // save the temporary name
+            name1 = birthdate.name1;
+            name2 = birthdate.name2;
+            
             p = birthdateField =
                 MemPtrNew(StrLen(r.fields[gBirthDateField])+1);
 
@@ -549,9 +647,12 @@ Int UpdateBirthdateDB(DmOpenRef dbP, FormPtr frm)
 
                 *q = 0;
                 if (AnalOneRecord(addrattr, p, &birthdate, &ignore)) return 0;
-                
                 p = q+1;
-                
+
+                // restore the saved name
+                birthdate.name1 = name1;
+                birthdate.name2 = name2;
+
                 while (*p == ' ' || *p == '\t' || *p == '\n')
                     p++;     // skip white space
             }

@@ -29,7 +29,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 extern Int gBirthDateField;
 
-void PackBirthdate(BirthDate *birthdate, VoidHand BirthEntry);
+void PackBirthdate(BirthDate *birthdate, void* recordP);
 void UnpackBirthdate(BirthDate *birthdate,
                      const PackedBirthDate *packedBirthdate);
 

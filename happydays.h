@@ -36,7 +36,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define MemoAppID           'memo'
 #define MemoDBName          "MemoDB"
 
-#define DATEBK3_ICON		"##@@@J@@@"		// birthday-cake icon
+#define DATEBK3_MEMO_STRING "DATEBK3"       // datebk3 icon in memo list
 
 /* Notify Preferences */
 struct sNotifyPrefs 
