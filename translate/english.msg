@@ -1,6 +1,7 @@
 TRANSLATION "ENGLISH"
 BEGIN
 	"long_notifySettingMoreString" = ""\
+	"For advanced user only\n\n"\
 	"This note is used for third-party datebook replacement program "\
 	"such as Action Names, DateBk3/4.\n\n"\
 	"You can set a icon, font, and more using this note.\n\n"\

@@ -334,13 +334,14 @@ Boolean AnalysisHappyDays(const char* field,
     num[numIdx++] = StrAToI(s);
     s = p;
     
-    num[numIdx] = StrAToI(s);
+	if (*s == 0) flag->bits.year = 0;
+	else {
+		flag->bits.year = 1;
+		num[numIdx] = StrAToI(s);
+	}
 
     if (numOfDelimeter == 1) {
         flag->bits.year = 0;
-    }
-    else {
-        flag->bits.year = 1;
     }
 
     switch (gPrefdfmts) {

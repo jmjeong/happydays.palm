@@ -719,7 +719,7 @@ static Int16 PerformNotifyDB(HappyDays birth, DateType when, Int8 age,
 	// General note field edit
 	//
     if (gPrefsR.DBNotifyPrefs.icon) {     
-        StrCat(noteField, gPrefsR.DBNotifyPrefs.note);
+        StrCopy(noteField, gPrefsR.DBNotifyPrefs.note);
         StrCat(noteField, "\n");
     }
     else noteField[0] = 0;
