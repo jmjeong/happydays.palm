@@ -1,0 +1,781 @@
+// HappyDays - A birthday display for the PalmPilot
+//
+//      Copyright(c) 1999-2001 JaeMok Jeong
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+#include "happydaysRsc.h"
+
+TRANSLATION "BRAZILIAN"
+BEGIN
+    "Translator" = "Mauricio Montel"
+    "Translator's email" = "maumontel@hotmail.com"
+
+    "long_notifySettingString" = ""\
+    "* Registros\n"\
+    "Selecione 'todos' caso você queira notificar "\
+    "todos os eventos nesta categoria. "\
+    "Selecione 'selecionado'para notificar somente o registro "\
+    "atual.\n\n"\
+    "* Existente\n"\
+    "Selecionar 'manter' se deseja manter as notificações existentes. "\
+    "Selecione 'alterar' caso você queira que as notificações sejam alteradas.\n\n"\
+    "* Alarme\n"\
+    "Para colocar um horário na notificação. Indique "\
+	"o número de dias de antecipação que você quer ser notificado.\n\n"\
+    "* Hora\n"\
+	"Horário do evento\n\n"\
+    "* Repetir por\n"\
+    "Estabelece o intervalo da notificação. "\
+    "Utiliza -1 para repetir sempre os eventos solares, e "\
+    "repetir por 5 anos os eventos lunares.\n"
+
+	"long_notifySettingMoreString" = ""\
+	"Para o numero do ícone AN, consulte o manual do Action Names . DateBk3Icon é "\
+	"lido a partir do MemoPad. Se você não tem um registro DateBk3 Icon no MemoPad, "\
+	"nada será mostrado.\n"
+
+    "long_customErrorString" = ""\
+    "'Birthday' é o custom field padrão."\
+    "Para mudar o nome do custom field, "\
+    "selecione 'Preferências'.\n\n"\
+    "IMPORTANTE: Você precisa lançar seu Addressbook e selecionar 'Options/"\
+    "Rename Custom Fields' para renomear o custom field para 'Birthday' "\
+    "ou o que você ajuste como nome do custom field nas Preferências do "\
+    "HappyDays.\n"
+
+    "long_aboutString" = ""\
+    "'HappyDays' ajudará você a lembrar os aniversários e comemorações "\
+    "de seus amigos e familiares, bem como outros eventos."\
+    "\n\nUse um dos custom fields da aplicação Address Book "\
+    "e renomeie para 'Birthday'."\
+    "\n\nExemplos:\n"\
+    " Last Name: Jeong\n"\
+    " First name: JaeMok\n"\
+    " ...\n"\
+    " Birthday: -)12/4/70\n\n"\
+    "Formatos:\n"\
+    " [-)|#)]Data\n"\
+    " -) significa calendário lunar\n"\
+    " #) significa calendário lunar bissexto\n\n"\
+    "O formato da data é automaticamente lido a partir das preferências do sistema. "\
+    "Você pode omitir o campo ano. Ao escrever um ano menor que 100 assume-se que seja "\
+    "um ano do séc. 20,se você não estiver certo do formato do ano, "\
+    "escreva-o no formato AAAA (ex. 1970).\n\n"\
+    "Para entradas múltiplas, consulte o manual.\n\n" \
+	"Nome1 & nome2 mostrados na lista do HappyDays List são determinados pelo "\
+	"'AddressBook/Preferences/List by'. Caso você troque esta preferência, "\
+	"você obtém diferentes visualizações.\n\n"\
+	"O formato da data é determinado por System/Prefs/Formats/Date Format.\n\n"\
+	"Escrevendo uma letra ou numero na área do graffiti, a coluna similar será "\
+	"realçada. Por exemplo, caso você escreva um  'a' no graffiti, o "\
+	"primeiro registro começado  com  'a' ou 'A' será realçado. "\
+	"Escrevendo '1' no graffiti, o próximo registro depois de "\
+	"Janeiro será realçado.\n"
+
+    "long_cleanupAlertString" = ""\
+    "As entradas de notificação serão consideradas do HappyDays se elas contiverem "\
+	"{HappyDays ID} nos seus campos de MEMO. "\ 	
+    "Se você usa este formato  nas suas entradas "\
+    "este registro também poderá ser removido pela Limpeza.\n"
+
+    "long_prefFormString" = ""\
+	"* Formato de data alternativo...\n"\
+	"Controla a interpretação do custom field Birthday. "\
+	"Se for omitido, será o mesmo que a preferência de data do sistema.\n\n"\
+	"* Buscar em Notes\n"\
+	"Para ler o campo Notes do Address Book, marque esta opção.\n\n"\
+    "* Preferir Data Lunar\n"\
+    "Se selecionado, uma linha pontilhada será desenhada junto a data lunar .\n\n"\
+	"* Formato da Notificação\n"\
+	"Descrição do formato da notificação\n\n"\
+    "* Custom field\n"\
+    "O nome do custom field usado no Address Book para entrada de dados\n\n"\
+    "* HappyDays ID\n"\
+    "Usado para Notificar e Limpeza\n"
+
+    "long_removeConfirmString" = ""\
+    "Você tem certeza que quer remover "\
+    "todas as notificações do HappyDays?"
+
+    "long_sl2lnString" = ""\
+        "-) significa mês lunar normal\n"\
+        "#) significa mês lunar bissexto"
+
+    "long_cantFindAddrString" = ""\
+    "Não foi possível encontra um custom field: '%s'\n"\
+    "Por favor renomeie um custom field no seu address book."
+
+    "Select Time" = "Selecionar Horário"
+    "No Time" = "Sem Horário"
+    "Invalid input date" = "Data Inválida"
+    "Export to Memo Pad is completed." = "Exportação para o Memo Pad completa."
+
+    "SUN"   = "DOM"
+    "MON"   = "SEG"
+    "TUE"   = "TER"
+    "WED"   = "QUA"
+    "THU"   = "QUI"
+    "FRI"   = "SEX"
+    "SAT"   = "SAB"
+
+    "Not enough memory" = "Memória insuficiente"
+    "%d notify entry is created.\n" = "%d Notificações criadas.\n" 
+    "%d existing entry " = "%d notificações "
+    "is kept untouched." = "sem alterar."
+    "is modified." = "alteradas."
+
+    "Could not write prefs." = ""\
+		"Não foi possível gravar prefs."
+    "Collecting Information..." = "Coletando informações..."
+
+    "HappyDays List" = "Lista do HappyDays"
+    "Look Up:" = "Procurar:"
+
+    "HappyDays View" = "Visual. do Happydays"
+    "Done"  = "Feito"
+    "DB" = "DB" 
+    "TD" = "TD"
+    "Goto" = "Ir para"
+
+    "Utilities" = "Utilitários"
+    "Date Book Notify" = "Notificar no Date Book"
+    "Cleanup Date Book"  = "Limpar Date Book"
+    "To Do Notify" = "Notificar no To Do"
+    "Cleanup To Do"  = "Limpar To Do"
+    "Export to Memo Pad" = "Exportar para Memo Pad"
+    "Solar to Lunar" = "Solar para Lunar"
+    "Lunar to Solar" = "Lunar para Solar"
+    "Options" = "Opções"
+    "Preferences" = "Preferências"
+    "About HappyDays" = "Sobre HappyDays"
+
+    "Edit" = "Editar"
+    "Undo" = "Desfazer"
+    "Cut" = "Cortar"
+    "Copy" = "Copiar" 
+    "Paste" = "Colar" 
+    "Select All" = "Selecionar todos" 
+    "Keyboard" = "Teclado" 
+    "Graffiti" = "Graffiti"
+
+    "HappyDays Preferences" = "Preferências do HappyDays"
+    "Custom field:" = "Custom field:"
+    "HappyDays ID:" = "HappyDays ID:"
+    "Emphasize Lunar Date" = "Preferir a data Lunar"
+
+    "OK" = "OK"
+    "Cancel" = "Cancelar"
+
+    "Solar to Lunar Convert" = "Conversão de Solar para Lunar"
+    "Enter Solar date:" = "Entre a data Solar:"
+    "Year must be in 1881-2043" = "O ano deve ser entre 1881-2043"
+    "Result Lunar date:" = "Data Lunar resultante:"
+
+    "Convert" = "Converter"
+
+    "Lunar to Solar Convert" = "Conversão de Lunar para Solar"
+    "Enter Lunar date:" = "Entre a data Lunar:"
+    "Leap" = "Bissexto"
+    "Result Solar date:" = "Data Solar resultante:"
+
+    "Records:" = "Registros:"
+      "all" = "todos"
+      "selected" = "selecionados" 
+    "Existing:" = "Existentes:"
+      "keep" = "manter"
+      "modify" = "modificar"
+    "Priority:" = "Prioridade:"
+    "Category:" = "Categoria:"
+    "Private:" = "Confidencial:"
+    "Alarm:" = "Alarme:"
+    "Time:" = "Hora:"
+    "More..." = "Mais..."
+
+    "Repeat for:" = "Repetir por:"
+    "years" = "anos"
+
+    "HappyDays says" = "HappyDays diz"
+
+    "HappyDays Export" = "Exportar HappyDays"
+    "Would you like to export HappyDays List to Memo Pad?" = ""\
+    	"Você gostaria de exportar a lista do HappyDays para o Memo Pad?" 
+
+    "Custom Field Error" = "Erro no Custom Field"
+    "Help" = "Ajuda" 
+
+
+    "HappyDays Cleanup" = "Limpar HappyDays" 
+
+    "Notify warning" = "Aviso" 
+    "^1: Are you sure you want to create notify entries for ^2 HappyDays records?" = ""\
+  	"^1: Você tem certeza que gostaria de criar notificações para ^2 HappyDays registros?" 
+      
+
+    "Invalid event format" = "Formato de evento inválido" 
+
+    "The address record for ^1\n contains an invalid event. How would you like to handle it?" = ""\
+    "O registro de endereço ^1\n contém um evento inválido. Como você gostaria de resolver isto?" 
+
+    "Ignore" = "Ignorar" 
+    "Ignore all" = "Ignorar todos" 
+
+    "Cleanup Done" = "Limpeza concluída" 
+
+    "^1: ^2 HappyDays notify entries removed." = ""\
+    	"^1: ^2 Notificações do HappyDays removidas." 
+
+    "Birthday" = "Aniversário" 
+    "All" = "Todos" 
+    "HappyDays Export List" = "Exportar Lista do HappyDays" 
+    "(not exist in this year)" = "(não existe neste ano)" 
+    "Please run Date Book once first." = "Por favor execute o Date Book primeiro."  
+    
+    "Instead of system date format" = "Ao invés do form. de data do sistema"  
+    "Use" = "Use"  
+    "M/D/Y" = "M/D/A"  
+    "D/M/Y" = "D/M/A"  
+    "D.M.Y" = "D.M.A"  
+    "D-M-Y" = "D-M-A"  
+    "Y/M/D" = "A/M/D"  
+    "Y.M.D" = "A.M.D"  
+    "Y-M-D" = "A-M-D"  
+
+    "Date Book Icon" = "Ícones do Date Book"  
+      "Icon Support" = "Suporte a Ícones"  
+      "AN" = "AN"  
+      "DateBk3" = "DateBk3"  
+      "AN Icon Number:" = "Número do ícone AN:"  
+      "DateBk3 Icon:" = "Ícone do DateBk3:"  
+
+    "Days" = "Dias"  
+    "Date Book" = "Date Book"  
+    "To Do" = "To Do"  
+    "Scan note field" = "Procurar em NOTE"  
+    "%d day(s) left" = "%d dias(s) para o evento"  
+    "%d day(s) passed" = "%d dia(s) passados"  
+    "Notify Format:" = "Formato da Notificação:"  
+    "[Last, First] E(1) Year" = "[Sobrenome, Nome] E(1) Ano"  
+    "[First Last] E(1) Year" = "[Nome Sobrenome] E(1) Ano"  
+    "Event - Last, First Year" = "Evento - Sobrenome, Nome Ano"  
+    "Event - First Last Year" = "Evento - Nome Sobrenome Ano"  
+    "First Last Year" = "Nome Sobrenome Ano"  
+    
+    "Processing" = "Processando"  
+    "Processed : " = "Processado : " 
+
+	"Name" = "Nome"
+	"Date" = "Data"
+	"Age" = "Idade"
+
+END
+
+
+STRING ID DateBookNotifyHelpString "long_notifySettingString"
+STRING ID DateBookNotifyMoreHelpString "long_notifySettingMoreString"
+STRING ID SelectDateString  "HappyDays"
+STRING ID CustomErrorHelpString "long_customErrorString"
+STRING ID AboutHelpString "long_aboutString"
+STRING ID CleanupAlertHelpString "long_cleanupAlertString"
+STRING ID PrefFormHelpString "long_prefFormString"
+STRING ID RemoveConfirmString "long_removeConfirmString"
+STRING ID InvalidDateString "Invalid input date"
+STRING ID SelectTimeString  "Select Time"
+STRING ID NoTimeString      "No Time"
+STRING ID ExportDoneString  "Export to Memo Pad is completed."
+STRING ID Sl2LnFormHelpString "long_sl2lnString"
+
+STRING ID SunString     "SUN"
+STRING ID MonString     "MON" 
+STRING ID TueString     "TUE"
+STRING ID WedString     "WED"
+STRING ID ThuString     "THU"
+STRING ID FriString     "FRI"
+STRING ID SatString     "SAT"
+
+STRING ID NotEnoughMemoryString
+                "Not enough memory"
+STRING ID NotifyCreateString
+                "%d notify entry is created.\n"
+STRING ID ExistingEntryString   "%d existing entry "
+STRING ID UntouchedString       "is kept untouched."
+STRING ID ModifiedString        "is modified."
+STRING ID CantFindAddrString    "long_cantFindAddrString"
+STRING ID CantWritePrefsString  "Could not write prefs."
+STRING ID ExportHeaderString 	"HappyDays Export List"
+STRING ID ViewNotExistString	"(not exist in this year)"
+STRING ID DateBookFirstAlertString  "Please run Date Book once first."
+STRING ID DateBookNotifyDaysString "Days"
+
+STRING ID DateBookString		"Date Book"
+STRING ID ToDoString			"To Do"
+STRING ID BirthLeftString		"%d day(s) left"
+STRING ID BirthPassedString     "%d day(s) passed"
+
+STRING ID MainHdrNameStr		"Name"
+STRING ID MainHdrDateStr		"Date"
+STRING ID MainHdrAgeStr			"Age"
+
+STRING ID FindHeaderString		"HappyDays"
+
+FORM StartForm AT (0 0 160 160)
+NOFRAME
+SAVEBEHIND
+BEGIN
+    LABEL "Collecting Information..." AUTOID AT (Center@80 BOTTOM@125) FONT 1
+END
+
+FORM MainForm AT (0 0 160 160)
+USABLE
+NOFRAME
+SAVEBEHIND
+MENUID MainFormMenu
+BEGIN
+    TITLE "HappyDays"
+
+    TABLE ID MainFormHeader AT (0 16 160 11) ROWS 1 COLUMNS 3 
+				COLUMNWIDTHS 160-DATE_FIELD_WIDTH-AGE_FIELD_WIDTH 
+				DATE_FIELD_WIDTH AGE_FIELD_WIDTH 
+    TABLE ID MainFormTable AT (0 28 160 110) ROWS 10 COLUMNS 1
+                COLUMNWIDTHS 160
+
+    LABEL "Look Up:" AUTOID AT (1 BOTTOM@160-1) FONT 0
+    SELECTORTRIGGER "" ID MainFormStart at (PrevRight+6 PrevTop
+            AUTO AUTO) LEFTANCHOR FONT 0
+
+    POPUPTRIGGER "" ID MainFormPopupTrigger
+            AT ( RIGHT@159 1 AUTO AUTO ) RIGHTANCHOR 
+    LIST "" ID MainFormAddrCategories AT (PREVLEFT PREVTOP 70 AUTO)
+            NONUSABLE
+    POPUPLIST ID MainFormPopupTrigger MainFormAddrCategories
+
+    BUTTON " " ID MainFormPageUp AT ( RIGHT@159 141 13 8 )
+        NONUSABLE NOFRAME FONT 5
+    BUTTON " " ID MainFormPageDown AT ( PREVLEFT PREVBOTTOM 13 8 )
+        NONUSABLE NOFRAME FONT 5
+END
+
+FORM BirthdateForm AT (0 0 160 160)
+USABLE
+NOFRAME
+SAVEBEHIND
+MENUID ViewFormMenu
+BEGIN
+    TITLE "HappyDays View"
+
+	FIELD ID BirthdateCategory AT (RIGHT@158 1 65 AUTO) RIGHTALIGN 
+		NONEDITABLE FONT 0
+
+    FIELD ID BirthdateFirst AT (6 30 148 AUTO) NONEDITABLE FONT 2
+    FIELD ID BirthdateSecond AT (PrevLeft PrevBottom+2 148 AUTO) 
+		NONEDITABLE FONT 2
+    FIELD ID BirthdateCustom AT (PrevLeft PrevBottom+6 148 AUTO)
+        NONEDITABLE FONT 1
+    FIELD ID BirthdateDate AT (PrevLeft PrevBottom+3 148 AUTO)
+        NONEDITABLE FONT 2
+    FIELD ID BirthdateOrigin AT (PrevLeft PrevBottom+1 148 AUTO)
+        NONEDITABLE FONT 0
+    FIELD ID BirthdateLeft AT (PrevLeft+42 PrevBottom+2 128 AUTO)
+		NONEDITABLE FONT 0
+
+    BUTTON "Done" ID BirthdateDone AT (1 BOTTOM@159 AUTO AUTO)
+    BUTTON "DB" ID BirthdateNotifyDB AT (PrevRight+6 PrevTop AUTO AUTO)
+    BUTTON "TD" ID BirthdateNotifyTD AT (PrevRight+1 PrevTop AUTO AUTO)
+    BUTTON "Goto" ID BirthdateGoto AT ( PrevRight+6 PrevTop AUTO AUTO)
+END
+
+MENU ID MainFormMenu
+BEGIN
+    PULLDOWN "Utilities"
+    BEGIN
+        MENUITEM "Date Book Notify"   	MainFormMenuNotifyDatebook  "D"
+        MENUITEM "Cleanup Date Book"    MainFormMenuCleanupDatebook "C"
+        MENUITEM "To Do Notify"   		MainFormMenuNotifyTodo		"T"
+        MENUITEM "Cleanup To Do"       	MainFormMenuCleanupTodo 	"O"
+        MENUITEM SEPARATOR
+        MENUITEM "Export to Memo Pad"   MainFormMenuExport  		"E" 
+        MENUITEM SEPARATOR
+        MENUITEM "Solar to Lunar"       MainFormMenuSl2Ln   		"S"
+        MENUITEM "Lunar to Solar"       MainFormMenuLn2Sl   		"L"
+    END
+
+    PULLDOWN "Options"
+    BEGIN
+        MENUITEM "Preferences"              MainFormMenuPref    "R"
+        MENUITEM SEPARATOR
+        MENUITEM "About HappyDays"          MainFormMenuAbout   "A"
+    END
+END
+
+MENU ID ViewFormMenu
+BEGIN
+    PULLDOWN "Utilities"
+    BEGIN
+        MENUITEM "Solar to Lunar"           MainFormMenuSl2Ln   "S"
+        MENUITEM "Lunar to Solar"           MainFormMenuLn2Sl   "L"
+    END
+END
+
+// Edit menu for S2L, L2S
+MENU ID TextMenu
+BEGIN
+    PULLDOWN   "Edit"
+    BEGIN
+    MENUITEM "Undo"                         TextMenuUndo        "U"
+    MENUITEM "Cut"                          TextMenuCut         "X"
+    MENUITEM "Copy"                         TextMenuCopy        "C"
+    MENUITEM "Paste"                        TextMenuPaste       "P"
+    MENUITEM "Select All"                   TextMenuSAll        "S"
+    MENUITEM  SEPARATOR
+    MENUITEM "Keyboard"                     TextMenuKBoard      "K"
+    MENUITEM "Graffiti"                     TextMenuGHelp       "G"
+    END
+END
+
+FORM ID PrefForm AT (2 2 156 156)
+FRAME
+MODAL
+USABLE
+DEFAULTBTNID PrefFormCancel
+HELPID PrefFormHelpString
+BEGIN
+    TITLE "HappyDays Preferences"
+    CHECKBOX "Instead of system date format" ID PrefFormOverrideSystemDate AT 
+			(10 20 AUTO AUTO)
+    LABEL "Use" AUTOID AT (20 PREVBOTTOM)
+    LIST "M/D/Y" "D/M/Y" "D.M.Y" "D-M-Y" "Y/M/D" "Y.M.D" "Y-M-D" 
+		ID PrefFormDateFmts 
+		AT (PREVRIGHT+4 PREVTOP 40 AUTO) VISIBLEITEMS 7 NONUSABLE
+    POPUPTRIGGER "" ID PrefFormDateTrigger
+                 AT (PREVLEFT PREVTOP-1 40 13) LEFTANCHOR
+    POPUPLIST ID PrefFormDateTrigger PrefFormDateFmts
+
+	CHECKBOX "Scan note field" ID PrefFormScanNote
+		AT (10 PrevBottom AUTO AUTO)
+    CHECKBOX "Emphasize Lunar Date" ID PrefFormEmphasize 
+		AT (10 PrevBottom AUTO AUTO) 
+
+	LABEL "Notify Format:" AUTOID AT (10 PrevBottom+2) 
+    LIST 	"[Last, First] E(1) Year" 
+	    	"[First Last] E(1) Year" 
+			"Event - Last, First Year"
+			"Event - First Last Year"
+			"First Last Year"
+		ID PrefFormNotifyFmts 
+			AT (20 PrevBottom 120 AUTO) VISIBLEITEMS 5 NONUSABLE
+    POPUPTRIGGER "" ID PrefFormNotifyTrigger 
+			AT (PREVLEFT PREVTOP-1 40 13) LEFTANCHOR
+    POPUPLIST ID PrefFormNotifyTrigger PrefFormNotifyFmts
+
+    LABEL "Custom field:" AUTOID AT (10 PrevBottom+2) 
+    FIELD ID PrefFormCustomField AT (85 PrevTop 50 AUTO) UNDERLINED
+            MAXCHARS 12
+    LABEL "HappyDays ID:" AUTOID AT (10 PrevBottom) 
+    FIELD ID PrefFormNotifyWith AT (85 PrevTop 28 AUTO) UNDERLINED
+            MAXCHARS 5
+
+    LABEL "Address Book:" AUTOID AT (10 PrevBottom)
+    LIST 	"Built-in" 
+			"Address.kr" 
+			"Address Album"
+			"AddressBkR" 
+			"Address Plus(+)"
+			"Super Names" 
+			"TealPhone"
+         ID PrefFormAddress
+         AT (PREVRIGHT+4 PREVTOP 70 AUTO) VISIBLEITEMS 7 NONUSABLE
+    POPUPTRIGGER "" ID PrefFormAddrTrigger
+                 AT (PrevLeft PrevTop-1 40 13) LEFTANCHOR
+    POPUPLIST ID PrefFormAddrTrigger PrefFormAddress
+         
+    BUTTON "OK" ID PrefFormOk AT (5 BOTTOM@149 40 AUTO)
+    BUTTON "Cancel" ID PrefFormCancel AT (PrevRight+5 PrevTop 40 AUTO)
+	GRAFFITISTATEINDICATOR AT (PrevRight+5 PrevTop)
+END
+
+FORM ID Sl2LnForm AT (2 2 156 156)
+USABLE
+SAVEBEHIND
+MODAL
+HELPID Sl2LnFormHelpString
+MENUID TextMenu
+BEGIN
+    TITLE "Solar to Lunar Convert"
+    LABEL "Enter Solar date:" AUTOID AT (10 30) FONT 1
+    FIELD ID Sl2LnFormInput AT (10 PrevBottom+3 70 AUTO) MAXCHARS 10
+        UNDERLINED
+    LABEL "Year must be in 1881-2043" AUTOID AT (10 PrevBottom+3) FONT 0
+
+    LABEL "Result Lunar date:" AUTOID AT (10 PrevBottom+15) FONT 1
+    FIELD ID Sl2LnFormResult AT (10 PrevBottom+3 70 AUTO)
+        NONEDITABLE UNDERLINED MAXCHARS 15
+
+    BUTTON "Convert" ID Sl2LnFormConvert AT
+            (10 BOTTOM@151 40 AUTO)
+    BUTTON "OK" ID Sl2LnFormOk AT (PrevRight+5 PrevTop 40 AUTO)
+
+END
+
+FORM ID Ln2SlForm AT (2 2 156 156)
+USABLE
+SAVEBEHIND
+MODAL
+MENUID TextMenu
+BEGIN
+    TITLE "Lunar to Solar Convert"
+    LABEL "Enter Lunar date:" AUTOID AT (10 30) FONT 1
+    FIELD ID Ln2SlFormInput AT (10 PrevBottom+3 70 AUTO) MAXCHARS 10
+        UNDERLINED
+    CHECKBOX "Leap" ID Ln2SlFormInputLeap AT
+        (PrevRight+8 PrevTop AUTO AUTO) LEFTANCHOR FONT 0
+    LABEL "Year must be in 1881-2043" AUTOID AT (10 PrevBottom+3) FONT 0
+
+    LABEL "Result Solar date:" AUTOID AT (10 PrevBottom+15) FONT 1
+    FIELD ID Ln2SlFormResult AT (10 PrevBottom+3 80 AUTO)
+        NONEDITABLE UNDERLINED MAXCHARS 15
+
+    BUTTON "Convert" ID Ln2SlFormConvert AT
+            (10 BOTTOM@151 40 AUTO)
+    BUTTON "OK" ID Ln2SlFormOk AT (PrevRight+5 PrevTop 40 AUTO)
+
+END
+
+FORM ID DateBookNotifyForm AT (2 18 156 140)
+FRAME
+MODAL
+USABLE
+DEFAULTBTNID DateBookNotifyFormCancel
+HELPID  DateBookNotifyHelpString
+BEGIN
+    TITLE "Date Book Notify"
+    LABEL "Records:" AUTOID AT (RIGHT@78 25) FONT 1
+    PUSHBUTTON "all" ID NotifyFormRecordAll 
+			AT (PrevRight+5 PrevTop AUTO AUTO) GROUP 1
+    PUSHBUTTON "selected" ID NotifyFormRecordSlct 
+			AT (PrevRight+1 PrevTop AUTO AUTO) LEFTANCHOR GROUP 1
+
+    LABEL "Existing:" AUTOID AT (RIGHT@78 PrevBottom+3) FONT 1
+    PUSHBUTTON "keep" ID NotifyFormEntryKeep 
+			at (PrevRight+5 PrevTop AUTO AUTO) GROUP 2
+    PUSHBUTTON "modify" ID NotifyFormEntryModify 
+			at (PrevRight+1 PrevTop AUTO AUTO) LEFTANCHOR GROUP 2
+
+    LABEL "Private:" AUTOID AT (RIGHT@78 PrevBottom+3) FONT 1
+    CHECKBOX " " ID NotifyFormPrivate 
+			at (PrevRIght+5 PrevTop AUTO AUTO) RIGHTANCHOR FONT 1 
+
+    LABEL "Alarm:" AUTOID AT (RIGHT@78 PrevBottom+3) FONT 1
+    CHECKBOX "" ID DateBookNotifyFormAlarm at (PrevRight+5 PrevTop
+            AUTO AUTO) RIGHTANCHOR FONT 1
+    FIELD ID DateBookNotifyFormBefore AT (PrevRight+2 PrevTop 13 AUTO)
+        UNDERLINED MAXCHARS 2
+    FIELD  ID DateBookNotifyFormLabelDays AT (PrevRight PrevTop 30 AUTO) 
+		NONEDITABLE 
+
+    LABEL "Time:" AUTOID AT (RIGHT@78 PrevBottom+3) FONT 1
+    SELECTORTRIGGER "" ID DateBookNotifyFormTime at (PrevRight+5 PrevTop
+            AUTO AUTO) LEFTANCHOR FONT 0
+
+    LABEL "Repeat for:" AUTOID AT (RIGHT@78 PrevBottom+3) FONT 1
+    FIELD ID DateBookNotifyFormDuration AT (PrevRight+5 PrevTop 13 AUTO)
+            UNDERLINED MAXCHARS 2
+    LABEL "years" AUTOID AT (PrevRight+3 PrevTop) FONT 0
+
+    BUTTON "OK" ID DateBookNotifyFormOk AT (5 Bottom@135 40 AUTO)
+    BUTTON "Cancel" ID DateBookNotifyFormCancel AT (PrevRight+5 PrevTop 40 AUTO)
+	BUTTON "Icon" ID DateBookNotifyFormMore AT (RIGHT@150 PrevTop AUTO AUTO)
+END
+
+FORM ID DateBookNotifyMoreForm AT (2 18 156 140)
+FRAME
+MODAL
+USABLE
+HELPID  DateBookNotifyMoreHelpString
+BEGIN
+    TITLE "Date Book Icon"
+
+    CHECKBOX "Icon Support" ID DateBookNotifyFormIcon 
+			at (7 25 AUTO AUTO) RIGHTANCHOR FONT 0 
+    PUSHBUTTON "AN" ID DateBookNotifyFormAN AT (PrevRight+5
+            PrevTop AUTO AUTO) LEFTANCHOR GROUP 1
+    PUSHBUTTON "DateBk3" ID DateBookNotifyFormBk3 AT (PrevRight+1
+            PrevTop AUTO AUTO) GROUP 1
+
+	LABEL "AN Icon Number:" ID DateBookNotifyANLabel AT (5 PrevBottom+5) 
+	FIELD ID DateBookNotifyANInput AT (PrevRight+5 PrevTop 30 AUTO) 
+		UNDERLINED MAXCHARS 3
+
+	LABEL "DateBk3 Icon:" ID DateBookNotifyBk3Label AT (5 PrevBottom+2) 
+    TABLE ID DateBookNotifyBk3Table AT (7 PrevBottom 143 40) ROWS 4 
+		COLUMNS 13 COLUMNWIDTHS 10 10 10 10 10 10 10 10 10 10 10 10 10
+
+    BUTTON "OK" ID DateBookNotifyMoreFormOk AT (5 Bottom@135 40 AUTO)
+	GRAFFITISTATEINDICATOR AT (PrevRight+5 PrevTop)
+END
+
+FORM ID ToDoNotifyForm AT (2 28 156 130)
+FRAME
+MODAL
+USABLE
+DEFAULTBTNID ToDoNotifyFormCancel
+BEGIN
+	TITLE "To Do Notify"
+
+    LABEL "Records:" AUTOID AT (RIGHT@65 20) FONT 1
+    PUSHBUTTON "all" ID NotifyFormRecordAll 
+			AT (PrevRight+5 PrevTop AUTO AUTO) GROUP 1
+    PUSHBUTTON "selected" ID NotifyFormRecordSlct 
+			AT (PrevRight+1 PrevTop AUTO AUTO) LEFTANCHOR GROUP 1
+
+    LABEL "Existing:" AUTOID AT (RIGHT@65 PrevBottom+5) FONT 1
+    PUSHBUTTON "keep" ID NotifyFormEntryKeep 
+			at (PrevRight+5 PrevTop AUTO AUTO) GROUP 2
+    PUSHBUTTON "modify" ID NotifyFormEntryModify 
+			at (PrevRight+1 PrevTop AUTO AUTO) LEFTANCHOR GROUP 2
+
+	LABEL "Priority:" AUTOID AT (RIGHT@65 PrevBottom+5) FONT 1
+	PUSHBUTTON "1" ID ToDoNotifyPri1 AT (PrevRight+5 PrevTop AUTO AUTO)
+		LEFTANCHOR GROUP 3
+	PUSHBUTTON "2" ID ToDoNotifyPri2 AT (PrevRight+1 PrevTop AUTO AUTO)
+		LEFTANCHOR GROUP 3
+	PUSHBUTTON "3" ID ToDoNotifyPri3 AT (PrevRight+1 PrevTop AUTO AUTO)
+		LEFTANCHOR GROUP 3
+	PUSHBUTTON "4" ID ToDoNotifyPri4 AT (PrevRight+1 PrevTop AUTO AUTO)
+		LEFTANCHOR GROUP 3
+	PUSHBUTTON "5" ID ToDoNotifyPri5 AT (PrevRight+1 PrevTop AUTO AUTO)
+		LEFTANCHOR GROUP 3
+
+	LABEL "Category:" AUTOID AT (RIGHT@65 PrevBottom+5) FONT 1
+    POPUPTRIGGER "" ID ToDoPopupTrigger
+            AT ( PrevRight+5 PrevTop AUTO AUTO ) LeftAnchor 
+	LIST "" ID ToDoNotifyCategory AT ( PrevLeft PrevTop 70 AUTO ) 
+		NONUSABLE 
+    POPUPLIST ID ToDoPopupTrigger ToDoNotifyCategory
+	
+    LABEL "Private:" AUTOID AT (RIGHT@65 PrevBottom+5) FONT 1
+    CHECKBOX " " ID NotifyFormPrivate 
+			at (PrevRight+5 PrevTop AUTO AUTO) RIGHTANCHOR FONT 1 
+
+    BUTTON "OK" ID ToDoNotifyFormOk AT (5 Bottom@125 40 AUTO)
+    BUTTON "Cancel" ID ToDoNotifyFormCancel AT (PrevRight+5 PrevTop 40 AUTO)
+END
+
+ALERT ID ErrorAlert INFORMATION
+BEGIN
+    TITLE "HappyDays says"
+    MESSAGE "^1"
+    BUTTONS "OK"
+END
+
+ALERT ID ExportAlert CONFIRMATION
+DEFAULTBUTTON 1
+BEGIN
+    TITLE "HappyDays Export"
+    MESSAGE 
+        "Would you like to export HappyDays List to Memo Pad?"
+    BUTTONS "OK" "Cancel"
+END
+
+ALERT ID CustomFieldAlert INFORMATION
+HELPID CustomErrorHelpString
+BEGIN
+    TITLE "Custom Field Error"
+    MESSAGE "^1"
+    BUTTONS "OK" "Help" "Preferences"
+END
+
+ALERT ID CleanupAlert CONFIRMATION
+HELPID CleanupAlertHelpString
+DEFAULTBUTTON 1
+BEGIN
+    TITLE "HappyDays Cleanup"
+    MESSAGE "^1: ^2"
+    BUTTONS "OK" "Cancel"
+END
+
+ALERT ID NotifyWarning CONFIRMATION
+DEFAULTBUTTON 1
+BEGIN
+    TITLE "Notify warning"
+    MESSAGE "^1: Are you sure you want to create notify entries for ^2 HappyDays records?"
+    BUTTONS "OK" "Cancel"
+END
+
+ALERT ID InvalidFormat CONFIRMATION
+BEGIN
+    TITLE "Invalid event format"
+    MESSAGE "The address record for ^1\n contains an invalid event. How would you like to handle it?"
+    BUTTONS "Edit" "Ignore" "Ignore all"
+END
+
+ALERT ID CleanupDone INFORMATION
+BEGIN
+    TITLE "Cleanup Done"
+    MESSAGE "^1: ^2 HappyDays notify entries removed."
+    BUTTONS "OK"
+END
+
+FORM ID AboutForm AT (2 2 156 156)
+USABLE
+MODAL
+HELPID AboutHelpString
+BEGIN
+    TITLE "About HappyDays"
+
+	FORMBITMAP AT (6 18) BITMAP ID_BitmapIcon USABLE 
+    LABEL "HappyDays 1.45" AUTOID AT (PrevRight+38 PrevTop) FONT 1
+    LABEL "GPL free software"
+        AUTOID AT (PrevLeft PrevTop+ABOUT_LINE_SPACING) FONT 0
+    LABEL "(c) 1999-2001 JaeMok Jeong"
+        AUTOID AT (Center PrevTop+ABOUT_LINE_SPACING2) FONT 0
+	LABEL "E-Mail & Web Page" AUTOID AT (CENTER PrevTop+ABOUT_LINE_SPACING) FONT 1
+    LABEL "jmjeong@oopsla.snu.ac.kr" AUTOID AT 	
+			(Center PrevTop+ABOUT_LINE_SPACING) Font 0
+    LABEL "jmjeong.com/palm/happydays"
+        AUTOID AT (Center PrevTop+ABOUT_LINE_SPACING) FONT 0
+
+    LABEL "Translator" AUTOID AT (Center@80 PrevBottom+3) USABLE FONT 0
+    LABEL "Translator's email" AUTOID AT (Center@80 PrevBottom) USABLE FONT 0
+            
+    BUTTON "OK" AboutFormOk AT (RIGHT@80-3 BOTTOM@148 44 AUTO) FONT 0
+    BUTTON "Help" AboutFormHelp AT (PrevRight+6 PrevTop 44 AUTO) FONT 0
+END
+
+FORM ID ProgressForm AT (22 72 116 46)
+USABLE
+MODAL
+BEGIN
+	TITLE "Processing"
+	LABEL "Processed : " AUTOID AT (20 25) 
+	FIELD ID ProgressFormField AT (PrevRight+3 PrevTop 50 AUTO) NONEDITABLE
+END
+
+/////////////
+// Bitmaps //
+/////////////
+BitMapFamily ID ID_BitmapIcon
+	"HD_large.bmp" "HD_large.bmp" "" "HD_large_color.bmp"
+	COMPRESS
+	TRANSPARENT 204 204 0
+
+ICONFAMILY 
+	"HD_large.bmp" "HD_large.bmp" "" "HD_large_color.bmp"
+	TRANSPARENT 204 204 0
+SMALLICONFAMILY
+	"HD_small.bmp" "HD_small.bmp" "" "HD_small_color.bmp"
+	TRANSPARENT 204 204 0
+
+APPLICATIONICONNAME 1000 "HappyDays"
+VERSION ID 1 "1.45"
