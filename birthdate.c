@@ -628,7 +628,9 @@ Boolean FindHappyDaysField()
         MemPtrUnlock(addrInfoPtr);
     }
     if (gHappyDaysField < 0) {
-        return false;
+        // Custom field에 일치하는 게 없는 경우에는 note field를 조사
+        gHappyDaysField = note;
+        return true;
     }
     return true;
 }
@@ -726,7 +728,8 @@ Boolean UpdateHappyDaysDB(FormPtr frm)
 
     recordNum = DmNumRecords(AddressDB);
     indicateNext = recordNum / INDICATE_NUM;
-    initIndicate();
+
+    if (recordNum > 50) initIndicate();
             
     while (1) {
         char *name1, *name2;
@@ -736,7 +739,7 @@ Boolean UpdateHappyDaysDB(FormPtr frm)
                                         dmAllCategories);
         if (!recordH) break;
         if (i++ == indicateNext) {
-            displayNextIndicate(i * INDICATE_NUM / recordNum);
+            if (recordNum > 50) displayNextIndicate(i * INDICATE_NUM / recordNum);
             indicateNext += recordNum / INDICATE_NUM;
         }
 
