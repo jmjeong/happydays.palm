@@ -8,10 +8,10 @@ File Download
 </h2>
 <p>
 <a
-href="ftp://jmjeong.com/pub/happydays/happydays-2.03.zip">happydays-2.03.zip</a>
+href="ftp://jmjeong.com/pub/happydays/happydays-2.04.zip">happydays-2.04.zip</a>
 - English version and manual<br>
 <a
-href="ftp://jmjeong.com/pub/happydays/happydays-src-2.03.zip">happydays-src-2.03.zip</a>
+href="ftp://jmjeong.com/pub/happydays/happydays-src-2.04.zip">happydays-src-2.04.zip</a>
 - source file<br>
 
 </P>
@@ -30,18 +30,11 @@ To get the latest CVS sources do the following
 $ export CVSROOT=":pserver:cvs@coconut.snu.ac.kr:/export/cvsroot"
 $ cvs login
 ( password = anonymous )
-$ cvs -z3 checkout -rver_203 happydays
+$ cvs -z3 checkout -rver_204 happydays
 </pre>
 
 <br>
 For more info on CVS see <a href="http://www.cyclic.com">Cyclic</a>.
-
-<!--  <h2> -->
-<!--  Known Bugs -->
-<!--  </h2> -->
-<!--  <p> -->
-<!--  Not yet. -->
-<!--  </p> -->
 
 <h2>
 Localizations
@@ -55,8 +48,8 @@ i.e. the phase after '=') into your favorite language. See the sample <a href="l
 
 HappyDays has been translated into the following languages:  <br>
 <ul>
-  <li> <a href="ftp://jmjeong.com/pub/happydays/happydays-2.03-ko.zip">
-  Korean</a>(2.03) - by Jaemok Jeong<br>
+  <li> <a href="ftp://jmjeong.com/pub/happydays/happydays-2.04-ko.zip">
+  Korean</a>(2.04) - by Jaemok Jeong<br>
 	  (happydays-k8.prc for 8x8 font,
 	  happydays-k11.prc for 11x11 font)
   <li> <a
@@ -78,8 +71,8 @@ HappyDays has been translated into the following languages:  <br>
       href="mailto:kteotrakool@hotmail.com">kteotrakool@hotmail.com</a>)<br>
       Requires Thai Language Hack (ThaiPOS or ThaiHack)
   <li><a
-  	  href="ftp://jmjeong.com/pub/happydays/happydays-2.03-sp.zip">
-			Spanish</a>(2.03 beta release)
+  	  href="ftp://jmjeong.com/pub/happydays/happydays-2.04-sp.zip">
+			Spanish</a>(2.04 beta release)
 	  - by Juan Fernando Calderón
 			(<a href="mailto:jfcalderon@usa.net">jfcalderon@usa.net</a>)
   <li><a
@@ -111,7 +104,7 @@ You want to see changes before HappyDays 2.0, look up the
 <a href="change_log.html">change_log.html</a> file.
 <p>
 
-<b>HappyDays 2.03 version - 6/22/2001</b>
+<b>HappyDays 2.04 version - 6/22/2001</b>
 <ul>
 	<li> Fix a bug in global find
 	<li> Fix a bug in 'Instead of system date format' option

@@ -50,7 +50,7 @@ BEGIN
     "Not enough memory" = "메모리 부족"
     "%d notify entry is created.\n" =
         "%d 개의 알림 레코드가 생성되었습니다.\n"
-    "%d existing entry " = "%d 개의 존재하는 레코드"
+    "%d existing entry " = "이미 있던 %d 개의 레코드"
     "is kept untouched." = "를 그대로 유지했습니다."
     "is modified." = "가 수정되었습니다."
 
@@ -166,7 +166,7 @@ BEGIN
 
     "Notify warning" = "알림 경고"
 	"long_notifywarningString" = ""\
-		"^1: ^2 개의 해피데이즈에 대한 알림 레코드를 만들기 원하십니까?"
+		"해피데이즈에 있는 ^2 개의 레코드가 ^1 로 전달됩니다. "
 
 /* Date Book Icon */
 	"Date Book Icon" = "아이콘 설정"

@@ -6,12 +6,12 @@ BEGIN
       "Si no existe la entrada de DateBk3 en el bloc de notas no se muestra información.\n"
 
     "long_customErrorString" = ""\
-    "'Birthday' is the default custom field name."\
-    "To set a different default custom field"\
-    " name, tap 'Preferences'.\n\n"\
-    "IMPORTANT: You need to launch your Address Book and select 'Options/"\
-    "Rename Custom Fields' to rename a custom field to 'Birthday'"\
-    " or whatever you set as a custom field name in the Preferences of "\
+    "'Nacimiento' es el nombre del campo personalizado por omisión."\
+    "Para usar un campo personalizado diferente"\
+    "seleccione el menú 'Preferencias'.\n\n"\
+    "IMPORTANTE: Necesita utilizar la Lista de Direcciones y seleccionar 'Opciones/"\
+    "Nombre campos pers...' para cambiar un campo personalizado a 'Nacimiento'"\
+    " o el de su elección en las preferencias de "\
     "HappyDays.\n"
 
     "long_aboutString" = ""\
@@ -19,7 +19,7 @@ BEGIN
       "de sus amigos y familiares, así como otros eventos.\n\n"\
     "Por favor consulte el archivo index.html y manual.html para información detallada "\
     "sobre el uso de HappyDays\n\n"\
-    "HappyDays se distibuye bajo los términos de la Licencia GNU General "\
+    "HappyDays se distribuye bajo los términos de la Licencia GNU General "\
     "Public License version 2.0.\n"
 
     "long_cleanupAlertString" = ""\
@@ -33,7 +33,7 @@ BEGIN
         "#) significa mes lunar bisiesto"
 
     "long_cantFindAddrString" = ""\
-    "No es posible encontrar campo personalizado: '%s'\n"\
+    "No es posible encontrar el campo personalizado: '%s'\n"\
     "Por favor renombre un campo personalizado en su Lista de Direcciones."
 
     "Select Time" = "Establecer hora"
@@ -74,10 +74,10 @@ BEGIN
     "Export to Memo Pad" = "Exportar a Bloc de notas"
     "Solar to Lunar" = "Solar -> Lunar"
     "Lunar to Solar" = "Lunar -> Solar"
-    "Rescan Address Book" = "Volver a leer Agenda"
+    "Rescan Address Book" = "Volver a leer Lista de Direcciones"
 
     "Options" = "Opciones"
-	"Font..." = "Font..."
+	"Font..." = "Fuente..."
     "Preferences" = "Preferencias"
 	"Display Preferences" = "Preferencias de Pantalla"
     "About HappyDays" = "Acerca de HappyDays"
@@ -95,7 +95,7 @@ BEGIN
 /* Font... */
 
 /* preferences screen */
-    "Custom field:" = "Custom field:"
+    "Custom field:" = "Campo pers:"
     "Instead of system date format" = "Formato de fecha alternativo"
     "Use" = "Usar"
     "M/D/Y" = "M/D/A"
@@ -105,7 +105,7 @@ BEGIN
     "Y/M/D" = "A/M/D"
     "Y.M.D" = "A.M.D"
     "Y-M-D" = "A-M-D"
-	"Address Autoscan" = "Actualizar agenda automáticamente"
+	"Address Autoscan" = "Releer Direcciones"
 	"Always" = "Siempre"
 	"Ask" = "Preguntar"
 	"Never" = "Nunca"
@@ -117,8 +117,8 @@ BEGIN
 	"Event - First Last Year" = "Evento - Nombre Apellido Año"
 	"First Last Year" = "Nombre Apellido Año"
     
-	"Address Book" = "Agenda"
-	"Bulit-in" = "Interna"
+	"Address Book:" = "Direcciones:"
+	"Built-in" = "Interna"
 
 
 /* Display preferences */
@@ -129,9 +129,8 @@ BEGIN
 	"GPL free software" = "Softwate gratuito GPL"
 	"E-Mail & Web Page" = "E-Mail & Página Web"
 
-    "Translator" = "Juan Fernando Calderón"
+    "Translator" = "Trad: Juan Fernando Calderón"
     "Translator's email" = "jfcalderon@usa.net"
-
 
     "OK" = "Hecho"
     "Cancel" = "Cancelar"
@@ -194,7 +193,7 @@ BEGIN
     "Would you like to export HappyDays List to Memo Pad?" = ""\
       "¿Desea exportar la lista HappyDays al Bloc de notas?"
 
-    "Custom Field Error" = "Error en campo personalizado"
+    "Custom Field Error" = "Error en campo pers."
     "Help" = "Ayuda"
 
 
@@ -220,8 +219,8 @@ BEGIN
     "Date Book" = "Agenda"
     "To Do" = "Tareas"
     "Scan note field" = "Buscar en Notas"
-    "%ld days left" = "%ld días para el evento"  
-    "%ld days passed" = "%ld días transcurridos"
+    "%d days left" = "%d días para el evento"  
+    "%d days passed" = "%d días transcurridos"
 
       "Processing" = "Procesando"
 	"Processed : " = "Procesado : "	
@@ -236,5 +235,5 @@ BEGIN
 	"Origin:" = "Origen:"
 	"Age:" = "Edad:"
 	"UpTo Date:" = "A la fecha:"
-	"%dY %dM %dD (%ld)" = "%dA %dM %dD (%ld)"
+	"%dY %dM %dD (%d)" = "%dA %dM %dD (%d)"
 END
