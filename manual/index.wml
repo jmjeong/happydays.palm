@@ -69,8 +69,10 @@ available in HappyDays.  You can make the notification record in DatebookDB
   <li>Support Action Names and DateBk3 formats as well as built-in Date Book
   <li>You can switch to the relevant record in AddressBook from HappyDays
       records. 
-  <li>HappyDays supports on-line tips. If you tap 'i' in each screen, you can
-      see the help message.
+  <li>Full support for Handera 330 with 240 x 320 screen resolution with
+        virtual graffiti area, while running properly on the "normal"
+        Palm-powered devices with 160x160 screen.
+  <li>Support for Jog dial
 </ul>
 </p>
 
