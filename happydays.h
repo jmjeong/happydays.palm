@@ -41,6 +41,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define DATEBK3_MEMO_STRING "DATEBK3\n"       // datebk3 icon in memo list
 
+#define HappydaysEventNoteTitle "= HappyDays Notes"
+
 /* DateBook Notify Preferences */
 struct sDBNotifyPrefs 
 {
@@ -99,29 +101,33 @@ struct sPrefsR
     char addrCategory[dmCategoryLength];
     char adrcdate[4], adrmdate[4];      // address book create/modify date
 
-	FontID listFont;		            // HappyDays list font
+	FontID  listFont;		            // HappyDays list font
+    UInt16  eventNoteIndex;             // Event Note Index in MemoDB
+    Boolean eventNoteExists;
 };
 
 typedef union 
 {
     struct      
     {
-        unsigned reserverd:10;
-        unsigned multiple_event:1;      // this is multiple event(for check)
-        unsigned year:1;                // date contains year field
-        unsigned priority_name1:1;      // name1 has priority?
-        unsigned lunar_leap :1;         // lunar leap month?
-        unsigned lunar      :1;         // lunar calendar?
-        unsigned solar      :1;         // solar calendar?
+        unsigned int reserverd:9;
+        unsigned int nthdays:1;             // n-th day
+        unsigned int multiple_event:1;      // this is multiple event(for check)
+        unsigned int year:1;                // date contains year field
+        unsigned int priority_name1:1;      // name1 has priority?
+        unsigned int lunar_leap :1;         // lunar leap month?
+        unsigned int lunar      :1;         // lunar calendar?
+        unsigned int solar      :1;         // solar calendar?
     } bits;
     Int16 allBits;          // 16 bit
 } HappyDaysFlag;
 
 typedef struct 
 {
-    UInt32 addrRecordNum;   // address book record number
-    DateType date;          // orignal address book birthdate 
-    HappyDaysFlag flag;     // about birthdate flag
+    UInt32              addrRecordNum;      // address book record number
+    DateType            date;               // orignal address book birthdate 
+    HappyDaysFlag       flag;               // about birthdate flag
+    Int16               nth;                // valid only if nthdays is on
     char *name1;
     char *name2;
     char *custom;
@@ -129,10 +135,11 @@ typedef struct
 
 typedef struct
 {
-    UInt32 addrRecordNum;
-    DateType date;
-    HappyDaysFlag flag;
-    char name[1];           // actually may be longer than 1
+    UInt32              addrRecordNum;
+    DateType            date;
+    HappyDaysFlag       flag;
+    Int16               nth;                // valid only if nthdays is on
+    char                name[1];            // actually may be longer than 1
 } PackedHappyDays;
 
 #define INVALID_CONV_DATE       127
@@ -145,6 +152,13 @@ typedef struct
 	Int8        age;				// calculated age	
     DateType    date;               // converted date(the incoming birthday)
 } LineItemType;
+
+typedef struct
+{
+    Char    name[21];               // event type name
+    UInt16  start;                  // starting position
+    UInt16  len;                    // length
+} EventNoteInfo;
 
 typedef LineItemType* LineItemPtr;
 

@@ -194,6 +194,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define BioRhythmStr				1944
 #define BioString					1945
 #define ToDoFirstAlertString	    1946
+#define NthFormatString             1947
+#define NthListFormatString         1948
 
 #define JanString					1950		
 #define FebString					1951	

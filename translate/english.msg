@@ -10,10 +10,12 @@ BEGIN
     "long_aboutString" = ""\
     "'HappyDays' will help you remember the birthdays and anniversaries "\
     "of your friends and family members, as well as other events.\n\n"\
-    "View the index.html and manual.html file for detailed information "\
-    "on how to use HappyDays\n\n"\
+    "Visit http://jmjeong.com/?HappyDays for the detailed information "\
+    "on how to use HappyDays.\n\n"\
     "HappyDays is distributed under the terms of the GNU General "\
-    "Public License version 2.0.\n"
+    "Public License version 2.0.\n\n"\
+	"= Input Format\n\n"\
+	"[*[{EventType}]\\ws{Description}\\ws{Date}[[nth day list]]\n"
 
     "long_cleanupAlertString" = ""\
     "Notification entries are considered HappyDays if they have "\
@@ -120,7 +122,6 @@ BEGIN
 
     "Translator" = "English version"
     "Translator's email" = "Jaemok Jeong"
-
 
     "OK" = "OK"
     "Cancel" = "Cancel"

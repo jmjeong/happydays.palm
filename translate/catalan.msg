@@ -62,7 +62,7 @@ BEGIN
     "Export to Memo Pad" = "Exporta al Bloc de notes"
     "Solar to Lunar" = "Solar -> Lunar"
     "Lunar to Solar" = "Lunar -> Solar"
-	"Rescan Address Book" = "Torna a cercar a la Llibreta d'Adreces"
+	"Rescan Address Book" = "Torna a cercar Adreces"
 
     "Options" = "Opcions"
 	"Font..." = "Lletra..."
@@ -117,8 +117,8 @@ BEGIN
 	"GPL free software" = "Programari gratuït GPL"
 	"E-Mail & Web Page" = "E-Mail & Web Page"
 
-    "Translator" = "Paco Rivière"
-    "Translator's email" = "friviere@wanadoo.es"
+    "Translator" = "PalmCAT.org"
+    "Translator's email" = "www.palmcat.org"
 
 
     "OK" = "D'acord"

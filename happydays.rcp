@@ -48,6 +48,8 @@ STRING ID DateBookFirstAlertString  "Please run Date Book once first."
 STRING ID ToDoFirstAlertString  "Please run Todo once first."
 STRING ID DateBookNotifyDaysString "Days"
 STRING ID AgeFormatString		"%dY %dM %dD (%ld)"
+STRING ID NthFormatString       "%dth day"
+STRING ID NthListFormatString   "(%dth)"
 
 STRING ID DateBookString		"Date Book"
 STRING ID ToDoString			"To Do"
@@ -59,8 +61,8 @@ STRING ID NextDateStr			"Next Date:"
 STRING ID SourceDateStr			"Origin:"
 STRING ID AgeStr				"Age:"
 STRING ID RemainedDayStr		"UpTo Date:"
-STRING ID BioRhythmStr			"BioRhythm:"
-STRING ID BioString				"P(%s) E(%s) I(%s)"
+// STRING ID BioRhythmStr			"BioRhythm:"
+// STRING ID BioString				"P(%s) E(%s) I(%s)"
 
 STRING ID FindHeaderString		"HappyDays"
 
@@ -289,7 +291,7 @@ BEGIN
     BUTTON "Convert" ID Sl2LnFormConvert AT
             (10 BOTTOM@151 50 AUTO)
     BUTTON "OK" ID Sl2LnFormOk AT (PrevRight+5 PrevTop 40 AUTO)
-
+	GRAFFITISTATEINDICATOR AT (PrevRight+5 PrevTop)
 END
 
 FORM ID Ln2SlForm AT (2 2 156 156)
@@ -313,7 +315,7 @@ BEGIN
     BUTTON "Convert" ID Ln2SlFormConvert AT
             (10 BOTTOM@151 50 AUTO)
     BUTTON "OK" ID Ln2SlFormOk AT (PrevRight+5 PrevTop 40 AUTO)
-
+	GRAFFITISTATEINDICATOR AT (PrevRight+5 PrevTop)
 END
 
 FORM ID DateBookNotifyForm AT (2 18 156 140)
@@ -358,6 +360,8 @@ BEGIN
 
     BUTTON "OK" ID DateBookNotifyFormOk AT (5 Bottom@135 40 AUTO)
     BUTTON "Cancel" ID DateBookNotifyFormCancel AT (PrevRight+5 PrevTop 40 AUTO)
+	GRAFFITISTATEINDICATOR AT (PrevRight+5 PrevTop)
+
 	BUTTON "Note" ID DateBookNotifyFormMore AT (RIGHT@150 PrevTop AUTO AUTO)
 END
 
@@ -494,10 +498,10 @@ BEGIN
     TITLE "About HappyDays"
 
 	FORMBITMAP AT (6 18) BITMAP ID_BitmapIcon USABLE 
-    LABEL "HappyDays 2.29" AUTOID AT (PrevRight+38 PrevTop) FONT 1
+    LABEL "HappyDays 2.31" AUTOID AT (PrevRight+38 PrevTop) FONT 1
     LABEL "GPL free software"
         AUTOID AT (PrevLeft PrevTop+ABOUT_LINE_SPACING) FONT 0
-    LABEL "(c) 1999-2003 Jaemok Jeong"
+    LABEL "(c) 1999-2004 Jaemok Jeong"
         AUTOID AT (Center PrevTop+ABOUT_LINE_SPACING2) FONT 0
         
 	LABEL "E-Mail & Web Page" AUTOID AT (CENTER PrevTop+ABOUT_LINE_SPACING)
@@ -564,4 +568,4 @@ SMALLICONFAMILY
 	TRANSPARENT 192 192 0
 
 APPLICATIONICONNAME 1000 "HappyDays"
-VERSION ID 1 "2.29"
+VERSION ID 1 "2.31"

@@ -1,6 +1,6 @@
 /*
 HappyDays - A Birthday displayer for the PalmPilot
-Copyright (C) 1999-2001 JaeMok Jeong
+Copyright (C) 1999-2004 JaeMok Jeong
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,8 +18,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 #include <PalmOS.h>
-#include <HandEra/Vga.h>
-#include <HandEra/Silk.h>
+#include "HandEra/Vga.h"
+#include "HandEra/Silk.h"
 
 #include "address.h"
 #include "memodb.h"
@@ -57,6 +57,10 @@ DateFormatType gSystemdfmts;  	// global system date format
 TimeFormatType gPreftfmts;  	// global time format
 DateType gStartDate;			// staring date of birthday listing
 
+Int16         gNumOfEventNote = -1;
+EventNoteInfo *gEventNoteInfo = 0;   // event note string
+Boolean  is35;
+
 Boolean gbVgaExists = false;
 
 Boolean gProgramExit = false;   // Program exit control(set by Startform)
@@ -73,7 +77,7 @@ enum ViewFormType { ViewType = 0,
                     ViewAge,
                     ViewRemained,
 //					ViewBioRhythm,
-                    ViewSpace,
+                    ViewSpace
 };
 
 ////////////////////////////////////////////////////////////////////
@@ -105,13 +109,14 @@ static void HighlightMatchRowDate(DateTimeType inputDate);
 static void HighlightMatchRowName(Char first);
 
 static void WritePrefsRec(void);
-static void MainFormLoadTable(FormPtr frm, Int16 listOffset);
-static void MainFormInit(FormPtr formP, Boolean resize);
-static void MainFormResize(FormPtr frmP, Boolean draw);
-static void MainTableSelectItem(TablePtr table, Int16 row, Boolean selected);
 
-void MainFormDrawRecord(MemPtr tableP, Int16 row, Int16 column, 
-                               RectanglePtr bounds) SECT1;
+static void MainFormLoadTable(FormPtr frm, Int16 listOffset) SECT1;
+static void MainFormInit(FormPtr formP, Boolean resize) SECT1;
+
+static void MainFormResize(FormPtr frmP, Boolean draw) SECT1;
+static void MainTableSelectItem(TablePtr table, Int16 row, Boolean selected) SECT1;
+
+void MainFormDrawRecord(MemPtr tableP, Int16 row, Int16 column, RectanglePtr bounds) SECT1;
 
 Boolean MenuHandler(FormPtr frm, EventPtr e) SECT1;
 void MainFormScroll(Int16 newValue, Int16 oldValue, Boolean force_redraw) SECT1;
@@ -217,16 +222,130 @@ static void EventLoop(void)
     } while (e.eType != appStopEvent && !gProgramExit);
 }
 
+static Int16 GetNumOfEventNoteInfo(Char *rp)
+{
+    char* p = rp;
+    char *q;
+    Int16 num = 0;
+
+    while ( (q = StrChr(p, '\n')) )
+    {
+        if (*(q+1) == '*') {
+             p = q+1;
+            num++;
+        }
+        else p++;
+    }
+     
+    return num;
+}
+
+static void ProcessEventNoteInfo(EventNoteInfo* eventNoteInfo, Char* rp, Int16 num)
+{
+    char *p = rp;
+    char *q;
+    Int16 i = 0;
+    Int16 len;
+
+    while (*p++ != '*' && *p)
+        ;
+
+    for (i = 0; i < num; i++) 
+    {
+        if (!*p) break;
+
+        while (*p && (*p == ' ' || *p == '\n'))
+            p++;
+
+        q = p;
+
+        while (*p && *p++ != '\n')
+            ;
+
+        len = (p - q) - 1;
+        if (len > 20) len = 20;
+            
+        StrNCopy(eventNoteInfo[i].name, q, len);
+        eventNoteInfo[i].name [len] = 0;
+
+        eventNoteInfo[i].start = p - rp;
+
+        while (*p && *p != '*')
+            p++;
+
+        eventNoteInfo[i].len = (p - rp) - eventNoteInfo[i].start;
+        if (*p == '*') {
+        	eventNoteInfo[i].len--;
+        	p++;
+        }
+    }
+    gNumOfEventNote = i;
+}
+
+static void GetEventNoteInfo()
+{
+    MemHandle recordH = 0;
+    UInt16  currindex = 0;
+    char*   rp;
+    Boolean found = false;
+
+    gEventNoteInfo = 0;
+
+    if (gPrefsR.eventNoteExists) {
+        if ((recordH = DmQueryRecord(MemoDB, gPrefsR.eventNoteIndex)) != NULL) {
+            rp = (char *) MemHandleLock(recordH);
+            if (StrNCaselessCompare(rp, HappydaysEventNoteTitle, StrLen(HappydaysEventNoteTitle)) == 0) {
+                gNumOfEventNote = GetNumOfEventNoteInfo(rp);
+                if (gNumOfEventNote > 0) {
+                    gEventNoteInfo = MemPtrNew(sizeof(EventNoteInfo) * gNumOfEventNote);
+
+                    ProcessEventNoteInfo(gEventNoteInfo, rp, gNumOfEventNote);
+                }
+
+                MemHandleUnlock(recordH);
+                return;
+            }
+            MemHandleUnlock(recordH);
+        }
+    }
+    
+    while ((recordH = DmQueryNextInCategory(MemoDB,
+                                            &currindex, dmAllCategories)) ) {
+        rp = (char *) MemHandleLock(recordH);
+        if (StrNCaselessCompare(rp, HappydaysEventNoteTitle, StrLen(HappydaysEventNoteTitle)) == 0) {
+            gNumOfEventNote = GetNumOfEventNoteInfo(rp);
+
+            if (gNumOfEventNote > 0) {
+                gEventNoteInfo = MemPtrNew(sizeof(EventNoteInfo) * gNumOfEventNote);
+
+                ProcessEventNoteInfo(gEventNoteInfo, rp, gNumOfEventNote);
+            }
+
+            gPrefsR.eventNoteIndex = currindex;
+            found = true;
+            MemHandleUnlock(recordH);
+            break;
+        }
+
+        MemHandleUnlock(recordH);
+        currindex++;
+    }
+    gPrefsR.eventNoteExists = found;
+}
+
 /* Get preferences, open (or create) app database */
 static UInt16 StartApplication(void)
 {
-    Int8 err;
 	UInt32 version;
+	Int16 err;
 
     gTableRowHandle = 0;
 
 	if (_TRGVGAFeaturePresent(&version)) gbVgaExists = true;
 	else gbVgaExists = false;
+	
+	err = FtrGet(sysFtrCreator, sysFtrNumROMVersion, &version);
+	is35 = (version >= 0x03503000);
 
     if(gbVgaExists)
     	VgaSetScreenMode(screenMode1To1, rotateModeNone);
@@ -248,6 +367,7 @@ static UInt16 StartApplication(void)
         freememories();
         return 1;
     }
+    GetEventNoteInfo();
 
     return 0;
 }
@@ -531,6 +651,8 @@ static void freememories(void)
         MemHandleFree(gTableRowHandle);
         gTableRowHandle = 0;
     }
+    
+    if (gEventNoteInfo) MemPtrFree(gEventNoteInfo);
 }
 
 static void ReadPrefsRec(void)
@@ -587,8 +709,9 @@ static void ReadPrefsRec(void)
         StrCopy(gPrefsR.adrcdate, "\0\0\0");
         StrCopy(gPrefsR.adrmdate, "\0\0\0");
         
-        gPrefsR.listFont = (gbVgaExists) ? VgaBaseToVgaFont(stdFont) 
-            : stdFont;
+        gPrefsR.listFont = (gbVgaExists) ? VgaBaseToVgaFont(stdFont) : stdFont;
+        gPrefsR.eventNoteIndex = 0;
+        gPrefsR.eventNoteExists = false;
     }
 
     if (gPrefsR.Prefs.sysdateover) gPrefdfmts = gPrefsR.Prefs.dateformat;
@@ -624,10 +747,6 @@ static Int16 OpenDatabases(void)
     gSystemdfmts = gPrefdfmts = sysPrefs.dateFormat;// save global date format
     gPreftfmts = sysPrefs.timeFormat;               // save global time format
     
-    /*
-     * Quick way to open all needed databases.  Thanks to Danny Epstein.
-     */
-
     DatebookDB = DmOpenDatabaseByTypeCreator('DATA', DatebookAppID,
                                              mode | dmModeReadWrite);
     if (!DatebookDB) {
@@ -1772,22 +1891,14 @@ static Boolean PrefFormHandleEvent(EventPtr e)
     return handled;
 }
 
-
 static void MainTableSelectItem(TablePtr table, Int16 row, Boolean select)
 {
-	RectangleType r;
-
-	TblGetItemBounds(table, row, 0, &r);
-
-    if (!select) {
-        WinEraseRectangle(&r, 0);
-        MainFormDrawRecord(table, row, 0, &r);
+  	if (select) {
+		TblSelectItem(table, row, 0);
     }
-    else WinInvertRectangle(&r, 0);
 }
 
-void MainFormDrawRecord(MemPtr tableP, Int16 row, Int16 column, 
-                               RectanglePtr bounds)
+void MainFormDrawRecord(MemPtr tableP, Int16 row, Int16 column, RectanglePtr bounds)
 {
     FontID currFont;
     MemHandle recordH = 0;
@@ -1815,6 +1926,7 @@ void MainFormDrawRecord(MemPtr tableP, Int16 row, Int16 column,
      * It is a Pilot convention to not destroy the current font
      * but to save and restore it.
      */
+     
     currFont = FntSetFont(gPrefsR.listFont);
 
     x = bounds->topLeft.x;
@@ -1855,8 +1967,24 @@ void MainFormDrawRecord(MemPtr tableP, Int16 row, Int16 column,
 
 		// Display name
 		// 
-		nameExtent = bounds->extent.x - width 
+		width = nameExtent = bounds->extent.x - width 
             - ageFieldWidth - categoryWidth -2;
+
+
+        if (r.flag.bits.nthdays) {
+            char format[25];
+
+            SysCopyStringResource(format, NthListFormatString);
+            StrPrintF(gAppErrStr, format, r.nth);
+            
+            length = StrLen(gAppErrStr);
+            FntCharsInWidth(gAppErrStr, &width, &length, &ignored);
+            WinDrawChars(gAppErrStr, length, x, y);
+
+            x += width;
+            nameExtent -= width;
+        }
+        
 		DrawRecordName(r.name1, r.name2, nameExtent, &x, y,
 					   false,
 					   r.flag.bits.priority_name1 || !gSortByCompany);
@@ -2288,8 +2416,13 @@ void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column,
         ///////////////////////////////////
         // Process Age
         ///////////////////////////////////
-        
-        if (r.flag.bits.year) {
+
+        if (r.flag.bits.nthdays) {
+            SysCopyStringResource(gAppErrStr, NthFormatString);
+
+            StrPrintF(displayStr, gAppErrStr, r.nth);
+        }
+        else if (r.flag.bits.year) {
             DateType solBirth;
             DateTimeType rtVal;
             UInt8 ret;
@@ -2346,16 +2479,21 @@ void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column,
     break;
     case ViewRemained:
     {
-        dateDiff = (Int32)DateToDays(converted) - (Int32)DateToDays(current);
+		if (converted.year != INVALID_CONV_DATE) {
+			dateDiff = (Int32)DateToDays(converted) - (Int32)DateToDays(current);
 
-        if (dateDiff >= (Int32)0) {
-            SysCopyStringResource(displayStr, BirthLeftString);
-            StrPrintF(gAppErrStr, displayStr, dateDiff);
-        }
-        else {
-            SysCopyStringResource(displayStr, BirthPassedString);
-            StrPrintF(gAppErrStr, displayStr, -1 * dateDiff);
-        }
+			if (dateDiff >= (Int32)0) {
+				SysCopyStringResource(displayStr, BirthLeftString);
+				StrPrintF(gAppErrStr, displayStr, dateDiff);
+			}
+			else {
+				SysCopyStringResource(displayStr, BirthPassedString);
+				StrPrintF(gAppErrStr, displayStr, -1 * dateDiff);
+			}
+		}
+		else {
+			StrCopy(gAppErrStr, "-");
+		}
             
         length = StrLen(gAppErrStr);
         FntCharsInWidth(gAppErrStr, &width, &length, &ignored);
@@ -2575,7 +2713,7 @@ void DrawTiny(int size,int x,int y,int n)
     WinDrawLine(x,y+c,x+a,y+c);
 }
 
-void TinyNumber(int size,int x,int y,int num) 
+static void TinyNumber(int size,int x,int y,int num) 
 {
   const int numbers[10] = {119,36,93,109,46,107,123,37,127,111};
   //if ((num >=0) && (num<=9))
@@ -2654,7 +2792,7 @@ void DrawSilkMonth(int mon, int year, int day, int x, int y)
   	WinDrawChars( gAppErrStr,StrLen(gAppErrStr),x+(240/6)-(width/2),y+48);
 }
 
-void DrawMonth(DateType converted)
+static void DrawMonth(DateType converted)
 {
 	const int start = 185;
 
@@ -2858,6 +2996,7 @@ static Boolean StartFormHandleEvent(EventPtr e)
                     rescan = true;
                     break;
                 case 1:             // No
+                	break;
                 }
                 break;
             case 2: // no
@@ -2888,6 +3027,12 @@ static Boolean StartFormHandleEvent(EventPtr e)
 //
 //
 // $Log$
+// Revision 1.74  2004/03/08 13:21:47  jmjeong
+// -(Add) Can Assign N-th day of Event.
+// -(Add) Give different icon or color to different event types. You can set any
+// note field for each event type with "= HappyDays Notes".
+// -(Enhance) Change the color for table select
+//
 // Revision 1.73  2003/01/15 02:11:18  jmjeong
 // re-arrange multi segment
 //

@@ -43,11 +43,14 @@ extern Int16 gMainTableTotals;      // Main Form table total rows;
 extern Int16 gMainTableHandleRow;   // The row of birthdate view to display
 extern DateType gStartDate;			// staring date of birthday listing
 
+extern Int16 gNumOfEventNote;
+extern EventNoteInfo *gEventNoteInfo;
+
 UInt16 gToDoCategory;               // todo category
 
-typedef enum {
+typedef enum _WhichString {
     DBSetting = 1,
-    ToDoSetting = 2,
+    ToDoSetting = 2
 } WhichString;
 
 // to be used for loading Note String Form
@@ -87,6 +90,15 @@ static void LoadCommonPrefsFields(FormPtr frm);
 static void UnloadCommonNotifyPrefs(FormPtr frm);
 static Boolean IsSameRecord(Char* notefield, HappyDays birth);
 
+Char* EventTypeString(HappyDays r);
+int CleanupFromTD(DmOpenRef db);
+int CleanupFromDB(DmOpenRef db);
+void PerformExport(Char * memo, int mainDBIndex, DateType when);
+Boolean DBNotifyFormHandleEvent(EventPtr e);
+Boolean NotifyStringFormHandleEvent(EventPtr e);
+Boolean ToDoFormHandleEvent(EventPtr e);
+
+
 // temporary return value;
 Char* EventTypeString(HappyDays r)
 {
@@ -120,6 +132,13 @@ void PerformExport(Char * memo, int mainDBIndex, DateType when)
         UnpackHappyDays(&r, rp);
 
         StrNCat(memo, "\"", 4096);
+        if (r.flag.bits.nthdays) {
+            char format[25];
+
+            SysCopyStringResource(format, NthListFormatString);
+            StrPrintF(gAppErrStr, format, r.nth);
+            StrNCat(memo, gAppErrStr, 4096);
+        }
         StrNCat(memo, r.name1, 4096);
         if (r.name2 && r.name2[0]) {
             if (r.name1 && r.name1[0]) StrNCat(memo, ", ", 4096);
@@ -227,6 +246,58 @@ int CleanupFromDB(DmOpenRef db)
         }
     }
     return ret;
+}
+
+static Int16 FindEventNoteInfo(HappyDays birth)
+{
+    MemHandle recordH = 0;
+    char *eventString;
+    char *rp;
+    Int16 i;
+    
+    if (!gPrefsR.eventNoteExists) return -1;
+
+    if (!birth.custom[0]) {
+        eventString = gPrefsR.Prefs.custom;
+    }
+    else {
+        eventString = birth.custom;
+    }
+
+    if ((recordH = DmQueryRecord(MemoDB, gPrefsR.eventNoteIndex)) ) {
+        rp = (char *) MemHandleLock(recordH);
+
+        for (i = 0; i < gNumOfEventNote; i++) {
+            if (StrNCaselessCompare(eventString, gEventNoteInfo[i].name, StrLen(eventString))== 0) 
+            {
+                MemHandleUnlock(recordH);
+                return i;
+            }
+        }
+        MemHandleUnlock(recordH);
+    }
+    return -1;
+}
+
+static void LoadEventNoteString(char *p, Int16 idx, Int16 maxString)
+{
+    char *rp;
+    Int16 len;
+        
+    MemHandle recordH = DmQueryRecord(MemoDB, gPrefsR.eventNoteIndex);
+    rp = (char*)MemHandleLock(recordH);
+
+    if (gEventNoteInfo[idx].len > maxString) {
+        len = maxString;
+    }
+    else len = gEventNoteInfo[idx].len;
+    
+    StrNCopy(p, rp + gEventNoteInfo[idx].start, len);
+    p[len] = 0;
+
+    StrCat(p, "\n");
+    
+    MemHandleUnlock(recordH);
 }
 
 Boolean ToDoFormHandleEvent(EventPtr e)
@@ -581,15 +652,23 @@ static Char* gNotifyFormatString[6] =
 // Memory is allocated, after calling this routine, user must free the memory
 //
 static Char* NotifyDescString(DateType when, HappyDays birth, 
-							  Int8 age,Boolean todo)
+							  Int8 age, Boolean todo)
 {
     Char* description, *pDesc;
     Char* pfmtString;
+    Char format[25];
     
     // make the description
     description = pDesc = MemPtrNew(1024);
     SysCopyStringResource(gAppErrStr, NotEnoughMemoryString);
     ErrFatalDisplayIf(!description, gAppErrStr);
+
+    if (birth.flag.bits.nthdays) {
+        SysCopyStringResource(format, NthListFormatString);
+        StrPrintF(pDesc, format, birth.nth);
+
+        pDesc += StrLen(pDesc);
+    }
 
     // boundary check must be inserted
     //
@@ -663,7 +742,7 @@ static Char* NotifyDescString(DateType when, HappyDays birth,
                     StrCat(pDesc, gAppErrStr);
                     pDesc += StrLen(pDesc);
                 }
-                if (birth.flag.bits.year) {
+                if (birth.flag.bits.year && !birth.flag.bits.nthdays) {
                     if (!birth.flag.bits.solar 
                         || gPrefsR.DBNotifyPrefs.duration != -1 || todo) {
                         if (age >= 0) {
@@ -681,6 +760,7 @@ static Char* NotifyDescString(DateType when, HappyDays birth,
                 break;
 
             default:
+            	break;
             }
 
             pfmtString += 2;    // advance +char;
@@ -704,7 +784,8 @@ static Int16 PerformNotifyDB(HappyDays birth, DateType when, Int8 age,
     Char* description = 0;
     Int16 existIndex;
     ApptDBRecordFlags changedFields;
-    Char noteField[255];        // (datebk3: 10, AN:14), HD id: 5
+    Int16 idx;
+    Char noteField[256];        // (datebk3: 10, AN:14), HD id: 5
 
     // for the performance, check this first 
     if ( ((existIndex = CheckDatebookRecord(when, birth)) >= 0)
@@ -754,6 +835,9 @@ static Int16 PerformNotifyDB(HappyDays birth, DateType when, Int8 age,
         StrCopy(noteField, gPrefsR.DBNotifyPrefs.note);
         StrCat(noteField, "\n");
     }
+    else if ((idx = FindEventNoteInfo(birth)) >= 0) {
+        LoadEventNoteString(noteField, idx, 256);
+    }
     else noteField[0] = 0;
 
     StrCat(noteField, gPrefsR.Prefs.notifywith);
@@ -771,7 +855,7 @@ static Int16 PerformNotifyDB(HappyDays birth, DateType when, Int8 age,
         // if not exists
         // write the new record (be sure to fill index)
         //
-        ApptNewRecord(DatebookDB, &datebook, &existIndex);
+        ApptNewRecord(DatebookDB, &datebook, (UInt16 *)&existIndex);
         // if private is set, make the record private
         //
         ChkNMakePrivateRecord(DatebookDB, existIndex);
@@ -789,7 +873,7 @@ static Int16 PerformNotifyDB(HappyDays birth, DateType when, Int8 age,
             changedFields.alarm = 1;
 			changedFields.note = 1;
 
-            ApptChangeRecord(DatebookDB, &existIndex, &datebook,
+            ApptChangeRecord(DatebookDB, (UInt16*)&existIndex, &datebook,
                              changedFields);
             // if private is set, make the record private
             //
@@ -806,9 +890,10 @@ static Int16 PerformNotifyDB(HappyDays birth, DateType when, Int8 age,
 static Int16 PerformNotifyTD(HappyDays birth, DateType when, Int8 age,
                              Int16 *created, Int16 *touched)
 {
-    Char noteField[255];      // (datebk3: 10, AN:14), HD id: 5
+    Char noteField[255+1];  // (datebk3: 10, AN:14), HD id: 5
     ToDoItemType todo;
     Char* description = 0;
+    Int16 idx;  
     
     Int16 existIndex;
 
@@ -834,6 +919,9 @@ static Int16 PerformNotifyTD(HappyDays birth, DateType when, Int8 age,
         StrCopy(noteField, gPrefsR.TDNotifyPrefs.note);
         StrCat(noteField, "\n");
     }
+    else if ((idx = FindEventNoteInfo(birth)) >= 0) {
+        LoadEventNoteString(noteField, idx, 256);
+    }
     else noteField[0] = 0;
 
     StrCat(noteField, gPrefsR.Prefs.notifywith);
@@ -854,7 +942,7 @@ static Int16 PerformNotifyTD(HappyDays birth, DateType when, Int8 age,
         // if not exists
         // write the new record (be sure to fill index)
         //
-        ToDoNewRecord(ToDoDB, &todo, gToDoCategory, &existIndex);
+        ToDoNewRecord(ToDoDB, &todo, gToDoCategory, (UInt16*)&existIndex);
         // if private is set, make the record private
         //
         ChkNMakePrivateRecord(ToDoDB, existIndex);
@@ -874,7 +962,7 @@ static Int16 PerformNotifyTD(HappyDays birth, DateType when, Int8 age,
             DmMoveRecord(ToDoDB, existIndex, DmNumRecords(ToDoDB));
             
             // make new record
-            ToDoNewRecord(ToDoDB, &todo, gToDoCategory, &existIndex);
+            ToDoNewRecord(ToDoDB, &todo, gToDoCategory, (UInt16*)&existIndex);
             // if private is set, make the record private
             //
             ChkNMakePrivateRecord(ToDoDB, existIndex);
@@ -922,7 +1010,10 @@ static void NotifyDatebook(int mainDBIndex, DateType when, Int8 age,
          */
         UnpackHappyDays(&r, rp);
 
-        if (r.flag.bits.solar) {
+        if (r.flag.bits.nthdays) {
+            PerformNotifyDB(r, when, age, NULL, created, touched);
+        }
+        else if (r.flag.bits.solar) {
             repeatInfo.repeatType = repeatYearly;
             repeatInfo.repeatFrequency = 1;
             repeatInfo.repeatOn = 0;
@@ -1031,7 +1122,10 @@ static void NotifyToDo(int mainDBIndex, DateType when, Int8 age,
          */
         UnpackHappyDays(&r, rp);
 
-        if (r.flag.bits.solar) {
+        if (r.flag.bits.nthdays) {
+            PerformNotifyTD(r, when, age, created, touched);
+        }
+        else if (r.flag.bits.solar) {
             PerformNotifyTD(r, when, age, created, touched);
         }
         else if (r.flag.bits.lunar || r.flag.bits.lunar_leap) {
@@ -1329,6 +1423,7 @@ static void LoadTDNotifyPrefsFields(void)
         CtlSetValue(GetObjectPointer(frm, ToDoNotifyPri5), 1);
         break;
     default:
+    	break;
     }
     DisplayCategory(ToDoPopupTrigger, gPrefsR.TDNotifyPrefs.todoCategory, false);
 
@@ -1492,12 +1587,11 @@ static Int16 CheckToDoRecord(DateType when, HappyDays birth)
 //
 static void ChkNMakePrivateRecord(DmOpenRef db, Int16 index)
 {
-    Int16 attributes;
+    UInt16 attributes;
     // if private is set, make the record private
     //
     if (gPrefsR.private == 1) {
-        DmRecordInfo(db, index, &attributes,
-                     NULL,NULL);
+        DmRecordInfo(db, index, &attributes, NULL,NULL);
         attributes |= dmRecAttrSecret;
         DmSetRecordInfo(db, index, &attributes, NULL);
     }

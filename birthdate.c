@@ -31,15 +31,14 @@ void PackHappyDays(HappyDays *hd, void* recordP)
 {
     UInt16 offset = 0;
 
-    DmWrite(recordP, offset, (Char*)&hd->addrRecordNum,
-            sizeof(hd->addrRecordNum));
+    DmWrite(recordP, offset, (Char*)&hd->addrRecordNum, sizeof(hd->addrRecordNum));
     offset += sizeof(hd->addrRecordNum);
-    DmWrite(recordP, offset, (Char*)&hd->date,
-            sizeof(hd->date));
+    DmWrite(recordP, offset, (Char*)&hd->date, sizeof(hd->date));
     offset += sizeof(hd->date);
-    DmWrite(recordP, offset, (Char*)&hd->flag,
-            sizeof(hd->flag));
-    offset += sizeof(hd->flag);  // for corealign
+    DmWrite(recordP, offset, (Char*)&hd->flag, sizeof(hd->flag));
+    offset += sizeof(hd->flag);  
+    DmWrite(recordP, offset, (Char*)&hd->nth, sizeof(hd->nth));
+    offset += sizeof(hd->nth);      // for corealign
 
     if (hd->name1) {
         DmStrCopy(recordP, offset, (Char*)hd->name1);
@@ -68,14 +67,21 @@ void PackHappyDays(HappyDays *hd, void* recordP)
     }
 }
 
-void UnpackHappyDays(HappyDays *hd,
-                            const PackedHappyDays *packedHappyDays)
+void UnpackHappyDays(HappyDays *hd, const PackedHappyDays *packedHappyDays)
 {
-    char *s = packedHappyDays->name;
+    char *s = (char*)packedHappyDays;
 
-    hd->addrRecordNum = packedHappyDays->addrRecordNum;
-    hd->date = packedHappyDays->date;
-    hd->flag = packedHappyDays->flag;
+    MemMove(&hd->addrRecordNum, s, sizeof(hd->addrRecordNum));
+    s += sizeof(hd->addrRecordNum);
+
+    MemMove(&hd->date, s, sizeof(hd->date));
+    s += sizeof(hd->date);
+
+    MemMove(&hd->flag, s, sizeof(hd->flag));
+    s += sizeof(hd->flag);
+
+    MemMove(&hd->nth, s, sizeof(hd->nth));
+    s += sizeof(hd->nth);
 
     hd->name1 = s;
     s += StrLen(s) + 1;
@@ -83,11 +89,12 @@ void UnpackHappyDays(HappyDays *hd,
     s += StrLen(s) + 1;
     hd->custom = s;
     s += StrLen(s) + 1;
+
 }
 
 static Int16 HDPackedSize(HappyDays* hd)
 {
-    Int16 size;
+    Int16 
 
     size = sizeof(PackedHappyDays) - sizeof(char);    // corect
     if (hd->name1) size += StrLen(hd->name1) +1;
@@ -102,11 +109,12 @@ static Int16 HDPackedSize(HappyDays* hd)
     return size;
 }
 
-Int16 CompareHappyDaysFunc(LineItemPtr p1, LineItemPtr p2, Int32 extra)
+static Int16 CompareHappyDaysFunc(LineItemPtr p1, LineItemPtr p2, Int32 extra)
 {   
     return DateCompare(p1->date, p2->date)*extra;
 }
-Int16 CompareAgeFunc(LineItemPtr p1, LineItemPtr p2, Int32 extra)
+
+static Int16 CompareAgeFunc(LineItemPtr p1, LineItemPtr p2, Int32 extra)
 {   
 	if (p1->age > p2->age) return 1*extra;
 	else if (p1->age < p2->age) return -1*extra;
@@ -181,7 +189,37 @@ UInt16 AddrGetHappyDays(DmOpenRef dbP, UInt16 AddrCategory, DateType start)
                     //
 					converted = r.date;
 
-                    if (r.flag.bits.lunar || r.flag.bits.lunar_leap) {
+                    if (r.flag.bits.nthdays) {
+                        DateTimeType rtVal;
+
+                        if (r.flag.bits.lunar || r.flag.bits.lunar_leap) {
+                            if  (lun2sol(converted.year + firstYear,
+                                         converted.month, converted.day,
+                                         r.flag.bits.lunar_leap, &rtVal)) {
+                                MemHandleUnlock(recordH);
+                                currindex++;
+                                recordNum--;
+                                totalItems--;
+
+                                continue;
+                            }
+                            converted.day = rtVal.day;
+                            converted.month = rtVal.month;
+                            converted.year = rtVal.year - firstYear;
+                        }
+                        DateAdjust(&converted, r.nth);
+
+                        if (DateToDays(converted) < DateToDays(start)) {
+                        	MemHandleUnlock(recordH);
+                        	currindex++;
+                            recordNum--;
+                            totalItems--;
+
+                            continue;
+                        }
+                        
+                    }
+                    else if (r.flag.bits.lunar || r.flag.bits.lunar_leap) {
 
                         if (!FindNearLunar(&converted, start,
                                            r.flag.bits.lunar_leap)) {
@@ -227,7 +265,8 @@ UInt16 AddrGetHappyDays(DmOpenRef dbP, UInt16 AddrCategory, DateType start)
                         }
                     }
         
-					if (converted.year != INVALID_CONV_DATE 
+					if (converted.year != INVALID_CONV_DATE
+                        && !r.flag.bits.nthdays 
 						&& r.flag.bits.year 
 						&& (age = CalculateAge(converted, r.date, r.flag)) >= 0) {
 						// calculate age if year exists
@@ -253,11 +292,11 @@ UInt16 AddrGetHappyDays(DmOpenRef dbP, UInt16 AddrCategory, DateType start)
                 SysInsertionSort(ptr, totalItems, sizeof(LineItemType),
                                  (_comparF *)CompareHappyDaysFunc, 1L);
             }
-			else if (gPrefsR.Prefs.sort == 2) {  	// age sort
+			else if (gPrefsR.Prefs.sort == 3) {  	// age sort
                 SysInsertionSort(ptr, totalItems, sizeof(LineItemType),
                                  (_comparF *)CompareAgeFunc, 1L);
             }
-			else if (gPrefsR.Prefs.sort == 3) {	// age sort(re)
+			else if (gPrefsR.Prefs.sort == 2) {	    // age sort(re)
                 SysInsertionSort(ptr, totalItems, sizeof(LineItemType),
                                  (_comparF *)CompareAgeFunc, -1L);
             }
@@ -482,7 +521,7 @@ static UInt16 HDFindSortPosition(DmOpenRef dbP, PackedHappyDays* newRecord)
                                (DmComparF *)HDComparePackedRecords, 0);
 }
 
-static Int16 HDNewRecord(DmOpenRef dbP, HappyDays *r, Int16 *index)
+static Int16 HDNewRecord(DmOpenRef dbP, HappyDays *r, UInt16 *index)
 {
     MemHandle recordH;
     PackedHappyDays* recordP;
@@ -515,10 +554,12 @@ static Int16 HDNewRecord(DmOpenRef dbP, HappyDays *r, Int16 *index)
 static Int16 AnalOneRecord(UInt16 addrattr, Char* src,
                   HappyDays* hd, Boolean *ignore)
 {
-    Char* p;
+    Char *p, *q;
     UInt16 index;
     Int16 err;
     Int16 year, month, day;
+    Int16 nth[20];
+    Int16 count = 0;
 
 	while (*src == ' ' || *src == '\t') src++;    // skip white space
 
@@ -526,6 +567,22 @@ static Int16 AnalOneRecord(UInt16 addrattr, Char* src,
     if (*src == '!') {
         if (gPrefsR.Prefs.ignoreexclamation) return 0;
         else src++;
+    }
+
+
+    if ((q = StrChr(src, '['))) {
+        // [ 이 있는 경우 duration으로 판단 
+        p = q;
+
+        q = StrChr(src, ']');
+        if (q) *q = 0;
+        else return 0;
+
+        do {
+            p++;
+            nth[count++] = StrAToI(p);
+            if (count >= 20) break;
+        } while ((p = StrChr(p, ',')));
     }
     
     if (*src == '*') {
@@ -590,6 +647,35 @@ static Int16 AnalOneRecord(UInt16 addrattr, Char* src,
 
         DmReleaseRecord(MainDB, index, true);
     }
+
+    if (count > 0) {
+        Int16 i;
+        HappyDays hdr;
+
+        for (i = 0; i < count; i++) {
+            MemMove(&hdr, hd, sizeof(hdr));
+
+            hdr.flag.bits.nthdays = 1;
+            hdr.nth = nth[i];
+
+            if (!hdr.flag.bits.year) goto ErrHandler;
+            
+            err = HDNewRecord(MainDB, &hdr, &index);
+            if (!err) {
+                UInt16 attr;
+                // set the category of the new record to the category
+                // it belongs in
+                DmRecordInfo(MainDB, index, &attr, NULL, NULL);
+                attr &= ~dmRecAttrCategoryMask;
+                attr |= addrattr;
+
+                DmSetRecordInfo(MainDB, index, &attr, NULL);
+
+                DmReleaseRecord(MainDB, index, true);
+            }
+        }
+    }
+    
     return 0;
 
  ErrHandler:
@@ -604,7 +690,8 @@ static Int16 AnalOneRecord(UInt16 addrattr, Char* src,
         if (!GotoAddress(hd->addrRecordNum)) return -1;
     case 2:                 // Ignore all
         *ignore = true;
-    case 1:                 // Ignore
+    case 1:  
+    	break;              // Ignore
     }
     return 0;
 }
@@ -647,12 +734,12 @@ void  SetReadAddressDB()
 }
 
 #define	INDICATE_TOP		110
-#define	INDICATE_LEFT		35
+#define	INDICATE_LEFT		20	
 #define	INDICATE_HEIGHT		6
 #define	INDICATE_WIDTH		15
 #define INDICATE_NUM        7
 
-void initIndicate()
+static void initIndicate()
 {
 	RectangleType rect;
 	CustomPatternType pattern;
@@ -664,7 +751,7 @@ void initIndicate()
 
 	rect.topLeft.x = INDICATE_LEFT;	
 	rect.topLeft.y = INDICATE_TOP;
-	rect.extent.x = INDICATE_WIDTH * (INDICATE_NUM -1);
+	rect.extent.x = INDICATE_WIDTH * (INDICATE_NUM);
 	rect.extent.y = INDICATE_HEIGHT;
 
     if (gbVgaExists) {
@@ -678,7 +765,7 @@ void initIndicate()
 	return;
 }
 
-void displayNextIndicate( int index )
+static void displayNextIndicate( int index )
 {
 	FormPtr form;
 	RectangleType rect;
