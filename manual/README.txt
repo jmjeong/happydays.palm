@@ -22,7 +22,7 @@ Visit http://jmjeong.com/?HappyDays/Manual
 
 4. Download 
 
-You can download the new version of HappyDays and localized version from 
+You can download the new version of HappyDays and the localized version from 
 http://jmjeong.com/?HappyDays%2FDownload
 
 5. License
