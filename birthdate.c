@@ -520,6 +520,13 @@ static Int16 AnalOneRecord(UInt16 addrattr, Char* src,
     Int16 year, month, day;
 
 	while (*src == ' ' || *src == '\t') src++;    // skip white space
+
+    // ignore record with exclamation mark
+    if (*src == '!') {
+        if (gPrefsR.Prefs.ignoreexclamation) return 0;
+        else src++;
+    }
+    
     if (*src == '*') {
         
         // this is multiple event
@@ -552,7 +559,6 @@ static Int16 AnalOneRecord(UInt16 addrattr, Char* src,
         src = p+1;
         while (*src == ' ' || *src == '\t') src++;     // skip white space
     }
-    else if (*src == '!') return 0;
     
     if (!AnalysisHappyDays(src, &hd->flag,
                            &year, &month, &day)) goto ErrHandler;

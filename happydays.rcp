@@ -199,7 +199,7 @@ DEFAULTBTNID PrefFormCancel
 BEGIN
     TITLE "Preferences"
 
-    LABEL "Custom field:" AUTOID AT (10 20)
+    LABEL "Custom field:" AUTOID AT (10 17)
     FIELD ID PrefFormCustomField AT (PrevRight+3 PrevTop 50 AUTO) UNDERLINED
             MAXCHARS 12
 
@@ -215,8 +215,10 @@ BEGIN
 
 	CHECKBOX "Scan note field" ID PrefFormScanNote
 		AT (10 PrevBottom+1 AUTO AUTO)
+	CHECKBOX "Ignore record with prefix '!'" ID PrefFormIgnorePrefix
+		AT (10 PrevBottom+1 AUTO AUTO)
         
-    LABEL "Address Autoscan" AUTOID AT (10 PrevBottom+3)
+    LABEL "Address Autoscan" AUTOID AT (10 PrevBottom+1)
     LIST "Always" "Ask" "Never"
 		ID PrefFormAutoRescan
 		AT (PREVRIGHT PREVTOP 50 AUTO) VISIBLEITEMS 3 NONUSABLE
@@ -224,7 +226,7 @@ BEGIN
                  AT (PREVLEFT PREVTOP-1 50 AUTO) LEFTANCHOR
     POPUPLIST ID PrefFormRescanTrigger PrefFormAutoRescan
         
-	LABEL "Notify Format:" AUTOID AT (10 PrevBottom+3) 
+	LABEL "Notify Format:" AUTOID AT (10 PrevBottom+1) 
     LIST 	"[Last, First] E(1) Year" 
 	    	"[First Last] E(1) Year" 
 			"Event - Last, First Year"
@@ -499,10 +501,10 @@ BEGIN
     TITLE "About HappyDays"
 
 	FORMBITMAP AT (6 18) BITMAP ID_BitmapIcon USABLE 
-    LABEL "HappyDays 2.08" AUTOID AT (PrevRight+38 PrevTop) FONT 1
+    LABEL "HappyDays 2.09b1" AUTOID AT (PrevRight+38 PrevTop) FONT 1
     LABEL "GPL free software"
         AUTOID AT (PrevLeft PrevTop+ABOUT_LINE_SPACING) FONT 0
-    LABEL "(c) 1999-2001 Jaemok Jeong"
+    LABEL "(c) 1999-2002 Jaemok Jeong"
         AUTOID AT (Center PrevTop+ABOUT_LINE_SPACING2) FONT 0
         
 	LABEL "E-Mail & Web Page" AUTOID AT (CENTER PrevTop+ABOUT_LINE_SPACING)
@@ -569,4 +571,4 @@ SMALLICONFAMILY
 	TRANSPARENT 192 192 0
 
 APPLICATIONICONNAME 1000 "HappyDays"
-VERSION ID 1 "2.08"
+VERSION ID 1 "2.09"

@@ -74,26 +74,26 @@ struct sPrefsR defaultPref = {
 #if defined(GERMAN)
     {  1, "Alle" },                         // Todo notify prefs
     {  "Geburtstag", "*HD:",                // Prefs
-       1, 1, 0, 0, 0, dfDMYWithDots },   
+       1, 1, 0, 1, 0, 0, dfDMYWithDots },   
 #elif defined(PORTUGUESE_BR)
     {  1, "All" },                          // Todo notify prefs
     {  "Aniversario", "*HD:",               // Prefs
-       1, 1, 0, 0, 0, dfMDYWithSlashes },   
+       1, 1, 0, 1, 0, 0, dfMDYWithSlashes },   
 #elif defined(ITALIAN)
     {  1, "All" },                          // Todo notify prefs
     {  "Compleanno", "*HD:",                // Prefs
-       1, 1, 0, 0, 0, dfMDYWithSlashes },   
+       1, 1, 0, 1, 0, 0, dfMDYWithSlashes },   
 #else
     {  1, "All" },                          // Todo notify prefs
     {  "Birthday", "*HD:",                  // Prefs
-       1, 1, 0, 0, 0, dfMDYWithSlashes },   
+       1, 1, 0, 1, 0, 0, dfMDYWithSlashes },   
 #endif
     {  1, },                                // Display Preferences
     0,                                      // hide secret record
 #ifdef GERMAN
     "Alle",                                 // Address category
 #elif defined(PORTUGUESE_BR)
-    "All",                                 // Address category
+    "All",                                  // Address category
 #else
     "All", 
 #endif
@@ -1537,12 +1537,10 @@ static void LoadPrefsFields()
 /*
     SetFieldTextFromStr(PrefFormNotifyWith, gPrefsR.Prefs.notifywith);
 */
-    if (gPrefsR.Prefs.scannote == 1) {
-        CtlSetValue(GetObjectPointer(frm, PrefFormScanNote), 1);
-    }
-    else {
-        CtlSetValue(GetObjectPointer(frm, PrefFormScanNote), 0);
-    }
+    CtlSetValue(GetObjectPointer(frm, PrefFormScanNote), 
+		gPrefsR.Prefs.scannote);
+    CtlSetValue(GetObjectPointer(frm, PrefFormIgnorePrefix), 
+		gPrefsR.Prefs.ignoreexclamation);
 
 }
 
@@ -1616,6 +1614,12 @@ static Boolean UnloadPrefsFields()
         needrescan = true;
     }
     gPrefsR.Prefs.scannote = CtlGetValue(ptr);
+
+    ptr = GetObjectPointer(frm, PrefFormIgnorePrefix);
+    if (CtlGetValue(ptr) != gPrefsR.Prefs.ignoreexclamation ) {
+        needrescan = true;
+    }
+    gPrefsR.Prefs.ignoreexclamation = CtlGetValue(ptr);
 
     return needrescan;
 }
@@ -2807,7 +2811,7 @@ static Boolean StartFormHandleEvent(EventPtr e)
             StrPrintF(gAppErrStr, ErrStr, gPrefsR.Prefs.custom);
 
             switch (FrmCustomAlert(CustomFieldAlert,
-                                   gAppErrStr, " ", " ")) {
+                                   " ", " ", " ")) {
             case 0:             // OK
                 gProgramExit = true;
                 break;
@@ -2868,6 +2872,9 @@ static Boolean StartFormHandleEvent(EventPtr e)
 //
 //
 // $Log$
+// Revision 1.67  2002/02/14 14:33:37  jmjeong
+// add the routine to process prefix '!'
+//
 // Revision 1.66  2002/02/03 14:20:48  jmjeong
 // add log, revision
 //

@@ -77,6 +77,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define PrefFormAddrTrigger         1313
 #define PrefFormRescanTrigger       1314
 #define PrefFormAutoRescan          1315
+#define PrefFormIgnorePrefix        1316
 
 #define DispPrefForm                1350
 #define DispPrefOk                  1351

@@ -25,7 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define DEFAULT_DURATION    5
 
 #define HDAppID           	'Jmje'
-#define HDAppVer        	17
+#define HDAppVer        	18
 
 #define MainDBType          'DATA'
 #define MainDBName          "HappyDaysDB"
@@ -66,6 +66,7 @@ struct sPrefs
     char sort;                  // sortbing order
     char notifyformat;          // notify format list
     char autoscan;              // Automatic scan of address
+	char ignoreexclamation;		// ignore the record with prefix '!'
     char scannote;              // scan from notes?
     char addrapp;               // address appid(used for GOTO operation)
     Boolean sysdateover;        // override system date format
