@@ -1,7 +1,7 @@
 TRANSLATION "ENGLISH"
 BEGIN
     "Translator" = "English version"
-    "Translator's email" = ""
+    "Translator's email" = "Jaemok Jeong"
 
 	"long_notifySettingMoreString" = ""\
 	"For AN Icon Number, consult Action Names manual. DateBk3Icon is "\
