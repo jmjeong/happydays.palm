@@ -123,6 +123,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define BirthdateDate               1608
 #define BirthdateCategory           1609
 #define BirthdateOrigin             1610
+#define BirthdateLeft				1611
+
+#define BirthLeftString				1699
 
 #define ToDoNotifyForm              1700
 #define ToDoNotifyPri1              1701

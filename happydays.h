@@ -133,7 +133,7 @@ typedef struct
 typedef struct 
 {
     UInt16 birthRecordNum;  // birthdate+ DB record num
-    DateType    date;       // converted date
+    DateType    date;       // converted date(the incoming birthday)
 } LineItemType;
 
 typedef LineItemType* LineItemPtr;

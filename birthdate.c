@@ -590,7 +590,7 @@ Int16 UpdateBirthdateDB(DmOpenRef dbP, FormPtr frm)
         Boolean     ignore = false;         // ignore error record
         Char*       birthdateField;
         UInt16      addrattr;
-        Char        *p, *q;
+        Char        *p, *q, *end;
 
         // display collecting information
         //
@@ -660,6 +660,13 @@ Int16 UpdateBirthdateDB(DmOpenRef dbP, FormPtr frm)
                 ErrFatalDisplayIf(!birthdateField, gAppErrStr);
             
                 p = StrCopy(birthdateField, p);
+
+				if (whichField == note && 
+					(end = StrStr(p, gPrefsR->BirthPrefs.notifywith))) {
+					// end delimeter
+					//
+					*end = 0;
+				}
             
                 while ((q = StrChr(p, '\n'))) {
                     // multiple event

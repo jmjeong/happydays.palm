@@ -23,13 +23,15 @@ LANG = ENGLISH
 
 all: en
 
-all-lang: en ko de
+all-lang: en ko de th
 
 en: alwaysmake $(TARGET).prc
 
 ko: alwaysmake $(TARGET)-kt.prc $(TARGET)-km.prc
 
 de: alwaysmake $(TARGET)-de.prc 
+
+th: alwaysmake $(TARGET)-th.prc
 
 .S.o:
 	$(CC) $(TARGETFLAGS) -c $<
@@ -49,9 +51,14 @@ $(TARGET)-km.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGE
 $(TARGET)-de.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGET).grc pref0000.$(TARGET).grc rloc0000.$(TARGET).grc bin-de.res
 	$(BUILDPRC) $(TARGET)-de.prc $(APPNAME) $(APPID) code0001.$(TARGET).grc code0000.$(TARGET).grc data0000.$(TARGET).grc *.bin pref0000.$(TARGET).grc rloc0000.$(TARGET).grc
 
+$(TARGET)-th.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGET).grc pref0000.$(TARGET).grc rloc0000.$(TARGET).grc bin-th.res
+	$(BUILDPRC) $(TARGET)-th.prc $(APPNAME) $(APPID) code0001.$(TARGET).grc code0000.$(TARGET).grc data0000.$(TARGET).grc *.bin pref0000.$(TARGET).grc rloc0000.$(TARGET).grc
+
 code0000.$(TARGET)-de.grc: $(TARGET)-de
 	$(OBJRES) $(TARGET)
-	mv code0000.$(TARGET).grc code0000.$(TARGET)-de.grc
+
+code0000.$(TARGET)-th.grc: $(TARGET)-th
+	$(OBJRES) $(TARGET)
 
 code0000.$(TARGET)-en.grc: $(TARGET)-en
 	$(OBJRES) $(TARGET)
@@ -67,21 +74,34 @@ pref0000.$(TARGET).grc: code0000.$(TARGET).grc
 
 rloc0000.$(TARGET).grc: code0000.$(TARGET).grc
 
-bin.res: $(TARGET).rcp $(TARGET).pbitm
-	$(PILRC) -L ENGLISH $(TARGET).rcp .
-	touch bin.res
+bin.res: $(TARGET)-en.rcp $(TARGET).pbitm
+	$(PILRC) -L ENGLISH $(TARGET)-en.rcp .
 
-bin-kt.res: $(TARGET).rcp $(TARGET).pbitm
-	$(PILRC) -L KOREAN -Fkt $(TARGET).rcp .
-	touch bin.res
+bin-kt.res: $(TARGET)-ko.rcp $(TARGET).pbitm
+	$(PILRC) -L KOREAN -Fkt $(TARGET)-ko.rcp .
 
-bin-km.res: $(TARGET).rcp $(TARGET).pbitm
-	$(PILRC) -L KOREAN -Fkm $(TARGET).rcp .
-	touch bin.res
+bin-km.res: $(TARGET)-ko.rcp $(TARGET).pbitm
+	$(PILRC) -L KOREAN -Fkm $(TARGET)-ko.rcp .
 
-bin-de.res: $(TARGET).rcp $(TARGET).pbitm
-	$(PILRC) -L GERMAN $(TARGET).rcp .
-	touch bin.res
+bin-de.res: $(TARGET)-de.rcp $(TARGET).pbitm
+	$(PILRC) -L GERMAN $(TARGET)-de.rcp .
+
+bin-th.res: $(TARGET)-th.rcp $(TARGET).pbitm
+	$(PILRC) -L THAI $(TARGET)-th.rcp .
+
+$(TARGET)-en.rcp: $(TARGET).rcp english.msg hdr.msg
+	cat hdr.msg english.msg $(TARGET).rcp > $(TARGET)-en.rcp
+
+$(TARGET)-ko.rcp: $(TARGET).rcp korean.msg hdr.msg
+	cat hdr.msg korean.msg $(TARGET).rcp > $(TARGET)-ko.rcp
+	
+$(TARGET)-de.rcp: $(TARGET).rcp german.msg hdr.msg
+	cat hdr.msg german.msg $(TARGET).rcp > $(TARGET)-de.rcp
+
+$(TARGET)-th.rcp: $(TARGET).rcp thai.msg hdr.msg
+	cat hdr.msg thai.msg $(TARGET).rcp > $(TARGET)-th.rcp
+
+
 
 alwaysmake:
 	rm -f bin.res

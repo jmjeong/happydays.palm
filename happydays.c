@@ -138,12 +138,12 @@ static void RereadBirthdateDB()
     gMainTableTotals = AddrGetBirthdate(MainDB, gAddrCategory);
 }
 
-static void HighlightAction(int selected)
+static void HighlightAction(int selected, Boolean sound)
 {
     FormPtr frm = FrmGetActiveForm();
     TablePtr tableP = GetObjectPointer(frm, MainFormTable);
 
-	SndPlaySystemSound(sndClick);
+	if (sound) SndPlaySystemSound(sndClick);
 
     if (gMainTableStart > selected
         || selected >= (gMainTableStart + gMainTableRows) ) {
@@ -181,7 +181,7 @@ static void HighlightMatchRowDate(DateTimeType inputDate)
         MemPtrUnlock(ptr);
     }
     if (selected >= 0) {        // matched one exists
-        HighlightAction(selected);
+        HighlightAction(selected, true);
     }
 }
 
@@ -222,7 +222,7 @@ static void HighlightMatchRowName(Char first)
         MemPtrUnlock(ptr);
     }
     if (selected >= 0) {        // matched one exists
-        HighlightAction(selected);
+        HighlightAction(selected, true);
     }
 }
 
@@ -666,7 +666,7 @@ static Boolean MainFormHandleEvent (EventPtr e)
 
         case MainFormPageUp:
             if (gMainTableStart) {
-                gMainTableStart -= MIN(gMainTableStart, gMainTableRows);
+                gMainTableStart -= MIN(gMainTableStart, gMainTableRows-1);
                 MainFormLoadTable(frm, true);
                 FldDrawField(ClearFieldText(MainFormField));
             }
@@ -674,7 +674,7 @@ static Boolean MainFormHandleEvent (EventPtr e)
             break;
         case MainFormPageDown:
             if ((gMainTableStart + gMainTableRows) < gMainTableTotals) {
-                gMainTableStart += gMainTableRows;
+                gMainTableStart += gMainTableRows-1;
                 MainFormLoadTable(frm, true);
                 FldDrawField(ClearFieldText(MainFormField));
             }
@@ -926,6 +926,8 @@ static Int16 CalculateAge(DateType converted, DateType birthdate,
     if (flag.bits.lunar_leap || flag.bits.lunar) {
         // lunar birthdate
         //          change to lunar date
+        //
+        // converted solar is again converted into lunar day for calculation
         ret = sol2lun(converted.year + 1904, converted.month, converted.day,
                       &rtVal, &dummy);
         if (ret) return -1;     // error
@@ -1068,8 +1070,10 @@ static void SetBirthdateViewForm(Int16 index, DateType converted)
     FormPtr frm;
     Char displayStr[255];
     UInt16 addrattr;
+	UInt16 dateDiff;
     Int16 age = 0;
-
+	DateType current;
+            
     if ((frm = FrmGetFormPtr(BirthdateForm)) == 0) return;
     /*
      * Set the standard font.  Save the current font.
@@ -1092,6 +1096,7 @@ static void SetBirthdateViewForm(Int16 index, DateType converted)
         }
         else {
             SetFieldTextFromStr(BirthdateFirst, r.name1);
+            ClearFieldText(BirthdateSecond);
         }
 
         if (!r.custom[0]) {         // custom does not exist
@@ -1121,6 +1126,7 @@ static void SetBirthdateViewForm(Int16 index, DateType converted)
         }
         SetFieldTextFromStr(BirthdateDate, displayStr);
 
+        DateSecondsToDate(TimGetSeconds(), &current);
         StrCopy(displayStr, " <==  ");
 
         if (r.flag.bits.lunar) {
@@ -1140,7 +1146,37 @@ static void SetBirthdateViewForm(Int16 index, DateType converted)
         }
             
         StrCat(displayStr, gAppErrStr);
+
+        if (r.flag.bits.year) {
+            DateType solBirth;
+            DateTimeType rtVal;
+            UInt8 ret;
+            
+            if (r.flag.bits.lunar || r.flag.bits.lunar_leap) {
+                ret = !lun2sol(r.date.year+1904,
+                               r.date.month,
+                               r.date.day,
+                               r.flag.bits.lunar_leap, &rtVal);
+                if (ret) {
+                    solBirth.year = rtVal.year - 1904;
+                    solBirth.month = rtVal.month;
+                    solBirth.day = rtVal.day;
+                }
+            }
+            else solBirth = r.date;
+            
+            dateDiff = DateToDays(current) - DateToDays(solBirth);
+            StrPrintF(gAppErrStr, " (%d)", dateDiff);
+            StrCat(displayStr,gAppErrStr);
+        }
         SetFieldTextFromStr(BirthdateOrigin, displayStr);
+
+		DateSecondsToDate(TimGetSeconds(), &current);
+		dateDiff = DateToDays(converted) - DateToDays(current);
+
+        SysCopyStringResource(gAppErrStr, BirthLeftString);
+		StrPrintF(displayStr, gAppErrStr, dateDiff);
+		SetFieldTextFromStr(BirthdateLeft, displayStr);
 
         // read category information
         //
@@ -1472,8 +1508,8 @@ static Char* DateBk3IconString()
 }
 
 static Char* gNotifyFormatString[5] =
-{ "[+L] +e +y",     // [Jeong, JaeMok] B 1970
-  "[+F] +e +y",     // [JaeMok Jeong] B 1970
+{ "[+L] +E +y",     // [Jeong, JaeMok] B 1970
+  "[+F] +E +y",     // [JaeMok Jeong] B 1970
   "+E - +L +y",     // Birthday - Jeong, JaeMok 1970
   "+E - +F +y",     // Birthday - JaeMok Jeong 1970
   "+F +y",        	// JaeMok Jeong 1970
@@ -1549,8 +1585,8 @@ static Char* NotifyDescString(DateType when, BirthDate birth, Boolean todo)
 
                     if (birth.flag.bits.year) {
                         DateToAscii(birth.date.month, birth.date.day,
-                                        birth.date.year + 1904,
-                                        gDispdfmts, gAppErrStr);
+                                    birth.date.year + 1904,
+                                    gDispdfmts, gAppErrStr);
                     }
                     else {
                         DateToAsciiLong(birth.date.month, birth.date.day, -1, gDispdfmts,
@@ -1562,7 +1598,7 @@ static Char* NotifyDescString(DateType when, BirthDate birth, Boolean todo)
                 }
                 if (birth.flag.bits.year) {
                     if (!birth.flag.bits.solar 
-							|| gPrefsR->DBNotifyPrefs.duration ==1 || todo) {
+                        || gPrefsR->DBNotifyPrefs.duration ==1 || todo) {
                         age = CalculateAge(when, birth.date, birth.flag);
                         if (age >= 0) {
                             StrPrintF(gAppErrStr, " (%d)", age);
@@ -1570,7 +1606,7 @@ static Char* NotifyDescString(DateType when, BirthDate birth, Boolean todo)
                         }
                     }
                     else if (birth.flag.bits.solar 
-								&& gPrefsR->DBNotifyPrefs.duration != 1) {
+                             && gPrefsR->DBNotifyPrefs.duration != 1) {
                         StrPrintF(gAppErrStr, "%d", birth.date.year + 1904 );
                         StrCopy(pDesc, gAppErrStr);
                     }
@@ -1593,8 +1629,8 @@ static Char* NotifyDescString(DateType when, BirthDate birth, Boolean todo)
 }
     
 static Int16 PerformNotifyDB(BirthDate birth, DateType when,
-                           RepeatInfoType* repeatInfoPtr,
-                           Int16 *created, Int16 *touched)
+                             RepeatInfoType* repeatInfoPtr,
+                             Int16 *created, Int16 *touched)
 {
     ApptDBRecordType datebook;
     ApptDateTimeType dbwhen;
@@ -1945,8 +1981,8 @@ static void NotifyAction(UInt32 whatAlert,
                 for (i=0; i < gMainTableTotals; i++) {
                     if (ptr[i].date.year != INVALID_CONV_DATE) {
                         (*func)(ptr[i].birthRecordNum,
-                                       ptr[i].date, &created,
-                                       &touched);
+                                ptr[i].date, &created,
+                                &touched);
                     }
 
                     if ((i+1) % 20 == 0) {
@@ -1972,8 +2008,8 @@ static void NotifyAction(UInt32 whatAlert,
             if (ptr[gMainTableHandleRow].date.year
                 != INVALID_CONV_DATE) {
                 (*func)(ptr[gMainTableHandleRow].birthRecordNum,
-                               ptr[gMainTableHandleRow].date,
-                               &created, &touched);
+                        ptr[gMainTableHandleRow].date,
+                        &created, &touched);
             }
         }
         MemPtrUnlock(ptr);
@@ -2457,12 +2493,57 @@ static Boolean DBNotifyFormMoreHandleEvent(EventPtr e)
     return handled;
 }
 
+static void RecordViewScroll(Int16 chr)
+{
+	LineItemPtr ptr;
+    
+    // Before processing the scroll, be sure that the command bar has
+    // been closed.
+    MenuEraseStatus (0);
+    
+    switch (chr) {
+    case vchrPageDown:
+        if (gMainTableHandleRow < gMainTableTotals-1) {
+            gMainTableHandleRow++;
+            ptr = MemHandleLock(gTableRowHandle);
+            SetBirthdateViewForm(ptr[gMainTableHandleRow].birthRecordNum,
+                                 ptr[gMainTableHandleRow].date);
+            MemPtrUnlock(ptr);
+        
+            SndPlaySystemSound(sndInfo);
+            FrmDrawForm(FrmGetFormPtr(BirthdateForm));
+        }
+        break;
+    case vchrPageUp:
+        if (gMainTableHandleRow > 0 ) {
+            gMainTableHandleRow--;
+
+            ptr = MemHandleLock(gTableRowHandle);
+            SetBirthdateViewForm(ptr[gMainTableHandleRow].birthRecordNum,
+                                 ptr[gMainTableHandleRow].date);
+            MemPtrUnlock(ptr);
+        
+            SndPlaySystemSound(sndInfo);
+            FrmDrawForm(FrmGetFormPtr(BirthdateForm));
+        }
+        break;
+    }
+}
+
 static Boolean BirthdateFormHandleEvent(EventPtr e)
 {
     Boolean handled = false;
     FormPtr frm = FrmGetFormPtr(BirthdateForm);
 
     switch (e->eType) {
+	case keyDownEvent:
+	{
+		if (EvtKeydownIsVirtual(e)) {
+			RecordViewScroll(e->data.keyDown.chr);
+			handled = true;
+		}
+    }
+    
     case frmOpenEvent: 
     {
         // set appropriate information
@@ -2485,7 +2566,8 @@ static Boolean BirthdateFormHandleEvent(EventPtr e)
         switch(e->data.ctlSelect.controlID) {
         case BirthdateDone:
             FrmReturnToForm(0);
-
+            HighlightAction(gMainTableHandleRow, false);
+                
             handled = true;
             break;
         case BirthdateNotifyDB:
@@ -2777,11 +2859,14 @@ static Int16 OpenDatabases(void)
         if (!MainDB) return EDBCREATE;
         /* Set the backup bit.  This is to aid syncs with non Palm software. */
         DmOpenDatabaseInfo(MainDB, &dbID, NULL, NULL, &cardNo, NULL);
-        DmDatabaseInfo(cardNo, dbID, NULL, &attributes, NULL, NULL,
-                       NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-        attributes |= dmHdrAttrBackup;
-        DmSetDatabaseInfo(cardNo, dbID, NULL, &attributes, NULL, NULL,
-                          NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+		/*	turn-off
+
+            DmDatabaseInfo(cardNo, dbID, NULL, &attributes, NULL, NULL,
+            NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+            attributes |= dmHdrAttrBackup;
+            DmSetDatabaseInfo(cardNo, dbID, NULL, &attributes, NULL, NULL,
+            NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+		*/
     }
     if (!PrefsDB) {
         //
@@ -2992,7 +3077,7 @@ static Boolean SpecialKeyDown(EventPtr e)
         push_chr = chr;
         
         HighlightMatchRowDate(dt);
-        return false;
+        return true;;
     }
     else if ((chr >= 'A' && chr <= 'Z') || (chr >= 'a' && chr <= 'z')) {
         // is alpha?
@@ -3002,8 +3087,8 @@ static Boolean SpecialKeyDown(EventPtr e)
         HighlightMatchRowName(chr);
     }
     // else if ( chr == 0xA4 || (chr >= 0xA1 && chr <= 0xFE) ) {
-        // is korean letter?
-        //
+    // is korean letter?
+    //
     //}
 	
     return false;
