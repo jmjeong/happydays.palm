@@ -47,6 +47,7 @@ Int16 gMainTableHandleRow;    // The row of birthdate view to display
 DateFormatType gPrefdfmts;  // global date format for Birthday field
 DateFormatType gDispdfmts;  // global date format for display
 TimeFormatType gPreftfmts;  // global time format
+Int16 gFormID;              // global form id(which form is displayed)
 
 Boolean gProgramExit = false;    // Program exit control(set by Startform)
 
@@ -2259,15 +2260,14 @@ static Boolean StartFormHandlerEvent(EventPtr e)
 static Boolean ApplicationHandleEvent(EventPtr e)
 {
     FormPtr frm;
-    UInt16    formId;
     Boolean handled = false;
 
     if (e->eType == frmLoadEvent) {
-        formId = e->data.frmLoad.formID;
-        frm = FrmInitForm(formId);
+        gFormID = e->data.frmLoad.formID;
+        frm = FrmInitForm(gFormID);
         FrmSetActiveForm(frm);
 
-        switch(formId) {
+        switch(gFormID) {
         case StartForm:
             FrmSetEventHandler(frm, StartFormHandlerEvent);
             break;
@@ -2568,6 +2568,34 @@ static void StopApplication(void)
     freememories();
 }
 
+static Boolean SpecialKeyDown(EventPtr e) 
+{
+    Int16 chr;
+    if (e->eType != keyDownEvent) return false;
+
+    if (e->data.keyDown.modifiers & commandKeyMask) {
+        chr = e->data.keyDown.chr;
+
+        if (e->data.keyDown.modifiers & autoRepeatKeyMask) return false;
+        if (e->data.keyDown.modifiers & poweredOnKeyMask) return false;
+
+        // softkey only work on main screen
+        if (gFormID != MainForm) return false;
+            
+        if (keyboardAlphaChr == chr) {
+            gPrefsR->BirthPrefs.sort = '0';     // sort by name
+            FrmUpdateForm(MainForm, frmRedrawUpdateCode);
+            return true;
+        }
+        else if (keyboardNumericChr == chr) {
+            gPrefsR->BirthPrefs.sort = '1';     // sort by date
+            FrmUpdateForm(MainForm, frmRedrawUpdateCode);
+            return true;
+        }
+    }
+    return false;
+}
+
 /* The main event loop */
 static void EventLoop(void)
 {
@@ -2576,6 +2604,8 @@ static void EventLoop(void)
 
     do {
         EvtGetEvent(&e, evtWaitForever);
+
+        if (SpecialKeyDown(&e)) continue;
         if (! SysHandleEvent (&e))
             if (! MenuHandleEvent (NULL, &e, &err))
                 if (! ApplicationHandleEvent (&e))

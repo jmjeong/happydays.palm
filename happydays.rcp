@@ -746,6 +746,7 @@ BEGIN
 
     BUTTON "OK" ID PrefFormOk AT (5 BOTTOM@123 40 AUTO)
     BUTTON "Cancel" ID PrefFormCancel AT (PrevRight+5 PrevTop 40 AUTO)
+	GRAFFITISTATEINDICATOR AT (PrevRight+5 PrevTop)
 END
 
 FORM ID Sl2LnForm AT (0 0 160 160)
@@ -768,6 +769,7 @@ BEGIN
     BUTTON "Convert" ID Sl2LnFormConvert AT
             (10 BOTTOM@153 40 AUTO)
     BUTTON "OK" ID Sl2LnFormOk AT (PrevRight+5 PrevTop 40 AUTO)
+	GRAFFITISTATEINDICATOR AT (PrevRight+5 PrevTop)
 
 END
 
@@ -792,6 +794,7 @@ BEGIN
     BUTTON "Convert" ID Ln2SlFormConvert AT
             (10 BOTTOM@153 40 AUTO)
     BUTTON "OK" ID Ln2SlFormOk AT (PrevRight+5 PrevTop 40 AUTO)
+	GRAFFITISTATEINDICATOR AT (PrevRight+5 PrevTop)
 
 END
 
@@ -837,6 +840,7 @@ BEGIN
 
     BUTTON "OK" ID NotifySettingFormOk AT (5 Bottom@135 40 AUTO)
     BUTTON "Cancel" ID NotifySettingFormCancel AT (PrevRight+5 PrevTop 40 AUTO)
+	GRAFFITISTATEINDICATOR AT (PrevRight+5 PrevTop)
 	BUTTON "More..." ID NotifySettingFormMore AT (RIGHT@150 PrevTop AUTO AUTO)
 END
 
@@ -867,6 +871,7 @@ BEGIN
 		COLUMNS 13 COLUMNWIDTHS 10 10 10 10 10 10 10 10 10 10 10 10 10
 
     BUTTON "OK" ID NotifySettingMoreFormOk AT (5 Bottom@135 40 AUTO)
+	GRAFFITISTATEINDICATOR AT (PrevRight+5 PrevTop)
 END
 
 ALERT ID ErrorAlert INFORMATION
@@ -927,7 +932,7 @@ MODAL
 HELPID AboutHelpString
 BEGIN
     TITLE "HappyDays"
-    LABEL "HappyDays 1.11" AUTOID AT (Center@80 20) FONT 1
+    LABEL "HappyDays 1.12" AUTOID AT (Center@80 20) FONT 1
     LABEL "(c) 1999-2000, JaeMok Jeong"
         AUTOID AT (Center@80 PrevBottom+5) FONT 0
     LABEL "<jmjeong@oopsla.snu.ac.kr>" AUTOID AT (Center@80 PrevBottom)
@@ -950,4 +955,4 @@ APPLICATIONICONNAME 1000 "HappyDays"
 ICON "happydays.pbitm"
 SMALLICON "happydays-small.pbitm"
 
-VERSION 1 "1.11"
+VERSION 1 "1.12"
