@@ -4,8 +4,6 @@ BEGIN
     "Translator's email" = ""
 
     "long_notifySettingString" = ""\
-	""
-/*
     "* Records\n"\
     "Tab 'all' if you'd like to "\
     "make notification entries created for all of your events in this"\
@@ -25,7 +23,6 @@ BEGIN
     "is the interval of the notification record. "\
     "-1 means repeat forever in case of solar event, and "\
     "means repeat for 5 years in lunar event for convenience.\n"
-*/
 
 	"long_notifySettingMoreString" = ""\
 	"For AN Icon Number, consult Action Names manual. DateBk3Icon is "\
@@ -42,9 +39,6 @@ BEGIN
     "HappyDays.\n"
 
     "long_aboutString" = ""\
-	""
-
-/*
     "'HappyDays' will help you remember the birthdays and anniversaries "\
     "of your friends and family members, as well as other events."\
     "\n\nUse one of the custom fields in Address Book application "\
@@ -72,7 +66,6 @@ BEGIN
 	"first record beginning with 'a' or 'A' is highlighted. "\
 	"If you write '1' in graffiti, the nearest incoming record after January "\
 	"is highlighted.\n"
-*/
 
     "long_cleanupAlertString" = ""\
     "Notification entries are considered HappyDays if they have "\
@@ -81,8 +74,6 @@ BEGIN
     "entries, this record might also be removed by CleanUp.\n"
 
     "long_prefFormString" = ""\
-	""
-/*
 	"* Instead of system date...\n"\
 	"Control the interpretation of the AddressDB Birthday custom field. "\
 	"By default this is the same as the system date format preference.\n\n"\
@@ -96,7 +87,6 @@ BEGIN
     "The name of custom fields in Address Book used for INPUT\n\n"\
     "* HappyDays ID\n"\
     "Used for Notify and Cleanup\n"
-*/
 
     "long_removeConfirmString" = ""\
     "Are you sure you want to remove all "\

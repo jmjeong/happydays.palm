@@ -24,8 +24,6 @@ BEGIN
     "Translator's email" = ""
 
     "long_notifySettingString" = ""\
-	""
-/*
     "* Records\n"\
     "Tab 'all' if you'd like to "\
     "make notification entries created for all of your events in this"\
@@ -45,7 +43,6 @@ BEGIN
     "is the interval of the notification record. "\
     "-1 means repeat forever in case of solar event, and "\
     "means repeat for 5 years in lunar event for convenience.\n"
-*/
 
 	"long_notifySettingMoreString" = ""\
 	"For AN Icon Number, consult Action Names manual. DateBk3Icon is "\
@@ -62,9 +59,6 @@ BEGIN
     "HappyDays.\n"
 
     "long_aboutString" = ""\
-	""
-
-/*
     "'HappyDays' will help you remember the birthdays and anniversaries "\
     "of your friends and family members, as well as other events."\
     "\n\nUse one of the custom fields in Address Book application "\
@@ -92,7 +86,6 @@ BEGIN
 	"first record beginning with 'a' or 'A' is highlighted. "\
 	"If you write '1' in graffiti, the nearest incoming record after January "\
 	"is highlighted.\n"
-*/
 
     "long_cleanupAlertString" = ""\
     "Notification entries are considered HappyDays if they have "\
@@ -101,8 +94,6 @@ BEGIN
     "entries, this record might also be removed by CleanUp.\n"
 
     "long_prefFormString" = ""\
-	""
-/*
 	"* Instead of system date...\n"\
 	"Control the interpretation of the AddressDB Birthday custom field. "\
 	"By default this is the same as the system date format preference.\n\n"\
@@ -116,7 +107,6 @@ BEGIN
     "The name of custom fields in Address Book used for INPUT\n\n"\
     "* HappyDays ID\n"\
     "Used for Notify and Cleanup\n"
-*/
 
     "long_removeConfirmString" = ""\
     "Are you sure you want to remove all "\
@@ -334,8 +324,8 @@ STRING ID DateBookNotifyDaysString "Days"
 
 STRING ID DateBookString		"Date Book"
 STRING ID ToDoString			"To Do"
-STRING ID BirthLeftString		"%d day(s) left"
-STRING ID BirthPassedString     "%d day(s) passed"
+STRING ID BirthLeftString		"%d days left"
+STRING ID BirthPassedString     "%d days passed"
 
 STRING ID TypeStr				"Type:"
 STRING ID NextDateStr			"Next Date:"
@@ -393,8 +383,10 @@ BEGIN
 
 	FIELD ID ViewFormCategory AT (RIGHT@160 1 65 AUTO) RIGHTALIGN 
 			NONEDITABLE FONT 0
-  	TABLE ID ViewFormTable AT (0 26 160 11*9)  
-			ROWS 9 COLUMNS 2 COLUMNWIDTHS 50 110
+                        
+	FIELD ID ViewFormName AT (0 25 160 AUTO) NONEDITABLE FONT 1
+    TABLE ID ViewFormTable AT (0 PrevBottom+10 160 11*7)  
+			ROWS 7 COLUMNS 2 COLUMNWIDTHS 50 110
 
     BUTTON "Done" ID ViewFormDone AT (1 BOTTOM@159 AUTO AUTO)
     BUTTON "DB" ID ViewFormNotifyDB AT (PrevRight+6 PrevTop AUTO AUTO)

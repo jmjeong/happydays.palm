@@ -94,8 +94,7 @@ struct sPrefsR defaultPref = {
 };
 
 
-enum ViewFormType { ViewName = 0,
-                    ViewType,
+enum ViewFormType { ViewType = 0,
                     ViewNext,
                     ViewSrc,
                     ViewSrcExtra,
@@ -568,8 +567,6 @@ static void ReadPrefsRec(void)
         || gPrefsR.version != version) {
 		MemMove(&gPrefsR, &defaultPref, sizeof(defaultPref));
 		gPrefsR.listFont = (gbVgaExists) ? VgaBaseToVgaFont(stdFont) 
-            : stdFont;
-		gPrefsR.viewFont = (gbVgaExists) ? VgaBaseToVgaFont(stdFont) 
             : stdFont;
         if (gPrefsR.BirthPrefs.sysdateover)
             gPrefdfmts = gPrefsR.BirthPrefs.dateformat;
@@ -3479,28 +3476,14 @@ static void ViewFormDrawRecord(MemPtr tableP, Int16 row, Int16 column,
          */
         UnpackBirthdate(&r, rp);
 
-        currFont = FntSetFont(gPrefsR.viewFont);
+        if (gbVgaExists) {
+            currFont = FntSetFont(VgaBaseToVgaFont(stdFont));
+        }
+        else {
+            currFont = FntSetFont(stdFont);
+        }
 
         switch (viewItem) {
-        case ViewName :
-            if (column == 0) {
-                RectangleType rect;
-                TblGetBounds(tableP, &rect);
-
-                ///////////////////////////////////
-                // Display name in large bold font
-                ///////////////////////////////////
-                if (gbVgaExists && VgaIsVgaFont(gPrefsR.viewFont)) {
-                    FntSetFont(VgaBaseToVgaFont(largeBoldFont));
-                }
-                else FntSetFont(largeBoldFont);
-                
-                DrawRecordName(r.name1, r.name2, rect.extent.x,
-                               &rect.topLeft.x, rect.topLeft.y,
-                               false,
-                               r.flag.bits.priority_name1 || !gSortByCompany);
-            }
-            break;
         case ViewType:
             ///////////////////////////////////
             // Display the Type of Anniversary
@@ -3545,9 +3528,9 @@ static void ViewFormDrawRecord(MemPtr tableP, Int16 row, Int16 column,
                     SysCopyStringResource(temp,
                                           DayOfWeek(converted.month, converted.day,
                                                     converted.year+1904) + SunString);
-                    StrNCat(gAppErrStr, " (", AppErrStrLen);
+                    StrNCat(gAppErrStr, " [", AppErrStrLen);
                     StrNCat(gAppErrStr, temp, AppErrStrLen);
-                    StrNCat(gAppErrStr, ")", AppErrStrLen);
+                    StrNCat(gAppErrStr, "]", AppErrStrLen);
                 }
                 else {
                     SysCopyStringResource(gAppErrStr, ViewNotExistString);
@@ -3700,11 +3683,18 @@ static void ViewFormInitTable(FormPtr frm)
     tableP = GetObjectPointer(frm, ViewFormTable);
 	tblRows = TblGetNumberOfRows(tableP); 
 
-	currFont = FntSetFont(gPrefsR.viewFont);
+    if (gbVgaExists) {
+        currFont = FntSetFont(VgaBaseToVgaFont(stdFont));
+    }
+    else {
+        currFont = FntSetFont(stdFont);
+    }
+    
 	row_height = FntLineHeight();
 
     for (row=0; row < tblRows; row++) {
 		TblSetRowHeight(tableP, row, row_height);
+        
 		TblSetItemStyle(tableP, row, 0, customTableItem);
 		TblSetItemStyle(tableP, row, 1, customTableItem);
 	}
@@ -3717,11 +3707,10 @@ static void ViewFormInitTable(FormPtr frm)
 static void ViewFormLoadTable(FormPtr frm, Int16 listOffset)
 {
     TablePtr 		tableP;
-	Int16 			tblRows, row, visibleRows;
-	RectangleType	rect;
-	Int16			running_total, row_height;
+	Int16 			tblRows, row;
+	Int16			row_height;
 	FontID			currFont;
-    Int16           tblItemIdx = ViewName;
+    Int16           tblItemIdx = ViewType;
 
     tableP = GetObjectPointer(frm, ViewFormTable);
 	tblRows = TblGetNumberOfRows(tableP); 
@@ -3729,17 +3718,17 @@ static void ViewFormLoadTable(FormPtr frm, Int16 listOffset)
     TblSetColumnUsable(tableP, 0, true);
     TblSetColumnUsable(tableP, 1, true);
 
-	currFont = FntSetFont(gPrefsR.viewFont);
+    if (gbVgaExists) {
+        currFont = FntSetFont(VgaBaseToVgaFont(stdFont));
+    }
+    else {
+        currFont = FntSetFont(stdFont);
+    }
+
 	row_height = FntLineHeight();
-	TblGetBounds(tableP, &rect);
-	running_total = 0;
-	visibleRows = 0;
 
     for (row=0; row < tblRows; row++) {
-        if (row == ViewName) 
-            TblSetRowHeight(tableP, row, row_height*2);
-        else 
-            TblSetRowHeight(tableP, row, row_height);
+        TblSetRowHeight(tableP, row, row_height);
         
         TblSetItemInt(tableP, row, 0, tblItemIdx);
         TblSetItemInt(tableP, row, 1, tblItemIdx);
@@ -3753,26 +3742,23 @@ static void ViewFormLoadTable(FormPtr frm, Int16 listOffset)
             tblItemIdx++;
         }
         
-		running_total += row_height;
-		if (row < gMainTableTotals)
-			TblSetRowUsable(tableP, row, running_total <= rect.extent.y);
-		else 
-			TblSetRowUsable(tableP, row, false);
-
-		if (running_total <= rect.extent.y) 
-			visibleRows++;
+        TblSetRowUsable(tableP, row, true);
 
 		TblMarkRowInvalid(tableP, row);
 	}
 	FntSetFont(currFont);
 }
 
-static void ViewFormSetCategory()
+static void ViewFormSetInfo(FormPtr frm)
 {
     UInt16 addrattr;
     LineItemPtr ptr;
+    MemHandle recordH = 0;
     Int16 index;
-
+    PackedBirthDate* rp;
+    BirthDate r;
+    // RectangleType rect;
+    
     // Read the necessary information from LineItem
     //
     ptr = MemHandleLock(gTableRowHandle);
@@ -3796,22 +3782,46 @@ static void ViewFormSetCategory()
 
     CategoryGetName(AddressDB, addrattr, gAppErrStr);
     SetFieldTextFromStr(ViewFormCategory, gAppErrStr);
+
+    if ((recordH = DmQueryRecord(MainDB, index))) {
+        rp = (PackedBirthDate *) MemHandleLock(recordH);
+        /*
+         * Build the unpacked structure for an AddressDB record.  It
+         * is just a bunch of pointers into the rp structure.
+         */
+        UnpackBirthdate(&r, rp);
+//        FrmGetObjectBounds(frm, FrmGetObjectIndex(frm, ViewFormName), &rect);
+        
+//        DrawRecordName(r.name1, r.name2, rect.extent.x,
+//                       &rect.topLeft.x, rect.topLeft.y,
+//                       false,
+//                       r.flag.bits.priority_name1 || !gSortByCompany);
+
+        if (r.name1[0] && r.name2[0])
+            StrPrintF(gAppErrStr, "%s, %s", r.name1, r.name2);
+        else if (r.name1[0] && !r.name2[0]) 
+            StrPrintF(gAppErrStr, "%s", r.name1);
+        else if (r.name2[0] && !r.name1[0])
+            StrPrintF(gAppErrStr, "%s", r.name2);
+        else gAppErrStr[0] = 0;
+        
+        SetFieldTextFromStr(ViewFormName, gAppErrStr);
+        MemHandleUnlock(recordH);
+    }
 }
 
 static void ViewFormInit(FormPtr frm, Boolean bformModify)
 {
-
     ViewFormInitTable(frm);
 	// display starting date
 	if (gbVgaExists) {
-		VgaTableUseBaseFont(GetObjectPointer(frm, ViewFormTable), 
-							!VgaIsVgaFont(gPrefsR.viewFont));
+		VgaTableUseBaseFont(GetObjectPointer(frm, ViewFormTable), false);
 		if (bformModify) VgaFormModify(frm, vgaFormModify160To240);
 		ViewFormResize(frm, false);
 	}
 
 	ViewFormLoadTable(frm, 0);
-    ViewFormSetCategory();
+    ViewFormSetInfo(frm);
 }
 
 static Boolean ViewFormHandleEvent(EventPtr e)
@@ -3847,7 +3857,7 @@ static Boolean ViewFormHandleEvent(EventPtr e)
         
                     SndPlaySystemSound(sndInfo);
 
-                    ViewFormSetCategory();
+                    ViewFormSetInfo(frm);
                     ViewFormLoadTable(frm, 0);
                     FrmDrawForm(FrmGetFormPtr(ViewForm));
                     // TblDrawTable(tableP);
@@ -3862,7 +3872,7 @@ static Boolean ViewFormHandleEvent(EventPtr e)
 
                     SndPlaySystemSound(sndInfo);
 
-                    ViewFormSetCategory();
+                    ViewFormSetInfo(frm);
                     ViewFormLoadTable(frm, 0);
                     FrmDrawForm(FrmGetFormPtr(ViewForm));
 

@@ -98,7 +98,6 @@ struct sPrefsR
     char memcdate[4], memmdate[4];      // memo create/modify date
 
 	FontID listFont;		// HappyDays list font
-	FontID viewFont;		// HappyDays view font
 };
 
 typedef union 
