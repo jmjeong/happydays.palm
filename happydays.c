@@ -1937,7 +1937,7 @@ static void AdjustDesktopCompatible(DateType *when)
     // get current date
     //
     
-    if (when->year < 1970 - 1904) when->year = 1970 - 1904;
+    if (when->year < 1990 - 1904) when->year = 1990 - 1904;
                 
     while (DaysInMonth(when->month, when->year) < when->day && maxtry-- >0) {
         when->year++;
