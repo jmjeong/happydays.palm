@@ -735,7 +735,8 @@ Boolean UpdateHappyDaysDB(FormPtr frm)
                 //
 
                 *q = 0;
-                if (AnalOneRecord(addrattr, p, &hd, &ignore)) return false;
+                if (AnalOneRecord(addrattr, p, &hd, &ignore)) 
+					goto Update_ErrHandler;
                 p = q+1;
 
                 // restore the saved name
@@ -751,7 +752,8 @@ Boolean UpdateHappyDaysDB(FormPtr frm)
             // last record
             if (*p) {
                 // check the null '\n'
-                if (AnalOneRecord(addrattr, p, &hd, &ignore)) return false;
+                if (AnalOneRecord(addrattr, p, &hd, &ignore)) 
+					goto Update_ErrHandler;
             }
                 
             if (whichField == gHappyDaysField       // next is note field
@@ -768,4 +770,9 @@ Boolean UpdateHappyDaysDB(FormPtr frm)
         currIndex++;
     }
 	return true;
+
+Update_ErrHandler:
+	MemPtrFree(hdField);
+	MemHandleUnlock(recordH);
+	return false;
 }
