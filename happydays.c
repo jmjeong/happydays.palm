@@ -1473,13 +1473,18 @@ static Int PerformNotify(BirthDate birth, DateType when,
     
         StrNCat(description, gAppErrStr, 1024);
     }
-    if (birth.flag.bits.year && (!birth.flag.bits.solar ||
-                                 gPrefsR->NotifyPrefs.duration ==1)) {
-        age = CalculateAge(when, birth.date, birth.flag);
-        if (age >= 0) {
-            StrPrintF(gAppErrStr, " (%d)", age);
-            StrNCat(description, gAppErrStr, 1024);
-        }
+    if (birth.flag.bits.year) {
+		if (!birth.flag.bits.solar || gPrefsR->NotifyPrefs.duration ==1) {
+        	age = CalculateAge(when, birth.date, birth.flag);
+        	if (age >= 0) {
+           		StrPrintF(gAppErrStr, " (%d)", age);
+            	StrNCat(description, gAppErrStr, 1024);
+        	}
+		}
+		else if (birth.flag.bits.solar && gPrefsR->NotifyPrefs.duration != 1) {
+			StrPrintF(gAppErrStr, "%d", birth.date.year + 1904);
+			StrNCat(description, gAppErrStr, 1024);
+		}
     }
 
     datebook.description = description;
