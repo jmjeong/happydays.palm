@@ -1,6 +1,6 @@
 // HappyDays - A birthday display for the PalmPilot
 //
-//      Copyright(c) 1999-2000 JaeMok Jeong
+//      Copyright(c) 1999-2001 JaeMok Jeong
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
