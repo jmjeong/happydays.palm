@@ -703,7 +703,7 @@ Int16 UpdateBirthdateDB(DmOpenRef dbP, FormPtr frm)
 
                 if (whichField == note) {
                     p = StrStr(r.fields[note], gPrefsR->BirthPrefs.notifywith)
-                        + StrLen(gPrefsR->BirthPrefs.notifywith)+1;
+                        + StrLen(gPrefsR->BirthPrefs.notifywith);
                 }
                 else {
                     p = r.fields[whichField];

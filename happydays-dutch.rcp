@@ -20,257 +20,253 @@
 
 TRANSLATION "DUTCH"
 BEGIN
-    "Translator" = "Jan Verhoeven"
-    "Translator's email" = "HappyDays@jeve.net"
+    "Translator" = "Roy Huijts"
+    "Translator's email" = ""
 
     "long_notifySettingString" = ""\
-    "* Verjaardagen\n"\
-    "Kies 'all' als u alle gegevens wilt aanpassen "\
-    "in de gekozen categorie"\
-    "."\
-    "Kies 'selected' als u 1 verjaardag wilt aanpassen "\
-    ".\n\n"\
-    "* Existing\n"\
-    "Kies 'keep' als u de aanwezige HappyDays invoer "\
-    "ongewijzigd moet blijven. Kies 'modify' als u wilt dat de "\
-    "invoer wordt aangepast.\n\n"\
-    "* Alarm\n"\
-    "Stelt het alarm in in uw agenda. Selecteer het aantal dagen "\
-	"dat u vooraf aan de verjaardag wordt herinnerd.\n\n"\
-    "* Time\n"\
-	"Tijd van de melding.\n\n"\
-    "* Herhaal voor\n"\
-    "is de interval van de melding. "\
-    "-1 betekend hewrhaling altijd voor een solar event, en "\
-    "betekend herhaald voor 5 jaren in lunar event voor de zekerheid.\n"
+        "* Verjaardagen\n"\
+        "Kies 'alle' als u alle gegevens in de gekozen categorie "\
+        "wilt aanpassen"\
+        "."\
+        "Kies 'selecteerd' als u 1 verjaardag wilt aanpassen "\
+        ".\n\n"\
+        "* Aanwezig\n"\
+        "Kies 'bewaar' als de aanwezige HappyDays invoer "\
+        "ongewijzigd moet blijven. Kies 'wijzig' als u wilt dat de "\
+        "invoer wordt aangepast.\n\n"\
+        "* Alarm\n"\
+        "Stelt het aantal dagen in dat u gewaarschuwd wordt voor een bepaalde verjaardag"\
+        ".\n\n"\
+        "* Tijd\n"\
+        "Tijd van de melding.\n\n"\
+        "* Herhaal voor\n"\
+        "is de interval van de melding. "\
+        "-1 betekend voor een zonne kalender herhaling voor altijd, en "\
+        "voor de maan kalender betekent dit dat het voor het gemak 5 jaar herhaald wordt.\n"
 
-	"long_notifySettingMoreString" = ""\
-	"For AN Icon Number, consult Action Names manual. DateBk3Icon is "\
-	"read from MemoPad. If you don't have DateBk3 Icon entry in MemoPad, "\
-	"nothing is displayed.\n"
+    "long_notifySettingMoreString" = ""\
+        "Lees de ActionNames handleiding om de AN Icoon nummers te achterhalen. "\
+        "Wanneer u DateBk3 gebruikt en geen icoon opgeeft dan zal er geen "\
+        "verjaardag in DateBk3 worden getoond.\n"
 
     "long_customErrorString" = ""\
-    "'Birthday' is the default custom field name."\
-    "To set a different default custom field"\
-    " name, tap 'Preferences'.\n\n"\
-    "IMPORTANT: You need to launch your Addressbook and select 'Options/"\
-    "Rename Custom Fields' to rename a custom field to 'Birthday'"\
-    " or whatever you set as a custom field name in the Preferences of "\
-    "HappyDays.\n"
+        "'Verjaardag' is de standaard gebruikersgedefinieerde veldnaam."\
+        "Wanneer u een ander veld wilt gebruikern, start dan de eigenschappen uit het menu.\n\n"\
+        "BELANGRIJK: U moet het adresboek openen en met 'Options/"\
+        "Rename Custom Fields' een gebruikers veld hernoemen naar 'Verjaardag' "\
+        "of een andere veldnaam afhankelijk wat u in HappyDays heeft gespecificeerd.\n"
 
     "long_aboutString" = ""\
-    "'HappyDays' will help you remember the birthdays and anniversaries "\
-    "of your friends and family members, as well as other events."\
-    "\n\nUse one of the custom fields in Address Book application "\
-    "and rename it to 'Verjaardag'."\
-    "\n\nExamples:\n"\
-    " Achternaam: Verhoeven\n"\
-    " Voornaam: Jan\n"\
-    " ...\n"\
-    " Verjaardag: -)12/4/70\n\n"\
-    "Formats:\n"\
-    " [-)|#)]Date\n"\
-    " -) betekend lunar kalender\n"\
-    " #) betekend lunar loop maand\n\n"\
-    "Datum formaat is automatisch uit systeem gegenereerd. "\
-    "U kunt het jaar-veld aanpassen. Jaar invoer lager dan 100 wordt aangemerkt als "\
-    "een jaar in de 20st eeuw, bent u niet zeker van het juiste jaar, "\
-    "gebruik voor jaar JJJJ(b.v. 1970).\n\n"\
-    "Voor meerdere gegevens gelijktijdig in te voeren, zie handleiding.\n"
+        "'HappyDays' zorgt ervoor dat u belangrijke gebeurtenissen en verjaardagen "\
+        "van familie en vrienden niet meer zult vergeten."\
+        "\n\nGebruik een van de velden in het adresboek programma "\
+        "en wijzig de naam van het veld in 'Verjaardag'."\
+        "\n\nVoorbeeld:\n"\
+        " Achternaam: Jeong\n"\
+        " Voornaam: JaeMok\n"\
+        " ...\n"\
+        " Verjaardag: -)12-4-70\n\n"\
+        "Formats:\n"\
+        " [-)|#)]Date\n"\
+        " -) betekend maan kalender\n"\
+        " #) betekend maan wissel maand\n\n"\
+        "Datum formaat wordt uit het systeem gehaald. "\
+        "U kunt het jaar-veld aanpassen. Jaar invoer lager dan 100 wordt beschouwd als "\
+        "een jaar in de 20st eeuw, bent u niet zeker van het juiste jaar, "\
+        "gebruik voor jaar JJJJ (b.v. 1970).\n\n"\
+        "Lees de handleiding wanneer men meerdere gegevens tegelijkertijd wil invoeren.\n"
 
     "long_cleanupAlertString" = ""\
-    "Notification entries are considered HappyDays if they have "\
-	"{HappyDays ID} in their memo field. "\ 	
-    "If you use this format in your own "\
-    "entries, this record might also be removed by CleanUp.\n"
+        "Notificatie regels worden als HappyDays regels beschouwd wanneer "\
+        "ze {HappyDays ID} identificatie in het veld hebben staan. "\ 	
+        "Als dit formaat gebruikt wordt in de eigen regels "\
+        ", dan kunnen deze regels verwijderd worden door CleanUp.\n"
 
     "long_prefFormString" = ""\
-	"* Inplaats van de systeemdatum\n"\
-	"Controleer op de naam van uw eigen veld hetzelfde is dan die in het adresboek. "\
-	"Normaal moeten deze hetzelfde zijn.\n\n"\
-	"* Scan notities\n"\
-	"Om notities te lezen, check deze optie.\n\n"\
-    "* Emphasize Lunar Date\n"\
-    "If checkbox is on, the dashed line is drawed beneath lunar date.\n\n"\
-	"* Overzicht formaat\n"\
-	"De wijze waarop u de lijst kan bekijken\n\n"\
-    "* Eigen veld\n"\
-    "De naam van het eigen veld in het adresboek voor INVOER\n\n"\
-    "* HappyDays ID\n"\
-    "Te gebruiken voor meldingen en opschonen\n"
+        "* Inplaats van de systeemdatum\n"\
+        "Controleer of de naam van uw eigen veld hetzelfde is dan die in het adresboek. "\
+        "Normaal moeten deze hetzelfde zijn.\n\n"\
+        "* Scan notities\n"\
+        "Om notities te lezen, moet deze optie aangevinkt worden.\n\n"\
+        "* Emphasize Lunar Date\n"\
+        "Als de checkbox aangevinkt is dan wordt een onderbroken lijn getoond onder de maan kalender datum.\n\n"\
+        "* Overzicht formaat\n"\
+        "De wijze waarop u de lijst kan bekijken\n\n"\
+        "* Eigen veld\n"\
+        "De naam van het eigen veld in het adresboek voor INVOER\n\n"\
+        "* HappyDays ID\n"\
+        "Te gebruiken voor meldingen en opschonen\n"
 
     "long_removeConfirmString" = ""\
-    "Weet u zeker dat alles verwijderd moet worden "\
-    "HappyDays notify entries?"
+        "Weet u zeker dat u alle HappyDays "\
+        "verjaardagen wilt verwijderen?"
 
     "long_sl2lnString" = ""\
-        "-) means plain month in lunar\n"\
-        "#) means leap month in lunar"
+        "-) betekend normale maand in maan kalender\n"\
+        "#) betekend wissel maand in maan kalender"
 
     "long_cantFindAddrString" = ""\
-    "Kan eigen veld niet vinden in het adresboek: '%s'\n"\
-    "Wijzig naam van eigen veld in Verjaardag in uw adresboek."
+        "Kan eigen veld niet vinden in het adresboek: '%s'\n"\
+        "Wijzig naam van eigen veld in Verjaardag in uw adresboek."
 
-    "Select Time" = "Selecteer tijd"
-    "No Time" = "Geen tijd"
-    "Invalid input date" = "Onjuiste datum"
-    "Export to Memo Pad is completed." = "Export naar Memo is voltooid."
+        "Select Time" = "Selecteer tijd"
+        "No Time" = "Geen tijd"
+        "Invalid input date" = "Onjuiste datum"
+        "Export to Memo Pad is completed." = "Export naar Memo is voltooid."
 
-    "SUN"   = "ZON"
-    "MON"   = "MAA"
-    "TUE"   = "DIN"
-    "WED"   = "WOE"
-    "THU"   = "DON"
-    "FRI"   = "VRY"
-    "SAT"   = "ZAT"
+        "SUN"   = "ZON"
+        "MON"   = "MAA"
+        "TUE"   = "DIN"
+        "WED"   = "WOE"
+        "THU"   = "DON"
+        "FRI"   = "VRY"
+        "SAT"   = "ZAT"
 
-    "Not enough memory" = "Niet genoeg geheugen"
-    "%d notify entry is created.\n" = "%d melding is niet aangemaakt.\n" 
-    "%d existing entry " = "%d incvoer is niet aanwezig "
-    "is kept untouched." = "is ongewijzigd bewaard."
-    "is modified." = "is aangepast."
+        "Not enough memory" = "Niet genoeg geheugen"
+        "%d notify entry is created.\n" = "%d melding is aangemaakt.\n" 
+        "%d existing entry " = "%d bestaande invoer "
+        "is kept untouched." = "is ongewijzigd bewaard."
+        "is modified." = "is aangepast."
 
-    "Could not write prefs." = ""\
-		"Kan niet worden aangepast."
-    "Collecting Information..." = "Verzameld informatie..."
+        "Could not write prefs." = ""\
+        "Kan niet worden aangepast."
+        "Collecting Information..." = "Verzamel informatie..."
 
-    "HappyDays List" = "HappyDays Overzicht"
-    "Look up" = "Ga naar datum.."
-    "Today" = "Vandaag"
+        "HappyDays List" = "HappyDays Overzicht"
+        "Look up" = "Ga naar datum..."
+        "Today" = "Vandaag"
 
-    "HappyDays View" = "HappyDays View"
-    "Done"  = "Gedaan"
-    "DB" = "DB" 
-    "TD" = "TD"
-    "Goto" = "Ga naar"
+        "HappyDays View" = "HappyDays View"
+        "Done"  = "Klaar"
+        "DB" = "DB" 
+        "TD" = "TD"
+        "Goto" = "Ga naar"
 
-    "Utilities" = "Utilities"
-    "Date Book Notify" = "Agenda afspraak"
-    "Cleanup Date Book"  = "Opschonen agenda"
-    "To Do Notify" = "To Do melding"
-    "Cleanup To Do"  = "Opschonen To Do"
-    "Export to Memo Pad" = "Export naar Memo"
-    "Solar to Lunar" = "Solar to Lunar"
-    "Lunar to Solar" = "Lunar to Solar"
-    "Options" = "Opties"
-    "Preferences" = "Eigenschappen"
-    "About HappyDays" = "Over HappyDays"
+        "Utilities" = "Utilities"
+        "Date Book Notify" = "Agenda afspraak"
+        "Cleanup Date Book"  = "Opschonen agenda"
+        "To Do Notify" = "To Do melding"
+        "Cleanup To Do"  = "Opschonen To Do"
+        "Export to Memo Pad" = "Export naar Memo"
+        "Solar to Lunar" = "Zon naar maand"
+        "Lunar to Solar" = "Maan naar zon"
+        "Options" = "Opties"
+        "Preferences" = "Eigenschappen"
+        "About HappyDays" = "Over HappyDays"
 
-    "Edit" = "Wijzigen"
-    "Undo" = "Ongedaan maken"
-    "Cut" = "Knippen"
-    "Copy" = "Kopieren" 
-    "Paste" = "Plakken" 
-    "Select All" = "Selecteer alles" 
-    "Keyboard" = "Keyboard" 
-    "Graffiti" = "Graffiti"
+        "Edit" = "Wijzigen"
+        "Undo" = "Ongedaan maken"
+        "Cut" = "Knippen"
+        "Copy" = "Kopieren" 
+        "Paste" = "Plakken" 
+        "Select All" = "Selecteer alles" 
+        "Keyboard" = "Toetsenbord" 
+        "Graffiti" = "Graffiti"
 
-    "HappyDays Preferences" = "HappyDays Eigenschappen"
-    "Custom field:" = "Verjaardag:"
-    "HappyDays ID:" = "HappyDays ID:"
-    "Emphasize Lunar Date" = "Emphasize Lunar Date"
+        "HappyDays Preferences" = "HappyDays Eigenschappen"
+        "Custom field:" = "Verjaardag:"
+        "HappyDays ID:" = "HappyDays ID:"
+        "Emphasize Lunar Date" = "Benadruk maan datums"
 
-    "OK" = "OK"
-    "Cancel" = "Annuleren"
+        "OK" = "OK"
+        "Cancel" = "Annuleer"
+    
+        "Solar to Lunar Convert" = "Omzetten Zon naar Maan"
+        "Enter Solar date:" = "Voer Zonne Datum in:"
+        "Year must be in 1881-2043" = "Jaar moet tussen 1881-2043 liggen"
+        "Result Lunar date:" = "Resultaat Maan datum:"
 
-    "Solar to Lunar Convert" = "Solar to Lunar Convert"
-    "Enter Solar date:" = "Voer Solar Datum in:"
-    "Year must be in 1881-2043" = "Jaartal moet liggen tussen 1881-2043"
-    "Result Lunar date:" = "Resultaat Lunar datum:"
+        "Convert" = "Zet om"
 
-    "Convert" = "Converteer"
+        "Lunar to Solar Convert" = "Converteer Maan naar Zon"
+        "Enter Lunar date:" = "Voer Maan datum in:"
+        "Leap" = "Wissel"
+        "Result Solar date:" = "Resultaat Zonne datum:"
 
-    "Lunar to Solar Convert" = "Lunar to Solar Converteren"
-    "Enter Lunar date:" = "Voer Lunar datum in:"
-    "Leap" = "Loopt"
-    "Result Solar date:" = "Resultaat Solar datum:"
+        "Records:" = "Records:"
+        "all" = "alle"
+        "selected" = "selecteerd" 
+        "Existing:" = "Aanwezig:"
+        "keep" = "bewaar"
+        "modify" = "wijzig"
+        "Priority:" = "Prioriteit:"
+        "Category:" = "Categorie:"
+        "Private:" = "Prive:"
+        "Alarm:" = "Alarm:"
+        "Time:" = "Tijd:"
+        "More..." = "Meer..."
 
-    "Records:" = "Records:"
-      "all" = "allen"
-      "selected" = "geselecteerd" 
-    "Existing:" = "Aanwezig:"
-      "keep" = "bewaren"
-      "modify" = "wijzigen"
-    "Priority:" = "Prioriteit:"
-    "Category:" = "Categorie:"
-    "Private:" = "Prive:"
-    "Alarm:" = "Alarm:"
-    "Time:" = "Tijd:"
-    "More..." = "Meer..."
+        "Repeat for:" = "Herhaal voor:"
+        "years" = "jaren"
 
-    "Repeat for:" = "Herhaal voor:"
-    "years" = "jaren"
+        "HappyDays says" = "HappyDays zegt"
 
-    "HappyDays says" = "HappyDays zegt"
+        "HappyDays Export" = "HappyDays Exporteren"
+        "Would you like to export HappyDays List to Memo Pad?" = ""\
+        	" Wilt u de verjaardagen exporteren naar Memo?" 
 
-    "HappyDays Export" = "HappyDays Export"
-    "Would you like to export HappyDays List to Memo Pad?" = ""\
-    	" Wilt u de verjaardagen exporteren naar Memo?" 
-
-    "Custom Field Error" = "Eigen veld fout"
-    "Help" = "Help" 
+        "Custom Field Error" = "Eigen veld fout"
+        "Help" = "Help" 
 
 
-    "HappyDays Cleanup" = "HappyDays Opschonen" 
+        "HappyDays Cleanup" = "HappyDays Opschonen" 
 
-    "Notify warning" = "Notify warning" 
-    "^1: Are you sure you want to create notify entries for ^2 HappyDays records?" = ""\
-  	"^1: Weet u zeker dat u nieuwe gegevens wilt invoeren voor ^2 HappyDays records?" 
+        "Notify warning" = "Notify warning" 
+        "^1: Are you sure you want to create notify entries for ^2 HappyDays records?" = ""\
+      	"^1: Weet u zeker dat u nieuwe gegevens wilt invoeren voor ^2 HappyDays record(s)?" 
       
 
-    "Invalid event format" = "Injuist evenement formaat" 
+        "Invalid event format" = "Onjuist formaat" 
 
-    "The address record for ^1\n contains an invalid event. How would you like to handle it?" = ""\
-    "Het adresveld^1\n bevat een onjuist gegeven. Hoe wilt u dit oplossen?" 
+        "The address record for ^1\n contains an invalid event. How would you like to handle it?" = ""\
+        "Het adresveld ^1\n bevat een onjuist gegeven. Hoe wilt u dit oplossen?" 
 
-    "Ignore" = "afbreken" 
-    "Ignore all" = "Alles afbreken" 
+        "Ignore" = "Afbreken" 
+        "Ignore all" = "Alles afbreken" 
 
-    "Cleanup Done" = "Opschonen voltooid" 
+        "Cleanup Done" = "Opschonen voltooid" 
 
-    "^1: ^2 HappyDays notify entries removed." = ""\
-    	"^1: ^2 HappyDays invoer is verwijderd." 
+        "^1: ^2 HappyDays notify entries removed." = ""\
+        	"^1: ^2 HappyDays invoer is verwijderd." 
 
-    "Birthday" = "Verjaardag" 
-    "All" = "Allen" 
-    "HappyDays Export List" = "HappyDays Export Lijst" 
-    "(not exist in this year)" = "(bestaat niet in dit jaar)" 
-    "Please run Date Book once first." = "Open eerst uw agenda."  
+        "Birthday" = "Verjaardag" 
+        "All" = "Alle" 
+        "HappyDays Export List" = "HappyDays Export Lijst" 
+        "(not exist in this year)" = "(bestaat niet in dit jaar)" 
+        "Please run Date Book once first." = "Open eerst uw agenda."  
     
-    "Instead of system date format" = "Instead of system date format"  
-    "Use" = "Gebruik"  
-    "M/D/Y" = "M/D/Y"  
-    "D/M/Y" = "D/M/Y"  
-    "D.M.Y" = "D.M.Y"  
-    "D-M-Y" = "D-M-Y"  
-    "Y/M/D" = "Y/M/D"  
-    "Y.M.D" = "Y.M.D"  
-    "Y-M-D" = "Y-M-D"  
+        "Instead of system date format" = "In plaats van systeem datum"  
+        "Use" = "formaat gebruik"  
+        "M/D/Y" = "M/D/Y"  
+        "D/M/Y" = "D/M/Y"  
+        "D.M.Y" = "D.M.Y"  
+        "D-M-Y" = "D-M-Y"  
+        "Y/M/D" = "Y/M/D"  
+        "Y.M.D" = "Y.M.D"  
+        "Y-M-D" = "Y-M-D"  
 
-    "Date Book Icon" = "Date Book Icon"  
-      "Icon Support" = "Icon Support"  
-      "AN" = "AN"  
-      "DateBk3" = "DateBk3"  
-      "AN Icon Number:" = "AN Icon Number:"  
-      "DateBk3 Icon:" = "DateBk3 Icon:"  
+        "Date Book Icon" = "Date Book Icoon"  
+          "Icon Support" = "Icoon voor"  
+          "AN" = "AN"  
+          "DateBk3" = "DateBk3"  
+          "AN Icon Number:" = "AN Icoon Nummer:"  
+          "DateBk3 Icon:" = "DateBk3 Icoon:"  
 
-    "Days" = "Dagen"  
-    "Date Book" = "Agenda"  
-    "To Do" = "To Do"  
-    "Scan note field" = "Scan notitievelden"  
-    "%d day(s) left" = "%d dag(en) te gaan"  
-    "Notify Format:" = "Notify Format:"  
-    "[Last, First] E(1) Year" = "[Achternaam, Voornaam] L(1) Jaar"  
-    "[First Last] E(1) Year" = "[Voornaam Achternaam] L(1) Jaar"  
-    "Event - Last, First Year" = "Event - Achternaam, Voornaam Jaar"  
-    "Event - First Last Year" = "Event - Voornaam Achternaam Jaar"  
-    "First Last Year" = "Voornaam Achternaam Jaar"  
-    
-    "Processing" = "Verwerken"  
-    "Processed : " = "Verwerkt : " 
+        "Days" = "Dagen"  
+        "Date Book" = "Agenda"  
+        "To Do" = "To Do"  
+        "Scan note field" = "Scan notitievelden"  
+        "%d day(s) left" = "%d dag(en) te gaan"  
+        "Notify Format:" = "Waarschuwings formaat:"  
+        "[Last, First] E(1) Year" = "[Achter, Voor] L(1) Jaar"  
+        "[First Last] E(1) Year" = "[Voor Achter] L(1) Jaar"  
+        "Event - Last, First Year" = "Event - Achter, Voor Jaar"  
+        "Event - First Last Year" = "Event - Voor Achter Jaar"  
+        "First Last Year" = "Voor Achter Jaar"  
+        
+        "Processing" = "Verwerken"  
+        "Processed : " = "Verwerkt : " 
 END
-
-
 STRING ID DateBookNotifyHelpString "long_notifySettingString"
 STRING ID DateBookNotifyMoreHelpString "long_notifySettingMoreString"
 STRING ID SelectDateString  "HappyDays"
@@ -739,15 +735,15 @@ END
 // Bitmaps //
 /////////////
 BitMapFamily ID ID_BitmapIcon
-	"HD_large.bmp" "HD_large.bmp" "" "HD_large.bmp"
+	"HD_large.bmp" "HD_large.bmp" "" "HD_large_color.bmp"
 	COMPRESS
 	TRANSPARENT 204 204 0
 
 ICONFAMILY 
-	"HD_large.bmp" "HD_large.bmp" "" "HD_large.bmp"
+	"HD_large.bmp" "HD_large.bmp" "" "HD_large_color.bmp"
 	TRANSPARENT 204 204 0
 SMALLICONFAMILY
-	"HD_small.bmp" "HD_small.bmp" "" "HD_small.bmp"
+	"HD_small.bmp" "HD_small.bmp" "" "HD_small_color.bmp"
 	TRANSPARENT 204 204 0
 
 APPLICATIONICONNAME 1000 "HappyDays"

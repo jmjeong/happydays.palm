@@ -22,6 +22,7 @@ PILOTXFER = pilot-xfer
 LANG = ENGLISH
 
 all: en
+	ls -al happydays*.prc
 
 all-lang: en ko de th dutch fr sp cz
 
@@ -33,7 +34,7 @@ de: $(TARGET)-de.prc
 
 th: $(TARGET)-th.prc
 
-chi: $(TARGET)-chi.prc
+chi: $(TARGET)-chi-big5.prc $(TARGET)-chi-gb.prc
 
 dutch: $(TARGET)-dutch.prc
 
@@ -64,8 +65,11 @@ $(TARGET)-de.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGE
 $(TARGET)-th.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGET).grc pref0000.$(TARGET).grc rloc0000.$(TARGET).grc bin-th.res
 	$(BUILDPRC) $(TARGET)-th.prc $(APPNAME) $(APPID) code0001.$(TARGET).grc code0000.$(TARGET).grc data0000.$(TARGET).grc *.bin pref0000.$(TARGET).grc rloc0000.$(TARGET).grc
 
-$(TARGET)-chi.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGET).grc pref0000.$(TARGET).grc rloc0000.$(TARGET).grc bin-chi.res
-	$(BUILDPRC) $(TARGET)-chi.prc $(APPNAME) $(APPID) code0001.$(TARGET).grc code0000.$(TARGET).grc data0000.$(TARGET).grc *.bin pref0000.$(TARGET).grc rloc0000.$(TARGET).grc
+$(TARGET)-chi-big5.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGET).grc pref0000.$(TARGET).grc rloc0000.$(TARGET).grc bin-chi-big5.res
+	$(BUILDPRC) $(TARGET)-chi-big5.prc $(APPNAME) $(APPID) code0001.$(TARGET).grc code0000.$(TARGET).grc data0000.$(TARGET).grc *.bin pref0000.$(TARGET).grc rloc0000.$(TARGET).grc
+
+$(TARGET)-chi-gb.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGET).grc pref0000.$(TARGET).grc rloc0000.$(TARGET).grc bin-chi-gb.res
+	$(BUILDPRC) $(TARGET)-chi-gb.prc $(APPNAME) $(APPID) code0001.$(TARGET).grc code0000.$(TARGET).grc data0000.$(TARGET).grc *.bin pref0000.$(TARGET).grc rloc0000.$(TARGET).grc
 
 $(TARGET)-dutch.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGET).grc pref0000.$(TARGET).grc rloc0000.$(TARGET).grc bin-dutch.res
 	$(BUILDPRC) $(TARGET)-dutch.prc $(APPNAME) $(APPID) code0001.$(TARGET).grc code0000.$(TARGET).grc data0000.$(TARGET).grc *.bin pref0000.$(TARGET).grc rloc0000.$(TARGET).grc
@@ -110,9 +114,13 @@ bin-th.res: $(TARGET)-th.rcp
 	rm -f *.bin
 	$(PILRC) -L THAI $(TARGET)-th.rcp .
 
-bin-chi.res: $(TARGET)-chi.rcp
+bin-chi-big5.res: $(TARGET)-chi-big5.rcp
 	rm -f *.bin
-	$(PILRC) -L CHINESE -F5 $(TARGET)-chi.rcp .
+	$(PILRC) -L CHINESE -F5 $(TARGET)-chi-big5.rcp .
+
+bin-chi-gb.res: $(TARGET)-chi-gb.rcp
+	rm -f *.bin
+	$(PILRC) -L CHINESE -F5 $(TARGET)-chi-gb.rcp .
 
 bin-dutch.res: $(TARGET)-dutch.rcp
 	rm -f *.bin
@@ -142,8 +150,11 @@ $(TARGET)-de.rcp: $(TARGET).rcp german.msg hdr.msg
 $(TARGET)-th.rcp: $(TARGET).rcp thai.msg hdr.msg
 	cat hdr.msg thai.msg $(TARGET).rcp > $(TARGET)-th.rcp
 
-$(TARGET)-chi.rcp: $(TARGET).rcp chinese.msg hdr.msg
-	cat hdr.msg chinese.msg $(TARGET).rcp > $(TARGET)-chi.rcp
+$(TARGET)-chi-big5.rcp: $(TARGET).rcp chinese.msg hdr.msg
+	cat hdr.msg chinese.msg $(TARGET).rcp > $(TARGET)-chi-big5.rcp
+
+$(TARGET)-chi-gb.rcp: $(TARGET).rcp schinese.msg hdr.msg
+	cat hdr.msg schinese.msg $(TARGET).rcp > $(TARGET)-chi-gb.rcp
 
 $(TARGET)-dutch.rcp: $(TARGET).rcp dutch.msg hdr.msg
 	cat hdr.msg dutch.msg $(TARGET).rcp > $(TARGET)-dutch.rcp

@@ -221,7 +221,7 @@ BEGIN
 	"^1: ^2 HappyDays notify entries removed." = ""\
 	"^1: ^2 개의 HappyDays 알림 레코드가 제거되었습니다."
 
-	"(c) 1999-2000 JaeMok Jeong" = "(c) 1999-2000 정 재목"
+	"(c) 1999-2001 JaeMok Jeong" = "(c) 1999-2001 정 재목"
     "GPL free software" = "GPL free software"
 	"E-Mail & Web Page" = "이메일 & 웹페이지"
 

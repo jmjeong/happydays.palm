@@ -752,15 +752,15 @@ END
 // Bitmaps //
 /////////////
 BitMapFamily ID ID_BitmapIcon
-	"HD_large.bmp" "HD_large.bmp" "" "HD_large.bmp"
+	"HD_large.bmp" "HD_large.bmp" "" "HD_large_color.bmp"
 	COMPRESS
 	TRANSPARENT 204 204 0
 
 ICONFAMILY 
-	"HD_large.bmp" "HD_large.bmp" "" "HD_large.bmp"
+	"HD_large.bmp" "HD_large.bmp" "" "HD_large_color.bmp"
 	TRANSPARENT 204 204 0
 SMALLICONFAMILY
-	"HD_small.bmp" "HD_small.bmp" "" "HD_small.bmp"
+	"HD_small.bmp" "HD_small.bmp" "" "HD_small_color.bmp"
 	TRANSPARENT 204 204 0
 
 APPLICATIONICONNAME 1000 "HappyDays"

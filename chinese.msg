@@ -182,14 +182,12 @@ BEGIN
     "HappyDays Cleanup" = "清理 HappyDays"
 
     "Notify warning" = "提示"
-    "^1: Are you sure you want to create notify entries for ^2 HappyDays 
-records?" = ""\
+    "^1: Are you sure you want to create notify entries for ^2 HappyDays records?" = ""\
       "^1: 你是否想建立 ^2 個 HappyDays 紀錄的提示？"
 
     "Invalid event format" = "不正確的事件格式"
 
-    "The address record for ^1\n contains an invalid event. How would you 
-like to handle it?" = ""\
+    "The address record for ^1\n contains an invalid event. How would you like to handle it?" = ""\
       "^1 的地址簿欄目\n 含有一個不合格式的事件，應怎處理？"
 
     "Ignore" = "略過"

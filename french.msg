@@ -246,4 +246,12 @@ BEGIN
 	
 	"Processing" = "Traitement"
 	"Processed : " = "Traité(s) : "	
+
+	"%d day(s) passed" = "%d jours(s) écoulé(s)"
+	"Name" = "Nom"
+	"Date" = "Date"
+	"Age" = "Age"
+	"HappyDays" = "HappyDays"
+	"GPL free software" = "Logiciel gratuit GPL"
+	"E-Mail & Web Page" = "E-Mail et Page Web"
 END

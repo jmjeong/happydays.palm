@@ -3376,13 +3376,14 @@ static void Search(FindParamsPtr findParams)
    	// unless told otherwise, there are no more items to be found
    	findParams->more = false;  
 
-	// refind this code(**************)
+	// refine this code(**************)
 	//
    	// Open the happydays database.
    	// dbP = DmOpenDatabase(cardNo, dbID, findParams->dbAccesMode);
 	// 
-	// refind this code(**************)
+	// refine this code(**************)
 	dbID = DmFindDatabase(cardNo, MainDBName);
+	if (! dbID) return;
    	dbP = DmOpenDatabase(cardNo, dbID, findParams->dbAccesMode);
    	if (! dbP) return;
 
