@@ -1,0 +1,42 @@
+-*- mode:outline -*-
+
+* Scan from notes field
+* Support Action Names and Datebk3 Icon(customizable)
+
+* From : Dieter Pellkofer (dieterp@patente.de) 
+Only the day and the month, but not the year is redundant in the date book
+entry. I would, therefor, prefer that the year is shown in the
+ datebook entry (if the event is created as repeating event). By showing the
+year it is easy to know how old the person will be on this
+ day. This is of course not necessary with not repeating events since in this
+case the actual age can be shown in the datebook.
+
+It's right for Father's_Day but now all family birthday entries (I mean the
+cases, when I have several people in the birthdate field of
+ my address book using "*" and the first name) are created without the
+surname. Only the first name is shown in the HappyDays list view,
+ the HappyDays detail view, the exported memo pad entry and even in the
+created datebook entry. If you know several people having
+ the same fist name you never know whose birthdate is...
+ Could it be a solution to create an address book entry for the anniversaries
+by inputting "Anniversary" not in the surname field but for
+ example in the "title" or "company" field leaving the surname field blank.
+Thus, the anniversaries will be shown without "surname" and
+ the names of real person will be shown with the surname.
+
+On further suggestion for the next release:
+ It should be easier to switch in the list view between name and date sorting.
+One quick solution could be to have one (toggle) menu
+ option or two menu options (one for date and one for name sorting) which can
+be accessed with a shortcut. If the shortcut does not need
+ to be preceeded by the "/" (as some programs do it) by input only one
+character the sorting could be switched.
+
+* From: "TING, Bevan" <bting@westpac.com.au>
+Also, another to-do is to give option of whether a user prefers "Event,
+Korean New Year" or "Korean New Year". :-D
+
+* From : Jeffrey Krzysztow
+I use an Address Replacement call TealPhone. How to I get HappyDays to use it
+instead of the built-in?
+
