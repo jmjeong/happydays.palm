@@ -99,6 +99,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define DateBookNotifyFormDuration  1422
 #define DateBookNotifyFormMore    	1423
 #define DateBookNotifyFormLabelDays	1424
+#define DateBookPopupTrigger		1425
+#define DateBookNotifyCategory		1426
 
 #define NotifyStringForm		    1450
 #define NotifyStringFormOk	        1451
@@ -214,6 +216,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define ExportAlert                 1990
 #define AddrRescanAlert             1991
+
+#define EditCategoryString          1992
 
 #define ID_BitmapIcon				2000
 

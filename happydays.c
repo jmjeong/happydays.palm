@@ -105,10 +105,10 @@ static Boolean DispPrefFormHandleEvent(EventPtr e);
 static Boolean ViewFormHandleEvent(EventPtr e);
 static Boolean MainFormHandleEvent(EventPtr e);
 
-static void HighlightMatchRowDate(DateTimeType inputDate);
-static void HighlightMatchRowName(Char first);
+static void HighlightMatchRowDate(DateTimeType inputDate) SECT1;
+static void HighlightMatchRowName(Char first) SECT1;
 
-static void WritePrefsRec(void);
+static void WritePrefsRec(void) SECT1;
 
 static void MainFormLoadTable(FormPtr frm, Int16 listOffset) SECT1;
 static void MainFormInit(FormPtr formP, Boolean resize) SECT1;
@@ -675,10 +675,11 @@ static void ReadPrefsRec(void)
         gPrefsR.DBNotifyPrefs.notifybefore = 3;
         gPrefsR.DBNotifyPrefs.duration = 1;
         *((int*)&gPrefsR.DBNotifyPrefs.when) = noTime;
+        gPrefsR.DBNotifyPrefs.apptCategory = 0;
         gPrefsR.DBNotifyPrefs.note[0] = 0;
 
         gPrefsR.TDNotifyPrefs.priority = 1;
-        StrCopy(gPrefsR.TDNotifyPrefs.todoCategory, "All");
+        gPrefsR.TDNotifyPrefs.todoCategory = 0;
         gPrefsR.TDNotifyPrefs.usenote = 0;
         gPrefsR.TDNotifyPrefs.note[0] = 0;
 
@@ -731,6 +732,7 @@ static Int16 OpenDatabases(void)
     LocalID dbID, appInfoID;
     UInt32 cdate, mdate;
     AddrAppInfoPtr appInfoPtr;
+    char ForDateBookCategoryCheck[dmCategoryLength];
 
     /*
      * Set these to zero in case any of the opens fail.
@@ -830,6 +832,11 @@ static Int16 OpenDatabases(void)
      * Check if the other databases opened correctly.  Abort if not.
      */
     if (!DatebookDB || !ToDoDB || !AddressDB || !MemoDB) return -1;
+
+	//Prepare DateBook AppInfoBlock
+	//if Needed
+	CategoryGetName(DatebookDB, 0, ForDateBookCategoryCheck);
+	if (!*ForDateBookCategoryCheck) CategorySetName(DatebookDB,0,"Unfiled");
 
     return 0;
 }
@@ -3027,6 +3034,10 @@ static Boolean StartFormHandleEvent(EventPtr e)
 //
 //
 // $Log$
+// Revision 1.75  2004/04/19 15:46:17  jmjeong
+// Datebook category support
+// Can edit the category of Datebook, Todo in HappyDays
+//
 // Revision 1.74  2004/03/08 13:21:47  jmjeong
 // -(Add) Can Assign N-th day of Event.
 // -(Add) Give different icon or color to different event types. You can set any

@@ -734,10 +734,10 @@ void  SetReadAddressDB()
 }
 
 #define	INDICATE_TOP		110
-#define	INDICATE_LEFT		20	
 #define	INDICATE_HEIGHT		6
+#define	INDICATE_LEFT		20	
 #define	INDICATE_WIDTH		15
-#define INDICATE_NUM        7
+#define INDICATE_NUM        8
 
 static void initIndicate()
 {

@@ -10,9 +10,12 @@ BEGIN
     "long_aboutString" = ""\
     "'HappyDays' ใช้สำหรับเตือน\nวันเกิดและวันครบรอบต่างๆ ของเพื่อนและครอบครัว "\
     "รวมถึงเหตุการณ์พิเศษอื่นๆ\n\n"\
-    "อ่านรายละเอียดและวิธีการใช้งานได้ในไฟล์ index.html และ manual.html ตามลำดับ\n\n"\
+    "อ่านรายละเอียดและวิธีการใช้งานไดที่ http://jmjeong.com/?HappyDays\n\n"\
     "HappyDays ถูกเผยแพร่ภายใต้ GNU General "\
-    "Public License เวอร์ชั่น 2.0\n"
+    "Public License เวอร์ชั่น 2.0\n\n"\
+	"= รูปแบบข้อมูล\n\n"\
+	"[*[{ประเภทเหตุการณ์}]\\ws{รายละเอียด}\\ws{วันที่}[[รายการจำนวนวันครบรอบ]]\n\n"\
+	"\\ws = เว้นวรรค (white space)\n"
 
     "long_cleanupAlertString" = ""\
     "รายการเตือนของ HappyDays จะมี "\
@@ -25,7 +28,7 @@ BEGIN
         "#) คือวันที่ตามจันทรคติใน\n\tเดือนอธิกมาส"
 
     "Select Time" = "เลือกเวลา"
-    "No Time" = "ไม่กำหนดเวลา"
+    "No Time" = "ไม่กำหนด"
     "Invalid input date" = "วันที่ที่ใส่ไม่ถูกต้อง"
     "Export to Memo Pad is completed." = "ส่งข้อมูลไป Memo Pad เรียบร้อยแล้ว"
 
@@ -150,7 +153,7 @@ BEGIN
     "Time:" = "เวลา:"
     "Icon" = "ไอคอน"
 
-    "Repeat for:" = "ซํ้านาน:"
+    "Repeat for:" = "ซํ้าเป็นเวลา:"
     "years" = "ปี"
 
     "Notify warning" = "คำเตือน"

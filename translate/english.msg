@@ -219,7 +219,7 @@ BEGIN
 		"Address DB is changed. \nDo you want to rescan it?"
 
  	"Ignore record with prefix '!'" = "Ignore record with prefix '!'"
- 	"Databook note" = "Databook note"
+ 	"Datebook note" = "Datebook note"
  	"Add the following note" = "Add the following note"
 
 /* HappyDays view */

@@ -44,6 +44,9 @@ BEGIN
     "are kept untouched." = "sense modificar."
     "have been modified." = "modificades."
 
+ 	"%dth day" = "%d  dia"                
+	"(%dth)" =  "(%d )"                             
+
     "Collecting Information" = "Reunint informació"
 
     "Look Up:" = "Cerca:"
@@ -158,7 +161,6 @@ BEGIN
 	"long_notifywarningString" = ""\
 		"^1: Segur que voleu crear notificacions de HappyDays per a ^2 registres?"
       
-/* Date Book Icon */
     "Date Book Icon" = "Icona d'Agenda"  
       "Icon Support" = "Suport d'Icones"
       "AN" = "AN"  
@@ -216,7 +218,7 @@ BEGIN
 		"la llibreta d'Adreces ha canviat. \nVoleu tornar a cercar a la llibreta d'Adreces?"
 
  	"Ignore record with prefix '!'" = "Ignora el registre amb prefix '!'"
- 	"Databook note" = "Nota a l'Agenda"
+ 	"Datebook note" = "Nota a l'Agenda"
  	"Add the following note" = "Afegeix la següent nota"
 
 /* HappyDays view */

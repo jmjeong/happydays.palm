@@ -5,9 +5,7 @@ BEGIN
 	"아이콘, 폰트, 카테고리 정보 등을 나타냅니다.\n\n"\
     "일정관리 프로그램으로 이들 프로그램을 사용하는 경우에는 "\
 	"그 프로그램들의 매뉴얼을 참조하여 적절한 노트 내용을 작성하세요.\n"
-
     "HappyDays" =  "HappyDays"
-
     "long_customErrorString" =  ""\
     "'Birthday'가 초기 사용자정의 필드 이름입니다."\
     "다른 이름을 설정하고 싶은 경우 "\
@@ -15,7 +13,6 @@ BEGIN
     "정보: 'Birthday' 사용자정의 필드를 바꾸기 위해서는 주소록을 수행시켜 "\
     "'Options/Rename Custom Fields'을 선택한 다음 수정하면 됩니다."\
     "혹은 해피데이즈의 설정 항목의 사용자정의 필드를 적절하게 수정하세요.\n"
-
     "long_aboutString" =  ""\
     "해피데이즈는 친구나 가족의 생일이나 기념일을 기억하는 것을 도와"\
     "줍니다. 더욱이 제사나 다른 이벤트 항목도 관리할 수 있습니다."\
@@ -24,15 +21,12 @@ BEGIN
 	"\n해피데이즈는 GNU GPL을 따릅니다.\n\n"\
 	"= 데이타 입력 포맷\n"\
 	"[*[{EventType}]\\ws{Description}\\ws]{Date}[[nth day list]]"
-
     "long_cleanupAlertString" =  ""\
     "알림 레코드의 메모 필드에 {HD 식별자}가 있는 경우 "\
     "해피데이즈 레코드로 "\
     "간주하고 삭제합니다. (주의 요망)\n"
-
     "long_removeConfirmString" =  ""\
     "모든 해피데이즈 알림 항목을 삭제하길 원하십니까?"
-
     "Invalid input date" =  "날짜 입력이 잘못되었습니다."
     "Select Time" =  "알람 시간"
     "No Time" =  "지정안됨"
@@ -49,7 +43,7 @@ BEGIN
     "FRI" =  "금"
     "SAT" =  "토"
 
-    "Janunary" =  "1월"
+    "January"= "1월"
     "February" =  "2월"
     "March" =  "3월"
     "April" =  "4월"
@@ -70,11 +64,11 @@ BEGIN
     "HappyDays Export List" =  "해피데이즈 목록"
     "(not exist in this year)" =  "(올해엔 없는 날입니다)"
     "Please run Date Book once first." =  "먼저 일정관리를 한번 수행하세요."
-    "Please run Todo once first."= "먼저 TODO 프로그램을 한번 수행하세요."
-    
+    "Please run Todo once first." =  "먼저 TODO 프로그램을 한번 수행하세요."
+    "Days"= "일"
     "%dY %dM %dD (%ld)" =  "%d년 %d월 %d일째 (%ld)"
-	"%dth day" = "%d일입니다"
-	"(%dth)" = "(%d일)"
+    "%dth day" =  "%d일입니다"
+    "(%dth)" =  "(%d일)"
 
     "Date Book" =  "일정관리"
     "To Do" =  "할 일"
@@ -88,7 +82,9 @@ BEGIN
     "UpTo Date:" =  "남은 일:"
 
     "Datebook Note" =  "일정관리 노트"
-    "ToDo Note"= "ToDo 노트"
+    "ToDo Note" =  "ToDo 노트"
+
+    "Edit Categories..."= "Edit Categories..."
 
     "Collecting Information" =  ""\
         "주소록으로부터 정보 수집중"
@@ -166,12 +162,12 @@ BEGIN
 
     "Address Book:" =  "주소록 : "
     "Built-in" =  "주소록"
-    "Address.kr" =  "Address.kr"
     "Address Album" =  "Address Album"
     "AddressBkR" =  "AddressBkR"
     "Address Plus(+)" =  "Address Plus(+)"
     "Super Names" =  "Super Names"
     "TealPhone" =  "TealPhone"
+    "HanAD"= "HanAD"
 
     "HappyDays ID:" =  "HappyDays ID:"
 
@@ -192,15 +188,15 @@ BEGIN
     "Records:" =  "레코드 :"
     "all" =  "전부"
     "selected" =  "선택"
-
     "Existing:" =  "기존 레코드 :"
     "keep" =  "유지"
     "modify" =  "수정"
 
+    "Category:" =  "카테고리 :"
     "Private:" =  "비공개 :"
+    " "= " "
 
     "Alarm:" =  "알람 :"
-
     "Time:" =  "시간 :"
 
     "Repeat for:" =  "몇 년간 :"
@@ -217,8 +213,6 @@ BEGIN
     "4" =  "4"
     "5" =  "5"
 
-    "Category:" =  "카테고리 :"
-
     "HappyDays says" =  "정 보"
     "^1" =  "^1"
 
@@ -233,6 +227,7 @@ BEGIN
         "메모장으로 해피데이즈 목록을 옮길까요?"
 
     "HappyDays Cleanup" =  "해피데이즈 정리"
+    "^1: ^2" = "^1: ^2"
 
     "Notify warning" =  "알림 경고"
     "long_notifywarningString" =  ""\
@@ -249,11 +244,9 @@ BEGIN
 	"^1: ^2 개의 해피데이즈 알림 레코드가 제거되었습니다."
 
     "GPL free software" =  "GPL free software"
-    "(c) 1999-2002 Jaemok Jeong" =  "(c) 1999-2002 Jaemok Jeong"
 
     "E-Mail & Web Page" =  "이메일 & 웹페이지"
     "happydays@jmjeong.com" =  "happydays@jmjeong.com"
-    "jmjeong.com/palm/happydays" =  "jmjeong.com/palm/happydays"
 
     "Translator" =  "한글 버젼"
     "Translator's email" =  "정재목"

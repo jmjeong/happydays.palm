@@ -61,13 +61,13 @@ STRING ID NextDateStr			"Next Date:"
 STRING ID SourceDateStr			"Origin:"
 STRING ID AgeStr				"Age:"
 STRING ID RemainedDayStr		"UpTo Date:"
-// STRING ID BioRhythmStr			"BioRhythm:"
-// STRING ID BioString				"P(%s) E(%s) I(%s)"
 
 STRING ID FindHeaderString		"HappyDays"
 
 STRING ID DBNoteString          "Datebook Note"
 STRING ID TDNoteString          "ToDo Note"
+
+STRING ID EditCategoryString    "Edit Categories..."
 
 FORM StartForm AT (0 0 160 160)
 NOFRAME
@@ -318,24 +318,31 @@ BEGIN
 	GRAFFITISTATEINDICATOR AT (PrevRight+5 PrevTop)
 END
 
-FORM ID DateBookNotifyForm AT (2 18 156 140)
+FORM ID DateBookNotifyForm AT (2 12 156 146)
 FRAME
 MODAL
 USABLE
 DEFAULTBTNID DateBookNotifyFormCancel
 BEGIN
     TITLE "Date Book Notify"
-    LABEL "Records:" AUTOID AT (RIGHT@78 25) FONT 1
+    
+    LABEL "Records:" AUTOID AT (RIGHT@78 18) FONT 1
     PUSHBUTTON "all" ID NotifyFormRecordAll 
 			AT (PrevRight+5 PrevTop AUTO AUTO) GROUP 1
     PUSHBUTTON "selected" ID NotifyFormRecordSlct 
 			AT (PrevRight+1 PrevTop AUTO AUTO) LEFTANCHOR GROUP 1
-
     LABEL "Existing:" AUTOID AT (RIGHT@78 PrevBottom+3) FONT 1
     PUSHBUTTON "keep" ID NotifyFormEntryKeep 
 			at (PrevRight+5 PrevTop AUTO AUTO) GROUP 2
     PUSHBUTTON "modify" ID NotifyFormEntryModify 
 			at (PrevRight+1 PrevTop AUTO AUTO) LEFTANCHOR GROUP 2
+            
+	LABEL "Category:" AUTOID AT (RIGHT@78 PrevBottom+3) FONT 1
+    POPUPTRIGGER "                 " ID DateBookPopupTrigger
+            AT ( PrevRight+5 PrevTop AUTO AUTO ) LeftAnchor 
+	LIST "" ID DateBookNotifyCategory AT ( PrevLeft PrevTop 70 AUTO ) 
+		NONUSABLE 
+    POPUPLIST ID DateBookPopupTrigger DateBookNotifyCategory
 
     LABEL "Private:" AUTOID AT (RIGHT@78 PrevBottom+3) FONT 1
     CHECKBOX " " ID NotifyFormPrivate 
@@ -358,7 +365,7 @@ BEGIN
             UNDERLINED MAXCHARS 2
     LABEL "years" AUTOID AT (PrevRight+3 PrevTop) FONT 0
 
-    BUTTON "OK" ID DateBookNotifyFormOk AT (5 Bottom@135 40 AUTO)
+    BUTTON "OK" ID DateBookNotifyFormOk AT (5 Bottom@141 40 AUTO)
     BUTTON "Cancel" ID DateBookNotifyFormCancel AT (PrevRight+5 PrevTop 40 AUTO)
 	GRAFFITISTATEINDICATOR AT (PrevRight+5 PrevTop)
 
@@ -419,7 +426,7 @@ BEGIN
 		LEFTANCHOR GROUP 3
 
 	LABEL "Category:" AUTOID AT (RIGHT@65 PrevBottom+5) FONT 1
-    POPUPTRIGGER "" ID ToDoPopupTrigger
+    POPUPTRIGGER "                " ID ToDoPopupTrigger
             AT ( PrevRight+5 PrevTop AUTO AUTO ) LeftAnchor 
 	LIST "" ID ToDoNotifyCategory AT ( PrevLeft PrevTop 70 AUTO ) 
 		NONUSABLE 
@@ -498,7 +505,7 @@ BEGIN
     TITLE "About HappyDays"
 
 	FORMBITMAP AT (6 18) BITMAP ID_BitmapIcon USABLE 
-    LABEL "HappyDays 2.31" AUTOID AT (PrevRight+38 PrevTop) FONT 1
+    LABEL "HappyDays 2.32" AUTOID AT (PrevRight+38 PrevTop) FONT 1
     LABEL "GPL free software"
         AUTOID AT (PrevLeft PrevTop+ABOUT_LINE_SPACING) FONT 0
     LABEL "(c) 1999-2004 Jaemok Jeong"
@@ -568,4 +575,4 @@ SMALLICONFAMILY
 	TRANSPARENT 192 192 0
 
 APPLICATIONICONNAME 1000 "HappyDays"
-VERSION ID 1 "2.31"
+VERSION ID 1 "2.32"

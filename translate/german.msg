@@ -43,7 +43,7 @@ BEGIN
 
     "SMTWTFS" =  "SMDMDFS"
 
-    "January"= "Januar"
+    "January" =  "Januar"
     "February" =  "Februar"
     "March" =  "März"
     "April" =  "April"
@@ -57,16 +57,18 @@ BEGIN
     "December" =  "Dezember"
 
     "Not enough memory" =  "Nicht genug Speicher"
-    "%d notify entries have been created.\n"= "%d Einträge erzeugt.\n"
-    "%d existing entries "= "%d bestehende Einträge "
-    "are kept untouched."= "belassen."
-    "have been modified."= "geändert."
+    "%d notify entries have been created.\n" =  "%d Einträge erzeugt.\n"
+    "%d existing entries " =  "%d bestehende Einträge "
+    "are kept untouched." =  "belassen."
+    "have been modified." =  "geändert."
     "HappyDays Export List" =  "HappyDays Export Liste"
     "(not exist in this year)" =  "(in diesem Jahr nicht vorhanden)"
     "Please run Date Book once first." =  "Bitte vorher den Kalender einmal aufrufen."
     "Please run Todo once first." =  "Bitte vorher die Aufgaben einmal aufrufen"
     "Days" =  "Tage"
     "%dY %dM %dD (%ld)" =  "%dJ %dM %dT (%ld)"
+    "%dth day"= "%d. Tag"
+    "(%dth)"= "(%d.)"
 
     "Date Book" =  "Kalender"
     "To Do" =  "Aufgaben"
@@ -140,7 +142,7 @@ BEGIN
     "Scan note field" =  "Notiz auswerten"
     "Ignore record with prefix '!'" =  "Einträge mit '!' ignorieren"
 
-    "Address Autoscan:" =  "Adressbuch Autoscan:"
+    "Address Autoscan:"= "Adressbuch Autoscan:"
     "Always" =  "immer"
     "Ask" =  "fragen"
     "Never" =  "nie"
@@ -148,7 +150,7 @@ BEGIN
     "Notify Format:" =  "Eintrag-Format:"
     "[Last, First] E(1) Year" =  "[Nachn., Vorn.] E(1) Jahr"
     "[First Last] E(1) Year" =  "[Vorn. Nachn.] E(1) Jahr"
-    "[First] E(1) Year"= "[Vorn.] E(1) Jahr"
+    "[First] E(1) Year" =  "[Vorn.] E(1) Jahr"
     "Event - Last, First Year" =  "Ereign. - Nachn., Vorn. Jahr"
     "Event - First Last Year" =  "Ereign. - Vorn. Nachn. Jahr"
     "First Last Year" =  "Vorn. Nachn. Jahr"
@@ -231,5 +233,4 @@ BEGIN
 
     "Processing" =  "Arbeite"
     "Processed : " =  "Bearbeitet : "
-
 END

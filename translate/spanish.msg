@@ -4,16 +4,18 @@ BEGIN
 	"Para usuarios avanzados sólamente\n\n"\
 	"Esta nota es usada por programas externos de reemplazo de la Agenda "\
 	"como Action Names, DateBk3/4.\n\n"\
-	"Tú puedes asignar un icono, una fuente y más utilizando esta nota.\n\n"\
+	"Usted puede asignar iconos, fuentes y más utilizando esta nota.\n\n"\
 	"Para más información, consulte sus manuales.\n"
 
     "long_aboutString" = ""\
     "'HappyDays' le ayudará a recordar los cumpleaños y aniversarios "\
     "de sus amigos y familiares, así como muchos otros eventos.\n\n"\
-    "Consulte los archivos index.html y manual.html para información detallada "\
+    "Visite http://jmjeong.com/?HappyDays para información detallada "\
     "sobre cómo utilizar HappyDays\n\n"\
     "HappyDays es distribuído bajo los términos de la GNU General "\
-    "Public License versión 2.0.\n"
+    "Public License versión 2.0.\n"\
+	"= Input Format\n\n"\
+	"[*[{EventType}]\\ws{Description}\\ws{Date}[[nth day list]]\n"
 
     "long_cleanupAlertString" = ""\
     "Las entradas de recordatorio son consideradas HappyDays si tienen "\
@@ -121,7 +123,6 @@ BEGIN
     "Translator" = "Alejandro Lizarraga"
     "Translator's email" = "bow2axel@hotmail.com"
 
-
     "OK" = "Aceptar"
     "Cancel" = "Cancelar"
 
@@ -134,7 +135,7 @@ BEGIN
 
     "Lunar to Solar Convert" = "Convertir Solar a Lunar"
     "Enter Lunar date:" = "Introduzca fecha lunar:"
-    "Leap" = "Salto"
+    "Leap" = "Bisiesto"
     "Result Solar date:" = "Resultado fecha solar:"
 
 
@@ -152,7 +153,7 @@ BEGIN
     "Time:" = "Hora:"
     "Icon" = "Icono"
 
-    "Repeat for:" = "Los próximos:"
+    "Repeat for:" = "Repetir por:"
     "years" = "años"
 
     "Notify warning" = "Aviso de recordatorios" 
@@ -211,7 +212,7 @@ BEGIN
     "%ld days passed" = "%ld días pasados"  
 
     "Processing" = "Procesando"  
-    "Processed : " = "Procesado : " 
+    "Processed : " = "Procesados : " 
 
 	"Address Change" = "Cambios en Direcciones"
 	"AddressDB is changed. \nDo you want to rescan it?"= ""\

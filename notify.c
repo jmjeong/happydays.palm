@@ -300,6 +300,34 @@ static void LoadEventNoteString(char *p, Int16 idx, Int16 maxString)
     MemHandleUnlock(recordH);
 }
 
+static Boolean TDSelectCategory (UInt16* category)
+{
+	Char* name;
+	Boolean categoryEdited;
+	
+	name = (Char *)CtlGetLabel (GetObjectPointer (FrmGetActiveForm(), ToDoPopupTrigger));
+
+	categoryEdited = CategorySelect (ToDoDB, FrmGetActiveForm (),
+                                     ToDoPopupTrigger, ToDoNotifyCategory,
+                                     false, category, name, 1, EditCategoryString);
+	
+	return (categoryEdited);
+}
+
+static Boolean DBSelectCategory (UInt16* category)
+{
+	Char* name;
+	Boolean categoryEdited;
+	
+	name = (Char *)CtlGetLabel (GetObjectPointer (FrmGetActiveForm(), DateBookPopupTrigger));
+
+	categoryEdited = CategorySelect (DatebookDB, FrmGetActiveForm (),
+                                     DateBookPopupTrigger, DateBookNotifyCategory,
+                                     false, category, name, 1, EditCategoryString);
+	
+	return (categoryEdited);
+}
+
 Boolean ToDoFormHandleEvent(EventPtr e)
 {
     Boolean handled = false;
@@ -338,9 +366,8 @@ Boolean ToDoFormHandleEvent(EventPtr e)
 
         case ToDoPopupTrigger: 
         {
-            SelectCategoryPopup(ToDoDB, &gToDoCategory,
-                                ToDoNotifyCategory, ToDoPopupTrigger,
-                                gPrefsR.TDNotifyPrefs.todoCategory);
+            TDSelectCategory(&gPrefsR.TDNotifyPrefs.todoCategory);
+            
             handled = true;
             break;
         }
@@ -418,6 +445,15 @@ Boolean DBNotifyFormHandleEvent(EventPtr e)
             handled = true;
             break;
 
+        case DateBookPopupTrigger: 
+        {
+            DBSelectCategory(&gPrefsR.DBNotifyPrefs.apptCategory);
+            
+            handled = true;
+            break;
+        }
+        
+        
         case DateBookNotifyFormAlarm:
             if (CtlGetValue(GetObjectPointer(frm,
                                              DateBookNotifyFormAlarm))) {
@@ -773,7 +809,18 @@ static Char* NotifyDescString(DateType when, HappyDays birth,
     
     return description;
 }
+
+static void SetCategory(DmOpenRef dbP, UInt16 index, UInt16 category)
+{
+    UInt16                  attr;
     
+    // Set the category.
+    DmRecordInfo (dbP, index, &attr, NULL, NULL);
+    attr &= ~dmRecAttrCategoryMask;
+    attr |= category;
+    DmSetRecordInfo (dbP, index, &attr, NULL);
+}
+
 static Int16 PerformNotifyDB(HappyDays birth, DateType when, Int8 age,
                              RepeatInfoType* repeatInfoPtr,
                              Int16 *created, Int16 *touched)
@@ -859,6 +906,7 @@ static Int16 PerformNotifyDB(HappyDays birth, DateType when, Int8 age,
         // if private is set, make the record private
         //
         ChkNMakePrivateRecord(DatebookDB, existIndex);
+        SetCategory(DatebookDB, existIndex, gPrefsR.DBNotifyPrefs.apptCategory);
         (*created)++;
     }
     else {                                      // if exists
@@ -878,8 +926,9 @@ static Int16 PerformNotifyDB(HappyDays birth, DateType when, Int8 age,
             // if private is set, make the record private
             //
             ChkNMakePrivateRecord(DatebookDB, existIndex);
+            SetCategory(DatebookDB, existIndex, gPrefsR.DBNotifyPrefs.apptCategory);
+            (*touched)++;
         }
-        (*touched)++;
     }
 
     if (description) MemPtrFree(description);
@@ -934,15 +983,12 @@ static Int16 PerformNotifyTD(HappyDays birth, DateType when, Int8 age,
     description = NotifyDescString(when, birth, age, true);		// todo = true
     todo.description = description;
 
-    // category adjust
-    if (gToDoCategory == dmAllCategories) gToDoCategory = dmUnfiledCategory;
-    
     if (existIndex < 0) {            // there is no same record
         //
         // if not exists
         // write the new record (be sure to fill index)
         //
-        ToDoNewRecord(ToDoDB, &todo, gToDoCategory, (UInt16*)&existIndex);
+        ToDoNewRecord(ToDoDB, &todo, gPrefsR.TDNotifyPrefs.todoCategory, (UInt16*)&existIndex);
         // if private is set, make the record private
         //
         ChkNMakePrivateRecord(ToDoDB, existIndex);
@@ -962,16 +1008,15 @@ static Int16 PerformNotifyTD(HappyDays birth, DateType when, Int8 age,
             DmMoveRecord(ToDoDB, existIndex, DmNumRecords(ToDoDB));
             
             // make new record
-            ToDoNewRecord(ToDoDB, &todo, gToDoCategory, (UInt16*)&existIndex);
+            ToDoNewRecord(ToDoDB, &todo, gPrefsR.TDNotifyPrefs.todoCategory, (UInt16*)&existIndex);
             // if private is set, make the record private
             //
             ChkNMakePrivateRecord(ToDoDB, existIndex);
+            (*touched)++;
         }
-        (*touched)++;
     }
 
     if (description) MemPtrFree(description);
-    
     return 0;
 }
 
@@ -1340,6 +1385,8 @@ static void UnloadDBNotifyPrefsFieldsMore()
 static void LoadDBNotifyPrefsFields(void)
 {
     FormPtr frm;
+	Char* label;
+	ControlPtr ctl;
 
     if ((frm = FrmGetFormPtr(DateBookNotifyForm)) == 0) return;
 
@@ -1368,6 +1415,13 @@ static void LoadDBNotifyPrefsFields(void)
     
     TimeToAsciiLocal(gPrefsR.DBNotifyPrefs.when, gPreftfmts, gAppErrStr);
     CtlSetLabel(GetObjectPointer(frm, DateBookNotifyFormTime), gAppErrStr);
+
+	// Set the label of the category trigger.
+	ctl = GetObjectPointer (FrmGetActiveForm(), DateBookPopupTrigger);
+	label = (Char *)CtlGetLabel (ctl);
+	
+	CategoryGetName (DatebookDB, gPrefsR.DBNotifyPrefs.apptCategory, label);
+	CategorySetTriggerLabel(ctl, label);
 }
 
 static void UnloadDBNotifyPrefsFields()
@@ -1401,6 +1455,8 @@ static void UnloadDBNotifyPrefsFields()
 static void LoadTDNotifyPrefsFields(void)
 {
     FormPtr frm;
+	Char* label;
+	ControlPtr ctl;
 
     if ((frm = FrmGetFormPtr(ToDoNotifyForm)) == 0) return;
 
@@ -1425,16 +1481,12 @@ static void LoadTDNotifyPrefsFields(void)
     default:
     	break;
     }
-    DisplayCategory(ToDoPopupTrigger, gPrefsR.TDNotifyPrefs.todoCategory, false);
-
-    // set gToDoCategory information
-    //
-    if ((gToDoCategory = CategoryFind(ToDoDB, gPrefsR.TDNotifyPrefs.todoCategory))
-        == dmAllCategories) {
-        MemSet(gPrefsR.TDNotifyPrefs.todoCategory,
-               sizeof(gPrefsR.TDNotifyPrefs.todoCategory), 0);
-        CategoryGetName(ToDoDB, gToDoCategory, gPrefsR.TDNotifyPrefs.todoCategory);
-    }
+	// Set the label of the category trigger.
+	ctl = GetObjectPointer (FrmGetActiveForm(), ToDoPopupTrigger);
+	label = (Char *)CtlGetLabel (ctl);
+	
+	CategoryGetName (ToDoDB, gPrefsR.TDNotifyPrefs.todoCategory, label);
+	CategorySetTriggerLabel(ctl, label);
 }
 
 static void UnloadTDNotifyPrefsFields()
@@ -1489,13 +1541,7 @@ static void LoadCommonPrefsFields(FormPtr frm)
         CtlSetValue(GetObjectPointer(frm, NotifyFormEntryModify), 1);
     }
 
-    if (gPrefsR.private == 1) {
-        CtlSetValue(GetObjectPointer(frm, NotifyFormPrivate), 1);
-    }
-    else {
-        CtlSetValue(GetObjectPointer(frm, NotifyFormPrivate), 0);
-    }
-
+    CtlSetValue(GetObjectPointer(frm, NotifyFormPrivate), gPrefsR.private);
 }
 
 static void UnloadCommonNotifyPrefs(FormPtr frm)

@@ -47,10 +47,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 struct sDBNotifyPrefs 
 {
     char alarm;             // alarm set?
-    char usenote;           // icon?
     int  notifybefore;      // prenotify duration
     int  duration;          // interval of notified records
     TimeType when;          // no-time
+    UInt16 apptCategory;
+    char usenote;           // icon?
     char note[135];          // note field
 };
 
@@ -58,7 +59,7 @@ struct sDBNotifyPrefs
 struct sTDNotifyPrefs 
 {
     char priority;			// priority of TODO
-    char todoCategory[dmCategoryLength];
+    UInt16 todoCategory;
 	char usenote;			// use note?
 	char note[135];			// note field
 };
