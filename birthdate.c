@@ -141,7 +141,6 @@ UInt16 AddrGetBirthdate(DmOpenRef dbP, UInt16 AddrCategory)
                      */
                     UnpackBirthdate(&r, rp);
 
-
                     // original r(in MainDB) not changed
                     //     local change for LineItemType
                     //
@@ -362,19 +361,19 @@ static void UnderscoreToSpace(Char *src)
     }
 }
 
-static void BirthFindKey(PackedBirthDate* r, char **key, Int8* whichKey)
+static void BirthFindKey(PackedBirthDate* r, char **key, Int16* whichKey)
 {
     if (*whichKey == 1) {       // start
         if (r->name[0] == 0) {
             *whichKey = 3;      // end
-            *key =  &r->name[1];
+            *key =  &(r->name[1]);
             return;
         }
         else {
             *whichKey = 2;      // second
             *key = r->name;
             return;
-        }
+       }
     }
     else if (*whichKey == 2) {
         *whichKey = 3;
@@ -382,11 +381,13 @@ static void BirthFindKey(PackedBirthDate* r, char **key, Int8* whichKey)
         return;
     }
     else {
-        *key = NULL;
+        *key = 0;
         return;
     }
 }
 
+// null fields are considered less than others
+//
 static Int16 BirthComparePackedRecords(PackedBirthDate *rec1,
                                      PackedBirthDate *rec2,
                                      Int16 unusedInt,
@@ -394,21 +395,22 @@ static Int16 BirthComparePackedRecords(PackedBirthDate *rec1,
                                      SortRecordInfoPtr unused2,
                                      MemHandle appInfoH)
 {
-    Int8 result;
-    Int8 whichKey1 = 1, whichKey2 = 1;
+    Int16 result;
+    Int16 whichKey1 = 1, whichKey2 = 1;
     char *key1, *key2;
 
     do {
         BirthFindKey(rec1, &key1, &whichKey1);
         BirthFindKey(rec2, &key2, &whichKey2);
 
-        if (key1 == NULL) {
-            if (key2 == NULL) {
-                return 0;
+        if (*key1 == 0) {
+            if (*key2 == 0) {
+                result = 0;
+                return result;
             }
-            else return -1;
+            else result = -1;
         }
-        else if (key2 == NULL) return 1;
+        else if (*key2 == 0) result = 1;
         else {
             result = StrCaselessCompare(key1, key2);
             if (result == 0)
@@ -419,7 +421,7 @@ static Int16 BirthComparePackedRecords(PackedBirthDate *rec1,
     return result;
 }
 
-static Int16 BirthFindSortPosition(DmOpenRef dbP, PackedBirthDate* newRecord)
+static UInt16 BirthFindSortPosition(DmOpenRef dbP, PackedBirthDate* newRecord)
 {
     return DmFindSortPosition(dbP, (void*)newRecord, 0,
                                (DmComparF *)BirthComparePackedRecords, 0);
@@ -429,8 +431,8 @@ static Int16 BirthNewRecord(DmOpenRef dbP, BirthDate *r, Int16 *index)
 {
     MemHandle recordH;
     PackedBirthDate* recordP;
-    Int8 err;
-    Int16 newIndex;
+    Int16 err;
+    UInt16 newIndex;
 
     // 1) and 2) (make a new chunk with the correct size)
     recordH = DmNewHandle(dbP, (Int16)BirthPackedSize(r));
@@ -460,7 +462,7 @@ static Int16 AnalOneRecord(UInt16 addrattr, Char* src,
 {
     Char* p;
     UInt16 index;
-    Int8 err;
+    Int16 err;
     Int16 year, month, day;
 
 	while (*src == ' ' || *src == '\t') src++;     // skip white space
@@ -663,6 +665,8 @@ Int16 UpdateBirthdateDB(DmOpenRef dbP, FormPtr frm)
             
             currIndex++;
         }
+//        DmQuickSort(MainDB, (DmComparF *)BirthComparePackedRecords, 0L);
+
         MemMove(gPrefsR->adrcdate, (char *)&gAdcdate, 4);
         MemMove(gPrefsR->adrmdate, (char *)&gAdmdate, 4);
         gPrefsRdirty = true;

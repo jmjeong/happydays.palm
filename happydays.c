@@ -59,7 +59,7 @@ MemHandle PrefsRecHandle, PrefsRHandle;
 UInt16 PrefsRecIndex;
 struct sPrefsR *gPrefsR;
 struct sPrefsR DefaultPrefsR = {
-    {  '0', '0', '0', '1', '1', '0', 9, 3, -1, {8, 0}, "145" },
+    {  '0', '0', '0', '1', '1', '0', 9, 3, -1, {-1, -1}, "145" },
 #ifdef GERMAN
     {  "Geburtstag", "HD ", '1', '1', 0, dfDMYWithDots },
 #else
@@ -1466,7 +1466,7 @@ static Int16 PerformNotify(BirthDate birth, DateType when,
     Char* description = 0;
     Int16 index;
     ApptDBRecordFlags changedFields;
-    static Char noteField[20];      // (datebk3: 10, AN:9), HD id: 5
+    static Char noteField[20];      // (datebk3: 10, AN:14), HD id: 5
 
     /* Zero the memory */
     MemSet(&datebook, sizeof(ApptDBRecordType), 0);
@@ -1507,7 +1507,7 @@ static Int16 PerformNotify(BirthDate birth, DateType when,
     if (gPrefsR->NotifyPrefs.icon == '1') {     // AN
         StrCopy(noteField, "ICON: ");
         StrCat(noteField, gPrefsR->NotifyPrefs.an_icon);
-        StrCat(noteField, "\n");
+        StrCat(noteField, "\n#AN\n");
     }
 	else if (gPrefsR->NotifyPrefs.icon == '2') {
         StrCopy(noteField, DateBk3IconString());
@@ -1581,7 +1581,7 @@ static Int16 PerformNotify(BirthDate birth, DateType when,
         	}
 		}
 		else if (birth.flag.bits.solar && gPrefsR->NotifyPrefs.duration != 1) {
-			StrPrintF(gAppErrStr, "%d", (birth.date.year + 1904)%100 );
+			StrPrintF(gAppErrStr, "%d", birth.date.year + 1904 );
 			StrNCat(description, gAppErrStr, 1024);
 		}
     }
@@ -1899,7 +1899,7 @@ static void DateBk3CustomDrawTable(MemPtr tableP, Int16 row, Int16 column,
         drawFixel = convertWord(gDateBk3Icon[drawItem][i*2],
                                 gDateBk3Icon[drawItem][i*2+1]);
         for (j=0; j < 8; j++) {
-            if (drawFixel %2) {
+            if (drawFixel & 1) {
                 WinDrawLine(x+8-j, y+i+1, x+8-j, y+i+1);
             }
             drawFixel >>= 1;
@@ -1969,7 +1969,7 @@ static Boolean DateBk3IconLoadTable(FormPtr frm, Boolean redraw)
         }
         TblSetRowSelectable(tableP, row, true);
 
-        // TblSetRowHeight(tableP, row, 10);
+        TblSetRowHeight(tableP, row, 10);
         TblSetRowUsable(tableP, row, true);
     }
 
@@ -2125,7 +2125,7 @@ static Boolean NotifyFormMoreHandleEvent(EventPtr e)
             gPrefsR->NotifyPrefs.datebk3icon =
             e->data.tblEnter.column + e->data.tblEnter.row * 13;
 
-            // handled = true;
+            handled = true;
             break;
         }
     }

@@ -841,7 +841,7 @@ BEGIN
 		UNDERLINED MAXCHARS 3
 
 	LABEL "DateBk3 ICON" ID NotifySettingBk3Label AT (5 PrevBottom+2) 
-    TABLE ID NotifySettingBk3Table AT (7 PrevBottom 130 40) ROWS 4 
+    TABLE ID NotifySettingBk3Table AT (7 PrevBottom 143 40) ROWS 4 
 		COLUMNS 13 COLUMNWIDTHS 10 10 10 10 10 10 10 10 10 10 10 10 10
 
     BUTTON "OK" ID NotifySettingMoreFormOk AT (5 Bottom@135 40 AUTO)
@@ -905,7 +905,7 @@ MODAL
 HELPID AboutHelpString
 BEGIN
     TITLE "HappyDays"
-    LABEL "HappyDays 1.1pre1" AUTOID AT (Center@80 20) FONT 1
+    LABEL "HappyDays 1.1" AUTOID AT (Center@80 20) FONT 1
     LABEL "(c) 1999-2000, JaeMok Jeong"
         AUTOID AT (Center@80 PrevBottom+5) FONT 0
     LABEL "<jmjeong@oopsla.snu.ac.kr>" AUTOID AT (Center@80 PrevBottom)
@@ -928,4 +928,4 @@ APPLICATIONICONNAME 1000 "HappyDays"
 ICON "happydays.pbitm"
 SMALLICON "happydays-small.pbitm"
 
-VERSION 1 "1.1p1"
+VERSION 1 "1.1"
