@@ -51,10 +51,11 @@ Localizations
 <p>
 If you would like to translate HappyDays into your favorite language, please
 <a href="mailto:happydays@jmjeong.com">mail me</a> and let me know.  
-HappyDays has been translated into the following languages:  <br>
 To translate HappyDays into your favorite languge, you need to copy 'translate/english.msg' file into xxx.msg and edit xxx.msg file. Translate the right part(
-i.e. the phase after '=') into your favorite language. See the sample <a href="local/english.msg">english.msg</a> file.<br>
+i.e. the phase after '=') into your favorite language. See the sample <a
+href="local/english.msg">english.msg</a> file.<p>
 
+HappyDays has been translated into the following languages:  <br>
 <ul>
   <li> <a href="ftp://jmjeong.com/pub/happydays/happydays-2.01-ko.zip">
   Korean</a>(2.01) - by Jaemok Jeong<br>
