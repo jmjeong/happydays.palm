@@ -1,7 +1,7 @@
 TRANSLATION "CATALAN"
 BEGIN
     "Translator" = "Paco Rivière"
-    "Translator's email" = "paco@famosos.com"
+    "Translator's email" = "friviere@teleline.es"
 
     "long_notifySettingString" = ""\
     "* Registres\n"\
@@ -23,7 +23,7 @@ BEGIN
       "repetir per a 5 anys en registres lunars.\n\n"
 
 	"long_notifySettingMoreString" = ""\
-      "Per al número d'icone d'Action Names consulti el seu manual. "\
+      "Per al número d'icona d'Action Names consulti el seu manual. "\
       "Les icones de DateBk3 es llegeixen del bloc de notes. "\
       "Si no existeix l'entrada de DateBk3 en el bloc de notes no es mostra informació.\n"
 
@@ -48,11 +48,11 @@ BEGIN
       "Formats:\n"\
       " [-)|#)]Data\n"\
       " -) calendari lunar\n"\
-      " #) calendari lunar de trespas\n\n"\
+      " #) calendari lunar de traspàs\n\n"\
       "S'utilitza el format de data de les preferències del sistema. "\
       "No cal indicar l'any. Si escriu un any menor a 100 s'assumeix del segle XX. "\
       "Si no està segur del format de l'any, escrigui'l en la forma AAAA (com 1970).\n\n"\
-      "Per a entrades múltiples consulti el manual.\n"
+      "Per les entrades múltiples consulti el manual.\n"
 
     "long_cleanupAlertString" = ""\
     "Les notificacions es consideren HappyDays si tenen "\
@@ -62,15 +62,15 @@ BEGIN
 
     "long_prefFormString" = ""\
 	"* Format de data alternatiu\n"\
-	"Controli l'interpretació del camp personalitzat de Naixement. "\
+	"Controla l'interpretació del camp personalitzat de Naixement. "\
 	"Si no s'indica, és el mateix que les preferències de data del sistema.\n\n"\
-	"* Cercar en Notes\n"\
+	"* Cercar a les Notes\n"\
 	"Trii aquesta opció per a cercar en el camp de notes.\n\n"\
       "* Preferir Calendari Lunar \n"\
       "Si es selecciona, la linea puntejada es dibuixa junt a la data lunar.\n\n"\
 	"* Format de Notificació\n"\
 	"La descripció del format usat per a la notificació.\n\n"\
-      "* Camp pers:\n"\
+      "* Camp personal.:\n"\
       "El nom del camp personalitzat utilitzat per a les dades.\n\n"\
       "* Ident. HappyDays\n"\
       "Identificador utilitzat per a notificació i neteja.\n"
@@ -81,7 +81,7 @@ BEGIN
 
     "long_sl2lnString" = ""\
         "-) significa mes lunar normal\n"\
-        "#) significa mes lunar de trespas"
+        "#) significa mes lunar de traspàs"
 
     "long_cantFindAddrString" = ""\
     "No es possible trobar cap camp personalitzat: '%s'\n"\
@@ -90,7 +90,7 @@ BEGIN
     "Select Time" = "Establir hora"
     "No Time" = "Sense hora"
     "Invalid input date" = "Data invàlida"
-    "Export to Memo Pad is completed." = "Ha acabat l'exportació a Bloc de notes."
+    "Export to Memo Pad is completed." = "Ha acabat l'exportació al Bloc de notes."
 
     "SUN"   = "DIU"
     "MON"   = "DIL"
@@ -120,11 +120,11 @@ BEGIN
     "Goto" = "Ir a"
 
     "Utilities" = "Utilitats"
-    "Date Book Notify" = "Notificar en Agenda"
+    "Date Book Notify" = "Notificar a l'Agenda"
     "Cleanup Date Book"  = "Netejar Agenda"
-    "To Do Notify" = "Notificar en Tasques"
+    "To Do Notify" = "Notificar a les Tasques"
     "Cleanup To Do"  = "Netejar Tasques"
-    "Export to Memo Pad" = "Exportar a Bloc de notes"
+    "Export to Memo Pad" = "Exportar al Bloc de notes"
     "Solar to Lunar" = "Solar -> Lunar"
     "Lunar to Solar" = "Lunar -> Solar"
 
@@ -142,13 +142,13 @@ BEGIN
     "Graffiti" = "Ajuda de Graffiti"
 
     "HappyDays Preferences" = "Preferències HappyDays"
-    "Custom field:" = "Camp pers.:"
+    "Custom field:" = "Camp personal.:"
     "HappyDays ID:" = "Ident. HappyDays:"
     "Emphasize Lunar Date" = "Preferir Calendari Lunar"
 
     "OK" = "Fet"
     "Cancel" = "Cancelar"
-    "Icon" = "Icone"
+    "Icon" = "Icona"
 
     "Solar to Lunar Convert" = "Solar -> Lunar"
     "Enter Solar date:" = "Indiqui la data Solar:"
@@ -159,7 +159,7 @@ BEGIN
 
     "Lunar to Solar Convert" = "Lunar -> Solar."
     "Enter Lunar date:" = "Indiqui la data Lunar:"
-    "Leap" = "De trespas"
+    "Leap" = "De traspàs"
     "Result Solar date:" = "Data Solar resultat:"
 
     "Records:" = "Registres:"
@@ -228,12 +228,12 @@ BEGIN
     "Y.M.D" = "A.M.D"
     "Y-M-D" = "A-M-D"
 
-    "Date Book Icon" = "Icone d'Agenda"  
+    "Date Book Icon" = "Icona d'Agenda"  
       "Icon Support" = "Suport d'Icones"
       "AN" = "AN"  
       "DateBk3" = "DBk3"  
-      "AN Icon Number:" = "Número d'Icone AN:"
-      "DateBk3 Icon:" = "Icone DateBk3:"
+      "AN Icon Number:" = "Número d'Icona AN:"
+      "DateBk3 Icon:" = "Icona DateBk3:"
 
     "Days" = "Dies"
 	"Datebook" = "Agenda"
@@ -245,18 +245,18 @@ BEGIN
 
 
       "Notify Format:" = "Format de Notificació:"
-      "[Last, First] E(1) Year" = "[Cognoms, Nom] E(1) Any"
-	"[First Last] E(1) Year" = "[Nom Cognoms] E(1) Any"
+      "[Last, First] E(1) Year" = "[Cognoms, Nom] R(1) Any"
+	"[First Last] E(1) Year" = "[Nom Cognoms] R(1) Any"
 	"Event - Last, First Year" = "Registre - Cognoms, Nom Any"
 	"Event - First Last Year" = "Registre - Nom Cognoms Any"
 	"First Last Year" = "Nom Cognoms Any"
 
     
-      "Processing" = "Procesando"
+      "Processing" = "Processant"
 	"Processed : " = "Processat : "	
 
       "Name" = "Nom"
 	"Date" = "Data"
 	"Age"  = "Edat"
 
-END
+END 
