@@ -13,6 +13,7 @@ STRING ID SelectTimeString  "Select Time"
 STRING ID NoTimeString      "No Time"
 STRING ID ExportDoneString  "Export to Memo Pad is completed."
 STRING ID Sl2LnFormHelpString "long_sl2lnString"
+STRING ID DateCheckHelpString "long_checkDateString"
 
 STRING ID SunString     "SUN"
 STRING ID MonString     "MON" 
@@ -398,6 +399,16 @@ BEGIN
     MESSAGE "^1"
     BUTTONS "OK"
 END
+
+ALERT ID DateCheck CONFIRMATION
+DEFAULTBUTTON 1
+HELPID DateCheckHelpString
+BEGIN
+    TITLE "Date Check"
+    MESSAGE "Are you sure this is the current date?\n^1"
+    BUTTONS "Yes" "No"
+END
+
 
 ALERT ID ExportAlert CONFIRMATION
 DEFAULTBUTTON 1

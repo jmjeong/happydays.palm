@@ -18,10 +18,12 @@
 
 * Refine the code
 
+* consider lunar date in age calculation routine
+
 * Replace the start form into 'progress widget'
 
 * Write the detailed manual with screenshot
 
 * Support 'last Sunday of September' code 
 
-   
+* Support Datebk4 feature 

@@ -108,6 +108,11 @@ BEGIN
     "* HappyDays ID\n"\
     "Used for Notify and Cleanup\n"
 
+    "long_checkDateString" = ""\
+    "As HappyDays algorithms use the current date for various date "\
+    "calculation, incorrect data value would mislead it."
+
+
     "long_removeConfirmString" = ""\
     "Are you sure you want to remove all "\
     "HappyDays notify entries?"
@@ -299,6 +304,7 @@ STRING ID SelectTimeString  "Select Time"
 STRING ID NoTimeString      "No Time"
 STRING ID ExportDoneString  "Export to Memo Pad is completed."
 STRING ID Sl2LnFormHelpString "long_sl2lnString"
+STRING ID DateCheckHelpString "long_checkDateString"
 
 STRING ID SunString     "SUN"
 STRING ID MonString     "MON" 
@@ -384,7 +390,7 @@ BEGIN
 	FIELD ID ViewFormCategory AT (RIGHT@160 1 65 AUTO) RIGHTALIGN 
 			NONEDITABLE FONT 0
                         
-	FIELD ID ViewFormName AT (0 25 160 AUTO) NONEDITABLE FONT 1
+	FIELD ID ViewFormName AT (0 25 160 AUTO) NONEDITABLE FONT 2
     TABLE ID ViewFormTable AT (0 PrevBottom+10 160 11*7)  
 			ROWS 7 COLUMNS 2 COLUMNWIDTHS 50 110
 
@@ -684,6 +690,16 @@ BEGIN
     MESSAGE "^1"
     BUTTONS "OK"
 END
+
+ALERT ID DateCheck CONFIRMATION
+DEFAULTBUTTON 1
+HELPID DateCheckHelpString
+BEGIN
+    TITLE "Date Check"
+    MESSAGE "Are you sure this is the current date?\n^1"
+    BUTTONS "Yes" "No"
+END
+
 
 ALERT ID ExportAlert CONFIRMATION
 DEFAULTBUTTON 1

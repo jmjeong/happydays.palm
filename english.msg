@@ -88,6 +88,11 @@ BEGIN
     "* HappyDays ID\n"\
     "Used for Notify and Cleanup\n"
 
+    "long_checkDateString" = ""\
+    "As HappyDays algorithms use the current date for various date "\
+    "calculation, incorrect data value would mislead it."
+
+
     "long_removeConfirmString" = ""\
     "Are you sure you want to remove all "\
     "HappyDays notify entries?"

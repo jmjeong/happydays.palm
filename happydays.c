@@ -39,6 +39,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // 	Global variable
 ////////////////////////////////////////////////////////////////////
 
+Boolean gDateCheck = true;      // when program starts, check date
 MemHandle gTableRowHandle;
 
 Int16 gBirthDateField;
@@ -244,6 +245,54 @@ static void EventLoop(void)
     } while (e.eType != appStopEvent && !gProgramExit);
 }
 
+Int16 GotoPref()
+{
+    GoToParamsPtr theGotoPointer;
+    DmSearchStateType searchInfo;
+    UInt16 cardNo;
+    LocalID dbID;
+    UInt32 prefID = 'pref';
+
+    theGotoPointer = MemPtrNew(sizeof(GoToParamsType));
+    if (!theGotoPointer) return -1;
+    /* Set the owner of the pointer to be the
+       system. This is required because all memory
+       allocated by our application is freed when
+       the application quits. Our application will
+       quit the next time through our event
+       handler.
+    */
+    
+    
+    if ((MemPtrSetOwner(theGotoPointer, 0) == 0) &&
+        (DmGetNextDatabaseByTypeCreator(true, &searchInfo, 0,
+                                        prefID, true, &cardNo, &dbID)
+         == 0)) {
+
+        // copy all the goto information into the
+        // GotoParamsPtr structure
+        theGotoPointer->searchStrLen = 0;
+        theGotoPointer->dbCardNo = cardNo;
+        theGotoPointer->dbID = dbID;
+        theGotoPointer->recordNum = 0;
+        theGotoPointer->matchPos = 0;
+        theGotoPointer->matchFieldNum = 0;
+        theGotoPointer->matchCustom = 0;
+
+        if ((DmGetNextDatabaseByTypeCreator
+             (true, &searchInfo,
+            sysFileTApplication, prefID, true, &cardNo, &dbID) == 0)) {
+            SysUIAppSwitch(cardNo, dbID,
+                           sysAppLaunchCmdGoTo,
+                           (MemPtr) theGotoPointer);
+            return 0;
+        }
+    }
+
+	MemPtrFree(theGotoPointer);
+    return -1;
+}
+
 /* Get preferences, open (or create) app database */
 static UInt16 StartApplication(void)
 {
@@ -253,6 +302,18 @@ static UInt16 StartApplication(void)
     
 	if (_TRGVGAFeaturePresent(&version)) gbVgaExists = true;
 	else gbVgaExists = false;
+
+    if(gbVgaExists)
+    	VgaSetScreenMode(screenMode1To1, rotateModeNone);
+
+    // set current date to  the starting date
+	DateSecondsToDate(TimGetSeconds(), &gStartDate);
+
+    if (gDateCheck && FrmCustomAlert(DateCheck, "  ") != 0) {
+        GotoPref();
+    }
+    else gDateCheck = false;
+    
 
     if ((err = OpenDatabases()) < 0) {
         if (!DatebookDB) {
@@ -268,11 +329,6 @@ static UInt16 StartApplication(void)
         freememories();
         return 1;
     }
-	// set current date to  the starting date
-	DateSecondsToDate(TimGetSeconds(), &gStartDate);
-
-    if(gbVgaExists)
-    	VgaSetScreenMode(screenMode1To1, rotateModeNone);
 
     return 0;
 }
