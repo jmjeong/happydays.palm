@@ -2,35 +2,34 @@ TRANSLATION "CHINESE"
 BEGIN
     "long_notifySettingMoreString" = ""\
     "关于 AN 图标编号，请参考 Action Names 说明书"\
-    "DateBk3 图标将由 Memo Pad 处取得。"\
+    "DateBk3 图标将由记事本处取得。"\
     "假如没有设定，则不会显示图标。\n"
 
     "long_customErrorString" = ""\
     "'Birthday' 为预设的自订栏目名称。你可于'喜好设定'中更改此名称\n\n"\
-    "注意：你需先在 Address Book 内使用 'Options/Rename Custom Fields' "\
+    "注意：你需先在地址簿内使用 'Options/Rename Custom Fields' "\
     "以设定以上自订栏目名称\n"
 
     "long_aboutString" = ""\
-    "'HappyDays' 能帮助你纪录每个重要事件的日期(例如你亲朋戚友的生日及周年纪念等)\n\n"\
+    "HappyDays 能帮助你纪录每个重要事件的日期(例如你亲朋戚友的生日及周年纪念等)\n\n"\
     "详细使用方法请参阅 index.html 及 manual.html。\n\n"\
     "HappyDays 是根据 GNU GPL2.0 发行的软件。\n"
 
     "long_cleanupAlertString" = ""\
-    "假如你选择清除，任何带有 HappyDays 记号 (即 ' {HappyDays ID} ') "\
-    "的日志将被清除。\n"
+    "假如你选择清除，任何带有 HappyDays 记号的日志将被清除。\n"
 
     "long_sl2lnString" = ""\
     "-) 标示普通月份\n"\
     "#) 标示润月"
 
     "long_cantFindAddrString" = ""\
-    "在 Address Book 中找不到 '%s' 栏目\n"\
-    "请在 Address Book 内设定以上自订栏目名称\n"
+    "在地址簿中找不到 '%s' 栏目\n"\
+    "请在地址簿内设定以上自订栏目名称\n"
 
     "Select Time" = "Select Time"
     "No Time" = "不指定时间"
     "Invalid input date" = "不正确的日期"
-    "Export to Memo Pad is completed." = "完成 Memo Pad 汇出。"
+    "Export to Memo Pad is completed." = "完成汇出记事本。"
 
     "SUN"   = "星期日"
     "MON"   = "星期一"
@@ -53,19 +52,19 @@ BEGIN
 
     "HappyDays View" = "HappyDays 检视"
     "Done"  = "完成"
-    "DB" = "DateBk"
-    "TD" = "Todo"
-    "Goto" = "Addr"
+    "DB" = "行事历"
+    "TD" = "待办表"
+    "Goto" = "地址簿"
 
     "Utilities" = "工具"
-    "Date Book Notify" = "Date Book 提示"
-    "Cleanup Date Book"  = "清理 Date Book"
-    "To Do Notify" = "To Do List 提示"
-    "Cleanup To Do"  = "清理 To Do List"
-    "Export to Memo Pad" = "汇出到 MemoPad"
+    "Date Book Notify" = "行事历提示"
+    "Cleanup Date Book"  = "清理行事历"
+    "To Do Notify" = "待办表提示"
+    "Cleanup To Do"  = "清理待办表"
+    "Export to Memo Pad" = "汇出到记事本"
     "Solar to Lunar" = "阳历转阴历"
     "Lunar to Solar" = "阴历转阳历"
-    "Rescan Address Book" = "重新检查 Address Book"
+    "Rescan Address Book" = "重新检查地址簿"
 
     "Options" = "选项"
     "Font..." = "字型"
@@ -89,7 +88,7 @@ BEGIN
     "Custom field:" = "自订栏目："
     "Instead of system date format" = "不使用系统日期格式"
     "Use" = "并改用"
-/*
+
     "M/D/Y" = "M/D/Y"
     "D/M/Y" = "D/M/Y"
     "D.M.Y" = "D.M.Y"
@@ -97,7 +96,7 @@ BEGIN
     "Y/M/D" = "Y/M/D"
     "Y.M.D" = "Y.M.D"
     "Y-M-D" = "Y-M-D"
-*/
+/*
     "M/D/Y" = "月/日/年"
     "D/M/Y" = "日/月/年"
     "D.M.Y" = "日.月.年"
@@ -105,8 +104,8 @@ BEGIN
     "Y/M/D" = "年/月/日"
     "Y.M.D" = "年.月.日"
     "Y-M-D" = "年-月-日"
-
-    "Address Autoscan" = "Address 自动检查"
+*/
+    "Address Autoscan" = "自动检查地址簿"
     "Always" = "永远"
     "Ask" = "先问我"
     "Never" = "永不"
@@ -118,9 +117,8 @@ BEGIN
     "Event - First Last Year" = "事件 - 名 姓 年"
     "First Last Year" = "名 姓 年"
 
-    "Address Book" = "Address Book"
+    "Address Book" = "地址簿"
     "Bulit-in" = "内建"
-
 
 /* Display preferences */
     "Emphasize Lunar Date" = "突显阴历事件"
@@ -170,7 +168,7 @@ BEGIN
     "long_notifywarningString" = "^1: 你是否想建立 ^2 个 HappyDays 纪录的提示？"
 
 /* Date Book Icon */
-    "Date Book Icon" = "Date Book 图标"
+    "Date Book Icon" = "行事历图标"
     "Icon Support" = "图标支持"
     "AN" = "AN"
     "DateBk3" = "DateBook3"
@@ -187,7 +185,7 @@ BEGIN
 
     "HappyDays Export" = "HappyDays 汇出"
     "Would you like to export HappyDays List to Memo Pad?" = ""\
-      "要将 HappyDays 的资料汇出 Memo Pad？"
+      "要将 HappyDays 的资料汇出记事本？"
 
     "Custom Field Error" = "自订栏目错误"
     "Help" = "说明"
@@ -208,29 +206,30 @@ BEGIN
 
     "HappyDays Export List" = "HappyDays 汇出列表"
     "(not exist in this year)" = "(本年度没有)"
-    "Please run Date Book once first." = "请先执行 Date Book 一次"
+    "Please run Date Book once first." = "请先执行一次行事历"
 
     "Days" = "日"
-    "Date Book" = "Date Book"
-    "To Do" = "To Do"
-    "Scan note field" = "连 Note 栏目也一并检查"
+    "Date Book" = "行事历"
+    "To Do" = "待办表"
+    "Scan note field" = "连备注栏目也一并检查"
     "%d day(s) left" = "尚余%d日"
     "%d day(s) passed" = "已经过了%d日"
 
     "Processing" = "处理中"
     "Processed : " = "处理了："
 
-    "Address Change" = "Address 重新检查"
+    "Address Change" = "重新检查地址簿"
     "AddressDB is changed. \nDo you want to rescan it?"= ""\
-    "Address Book 资料曾被更新。 \n你要 HappyDays 重新检查？"
+    "地址簿数据曾被更新。 \n你要让 HappyDays 重新检查？"
 
 /* HappyDays view */
-	"Type:" = "事件类别："
-	"Next Date:" = "下一日期："
-	"Origin:" = "原本日期："
-	"Age:" = "周年岁数："
-	"UpTo Date:" = "距下一次："
+	"Type:" = "事件类别"
+	"Next Date:" = "下一日期"
+	"Origin:" = "原本日期"
+	"Age:" = "周年岁数"
+	"UpTo Date:" = "距下一次"
+	/* Daitau: the following lines should be localized as well */
+	"%d days left" = "尚余%d日"
 	"%dY %dM %dD (%d)" = "%d年 %d月 %d日 (%d)"
 END
-
 
