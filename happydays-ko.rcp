@@ -329,6 +329,8 @@ STRING ID MainHdrNameStr		"Name"
 STRING ID MainHdrDateStr		"Date"
 STRING ID MainHdrAgeStr			"Age"
 
+STRING ID FindHeaderString		"HappyDays"
+
 FORM StartForm AT (0 0 160 160)
 NOFRAME
 SAVEBEHIND
@@ -719,10 +721,10 @@ BEGIN
     TITLE "About HappyDays"
 
 	FORMBITMAP AT (6 18) BITMAP ID_BitmapIcon USABLE 
-    LABEL "HappyDays 1.4" AUTOID AT (PrevRight+38 PrevTop) FONT 1
+    LABEL "HappyDays 1.41" AUTOID AT (PrevRight+38 PrevTop) FONT 1
     LABEL "GPL free software"
         AUTOID AT (PrevLeft PrevTop+ABOUT_LINE_SPACING) FONT 0
-    LABEL "(c) 1999-2000 JaeMok Jeong"
+    LABEL "(c) 1999-2001 JaeMok Jeong"
         AUTOID AT (Center PrevTop+ABOUT_LINE_SPACING2) FONT 0
 	LABEL "E-Mail & Web Page" AUTOID AT (CENTER PrevTop+ABOUT_LINE_SPACING) FONT 1
     LABEL "jmjeong@oopsla.snu.ac.kr" AUTOID AT 	
@@ -762,4 +764,4 @@ SMALLICONFAMILY
 	TRANSPARENT 204 204 0
 
 APPLICATIONICONNAME 1000 "HappyDays"
-VERSION ID 1 "1.4"
+VERSION ID 1 "1.41"

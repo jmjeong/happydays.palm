@@ -52,8 +52,7 @@ BEGIN
       "你亦可以寫月份來尋找該月之紀錄。\n\n"
 
     "long_cleanupAlertString" = ""\
-      "假如你選擇清除，所有帶有 HappyDays 記號 (包括你自己輸入) 
-的日誌將被清除\n"
+      "假如你選擇清除，所有帶有 HappyDays 記號 (包括你自己輸入) 的日誌將被清除\n"
 
     "long_prefFormString" = ""\
       "* 不使用系統日期格式\n"\
