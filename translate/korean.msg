@@ -141,7 +141,7 @@ BEGIN
     "Scan note field" =  "주소록의 노트 필드 읽기"
     "Ignore record with prefix '!'" =  "! 로 시작하는 레코드 무시"
 
-    "Address Autoscan" =  "주소록 자동읽기"
+    "Address Autoscan:" =  "주소록 자동읽기:"
     "Always" =  "항상"
     "Ask" =  "묻기"
     "Never" =  "안함"

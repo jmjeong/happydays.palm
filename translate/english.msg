@@ -101,6 +101,7 @@ BEGIN
     "Notify Format:" = "Notify Format:"  
     "[Last, First] E(1) Year" = "[Last, First] E(1) Year"  
     "[First Last] E(1) Year" = "[First Last] E(1) Year"  
+  	"[First] E(1) Year" = "[First] E(1) Year" 
     "Event - Last, First Year" = "Event - Last, First Year"  
     "Event - First Last Year" = "Event - First Last Year"  
     "First Last Year" = "First Last Year"  

@@ -1,42 +1,46 @@
 TRANSLATION "FRENCH"
 BEGIN
-    "sKst"= "sKst"
 
-    "long_notifySettingMoreString" =  ""\
-	"Réservé aux utilisateurs avancés.\n\n"\
-	"Cette note est utilisée pour des applications tierces de remplacement de l'Agenda "\
-	"telles que Action Names, DateBk3/4.\n\n"\
-	"Vous pouvez définir une icône, une police et d'autres paramètres en utilisant cette note.\n\n"\
-	"Pour plus d'informations, reportez-vous au manuel.\n"
-    "HappyDays"= "HappyDays"
-    "long_customErrorString" =  ""\
-    "'Birthday' est le nom par défaut du champ personnalisé."\
-    "Pour définir un autre nom de champ par défaut,"\
-    " tapez 'Préférences'.\n\n"\
-    " IMPORTANT : vous devez lancer le Carnet d'adresses et sélectionner 'Options/"\
-    "Renommer champs personnalisés' pour renommer l'un des champs personnalisés en 'Birthday'"\
-    " ou tout autre chaîne que vous avez saisie dans les Préférences de "\
-    "HappyDays.\n"
-    "long_aboutString" =  ""\
+  "long_notifySettingMoreString" =  ""\
+   	"Réservé aux utilisateurs avancés.\n\n"\
+   	"Cette note est utilisée pour des applications tierces remplaçant l'Agenda "\
+   	"telles que Action Names, DateBk3/4.\n\n"\
+   	"Vous pouvez définir une icône, une police et d'autres paramètres en utilisant cette note.\n\n"\
+   	"Pour plus d'informations, reportez-vous au manuel.\n"
+
+  "long_aboutString" =  ""\
     "'HappyDays' vous évite d'oublier les anniversaires et les fêtes "\
     "de vos amis et des membres de votre famille, ainsi que d'autres événements.\n\n"\
     "Reportez-vous aux fichiers index.html et manual.html pour des informations détaillées "\
     "sur la façon d'utiliser HappyDays\n\n"\
     "HappyDays est distribué selon les conditions générales GNU "\
     "Public License version 2.0.\n"
-    "long_cleanupAlertString" =  ""\
-    "Les enregistrements de notification (événements, notes ou tâches) de HappyDays sont reconnus s'ils comportent l'identifiant HappyDays "\
-	"{ID HappyDays} dans le champ Note. "
-    "long_removeConfirmString" =  ""\
-    "Etes-vous sûr de vouloir supprimer tous "\
-    "les enregistrements de notification HappyDays ?"
-    "Invalid input date" =  "Date non valide"
-    "Select Time" =  "Choix heure"
-    "No Time" =  "Sans heure"
-    "Export to Memo Pad is completed." =  "L'export vers le Bloc-notes est terminé."
-    "long_sl2lnString" =  ""\
-        "-) signifie mois lunaire plein\n"\
-        "#) signifie mois lunaire intercalaire"
+
+ "long_customErrorString" =  ""\
+    "'Birthday' est le nom par défaut du champ personnalisé."\
+    "Pour définir un autre nom de champ par défaut,"\
+    " tapez 'Préférences'.\n\n"\
+    " Important : vous devez lancer le Carnet d'adresses et sélectionner 'Options/"\
+    "Renommer champs personnalisés' pour renommer l'un des champs personnalisés en 'Birthday'"\
+    " ou tout autre chaîne que vous avez saisie dans les Préférences de "\
+    "HappyDays.\n"
+
+  "long_cleanupAlertString" =  ""\
+    "Les enregistrements de notification (événements, notes ou tâches) de HappyDays"\
+    " sont reconnus s'ils comportent l'identifiant HappyDays dans le champ Note.\n"
+  
+  "long_removeConfirmString" =  ""\
+
+  "Etes-vous sûr de vouloir supprimer tous "\
+  "les enregistrements de notification HappyDays ?"
+  "Invalid input date" =  "Date non valide"
+  "Select Time" =  "Choix heure"
+  "No Time" =  "Sans heure"
+  "Export to Memo Pad is completed." =  "L'export vers le Bloc-notes est terminé."
+
+  "long_sl2lnString" =  ""\
+    "-) signifie mois lunaire plein\n"\
+    "#) signifie mois lunaire intercalaire"
 
     "SUN" =  "Dim"
     "MON" =  "Lun"
@@ -83,15 +87,13 @@ BEGIN
     "Origin:" =  "Origine:"
     "Age:" =  "Age:"
     "UpTo Date:" =  "A ce jour:"
-    "BioRhythm:"= "BioRythme"
+    "BioRhythm:"= "Biorythme"
     "P(%s) E(%s) I(%s)"= "P(%s) E(%s) I(%s)"
 
     "Datebook Note"= "Note agenda"
     "ToDo Note"= "Note tâches"
 
     "Collecting Information" =  "Recherche d'informations"
-
-    "HappyDays "= "HappyDays "
 
     "Look Up:" =  "Aller à:"
     "N"= "N"
@@ -131,17 +133,13 @@ BEGIN
 
     "Edit" =  "Edition"
     "Undo" =  "Annuler"
-    "U"= "U"
     "Cut" =  "Couper"
-    "X"= "X"
     "Copy" =  "Copier" 
     "Paste" =  "Coller" 
-    "P"= "P"
     "Select All" =  "Sélectionner tout" 
     "Keyboard" =  "Clavier" 
     "K"= "C"
     "Graffiti" =  "Aide Graffiti"
-    "G"= "G"
 
     "Emphasize Lunar Date" =  "Souligner les dates lunaires"
     "Display solar/lunar info in View"= "Afficher info solaire/lunaire dans la vue"
@@ -262,7 +260,6 @@ BEGIN
     "^1: ^2 HappyDays notify entries removed." =  ""\
     	"^1: ^2 enregistrements de notification HappyDays supprimé(s)." 
 
-    "HappyDays 2.21"= "Happydays 2.21"
     "GPL free software" =  "Logiciel gratuit GPL"
     "(c) 1999-2002 Jaemok Jeong"= "(c) 1999-2002 Jaemok Jeong"
 
@@ -278,19 +275,6 @@ BEGIN
     "Processing" =  "Traitement"  
     "Processed : " =  "Traité(s) : " 
 
-    "bitmap/largeIconBW.bmp"= "bitmap/largeIconBW.bmp"
-
-    "bitmap/mediumIconBW.bmp"= "bitmap/mediumIconBW.bmp"
-
-    "bitmap/largeInvertedIconBW.bmp"= "bitmap/largeInvertedIconBW.bmp"
-
-    "bitmap/HD large.bmp"= "bitmap/HD large.bmp"
-    "bitmap/HD large color.bmp"= "bitmap/HD large color.bmp"
-
-    "bitmap/HD small.bmp"= "bitmap/HD small.bmp"
-    "bitmap/HD small color.bmp"= "bitmap/HD small color.bmp"
-
-    "2.21"= "2.21"
 END
 
 

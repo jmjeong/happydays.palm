@@ -223,10 +223,10 @@ BEGIN
 	CHECKBOX "Ignore record with prefix '!'" ID PrefFormIgnorePrefix
 		AT (10 PrevBottom+1 AUTO AUTO)
         
-    LABEL "Address Autoscan" AUTOID AT (10 PrevBottom+1)
+    LABEL "Address Autoscan:" AUTOID AT (10 PrevBottom+1)
     LIST "Always" "Ask" "Never"
 		ID PrefFormAutoRescan
-		AT (PREVRIGHT PREVTOP 50 AUTO) VISIBLEITEMS 3 NONUSABLE
+		AT (PREVRIGHT+4 PREVTOP 50 AUTO) VISIBLEITEMS 3 NONUSABLE
     POPUPTRIGGER "" ID PrefFormRescanTrigger
                  AT (PREVLEFT PREVTOP-1 50 AUTO) LEFTANCHOR
     POPUPLIST ID PrefFormRescanTrigger PrefFormAutoRescan
@@ -251,8 +251,9 @@ BEGIN
 			"Address Plus(+)"
 			"Super Names" 
 			"TealPhone"
+			"HanAD"
          ID PrefFormAddress
-         AT (PrevRight+4 PREVTOP-45 70 AUTO) VISIBLEITEMS 6 NONUSABLE
+         AT (PrevRight+4 PREVTOP-45 70 AUTO) VISIBLEITEMS 7 NONUSABLE
     POPUPTRIGGER "" ID PrefFormAddrTrigger
                  AT (PrevLeft PrevTop+44 40 13) LEFTANCHOR
     POPUPLIST ID PrefFormAddrTrigger PrefFormAddress
@@ -493,7 +494,7 @@ BEGIN
     TITLE "About HappyDays"
 
 	FORMBITMAP AT (6 18) BITMAP ID_BitmapIcon USABLE 
-    LABEL "HappyDays 2.26" AUTOID AT (PrevRight+38 PrevTop) FONT 1
+    LABEL "HappyDays 2.27" AUTOID AT (PrevRight+38 PrevTop) FONT 1
     LABEL "GPL free software"
         AUTOID AT (PrevLeft PrevTop+ABOUT_LINE_SPACING) FONT 0
     LABEL "(c) 1999-2003 Jaemok Jeong"
@@ -563,4 +564,4 @@ SMALLICONFAMILY
 	TRANSPARENT 192 192 0
 
 APPLICATIONICONNAME 1000 "HappyDays"
-VERSION ID 1 "2.26"
+VERSION ID 1 "2.27"

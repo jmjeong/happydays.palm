@@ -140,7 +140,7 @@ BEGIN
     "Scan note field" =  "Notiz auswerten"
     "Ignore record with prefix '!'" =  "Einträge mit '!' ignorieren"
 
-    "Address Autoscan" =  "Adressbuch Autoscan"
+    "Address Autoscan:" =  "Adressbuch Autoscan:"
     "Always" =  "immer"
     "Ask" =  "fragen"
     "Never" =  "nie"

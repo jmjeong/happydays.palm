@@ -1,6 +1,6 @@
 /*
 HappyDays - A Birthday displayer for the PalmPilot
-Copyright (C) 1999-2001 JaeMok Jeong
+Copyright (C) 1999-2003 JaeMok Jeong
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -381,7 +381,8 @@ UInt32 AddrGotoCreatorId[] = {
     'CiAe',         // AddressBkR
 	'addp', 		// Address Plus(+)
     'SNms',         // Super Names
-    'TlPh'          // Teal Phone
+    'TlPh',         // Teal Phone
+	'HnAD'			// HanAD
 };
 
 Int16 GotoAddress(Int16 index)
