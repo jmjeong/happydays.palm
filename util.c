@@ -18,9 +18,125 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 #include <PalmOS.h>
+#include <SonyCLIE.h>
 #include "util.h"
 #include "happydaysRsc.h"
 #include "calendar.h"
+
+
+/***********************************************************************
+ * FUNCTION:    ResizeSilk
+ * DESCRIPTION: resizes the virtual silkscreen to the specified size
+ * PARAMETERS:  silkRefNum - reference number to the Silk Manager library
+ *              size       - the desired silkscreen size;
+ *                           must be vskResizeMax, vskResizeMin, or
+ *                             vskResizeNone
+ * RETURNS:     Err value
+ ***********************************************************************/
+Err ResizeSilk(UInt16 silkRefNum, UInt16 size)
+{
+    Err error = errNone;
+    UInt16 silkMgrVersion = VskGetAPIVersion(silkRefNum);
+    if (silkMgrVersion < 2)
+    {
+        error = SilkLibResizeDispWin(silkRefNum, size);
+    }
+    else
+    {
+        error = VskSetState(silkRefNum, vskStateResize, size);
+    }
+    return error;
+}
+
+/***********************************************************************
+ * FUNCTION:    EnableSilkResize
+ * DESCRIPTION: enables or disables silkscreen resizing
+ * PARAMETERS:  silkRefNum - reference number to the Silk Manager library
+ *              state      - the resize state to enable;
+ *                           must be a vskResizeDisable or a combination of
+ *                             the vskResizeVertically and
+ *                             vskResizeHorizontally bit flags
+ * RETURNS:     Err value
+ ***********************************************************************/
+Err EnableSilkResize(UInt16 silkRefNum, UInt16 state)
+{
+    Err error = errNone;
+    UInt16 silkMgrVersion = VskGetAPIVersion(silkRefNum);
+    if (silkMgrVersion < 2)
+    {
+        if (state & vskResizeVertically)
+        {
+            error = SilkLibEnableResize(silkRefNum);
+        }
+        else if (state == vskResizeDisable)
+        {
+            error = SilkLibDisableResize(silkRefNum);
+        }
+    }
+    else
+    {
+        if (silkMgrVersion < 3)
+        {
+            // versions of the silk manager earlier than 3 do not recognize
+            // the vskResizeHorizontally bit
+            state &= vskResizeVertically;
+        }
+        error = VskSetState(silkRefNum, vskStateEnable, state);
+    }
+    return error;
+}
+
+UInt16 GetSilkPos(UInt16 silkRefNum)
+{
+    // these values are no longer defined in SonySilkLib.h
+#ifndef stdSilkHeight
+#define stdSilkHeight   (65)
+#define stdStatusHeight (15)
+#endif
+    
+    UInt16 silkMgrVersion = VskGetAPIVersion(silkRefNum);
+    if (silkMgrVersion < 2)
+    {
+        Coord w, h;
+        UInt32 winMgrVersion;
+
+        // on Sony High-Resolution devices, WinGetDisplayExtent always returns
+        // low-res (standard) values...
+        WinGetDisplayExtent(&w, &h);
+
+        // ... however, on high-density devices, we might need to scale the
+        // dimensions
+
+        if (   FtrGet(sysFtrCreator, sysFtrNumWinVersion, &winMgrVersion) == errNone
+            && winMgrVersion >= 4)
+        {
+            w = WinUnscaleCoord(w, false);
+            h = WinUnscaleCoord(h, false);
+        }
+
+        switch (h)
+        {
+            default:
+                ErrNonFatalDisplay("Unrecognized display extent");
+                // fall through
+
+            case stdHeight:
+                return vskResizeMax;
+
+            case stdHeight + stdSilkHeight:
+                return vskResizeMin;
+
+            case stdHeight + stdSilkHeight + stdStatusHeight:
+                return vskResizeNone;
+        }
+    }
+    else
+    {
+        UInt16 state;
+        VskGetState(silkRefNum, vskStateResize, &state);
+        return state;
+    }
+}
 
 Boolean TextMenuHandleEvent(UInt16 menuID, UInt16 objectID)
 {
@@ -56,7 +172,7 @@ Boolean TextMenuHandleEvent(UInt16 menuID, UInt16 objectID)
 
     return false;
 }
-
+ 
 //
 // GetObjectPointer - return an object pointer given a form and objID
 //

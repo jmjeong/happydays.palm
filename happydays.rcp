@@ -6,6 +6,7 @@ STRING ID CustomErrorHelpString "long_customErrorString"
 STRING ID AboutHelpString "long_aboutString"
 STRING ID CleanupAlertHelpString "long_cleanupAlertString"
 STRING ID RemoveConfirmString "long_removeConfirmString"
+
 STRING ID InvalidDateString "Invalid input date"
 STRING ID SelectTimeString  "Select Time"
 STRING ID NoTimeString      "No Time"
@@ -493,7 +494,7 @@ END
 ALERT ID CleanupDone INFORMATION
 BEGIN
     TITLE "Cleanup Done"
-    MESSAGE "^1: ^2 HappyDays notify entries removed."
+    MESSAGE "Datebook: ^1 HappyDays notify entries removed."
     BUTTONS "OK"
 END
 
@@ -505,7 +506,7 @@ BEGIN
     TITLE "About HappyDays"
 
 	FORMBITMAP AT (6 18) BITMAP ID_BitmapIcon USABLE 
-    LABEL "HappyDays 2.32" AUTOID AT (PrevRight+38 PrevTop) FONT 1
+    LABEL "HappyDays 2.33" AUTOID AT (PrevRight+38 PrevTop) FONT 1
     LABEL "GPL free software"
         AUTOID AT (PrevLeft PrevTop+ABOUT_LINE_SPACING) FONT 0
     LABEL "(c) 1999-2004 Jaemok Jeong"
@@ -575,4 +576,4 @@ SMALLICONFAMILY
 	TRANSPARENT 192 192 0
 
 APPLICATIONICONNAME 1000 "HappyDays"
-VERSION ID 1 "2.32"
+VERSION ID 1 "2.33"

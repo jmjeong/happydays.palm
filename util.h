@@ -39,10 +39,16 @@ extern MemPtr AppInfoGetPtr(DmOpenRef dbP);
 extern Boolean FindNearLunar(DateType *dt, DateType base, Boolean leapyes);
 extern Int16 DateCompare (DateType d1, DateType d2); // defined in datebook.c
 
-extern void PrvMoveObject(FormPtr frmP, UInt16 objIndex, Coord y_diff, Boolean draw);
-extern void PrvResizeObject(FormPtr frmP, UInt16 objIndex, Coord y_diff, Boolean draw);
+extern void PrvMoveObject(FormPtr frmP, UInt16 objIndex, Coord y_diff, Boolean draw) SECT1;
+extern void PrvResizeObject(FormPtr frmP, UInt16 objIndex, Coord y_diff, Boolean draw) SECT1;
 
 Boolean TextMenuHandleEvent(UInt16 menuID, UInt16 objectID);
+
+Err ResizeSilk(UInt16 silkRefNum, UInt16 size) SECT1;
+Err EnableSilkResize(UInt16 silkRefNum, UInt16 state) SECT1;
+UInt16 GetSilkPos(UInt16 silkRefNum) SECT1;
+
+
 
 // Extract the bit at position index from bitfield.  0 is the high bit.
 #define BitAtPosition(pos)                ((UInt32)1 << (pos))

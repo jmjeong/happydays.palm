@@ -18,6 +18,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 #include <PalmOS.h>
+#include <SonyCLIE.h>
 #include "HandEra/Vga.h"
 #include "HandEra/Silk.h"
 
@@ -61,9 +62,15 @@ Int16         gNumOfEventNote = -1;
 EventNoteInfo *gEventNoteInfo = 0;   // event note string
 Boolean  is35;
 
-Boolean gbVgaExists = false;
+UInt16      gFormID;            // current form id
 
-Boolean gProgramExit = false;   // Program exit control(set by Startform)
+UInt16      hrRefNum, hrSRefNum;   // clie library reference number
+Boolean     gbVgaExists = false;
+
+Boolean     gSonyClie = false;
+Boolean     gSilkLibLoaded;
+
+Boolean     gProgramExit = false;   // Program exit control(set by Startform)
 
 ////////////////////////////////////////////////////////////////////
 // Prefs stuff 
@@ -97,13 +104,15 @@ static void MainFormReadDB();
 static int CalcPageSize(FormPtr frm);
 
 static void ViewFormLoadTable(FormPtr frm);
+static void ViewFormResize(FormPtr frmP, Boolean draw);
+static void ViewFormSilk();
 
-
-static Boolean StartFormHandleEvent(EventPtr e);
-static Boolean PrefFormHandleEvent(EventPtr e);
-static Boolean DispPrefFormHandleEvent(EventPtr e);
-static Boolean ViewFormHandleEvent(EventPtr e);
-static Boolean MainFormHandleEvent(EventPtr e);
+static Boolean StartFormHandleEvent(EventPtr e) SECT1;
+static Boolean PrefFormHandleEvent(EventPtr e) SECT1;
+static Boolean DispPrefFormHandleEvent(EventPtr e) SECT1;
+static Boolean ViewFormHandleEvent(EventPtr e) SECT1;
+static Boolean MainFormHandleEvent(EventPtr e) SECT1;
+static Err NR70GraffitiHandleEvent(SysNotifyParamType * /* notifyParamsP */);
 
 static void HighlightMatchRowDate(DateTimeType inputDate) SECT1;
 static void HighlightMatchRowName(Char first) SECT1;
@@ -333,11 +342,26 @@ static void GetEventNoteInfo()
     gPrefsR.eventNoteExists = found;
 }
 
+static Err NR70GraffitiHandleEvent(SysNotifyParamType *notifyParamsP)
+{
+    if (gFormID == MainForm) {
+        MainFormResize(FrmGetActiveForm(), true);
+    }
+    else if (gFormID == ViewForm) {
+        ViewFormResize(FrmGetActiveForm(), true);
+        ViewFormSilk();
+    }
+    return errNone;
+}
+
 /* Get preferences, open (or create) app database */
 static UInt16 StartApplication(void)
 {
 	UInt32 version;
-	Int16 err;
+	Int16  err;
+    UInt32      val;
+	SonySysFtrSysInfoP sonySysFtrSysInfoP;
+	UInt16  refNum;
 
     gTableRowHandle = 0;
 
@@ -346,6 +370,53 @@ static UInt16 StartApplication(void)
 	
 	err = FtrGet(sysFtrCreator, sysFtrNumROMVersion, &version);
 	is35 = (version >= 0x03503000);
+
+    if (!FtrGet(sysFtrCreator, sysFtrNumOEMCompanyID, &val)) {
+        Err         error;
+        UInt32      width, height;
+
+        if (val == sonyHwrOEMCompanyID_Sony) {
+       		if ((error = FtrGet(sonySysFtrCreator,
+                                sonySysFtrNumSysInfoP, (UInt32*)&sonySysFtrSysInfoP))) {
+                // NOT CLIE
+            }
+            else {
+                if ((sonySysFtrSysInfoP->extn & sonySysFtrSysInfoExtnSilk) &&
+                    (sonySysFtrSysInfoP->libr & sonySysFtrSysInfoLibrSilk)) {
+                    if ((error = SysLibFind(sonySysLibNameSilk, &refNum))) {
+                        if (error == sysErrLibNotFound) {
+                            // coulnd't find lib
+                            error = SysLibLoad('libr', sonySysFileCSilkLib, &refNum);
+                        }
+                    }
+                    if (!error ) {
+                        // the silkscreen library is available and usable
+                        if (VskGetAPIVersion(refNum) < 2) {
+                            error = SilkLibOpen(refNum);
+                        }
+                        else error = VskOpen(refNum); 
+                        
+                        if (error == errNone) {
+                            EnableSilkResize(refNum, vskResizeVertically | vskResizeHorizontally);
+                        
+                            hrSRefNum = refNum;
+                            gSilkLibLoaded = true;
+                        }
+                    }
+                }
+            }
+
+            error = SysLibLoad('libr', sonySysFileCHRLib, &hrRefNum);
+            
+            if (!error) {
+                gSonyClie = true;
+
+                HROpen(hrRefNum);
+                width = hrWidth; height = hrHeight;
+                HRWinScreenMode(hrRefNum, winScreenModeSet, &width, &height, NULL, NULL);
+            }
+        }
+    }
 
     if(gbVgaExists)
     	VgaSetScreenMode(screenMode1To1, rotateModeNone);
@@ -369,12 +440,59 @@ static UInt16 StartApplication(void)
     }
     GetEventNoteInfo();
 
+    if (gSilkLibLoaded) {
+    	// for NR70, Notification manager
+		LocalID             ProgramdbID;
+		UInt16              ProgramcardNo;
+	
+    	SysCurAppDatabase (&ProgramcardNo, &ProgramdbID); 
+        err = SysNotifyRegister(ProgramcardNo, ProgramdbID,
+                                  sysNotifyDisplayChangeEvent, NR70GraffitiHandleEvent, 
+                                  sysNotifyNormalPriority, NULL);
+        ErrFatalDisplayIf( ( err != errNone ), "can't register" );
+    }
+    
+
     return 0;
 }
 
 /* Save preferences, close forms, close app database */
 static void StopApplication(void)
 {
+    if (gSilkLibLoaded) {
+    	// for NR70, Notification manager
+		LocalID             ProgramdbID;
+		UInt16              ProgramcardNo;
+        Int16 	            error;
+
+    	SysCurAppDatabase (&ProgramcardNo, &ProgramdbID);
+
+        error = SysNotifyUnregister(ProgramcardNo, ProgramdbID,
+                                    sysNotifyDisplayChangeEvent, sysNotifyNormalPriority);
+         ErrFatalDisplayIf( ( error != errNone ), "can't unregister" );
+        
+         if (VskGetAPIVersion(hrSRefNum) < 2) {
+             // old devices didn't restore the silkscreen automatically
+             // for applications that don't support silkscreen resizing;
+             // therefore, we need to restore the silkscreen explicitly
+             (void) ResizeSilk(hrSRefNum, vskResizeMax);
+         }
+
+         // disable silkscreen resizing before we quit
+         (void) EnableSilkResize(hrSRefNum, vskResizeDisable);
+
+         if (VskGetAPIVersion(hrSRefNum) < 2) {
+             SilkLibClose(hrSRefNum);
+         }
+         else VskClose(hrSRefNum); // same as SilkLibClose
+    }
+
+    if (gSonyClie) {
+        HRWinScreenMode(hrRefNum, winScreenModeSetToDefaults,
+                        NULL, NULL, NULL, NULL);
+        HRClose(hrRefNum);
+    }
+    
     FrmSaveAllForms();
     FrmCloseAllForms();
     CloseDatabases();
@@ -595,14 +713,13 @@ static Boolean ApplicationHandleEvent(EventPtr e)
 {
     FormPtr frm;
     Boolean handled = false;
-	UInt16 formID;
 
     if (e->eType == frmLoadEvent) {
-        formID = e->data.frmLoad.formID;
-        frm = FrmInitForm(formID);
+        gFormID = e->data.frmLoad.formID;
+        frm = FrmInitForm(gFormID);
         FrmSetActiveForm(frm);
 
-        switch(formID) {
+        switch(gFormID) {
         case StartForm:
             FrmSetEventHandler(frm, StartFormHandleEvent);
             break;
@@ -1059,8 +1176,6 @@ static void DoDateSelect()
 		FrmUpdateForm(MainForm, frmRedrawUpdateCode);
     }
 }
-
-
 
 Boolean MenuHandler(FormPtr frm, EventPtr e)
 {
@@ -2186,8 +2301,8 @@ static void MainFormInit(FormPtr frm, Boolean bformModify)
 		VgaTableUseBaseFont(GetObjectPointer(frm, MainFormTable), 
 							!VgaIsVgaFont(gPrefsR.listFont));
 		if (bformModify) VgaFormModify(frm, vgaFormModify160To240);
-		MainFormResize(frm, false);
 	}
+	MainFormResize(frm, false);
 
 	DisplayCategory(MainFormPopupTrigger, gPrefsR.addrCategory, false);
 	DateToAsciiLong(gStartDate.month, gStartDate.day, 
@@ -2679,8 +2794,8 @@ static void ViewFormInit(FormPtr frm, Boolean bformModify)
 	if (gbVgaExists) {
 		VgaTableUseBaseFont(GetObjectPointer(frm, ViewFormTable), false);
 		if (bformModify) VgaFormModify(frm, vgaFormModify160To240);
-		ViewFormResize(frm, false);
 	}
+	ViewFormResize(frm, false);
 
 	ViewFormLoadTable(frm);
     ViewFormSetInfo(frm);
@@ -2801,9 +2916,13 @@ void DrawSilkMonth(int mon, int year, int day, int x, int y)
 
 static void DrawMonth(DateType converted)
 {
-	const int start = 185;
+	RectangleType rc;
+	int start;	
+	
+	if (gbVgaExists) start= 185;
+	else start = 120;
 
-	RectangleType rc = { {0, start}, {240, 66}};
+	RctSetRectangle(&rc, 0, start, 240, 66);
 	WinEraseRectangle(&rc, 0);
 
 	WinDrawLine(1,start,239,start);
@@ -2823,7 +2942,7 @@ static void ViewFormSilk()
 
     DateType converted;
 
-	if (gbVgaExists && !SilkWindowMaximized()) {
+	if (gbVgaExists && !SilkWindowMaximized() || gSilkLibLoaded && GetSilkPos(hrSRefNum) == vskResizeMin ) {
 		ptr = MemHandleLock(gTableRowHandle);
 		converted = ptr[gMainTableHandleRow].date;
 		MemPtrUnlock(ptr);
@@ -2902,7 +3021,6 @@ static Boolean ViewFormHandleEvent(EventPtr e)
     }
 	case displayExtentChangedEvent:
 		ViewFormResize(FrmGetActiveForm(), true);
-
 		ViewFormSilk();
 
 		break;
@@ -3034,6 +3152,9 @@ static Boolean StartFormHandleEvent(EventPtr e)
 //
 //
 // $Log$
+// Revision 1.76  2004/05/07 03:43:36  jmjeong
+// Sony Clie Hires+ Support
+//
 // Revision 1.75  2004/04/19 15:46:17  jmjeong
 // Datebook category support
 // Can edit the category of Datebook, Todo in HappyDays

@@ -1,6 +1,6 @@
 ## Makefile for HappyDays application
 
-VERSION = 2.32
+VERSION = 2.33
 TARGET = happydays
 APPNAME = "HappyDays"
 APPID = "Jmje"
@@ -15,7 +15,7 @@ OBJS = obj/lun2sol.o obj/sol2lun.o obj/address.o obj/datebook.o obj/util.o \
 
 CC = m68k-palmos-gcc
 
-CFLAGS = -Wall -O2 
+CFLAGS = -Wall -O2 -I/opt/palmdev/sdk-5r3/include/Clie -I/opt/palmdev/sdk-5r3/include/Clie/System -I/opt/palmdev/sdk-5r3/include/Clie/Libraries
 #CFLAGS = -Wall -g -O2
 
 PILRC = pilrc
@@ -431,7 +431,7 @@ zip: prc/$(TARGET).prc
 	-@echo "Making distribution file(happydays-$(VERSION).zip) ..." &&\
 	\rm -rf dist && mkdir dist && \
 	cp prc/$(TARGET).prc dist && cp manual/README.txt dist  && \
-	cd dist && \
+	cp manual/HappyDaysManual.pdf dist && cd dist && \
 	zip -r ../happydays-$(VERSION).zip *  && \rm -rf dist
 
 upload: zip 

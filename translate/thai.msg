@@ -10,7 +10,7 @@ BEGIN
     "long_aboutString" = ""\
     "'HappyDays' ใช้สำหรับเตือน\nวันเกิดและวันครบรอบต่างๆ ของเพื่อนและครอบครัว "\
     "รวมถึงเหตุการณ์พิเศษอื่นๆ\n\n"\
-    "อ่านรายละเอียดและวิธีการใช้งานไดที่ http://jmjeong.com/?HappyDays\n\n"\
+    "อ่านรายละเอียดและวิธีการใช้งานได้ที่ http://jmjeong.com/?HappyDays\n\n"\
     "HappyDays ถูกเผยแพร่ภายใต้ GNU General "\
     "Public License เวอร์ชั่น 2.0\n\n"\
 	"= รูปแบบข้อมูล\n\n"\
@@ -147,7 +147,7 @@ BEGIN
       "keep" = "คงเดิม"
       "modify" = "เปลี่ยน"
     "Priority:" = "ลำดับ:"
-    "Category:" = "หมวด:"
+    "Category:" = "ประเภท:"
     "Private:" = "ส่วนตัว:"
     "Alarm:" = "เตือนล่วงหน้า:"
     "Time:" = "เวลา:"

@@ -203,6 +203,7 @@ BEGIN
     "modify" =  "modifier"
     "Priority:" =  "Priorité:"
     "Category:" =  "Catégorie:"
+    "Edit Categories..." =  "Modifier les catégories..."
     "Private:" =  "Personnel:"
     "Alarm:" =  "Alarme:"
     "Time:" =  "Heure:"

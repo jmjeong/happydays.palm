@@ -158,8 +158,7 @@ BEGIN
     "years" = "any(s)"
 
     "Notify warning" = "Avís"
-	"long_notifywarningString" = ""\
-		"^1: Segur que voleu crear notificacions de HappyDays per a ^2 registres?"
+	"long_notifywarningString" = "^1: Segur que voleu crear notificacions de HappyDays per a ^2 registres?"
       
     "Date Book Icon" = "Icona d'Agenda"  
       "Icon Support" = "Suport d'Icones"
@@ -171,15 +170,13 @@ BEGIN
 /* HappyDays Cleanup */
     "HappyDays Cleanup" = "Neteja" 
 
-    "long_removeConfirmString" = ""\
-    "Desitjeu eliminar totes les notificacions "\
+    "long_removeConfirmString" = "Desitjeu eliminar totes les notificacions "\
     "de HappyDays?"
 
     "HappyDays says" = "HappyDays diu"
 
     "HappyDays Export" = "Exportar HappyDays"
-    "Would you like to export HappyDays List to Memo Pad?" = ""\
-"¿Voleu exportar la Llista de HappyDays al Bloc de notes?"
+    "Would you like to export HappyDays List to Memo Pad?" = "¿Voleu exportar la Llista de HappyDays al Bloc de notes?"
 
     "Custom Field Error" = "Error en camp personalitzat"
     "Help" = "Ajuda" 
@@ -187,8 +184,7 @@ BEGIN
 
     "Invalid event format" = "Format de registre no vàlid"
 
-	"long_invalidformatString" = ""\
-    	"El registre d'agenda de ^1\n contè un registre no vàlid. "\
+	"long_invalidformatString" = "El registre d'agenda de ^1\n contè un registre no vàlid. "\
 		"Què voleu fer?"
 
     "Ignore" = "Ignora'l" 
@@ -196,11 +192,10 @@ BEGIN
 
     "Cleanup Done" = "S'ha acabat la neteja" 
 
-    "^1: ^2 HappyDays notify entries removed." = ""\
-    	"^1: ^2 notificacions de HappyDays eliminades."
+    "^1: ^2 HappyDays notify entries removed." = "^1: ^2 notificacions de HappyDays eliminades."
 
     "HappyDays Export List" = "Exportar la Llista de HappyDays"
-    "(not exist in this year)" = "(no hi ha aquest any)"
+    "(not exist in this year)" = "(aquest any no hi és)"
     "Please run Date Book once first." = "Si us plau trieu l'Agenda primer."
     
     "Days" = "Dies"  
@@ -214,8 +209,7 @@ BEGIN
     "Processed : " = "Processat : " 
 
 	"Address Change" = "Cerca de la llibreta d'Adreces"
-	"Address DB is changed. \nDo you want to rescan it?" = ""\
-		"la llibreta d'Adreces ha canviat. \nVoleu tornar a cercar a la llibreta d'Adreces?"
+	"Address DB is changed. \nDo you want to rescan it?" = "La llibreta d'Adreces ha canviat. \nVoleu tornar a cercar a la llibreta d'Adreces?"
 
  	"Ignore record with prefix '!'" = "Ignora el registre amb prefix '!'"
  	"Datebook note" = "Nota a l'Agenda"
@@ -234,4 +228,5 @@ BEGIN
 END
 
  
+
 
