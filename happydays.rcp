@@ -45,7 +45,7 @@ STRING ID TypeStr				"Type:"
 STRING ID NextDateStr			"Next Date:"
 STRING ID SourceDateStr			"Source Date:"
 STRING ID AgeStr				"Age:"
-STRING ID RemainedDayStr		"Remained Day:"
+STRING ID RemainedDayStr		"Remained:"
 STRING ID UpToNowStr			"Up To Now:"
 
 STRING ID FindHeaderString		"HappyDays"
@@ -98,8 +98,8 @@ BEGIN
 
 	FIELD ID ViewFormCategory AT (RIGHT@160 1 65 AUTO) RIGHTALIGN 
 			NONEDITABLE FONT 0
-  	TABLE ID ViewFormTable AT (0 16 160 11*7)  
-			ROWS 7 COLUMNS 2 COLUMNWIDTHS 60 100
+  	TABLE ID ViewFormTable AT (0 26 160 11*9)  
+			ROWS 9 COLUMNS 2 COLUMNWIDTHS 50 110
 
     BUTTON "Done" ID ViewFormDone AT (1 BOTTOM@159 AUTO AUTO)
     BUTTON "DB" ID ViewFormNotifyDB AT (PrevRight+6 PrevTop AUTO AUTO)
@@ -138,6 +138,13 @@ BEGIN
     BEGIN
         MENUITEM "Solar to Lunar"           MainFormMenuSl2Ln   "S"
         MENUITEM "Lunar to Solar"           MainFormMenuLn2Sl   "L"
+    END
+    PULLDOWN "Options"
+    BEGIN
+		MENUITEM "Font..."					ViewFormMenuFont    "F"
+        MENUITEM "Display Preferences"      MainFormMenuDispPref    
+        MENUITEM SEPARATOR
+        MENUITEM "About HappyDays"          MainFormMenuAbout   "A"
     END
 END
 

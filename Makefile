@@ -74,7 +74,7 @@ happydays-sections.s happydays-sections.ld : happydays.def
 	multigen happydays.def
 
 $(TARGET).prc: $(TARGET) bin.res
-	$(BUILDPRC) $(TARGET).prc happydays.def *.bin $(TARGET)
+	$(BUILDPRC) -o $(TARGET).prc happydays.def *.bin $(TARGET)
 
 $(TARGET)-en.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGET).grc pref0000.$(TARGET).grc rloc0000.$(TARGET).grc bin.res
 	$(BUILDPRC) $(TARGET).prc $(APPNAME) $(APPID) code0001.$(TARGET).grc code0000.$(TARGET).grc data0000.$(TARGET).grc *.bin pref0000.$(TARGET).grc rloc0000.$(TARGET).grc

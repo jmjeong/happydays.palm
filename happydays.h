@@ -25,7 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define DEFAULT_DURATION    5
 
 #define HDAppID           	'Jmje'
-#define HDAppVer        	15
+#define HDAppVer        	16
 
 #define MainDBType          'DATA'
 #define MainDBName          "HappyDaysDB"
@@ -64,7 +64,6 @@ struct sBirthPrefs
     char custom[12+1];          // addr label length
     char notifywith[5+1];       // notify with (HD)
     char sort;                  // sorting order
-    char emphasize;             // emphasize lunar
     char notifyformat;          // notify format list
     char scannote;              // scan from notes?
     char addrapp;               // address appid(used for GOTO operation)
@@ -72,6 +71,12 @@ struct sBirthPrefs
     DateFormatType dateformat;  // if sysdateover is true
 };
 
+struct sDispPrefs
+{
+    char emphasize;             // emphasize lunar
+    char dispextrainfo;         // display extra day information
+    char dispsexagenary;  
+};
 
 struct sPrefsR 
 {
@@ -83,6 +88,7 @@ struct sPrefsR
     struct sDBNotifyPrefs DBNotifyPrefs;
     struct sTDNotifyPrefs TDNotifyPrefs;
     struct sBirthPrefs    BirthPrefs;
+    struct sDispPrefs     DispPrefs;
 
     // HideSecretRecord in system global preference
     Boolean gHideSecretRecord;
@@ -134,9 +140,9 @@ typedef struct
 // Table row item, used for sort
 typedef struct 
 {
-    UInt16 birthRecordNum;  // birthdate+ DB record num
-	Int8   age;				// calculated age	
-    DateType    date;       // converted date(the incoming birthday)
+    UInt16      birthRecordNum;     // birthdate+ DB record num
+	Int8        age;				// calculated age	
+    DateType    date;               // converted date(the incoming birthday)
 } LineItemType;
 
 typedef LineItemType* LineItemPtr;
