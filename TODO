@@ -1,68 +1,27 @@
 -*- mode:outline -*-
 
-* Scan from notes field
-* Support Action Names and Datebk3 Icon(customizable)
+* Automatic scan of Address
+  Always/Ask/Never
 
-* From :  Jim (Jim_Bahosh@yahoo.com) 
-1. I would like to see the notification format changed so that the HappyDays
-flag is at the very end of the entry.
- That way when events are viewed in DB3 it would be more likely that the # of
-years might be visible (instead of
- the HappyDays flag). Maybe put the HappyDays flag into the note field instead
-to keep the actual notification less
- cluttered.
+* 'Are you sure this is the current date?.. Mon Jun 18, 2001'
+  As HappyDays algorithms use the current date for various date
+   calculation, incorrect data value would mislead it.
 
- 2. I would like to be able to pick a DB3 icon for the other events, not just
-birthdays (Perhaps some type of list that
- would have an event title and associate it with a specific icon in DB3)
+* Add 'Reread Address' after preference
 
- 3. The last names of people need to show up in the list & notifications. (I
-did notice that when I sort the list by
- name, it is sorted correctly by last name eventhough the last name is not
-visible!)
+* Display preferences
+** Emphasize lunar date
+** Display additional event info(origin screen)
+** Display sexseasonary info
 
- 4. I would like to see it an option to display (or not display) the brackets
-[] in the notification entry, or even an
- option to have the entire entry surrounded by the brackets if they cannot be
-eliminated (it just kind of seems busy
- having the brackets, the HappyDays flag, the event type, and then the
-parentheses for the age. 
+* Fix selection code
 
+* Refine the code
 
-* From : Dieter Pellkofer (dieterp@patente.de) 
-Only the day and the month, but not the year is redundant in the date book
-entry. I would, therefor, prefer that the year is shown in the
- datebook entry (if the event is created as repeating event). By showing the
-year it is easy to know how old the person will be on this
- day. This is of course not necessary with not repeating events since in this
-case the actual age can be shown in the datebook.
+* Repleace the start form into 'progress widget'
 
-It's right for Father's_Day but now all family birthday entries (I mean the
-cases, when I have several people in the birthdate field of
- my address book using "*" and the first name) are created without the
-surname. Only the first name is shown in the HappyDays list view,
- the HappyDays detail view, the exported memo pad entry and even in the
-created datebook entry. If you know several people having
- the same fist name you never know whose birthdate is...
- Could it be a solution to create an address book entry for the anniversaries
-by inputting "Anniversary" not in the surname field but for
- example in the "title" or "company" field leaving the surname field blank.
-Thus, the anniversaries will be shown without "surname" and
- the names of real person will be shown with the surname.
+* Write the detailed manual with screenshot
 
-On further suggestion for the next release:
- It should be easier to switch in the list view between name and date sorting.
-One quick solution could be to have one (toggle) menu
- option or two menu options (one for date and one for name sorting) which can
-be accessed with a shortcut. If the shortcut does not need
- to be preceeded by the "/" (as some programs do it) by input only one
-character the sorting could be switched.
+* Support 'last sunday of september' code 
 
-* From: "TING, Bevan" <bting@westpac.com.au>
-Also, another to-do is to give option of whether a user prefers "Event,
-Korean New Year" or "Korean New Year". :-D
-
-* From : Jeffrey Krzysztow
-I use an Address Replacement call TealPhone. How to I get HappyDays to use it
-instead of the built-in?
-
+   
