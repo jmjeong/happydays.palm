@@ -405,4 +405,7 @@ zip: prc/$(TARGET).prc html
 	cd dist && \
 	zip -r ../happydays-$(VERSION).zip *  && \rm -rf dist
 
+upload: zip
+	scp *.zip jmjeong.com:~/public_html/palm/happydays/down
+
 -include .depend
