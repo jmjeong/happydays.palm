@@ -1,6 +1,6 @@
 TRANSLATION "SPANISH"
 BEGIN
-    "Translator" = "Versión Española: Juan Fernando Calderón"
+    "Translator" = "Juan Fernando Calderón"
     "Translator's email" = "jfcalderon@usa.net"
 
     "long_notifySettingString" = ""\
@@ -101,10 +101,10 @@ BEGIN
     "SAT"   = "SAB"
 
     "Not enough memory" = "Memoria Insuficiente"
-    "%d notify entry is created.\n" = "%d notificación(es) creada(s).\n"
-    "%d existing entry " = "%d notificación "
+    "%d notify entry is created.\n" = "%d notificaciones creadas.\n"
+    "%d existing entry " = "%d notificaciones "
     "is kept untouched." = "sin modificar."
-    "is modified." = "modificada."
+    "is modified." = "modificadas."
 
     "Could not write prefs." = "No se ha podido guardar preferencias."
     "Collecting Information..." = "Recolectando información..."
@@ -148,6 +148,7 @@ BEGIN
 
     "OK" = "Hecho"
     "Cancel" = "Cancelar"
+    "Icon" = "Icono"
 
     "Solar to Lunar Convert" = "Solar -> Lunar"
     "Enter Solar date:" = "Indique la fecha Solar:"
@@ -202,8 +203,6 @@ BEGIN
     "Ignore" = "Ignorar"
     "Ignore all" = "Ignorar todos"
 
-    "Cleanup Done" = "Cleanup Done" 
-
     "Cleanup Done" = "Limpieza concluida"
 
     "^1: ^2 HappyDays notify entries removed." = ""\
@@ -225,7 +224,7 @@ BEGIN
     "Y.M.D" = "A.M.D"
     "Y-M-D" = "A-M-D"
 
-    "DateBook Icon" = "Icono de Agenda"  
+    "Date Book Icon" = "Icono de Agenda"  
       "Icon Support" = "Soporte de Iconos"
       "AN" = "AN"  
       "DateBk3" = "DBk3"  

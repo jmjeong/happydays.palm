@@ -227,7 +227,7 @@ BEGIN
     "Y.M.D" = "Y.M.D"  
     "Y-M-D" = "Y-M-D"  
 
-    "DateBook Icon" = "DateBook Icon"  
+    "Date Book Icon" = "Date Book Icon"  
       "Icon Support" = "Icon Support"  
       "AN" = "AN"  
       "DateBk3" = "DateBk3"  

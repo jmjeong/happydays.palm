@@ -240,7 +240,7 @@ BEGIN
     "Y.M.D" = "J.M.T"
     "Y-M-D" = "J-M-T"
 
-    "DateBook Icon" = "Erweiterte Einstellungen"
+    "Date Book Icon" = "Erweiterte Einstellungen"
       "Icon Support" = "Icons verwenden"
 	  "AN" = "AN"
 	  "DateBk3" = "DBk3"
