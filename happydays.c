@@ -559,9 +559,10 @@ static void ReadPrefsRec(void)
 		MemMove(&gPrefsR, &defaultPref, sizeof(defaultPref));
 		gPrefsR.listFont = (gbVgaExists) ? VgaBaseToVgaFont(stdFont) 
             : stdFont;
-        if (gPrefsR.Prefs.sysdateover)
-            gPrefdfmts = gPrefsR.Prefs.dateformat;
     }
+
+	if (gPrefsR.Prefs.sysdateover)
+		gPrefdfmts = gPrefsR.Prefs.dateformat;
 }
 
 static void WritePrefsRec(void)
