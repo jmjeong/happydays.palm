@@ -2650,6 +2650,7 @@ static Boolean StartFormHandleEvent(EventPtr e)
 {
     Boolean handled = false;
     Boolean rescan;
+	Boolean ok = true;
     
     FormPtr frm = FrmGetFormPtr(StartForm);
 
@@ -2707,8 +2708,10 @@ static Boolean StartFormHandleEvent(EventPtr e)
                     gPrefsR.Prefs.autoscan = 2;
                     break;
                 }
-                if (rescan) UpdateHappyDaysDB(frm);
-                SetReadAddressDB();     // mark addressDB is read
+                if (rescan) {
+					ok = UpdateHappyDaysDB(frm);
+				}
+                if (ok) SetReadAddressDB();     // mark addressDB is read
             }
             MainFormReadDB();
             FrmGotoForm(MainForm);

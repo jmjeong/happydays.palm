@@ -1,6 +1,5 @@
 HEX "sKst" ID 1000 0x00 0x00 0x00 0x00
 
-STRING ID DateBookNotifyHelpString "long_notifySettingString"
 STRING ID DateBookNotifyMoreHelpString "long_notifySettingMoreString"
 STRING ID SelectDateString  "HappyDays"
 STRING ID CustomErrorHelpString "long_customErrorString"
@@ -313,7 +312,6 @@ FRAME
 MODAL
 USABLE
 DEFAULTBTNID DateBookNotifyFormCancel
-HELPID  DateBookNotifyHelpString
 BEGIN
     TITLE "Date Book Notify"
     LABEL "Records:" AUTOID AT (RIGHT@78 25) FONT 1

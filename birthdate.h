@@ -37,7 +37,7 @@ Boolean AnalysisHappyDays(const char* birthdate,
                           HappyDaysFlag *flag,
                           Int16* year, Int16* month, Int16* day);
 
-void UpdateHappyDaysDB(FormPtr frm);
+Boolean UpdateHappyDaysDB(FormPtr frm);
 void  SetReadAddressDB();
 
 Boolean FindHappyDaysField();

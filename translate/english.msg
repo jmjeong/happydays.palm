@@ -3,27 +3,6 @@ BEGIN
     "Translator" = "English version"
     "Translator's email" = ""
 
-    "long_notifySettingString" = ""\
-    "* Records\n"\
-    "Tab 'all' if you'd like to "\
-    "make notification entries created for all of your events in this"\
-    " category."\
-    "Tab 'selected' if only the currently selected record should be "\
-    "taken into account.\n\n"\
-    "* Existing\n"\
-    "Tap 'keep' if existing HappyDays entries "\
-    "should be left untouched. Tap 'modify' if you'd like "\
-    "these entries to be changed.\n\n"\
-    "* Alarm\n"\
-    "will set the alarm notification in your datebook entry. Set "\
-	"the number of days in advance you'd like to get notified.\n\n"\
-    "* Time\n"\
-	"Time of the event\n\n"\
-    "* Repeat for\n"\
-    "is the interval of the notification record. "\
-    "-1 means repeat forever in case of solar event, and "\
-    "means repeat for 5 years in lunar event for convenience.\n"
-
 	"long_notifySettingMoreString" = ""\
 	"For AN Icon Number, consult Action Names manual. DateBk3Icon is "\
 	"read from MemoPad. If you don't have DateBk3 Icon entry in MemoPad, "\

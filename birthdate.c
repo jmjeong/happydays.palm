@@ -638,7 +638,7 @@ void  SetReadAddressDB()
     MemMove(gPrefsR.adrmdate, (char *)&gAdmdate, 4);
 }
 
-void UpdateHappyDaysDB(FormPtr frm)
+Boolean UpdateHappyDaysDB(FormPtr frm)
 {
     UInt16 currIndex = 0;
     AddrPackedDBRecord *rp;
@@ -735,7 +735,7 @@ void UpdateHappyDaysDB(FormPtr frm)
                 //
 
                 *q = 0;
-                if (AnalOneRecord(addrattr, p, &hd, &ignore)) return;
+                if (AnalOneRecord(addrattr, p, &hd, &ignore)) return false;
                 p = q+1;
 
                 // restore the saved name
@@ -751,7 +751,7 @@ void UpdateHappyDaysDB(FormPtr frm)
             // last record
             if (*p) {
                 // check the null '\n'
-                if (AnalOneRecord(addrattr, p, &hd, &ignore)) return;
+                if (AnalOneRecord(addrattr, p, &hd, &ignore)) return false;
             }
                 
             if (whichField == gHappyDaysField       // next is note field
@@ -767,4 +767,5 @@ void UpdateHappyDaysDB(FormPtr frm)
         MemHandleUnlock(recordH);
         currIndex++;
     }
+	return true;
 }

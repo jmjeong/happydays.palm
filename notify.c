@@ -1055,8 +1055,8 @@ static void DateBk3CustomDrawTable(MemPtr tableP, Int16 row, Int16 column,
     Int8 drawFixel;
     Int8 i, j;
     
-    x = bounds->topLeft.x + (bounds->extent.x - 8) / 2;
-    y = bounds->topLeft.y + (bounds->extent.y - 8) / 2; 
+    x = bounds->topLeft.x + (bounds->extent.x - 8) / 2 -1;
+    y = bounds->topLeft.y + (bounds->extent.y - 8) / 2 -1; 
 
     for (i = 0; i < 8; i++) {
         drawFixel = gDateBk3Icon[drawItem][i];

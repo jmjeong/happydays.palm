@@ -110,7 +110,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define DateBookNotifyANLabel		1458
 #define DateBookNotifyANInput		1459
 
-#define DateBookNotifyHelpString     1498
 #define DateBookNotifyMoreHelpString 1499
 
 #define Sl2LnForm                   1500
