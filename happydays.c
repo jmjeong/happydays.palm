@@ -69,10 +69,14 @@ struct sPrefsR defaultPref = {
     HDAppVer,
     0, 0, 0,              // all/selected, keep/modified, private
     {   1, 0, 9, 3, 1, {-1, -1}, "145" },   // Datebook notify prefs
-#ifdef GERMAN
+#if defined(GERMAN)
     {  1, "Alle" },                         // Todo notify prefs
     {  "Geburtstag", "*HD:",                // Prefs
        1, 1, 0, 0, 0, dfDMYWithDots },   
+#elif defined(PORTUGUESE_BR)
+    {  1, "All" },                          // Todo notify prefs
+    {  "Aniversario", "*HD:",               // Prefs
+       1, 1, 0, 0, 0, dfMDYWithSlashes },   
 #else
     {  1, "All" },                          // Todo notify prefs
     {  "Birthday", "*HD:",                  // Prefs
