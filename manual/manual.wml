@@ -30,7 +30,6 @@ family. It gathers information from the built-in AddressBook application and
 exports notification record into the built-in Datebook, To Do or Memo Pad 
 application.  It supports the same categories as defined in 
 the AddressBook.
-</p>
 
 <hr noshade size=1>
 <h2><a name="installation">Installing HappyDays</a></h2>
@@ -48,7 +47,7 @@ the AddressBook.
 <h2><a name="upgrade">Upgrading HappyDays</a></h2>
 
 <p> If you have used HappyDays 1.x version, delete the old version before
-you install the new version. </p>
+you install the new version. 
 
 <hr noshade size=1>
 
@@ -246,7 +245,7 @@ This is HappyDays list view. All information gathered from Address Book is
 <p> "HappyDays preferences" are global application behavior settings, which
 is to say as part of the program configuration. "Display Preferences" are
 also global and applied to screen but is focused on customizing the
-HappyDays display. </p>
+HappyDays display. 
 
 <p>
 <ol>
@@ -493,7 +492,6 @@ HappyDays display. </p>
     </table>
 </ol>
 
-</p>
 
 <hr noshade size=1>
 
@@ -582,7 +580,7 @@ before the event name.</b> <p>
 <p> If you want to register anniversary such as New_Year or
 Thanksgiving_Lunar, you can insert this data in one AddressBook entry.
 For your information, Lunar
-date is changed every year. </p>
+date is changed every year. 
 
 <pre>
 Last name: Anniversary
@@ -611,7 +609,7 @@ event, because the year is not provided. The last char 'B' is the initial of
 the event type. In this example, 'B' means 'Birthday', the default event type.
 'E' means 'Event'. If you don't want to display a last name, add a dot('.')
 before the event name.
-</p>
+
 
 
 <h3><a name="note_field">Using note field of Address Book for input

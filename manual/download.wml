@@ -21,7 +21,7 @@ href="ftp://jmjeong.com/pub/happydays/">here</a>.
 <p>
 Before you install the new version, you <b>*should*</b> uninstall the old
 version(1.x version) due to HappyDaysDB name change. 
-Or there remains the old database after installing the new version. </p>
+Or there remains the old database after installing the new version.
 
 <p>
 To get the latest CVS sources do the following
@@ -35,7 +35,6 @@ $ cvs -z3 checkout -rver_203 happydays
 
 <br>
 For more info on CVS see <a href="http://www.cyclic.com">Cyclic</a>.
-</p>
 
 <!--  <h2> -->
 <!--  Known Bugs -->
@@ -103,7 +102,6 @@ HappyDays has been translated into the following languages:  <br>
 			Dutch</a>(1.45)
       - by Roy Huijts
 </ul>
-</p>
 
 <h2>
 Change log 

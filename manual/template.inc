@@ -4,6 +4,7 @@
 # The Template
 <HTML>
 <HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta name="description" content="HappyDays, Palm Pilot, application ">
 <meta name="keywords" content="HappyDays, Palm Pilot, PDA">
 <TITLE*>HappyDays-- <<TITLE>></TITLE*>
