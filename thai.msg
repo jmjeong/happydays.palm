@@ -113,8 +113,8 @@ BEGIN
     "Goto" = "ไปที่"
 
     "Utilities" = "อุปกรณ์  "
-    "DateBook Notify" = "เตือนใน DateBook"
-    "Cleanup Datebook"  = "ลบเตือนใน Datebook"
+    "Date Book Notify" = "เตือนใน DateBook"
+    "Cleanup Date Book"  = "ลบเตือนใน Datebook"
     "To Do Notify" = "เตือนใน To Do"
     "Cleanup To Do"  = "ลบเตือนใน To Do"
     "Export to Memo Pad" = "ส่งข้อมูลไป Memo Pad"
@@ -227,7 +227,7 @@ BEGIN
       "DateBk3 ICON:" = "ไอคอนใน DateBk3:"
 
     "Days" = "วัน"
-	"Datebook" = "DateBook"
+	"Date Book" = "Date Book"
 	"To Do" = "To Do"
 	"Scan note field" = "สแกนใน note      "
 	

@@ -34,7 +34,7 @@ STRING ID ViewNotExistString	"(not exist in this year)"
 STRING ID DateBookFirstAlertString  "Please run Date Book once first."
 STRING ID DateBookNotifyDaysString "Days"
 
-STRING ID DateBookString		"Datebook"
+STRING ID DateBookString		"Date Book"
 STRING ID ToDoString			"To Do"
 STRING ID BirthLeftString		"%d day(s) left"
 
@@ -103,8 +103,8 @@ MENU ID MainFormMenu
 BEGIN
     PULLDOWN "Utilities"
     BEGIN
-        MENUITEM "DateBook Notify"   	MainFormMenuNotifyDatebook  "D"
-        MENUITEM "Cleanup Datebook"     MainFormMenuCleanupDatebook "C"
+        MENUITEM "Date Book Notify"   	MainFormMenuNotifyDatebook  "D"
+        MENUITEM "Cleanup Date Book"     MainFormMenuCleanupDatebook "C"
         MENUITEM "To Do Notify"   		MainFormMenuNotifyTodo		"T"
         MENUITEM "Cleanup To Do"       	MainFormMenuCleanupTodo 	"O"
         MENUITEM SEPARATOR
@@ -247,7 +247,7 @@ USABLE
 DEFAULTBTNID DateBookNotifyFormCancel
 HELPID  DateBookNotifyHelpString
 BEGIN
-    TITLE "DateBook Notify"
+    TITLE "Date Book Notify"
     LABEL "Records:" AUTOID AT (RIGHT@78 25) FONT 1
     PUSHBUTTON "all" ID NotifyFormRecordAll 
 			AT (PrevRight+5 PrevTop AUTO AUTO) GROUP 1
@@ -292,7 +292,7 @@ MODAL
 USABLE
 HELPID  DateBookNotifyMoreHelpString
 BEGIN
-    TITLE "DateBook Icon"
+    TITLE "Date Book Icon"
 
     CHECKBOX "Icon Support" ID DateBookNotifyFormIcon 
 			at (7 25 AUTO AUTO) RIGHTANCHOR FONT 0 
@@ -421,7 +421,7 @@ MODAL
 HELPID AboutHelpString
 BEGIN
     TITLE "HappyDays"
-    LABEL "HappyDays 1.3" AUTOID AT (Center@80 20) FONT 1
+    LABEL "HappyDays 1.32" AUTOID AT (Center@80 20) FONT 1
     LABEL "(c) 1999-2000, JaeMok Jeong"
         AUTOID AT (Center@80 PrevBottom+5) FONT 0
     LABEL "<jmjeong@oopsla.snu.ac.kr>" AUTOID AT (Center@80 PrevBottom)
@@ -453,4 +453,4 @@ APPLICATIONICONNAME 1000 "HappyDays"
 ICON "HD_large.bmp"
 SMALLICON "HD_small.bmp"
 
-VERSION ID 1 "1.3"
+VERSION ID 1 "1.32"

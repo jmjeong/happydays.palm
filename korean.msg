@@ -1,6 +1,6 @@
 TRANSLATION "KOREAN"
 BEGIN
-    "Translator" = "한국어 버젼"
+    "Translator" = "한글 버젼"
     "Translator's email" = ""
 
     "long_notifySettingString" = ""\
@@ -124,8 +124,8 @@ BEGIN
     "Goto" = "이동"
 
     "Utilities" = "유틸리티 "
-    "DateBook Notify" = "일정관리에 알림 "
-    "Cleanup Datebook"  = "일정관리에서 정리 "
+    "Date Book Notify" = "일정관리에 알림 "
+    "Cleanup Date Book"  = "일정관리에서 정리 "
 	"To Do Notify" = "할 일에 알림 "
 	"Cleanup To Do"  = "할 일에서 정리 "
     "Export to Memo Pad" = "메모장으로 전송 "
@@ -167,6 +167,7 @@ BEGIN
 
     "Result Solar date:" = "변환된 양력 날짜 :"
 
+    
     "Records:" = "레코드 :"
       "all" = "전부"
       "selected" = "선택"
@@ -178,7 +179,7 @@ BEGIN
     "Private:" = "개인용 :"
     "Alarm:" = "알람 :"
     "Time:" = "시간 :"
-    "More..." = "더..."
+    "Icon" = "아이콘"
 
     "Repeat for:" = "몇 년간 :"
     "years" = "년"
@@ -228,15 +229,17 @@ BEGIN
     "Y.M.D" = "Y.M.D"
     "Y-M-D" = "Y-M-D"
 
-	"DateBook Notify More" = "아이콘 설정"
+	"Date Book Icon" = "아이콘 설정"
 	"Icon Support" = "아이콘 지원"
-	"AN ICON Number:" = "AN 아이콘 번호: "
-	"DateBk3 ICON:" = "DateBk3 아이콘: "
+	"AN Icon Number:" = "AN 아이콘 번호: "
+	"DateBk3 Icon:" = "DateBk3 아이콘: "
 
     "Days" = "일전"
-	"Datebook" = "일정관리"
+	"Date Book" = "일정관리"
 	"To Do" = "할 일"
 	"Scan note field" = "주소록의 노트 필드 읽기"
+    "%d day(s) left" = "%d 일 남았습니다"
+
 	
 	"Notify Format:" = "알림 레코드 형식: "
 	"[Last, First] E(1) Year" = "[성, 이름] E(1) 나이"
@@ -244,6 +247,8 @@ BEGIN
 	"Event - Last, First Year" = "행사 - 성, 이름 나이"
 	"Event - First Last Year" = "행사 - 이름 성 나이"
 	"First Last Year" = "이름 성 나이"
+
+    
 
 	"Processing" = "진행중"
 	"Processed : " = "처리된것 : "

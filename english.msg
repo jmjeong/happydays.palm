@@ -90,5 +90,163 @@ BEGIN
     "long_cantFindAddrString" = ""\
     "Can't find custom address book field: '%s'\n"\
     "Please rename a custom field of your address book."
+
+    "Select Time" = "Select Time"
+    "No Time" = "No Time"
+    "Invalid input date" = "Invalid input date"
+    "Export to Memo Pad is completed." = "Export to Memo Pad is completed."
+
+    "SUN"   = "SUN"
+    "MON"   = "MON"
+    "TUE"   = "TUE"
+    "WED"   = "WED"
+    "THU"   = "THU"
+    "FRI"   = "FRI"
+    "SAT"   = "SAT"
+
+    "Not enough memory" = "Not enough memory"
+    "%d notify entry is created.\n" = "%d notify entry is created.\n" 
+    "%d existing entry " = "%d existing entry "
+    "is kept untouched." = "is kept untouched."
+    "is modified." = "is modified."
+
+    "Could not write prefs." = ""\
+		"Could not write prefs."
+    "Collecting Information..." = "Collecting Information..."
+
+    "HappyDays List" = "HappyDays List"
+    "Look up" = "Look up"
+    "Today" = "Today"
+
+    "HappyDays View" = "HappyDays View"
+    "Done"  = "Done"
+    "DB" = "DB" 
+    "TD" = "TD"
+    "Goto" = "Goto"
+
+    "Utilities" = "Utilities"
+    "Date Book Notify" = "Date Book Notify"
+    "Cleanup Date Book"  = "Cleanup Date Book"
+    "To Do Notify" = "To Do Notify"
+    "Cleanup To Do"  = "Cleanup To Do"
+    "Export to Memo Pad" = "Export to Memo Pad"
+    "Solar to Lunar" = "Solar to Lunar"
+    "Lunar to Solar" = "Lunar to Solar"
+    "Options" = "Options"
+    "Preferences" = "Preferences"
+    "About HappyDays" = "About HappyDays"
+
+    "Edit" = "Edit"
+    "Undo" = "Undo"
+    "Cut" = "Cut"
+    "Copy" = "Copy" 
+    "Paste" = "Paste" 
+    "Select All" = "Select All" 
+    "Keyboard" = "Keyboard" 
+    "Graffiti" = "Graffiti"
+
+    "HappyDays Preferences" = "HappyDays Preferences"
+    "Custom field:" = "Custom field:"
+    "HappyDays ID:" = "HappyDays ID:"
+    "Emphasize Lunar Date" = "Emphasize Lunar Date"
+
+    "OK" = "OK"
+    "Cancel" = "Cancel"
+
+    "Solar to Lunar Convert" = "Solar to Lunar Convert"
+    "Enter Solar date:" = "Enter Solar date:"
+    "Year must be in 1881-2043" = "Year must be in 1881-2043"
+    "Result Lunar date:" = "Result Lunar date:"
+
+    "Convert" = "Convert"
+
+    "Lunar to Solar Convert" = "Lunar to Solar Convert"
+    "Enter Lunar date:" = "Enter Lunar date:"
+    "Leap" = "Leap"
+    "Result Solar date:" = "Result Solar date:"
+
+    "Records:" = "Records:"
+      "all" = "all"
+      "selected" = "selected" 
+    "Existing:" = "Existing:"
+      "keep" = "keep"
+      "modify" = "modify"
+    "Priority:" = "Priority:"
+    "Category:" = "Category:"
+    "Private:" = "Private:"
+    "Alarm:" = "Alarm:"
+    "Time:" = "Time:"
+    "More..." = "More..."
+
+    "Repeat for:" = "Repeat for:"
+    "years" = "years"
+
+    "HappyDays says" = "HappyDays says"
+
+    "HappyDays Export" = "HappyDays Export"
+    "Would you like to export HappyDays List to Memo Pad?" = ""\
+    	"Would you like to export HappyDays List to Memo Pad?" 
+
+    "Custom Field Error" = "Custom Field Error"
+    "Help" = "Help" 
+
+
+    "HappyDays Cleanup" = "HappyDays Cleanup" 
+
+    "Notify warning" = "Notify warning" 
+    "^1: Are you sure you want to create notify entries for ^2 HappyDays records?" = ""\
+  	"^1: Are you sure you want to create notify entries for ^2 HappyDays records?" 
+      
+
+    "Invalid event format" = "Invalid event format" 
+
+    "The address record for ^1\n contains an invalid event. How would you like to handle it?" = ""\
+    "The address record for ^1\n contains an invalid event. How would you like to handle it?" 
+
+    "Ignore" = "Ignore" 
+    "Ignore all" = "Ignore all" 
+
+    "Cleanup Done" = "Cleanup Done" 
+
+    "^1: ^2 HappyDays notify entries removed." = ""\
+    	"^1: ^2 HappyDays notify entries removed." 
+
+    "Birthday" = "Birthday" 
+    "All" = "All" 
+    "HappyDays Export List" = "HappyDays Export List" 
+    "(not exist in this year)" = "(not exist in this year)" 
+    "Please run Date Book once first." = "Please run Date Book once first."  
+    
+    "Instead of system date format" = "Instead of system date format"  
+    "Use" = "Use"  
+    "M/D/Y" = "M/D/Y"  
+    "D/M/Y" = "D/M/Y"  
+    "D.M.Y" = "D.M.Y"  
+    "D-M-Y" = "D-M-Y"  
+    "Y/M/D" = "Y/M/D"  
+    "Y.M.D" = "Y.M.D"  
+    "Y-M-D" = "Y-M-D"  
+
+    "DateBook Icon" = "DateBook Icon"  
+      "Icon Support" = "Icon Support"  
+      "AN" = "AN"  
+      "DateBk3" = "DateBk3"  
+      "AN Icon Number:" = "AN Icon Number:"  
+      "DateBk3 Icon:" = "DateBk3 Icon:"  
+
+    "Days" = "Days"  
+    "Date Book" = "Date Book"  
+    "To Do" = "To Do"  
+    "Scan note field" = "Scan note field"  
+    "%d day(s) left" = "%d day(s) left"  
+    "Notify Format:" = "Notify Format:"  
+    "[Last, First] E(1) Year" = "[Last, First] E(1) Year"  
+    "[First Last] E(1) Year" = "[First Last] E(1) Year"  
+    "Event - Last, First Year" = "Event - Last, First Year"  
+    "Event - First Last Year" = "Event - First Last Year"  
+    "First Last Year" = "First Last Year"  
+    
+    "Processing" = "Processing"  
+    "Processed : " = "Processed : " 
 END
 

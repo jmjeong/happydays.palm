@@ -11,7 +11,7 @@ OBJS = happydays.o lun2sol.o sol2lun.o address.o datebook.o util.o \
 
 CC = m68k-palmos-gcc
 
-CFLAGS = -Wall -O2 -D$(LANG)
+CFLAGS = -Wall -O2 
 #CFLAGS = -Wall -g -O2
 
 PILRC = pilrc
@@ -25,13 +25,15 @@ all: en
 
 all-lang: en ko de th
 
-en: alwaysmake $(TARGET).prc
+en: $(TARGET).prc
 
-ko: alwaysmake $(TARGET)-kt.prc $(TARGET)-km.prc
+ko: $(TARGET)-kt.prc $(TARGET)-km.prc
 
-de: alwaysmake $(TARGET)-de.prc 
+de: $(TARGET)-de.prc 
 
-th: alwaysmake $(TARGET)-th.prc
+th: $(TARGET)-th.prc
+
+chi: $(TARGET)-chi.prc
 
 .S.o:
 	$(CC) $(TARGETFLAGS) -c $<
@@ -54,14 +56,8 @@ $(TARGET)-de.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGE
 $(TARGET)-th.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGET).grc pref0000.$(TARGET).grc rloc0000.$(TARGET).grc bin-th.res
 	$(BUILDPRC) $(TARGET)-th.prc $(APPNAME) $(APPID) code0001.$(TARGET).grc code0000.$(TARGET).grc data0000.$(TARGET).grc *.bin pref0000.$(TARGET).grc rloc0000.$(TARGET).grc
 
-code0000.$(TARGET)-de.grc: $(TARGET)-de
-	$(OBJRES) $(TARGET)
-
-code0000.$(TARGET)-th.grc: $(TARGET)-th
-	$(OBJRES) $(TARGET)
-
-code0000.$(TARGET)-en.grc: $(TARGET)-en
-	$(OBJRES) $(TARGET)
+$(TARGET)-chi.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGET).grc pref0000.$(TARGET).grc rloc0000.$(TARGET).grc bin-chi.res
+	$(BUILDPRC) $(TARGET)-chi.prc $(APPNAME) $(APPID) code0001.$(TARGET).grc code0000.$(TARGET).grc data0000.$(TARGET).grc *.bin pref0000.$(TARGET).grc rloc0000.$(TARGET).grc
 
 code0000.$(TARGET).grc: $(TARGET)
 	$(OBJRES) $(TARGET)
@@ -74,41 +70,48 @@ pref0000.$(TARGET).grc: code0000.$(TARGET).grc
 
 rloc0000.$(TARGET).grc: code0000.$(TARGET).grc
 
-bin.res: $(TARGET)-en.rcp 
+bin.res: $(TARGET)-en.rcp
+	rm -f *.bin
 	$(PILRC) -L ENGLISH $(TARGET)-en.rcp .
 
-bin-kt.res: $(TARGET)-ko.rcp 
+bin-kt.res: $(TARGET)-ko.rcp
+	rm -f *.bin
 	$(PILRC) -L KOREAN -Fkt $(TARGET)-ko.rcp .
 
 bin-km.res: $(TARGET)-ko.rcp
+	rm -f *.bin
 	$(PILRC) -L KOREAN -Fkm $(TARGET)-ko.rcp .
 
-bin-de.res: $(TARGET)-de.rcp 
+bin-de.res: $(TARGET)-de.rcp
+	rm -f *.bin
 	$(PILRC) -L GERMAN $(TARGET)-de.rcp .
 
-bin-th.res: $(TARGET)-th.rcp 
+bin-th.res: $(TARGET)-th.rcp
+	rm -f *.bin
 	$(PILRC) -L THAI $(TARGET)-th.rcp .
+
+bin-chi.res: $(TARGET)-chi.rcp
+	rm -f *.bin
+	$(PILRC) -L CHINESE $(TARGET)-chi.rcp .
 
 $(TARGET)-en.rcp: $(TARGET).rcp english.msg hdr.msg
 	cat hdr.msg english.msg $(TARGET).rcp > $(TARGET)-en.rcp
 
 $(TARGET)-ko.rcp: $(TARGET).rcp korean.msg hdr.msg
 	cat hdr.msg korean.msg $(TARGET).rcp > $(TARGET)-ko.rcp
-	
+
 $(TARGET)-de.rcp: $(TARGET).rcp german.msg hdr.msg
 	cat hdr.msg german.msg $(TARGET).rcp > $(TARGET)-de.rcp
 
 $(TARGET)-th.rcp: $(TARGET).rcp thai.msg hdr.msg
 	cat hdr.msg thai.msg $(TARGET).rcp > $(TARGET)-th.rcp
 
-
-
-alwaysmake:
-	rm -f bin.res
+$(TARGET)-chi.rcp: $(TARGET).rcp chinese.msg hdr.msg
+	cat hdr.msg chinese.msg $(TARGET).rcp > $(TARGET)-chi.rcp
 
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(TARGET) $(LIBS)
-	! $(NM) -u $(TARGET) | grep .
+#	! $(NM) -u $(TARGET) | grep .
 
 send: $(TARGET).prc
 	$(PILOTXFER) -i $(TARGET).prc
@@ -126,6 +129,6 @@ veryclean: clean
 	-rm -f $(TARGET)*.prc pilot.ram pilot.scratch
 
 save:
-	zip $@ *.c Makefile *.rcp README COPYING *.h *.pbitm pilrc.diff
+	zip $@ *.c Makefile *.rcp README COPYING *.h *.pbitm 
 
 -include .depend

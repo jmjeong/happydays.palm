@@ -1,5 +1,5 @@
 /*
-HappyDays - A Birthdate displayer for the PalmPilot
+HappyDays - A Birthday displayer for the PalmPilot
 Copyright (C) 1999-2000 JaeMok Jeong
 
 This program is free software; you can redistribute it and/or
@@ -45,7 +45,7 @@ UInt32 gMmcdate, gMmmdate;      // Memo create/modify time
 Boolean gSortByCompany=true;    // sort by company is set in AddressBook?
 UInt16 gAddrCategory;           // address book category
 UInt16 gToDoCategory;           // todo category
-Int16 gMainTableStart;        // Main Form table start point
+Int16 gMainTableStart = 0;      // Main Form table start point
 Int16 gMainTableRows;         // Main Form table num of rows(default 11) constant
 Int16 gMainTableTotals;       // Main Form table total rows;
 Int16 gMainTableHandleRow;    // The row of birthdate view to display
@@ -607,7 +607,6 @@ static Boolean MainFormHandleEvent (EventPtr e)
         //
         gMainTableRows = TblGetNumberOfRows(tableP);
 
-        gMainTableStart = 0;
         DisplayCategory(MainFormPopupTrigger, gPrefsR->addrCategory, false);
 
         // category information of MainDB is same as AddressDB
@@ -853,10 +852,10 @@ static Boolean PrefFormHandleEvent(EventPtr e)
             handled = true;
             break;
         case PrefFormCancel:
-            
+
+            FrmReturnToForm(0);
 			// need for 'preference-cancel' work
             FrmUpdateForm(StartForm, frmRedrawUpdateCode);
-            FrmReturnToForm(0);
 
             handled = true;
             break;
@@ -1508,8 +1507,8 @@ static Char* DateBk3IconString()
 }
 
 static Char* gNotifyFormatString[5] =
-{ "[+L] +E +y",     // [Jeong, JaeMok] B 1970
-  "[+F] +E +y",     // [JaeMok Jeong] B 1970
+{ "[+L] +e +y",     // [Jeong, JaeMok] B 1970
+  "[+F] +e +y",     // [JaeMok Jeong] B 1970
   "+E - +L +y",     // Birthday - Jeong, JaeMok 1970
   "+E - +F +y",     // Birthday - JaeMok Jeong 1970
   "+F +y",        	// JaeMok Jeong 1970
@@ -3039,6 +3038,8 @@ static Boolean SpecialKeyDown(EventPtr e)
         if (keyboardAlphaChr == chr) {
             gPrefsR->BirthPrefs.sort = 0;     // sort by name
 			SndPlaySystemSound(sndClick);
+
+            gMainTableStart = 0;
             FrmUpdateForm(MainForm, frmRedrawUpdateCode);
             WritePrefsRec();
             return true;
@@ -3046,6 +3047,8 @@ static Boolean SpecialKeyDown(EventPtr e)
         else if (keyboardNumericChr == chr) {
             gPrefsR->BirthPrefs.sort = 1;     // sort by date
 			SndPlaySystemSound(sndClick);
+
+            gMainTableStart = 0;
             FrmUpdateForm(MainForm, frmRedrawUpdateCode);
             WritePrefsRec();
             return true;

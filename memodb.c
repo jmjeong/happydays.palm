@@ -17,6 +17,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+/*
+ * Just so you know these routines are pulled from the Memo source code
+ * as provided by Palm.  At least that is what I started from, I may have
+ * touched a few lines to get it to compile with gcc without warnings.
+ */
+
 // Set this to get to private database defines
 #define __MEMOMGR_PRIVATE__
 

@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  * I may have touched a few lines to get it to compile with gcc without
  * warnings.
  */
+
 #include <PalmOS.h>
 
 #include "happydaysRsc.h"
