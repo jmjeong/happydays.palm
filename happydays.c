@@ -46,7 +46,6 @@ Int16 gHappyDaysField;
 Char gAppErrStr[AppErrStrLen];
 Char gLookupDate[12];			// date string of look up
 UInt32 gAdcdate, gAdmdate;      // AddressBook create/modify time
-UInt32 gMmcdate, gMmmdate;      // Memo create/modify time
 Boolean gSortByCompany=true;    // sort by company is set in AddressBook?
 UInt16 gAddrCategory;           // address book category
 Int16 gMainTableTotals;       	// Main Form table total rows;
@@ -67,47 +66,13 @@ Boolean gProgramExit = false;   // Program exit control(set by Startform)
 ////////////////////////////////////////////////////////////////////
 
 struct sPrefsR gPrefsR;
-struct sPrefsR defaultPref = {
-    HDAppVer,
-    0, 0, 0,              // all/selected, keep/modified, private
-    {   1, 0, 3, 1, {-1, -1}, " " },   // Datebook notify prefs
-#if defined(GERMAN)
-    {  1, "Alle" },                         // Todo notify prefs
-    {  "Geburtstag", "*HD:",                // Prefs
-       1, 1, 0, 1, 0, 0, dfDMYWithDots },   
-#elif defined(PORTUGUESE_BR)
-    {  1, "All" },                          // Todo notify prefs
-    {  "Aniversario", "*HD:",               // Prefs
-       1, 1, 0, 1, 0, 0, dfMDYWithSlashes },   
-#elif defined(ITALIAN)
-    {  1, "All" },                          // Todo notify prefs
-    {  "Compleanno", "*HD:",                // Prefs
-       1, 1, 0, 1, 0, 0, dfMDYWithSlashes },   
-#else
-    {  1, "All" },                          // Todo notify prefs
-    {  "Birthday", "*HD:",                  // Prefs
-       1, 1, 0, 1, 0, 0, dfMDYWithSlashes },   
-#endif
-    {  1, },                                // Display Preferences
-    0,                                      // hide secret record
-#ifdef GERMAN
-    "Alle",                                 // Address category
-#elif defined(PORTUGUESE_BR)
-    "All",                                  // Address category
-#else
-    "All", 
-#endif
-    "\0\0\0", "\0\0\0",         /* addr create/modify date */
-    "\0\0\0", "\0\0\0"          /* memo create/modify date */
-};
-
 
 enum ViewFormType { ViewType = 0,
                     ViewNext,
                     ViewSrc,
                     ViewAge,
                     ViewRemained,
-					ViewBioRhythm,
+//					ViewBioRhythm,
                     ViewSpace,
 };
 
@@ -270,15 +235,15 @@ static UInt16 StartApplication(void)
 	DateSecondsToDate(TimGetSeconds(), &gStartDate);
     
     if ((err = OpenDatabases()) < 0) {
-        if (!DatebookDB) {
-            /*
-             * BTW make sure there is " " (single space) in unused ^1 ^2 ^3
-             * entries or PalmOS <= 2 will blow up.
-             */
+/*         if (!DatebookDB) { */
+/*             /\* */
+/*              * BTW make sure there is " " (single space) in unused ^1 ^2 ^3 */
+/*              * entries or PalmOS <= 2 will blow up. */
+/*              *\/ */
 
-            SysCopyStringResource(gAppErrStr, DateBookFirstAlertString);
-            FrmCustomAlert(ErrorAlert, gAppErrStr, " ", " ");
-        }
+/*             SysCopyStringResource(gAppErrStr, DateBookFirstAlertString); */
+/*             FrmCustomAlert(ErrorAlert, gAppErrStr, " ", " "); */
+/*         } */
 
         freememories();
         return 1;
@@ -578,18 +543,60 @@ static void ReadPrefsRec(void)
 	if (prefsSize != sizeof(gPrefsR) 
         || version == noPreferenceFound
         || gPrefsR.version != version) {
-		MemMove(&gPrefsR, &defaultPref, sizeof(defaultPref));
-		gPrefsR.listFont = (gbVgaExists) ? VgaBaseToVgaFont(stdFont) 
+
+        gPrefsR.version = HDAppVer;
+        gPrefsR.records = gPrefsR.existing = gPrefsR.private = 0;
+
+ 
+        gPrefsR.DBNotifyPrefs.alarm = 1;
+        gPrefsR.DBNotifyPrefs.usenote = 0;
+        gPrefsR.DBNotifyPrefs.notifybefore = 3;
+        gPrefsR.DBNotifyPrefs.duration = 1;
+        *((int*)&gPrefsR.DBNotifyPrefs.when) = noTime;
+        gPrefsR.DBNotifyPrefs.note[0] = 0;
+
+        gPrefsR.TDNotifyPrefs.priority = 1;
+        StrCopy(gPrefsR.TDNotifyPrefs.todoCategory, "All");
+        gPrefsR.TDNotifyPrefs.usenote = 0;
+        gPrefsR.TDNotifyPrefs.note[0] = 0;
+
+        StrCopy( gPrefsR.Prefs.notifywith, "*HD:");
+        gPrefsR.Prefs.sort = 1;
+        gPrefsR.Prefs.notifyformat = 1;
+        gPrefsR.Prefs.autoscan = 0;
+        gPrefsR.Prefs.ignoreexclamation = 1;
+        gPrefsR.Prefs.scannote = 0;
+        gPrefsR.Prefs.addrapp = 0;
+        gPrefsR.Prefs.sysdateover = false;
+        gPrefsR.Prefs.dateformat = dfMDYWithSlashes;
+ 
+#if defined(GERMAN)
+        StrCopy( gPrefsR.Prefs.custom, "Geburstag");
+        gPrefsR.Prefs.dateformat = dfDMYWithDots; 
+#elif defined(PORTUGUESE_BR)
+        StrCopy( gPrefsR.Prefs.custom, "Aniversario");
+#elif defined(ITALIAN)
+        StrCopy( gPrefsR.Prefs.custom, "Compleanno");
+#else
+        StrCopy( gPrefsR.Prefs.custom, "Birthday");
+#endif
+        gPrefsR.DispPrefs.emphasize = 1;
+
+        gPrefsR.gHideSecretRecord = 0;
+        StrCopy(gPrefsR.addrCategory, "All");
+        StrCopy(gPrefsR.adrcdate, "\0\0\0");
+        StrCopy(gPrefsR.adrmdate, "\0\0\0");
+        
+        gPrefsR.listFont = (gbVgaExists) ? VgaBaseToVgaFont(stdFont) 
             : stdFont;
     }
 
-	if (gPrefsR.Prefs.sysdateover)
-		gPrefdfmts = gPrefsR.Prefs.dateformat;
+    if (gPrefsR.Prefs.sysdateover) gPrefdfmts = gPrefsR.Prefs.dateformat;
 }
 
 static void WritePrefsRec(void)
 {
-	PrefSetAppPreferences(HDAppID, 0, HDAppVer, (void*)&gPrefsR, 
+    PrefSetAppPreferences(HDAppID, 0, HDAppVer, (void*)&gPrefsR, 
                           sizeof(gPrefsR), true);
 }
     
@@ -599,10 +606,6 @@ static Int16 OpenDatabases(void)
     UInt16 mode = 0;
     UInt16 cardNo;
     LocalID dbID, appInfoID;
-    char dbname[dmDBNameLength];
-    Boolean newSearch = true;
-    UInt32 creator;
-    DmSearchStateType searchInfo;
     UInt32 cdate, mdate;
     AddrAppInfoPtr appInfoPtr;
 
@@ -624,52 +627,59 @@ static Int16 OpenDatabases(void)
     /*
      * Quick way to open all needed databases.  Thanks to Danny Epstein.
      */
-    while ((DmGetNextDatabaseByTypeCreator(newSearch, &searchInfo, 'DATA',
-                                           NULL, false, &cardNo, &dbID) == 0) &&
-           (!DatebookDB || !ToDoDB || !AddressDB
-            || !MemoDB || !MainDB)) {
-        if (DmDatabaseInfo(cardNo, dbID, dbname, NULL, NULL, &cdate, &mdate,
-                           NULL, NULL, &appInfoID, NULL, NULL, &creator))
-            break;
-        if ((creator == DatebookAppID) &&
-            (StrCaselessCompare(dbname, DatebookDBName) == 0)) {
-            DatebookDB = DmOpenDatabase(cardNo, dbID, mode |
-                                        dmModeReadWrite);
-        }
-        else if ((creator == ToDoAppID) &&
-                 (StrCaselessCompare(dbname, ToDoDBName) == 0)) {
-            gMmcdate = cdate;
-            gMmmdate = mdate;
-            ToDoDB = DmOpenDatabase(cardNo, dbID, mode | dmModeReadWrite);
-        }
-        else if ((creator == MemoAppID)
-                 && (StrCaselessCompare(dbname, MemoDBName) == 0)) {
-            MemoDB = DmOpenDatabase(cardNo, dbID, 
-                                    mode | dmModeReadWrite | dmModeShowSecret);
-        }
-        else if ((creator == AddressAppID) &&
-                 (StrCaselessCompare(dbname, AddressDBName) == 0)) {
-            gAdcdate = cdate;
-            gAdmdate = mdate;
-            AddressDB = DmOpenDatabase(cardNo, dbID, mode | dmModeReadOnly);
+
+    DatebookDB = DmOpenDatabaseByTypeCreator('DATA', DatebookAppID,
+                                             mode | dmModeReadWrite);
+    if (!DatebookDB) {
             /*
-             * We want to get the sort order for the address book.  This
-             * controls how to display the birthday list.
+             * BTW make sure there is " " (single space) in unused ^1 ^2 ^3
+             * entries or PalmOS <= 2 will blow up.
              */
-            if (appInfoID) {
-                if ((appInfoPtr = (AddrAppInfoPtr)
-                     MemLocalIDToLockedPtr(appInfoID, cardNo))) {
-                    gSortByCompany = appInfoPtr->misc.sortByCompany;
-                    MemPtrUnlock(appInfoPtr);
-                }
-            }
-        } else if ((creator == HDAppID) &&
-                   (StrCaselessCompare(dbname, MainDBName) == 0)) {
-            MainDB = DmOpenDatabase(cardNo, dbID, dmModeReadWrite);
-		}
-        newSearch = false;
+
+        SysCopyStringResource(gAppErrStr, DateBookFirstAlertString);
+        FrmCustomAlert(ErrorAlert, gAppErrStr, " ", " ");
+        return -1;
     }
 
+    ToDoDB = DmOpenDatabaseByTypeCreator('DATA', ToDoAppID,
+                                         mode | dmModeReadWrite);
+    if (!ToDoDB) {
+        SysCopyStringResource(gAppErrStr, ToDoFirstAlertString);
+        FrmCustomAlert(ErrorAlert, gAppErrStr, " ", " ");
+        return -1;
+    }
+
+    AddressDB = DmOpenDatabaseByTypeCreator('DATA', AddressAppID,
+                                            mode | dmModeReadOnly);
+    ErrFatalDisplayIf(!AddressDB, "AddressDB not exist");
+
+    DmOpenDatabaseInfo(AddressDB, &dbID, NULL,  NULL, &cardNo, NULL);
+    if (!DmDatabaseInfo(cardNo, dbID, NULL , NULL, NULL, &cdate, &mdate,
+                        NULL, NULL, &appInfoID, NULL, NULL, NULL)) {
+        gAdcdate = cdate;
+        gAdmdate = mdate;
+        /*
+         * We want to get the sort order for the address book.  This
+         * controls how to display the birthday list.
+         */
+        if (appInfoID) {
+            if ((appInfoPtr = (AddrAppInfoPtr)
+                 MemLocalIDToLockedPtr(appInfoID, cardNo))) {
+                gSortByCompany = appInfoPtr->misc.sortByCompany;
+                MemPtrUnlock(appInfoPtr);
+            }
+        }
+
+    }
+    else return -1;
+    
+
+    MemoDB = DmOpenDatabaseByTypeCreator('DATA', MemoAppID,
+                                         mode | dmModeReadWrite);
+    ErrFatalDisplayIf(!AddressDB, "MemoDB not exist");
+
+    MainDB = DmOpenDatabaseByTypeCreator('DATA', MainAppID,
+                                         mode | dmModeReadWrite);
     if (!MainDB){
         //
         // Create our database if it doesn't exist yet
@@ -679,11 +689,8 @@ static Int16 OpenDatabases(void)
         MainDB = DmOpenDatabaseByTypeCreator(MainDBType, HDAppID,
                                              dmModeReadWrite);
         if (!MainDB) return -1;
-
-        /* Set the backup bit.  This is to aid syncs with non Palm software. */
-        DmOpenDatabaseInfo(MainDB, &dbID, NULL, NULL, &cardNo, NULL);
-
     }
+    
     /*
      * Read in the preferences from the private database.  This also loads
      * some global variables with values for convenience.
@@ -2116,8 +2123,8 @@ static void ViewTableDrawHdr(MemPtr tableP, Int16 row, Int16 column,
         SysCopyStringResource(gAppErrStr, RemainedDayStr);
 		break;
 
-    case ViewBioRhythm:
-        SysCopyStringResource(gAppErrStr, BioRhythmStr);
+//    case ViewBioRhythm:
+//        SysCopyStringResource(gAppErrStr, BioRhythmStr);
 
         break;
     default:
@@ -2355,6 +2362,7 @@ void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column,
         WinDrawChars(gAppErrStr, length, x, y);
     }
     break;
+/*    
 	case ViewBioRhythm:
 	{
 		Int16 phys, emot, intel;
@@ -2379,6 +2387,7 @@ void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column,
             
 	}
 	break;
+*/    
     }
     MemHandleUnlock(recordH);
 
@@ -2833,63 +2842,39 @@ static Boolean StartFormHandleEvent(EventPtr e)
         if(gbVgaExists) 
        		VgaFormModify(frm, vgaFormModify160To240);
         
-    case frmUpdateEvent:        
+        FindHappyDaysField();
 
-        if (!FindHappyDaysField()) {
-            char ErrStr[200];
-
-            SysCopyStringResource(ErrStr, CantFindAddrString);
-            StrPrintF(gAppErrStr, ErrStr, gPrefsR.Prefs.custom);
-
-            switch (FrmCustomAlert(CustomFieldAlert,
-                                   gAppErrStr, " ", " ")) {
-            case 0:             // OK
-                gProgramExit = true;
-                break;
-            case 1:             // Help 
-                FrmHelp(CustomErrorHelpString);
-                FrmUpdateForm(StartForm, 0);    // to redisplay startform
-                
-                break;
-            case 2:             // Preferences
-                FrmPopupForm(PrefForm);
-                break;
-            }
-        }
-        else {
-            rescan = false;
+        rescan = false;
             
-            if (IsChangedAddressDB()) {
-                switch (gPrefsR.Prefs.autoscan) {
-                case 0: // always
+        if (IsChangedAddressDB()) {
+            switch (gPrefsR.Prefs.autoscan) {
+            case 0: // always
+                rescan = true;
+                break;
+            case 1: // ask
+                switch (FrmCustomAlert(AddrRescanAlert,
+                                       gAppErrStr, " ", " ")) {
+                case 0:             // Yes
                     rescan = true;
                     break;
-                case 1: // ask
-                    switch (FrmCustomAlert(AddrRescanAlert,
-                                           gAppErrStr, " ", " ")) {
-                    case 0:             // Yes
-                        rescan = true;
-                        break;
-                    case 1:             // No
-                    }
-                    break;
-                case 2: // no
-                    break;
-                case 3:
-                    rescan = true;      // trick, force rescan
-                    
-                    gPrefsR.Prefs.autoscan = 2;
-                    break;
+                case 1:             // No
                 }
-                if (rescan) {
-					ok = UpdateHappyDaysDB(frm);
-				}
-                if (ok) SetReadAddressDB();     // mark addressDB is read
+                break;
+            case 2: // no
+                break;
+            case 3:
+                rescan = true;      // trick, force rescan
+                    
+                gPrefsR.Prefs.autoscan = 2;
+                break;
             }
-            MainFormReadDB();
-            FrmGotoForm(MainForm);
+            if (rescan) {
+                ok = UpdateHappyDaysDB(frm);
+            }
+            if (ok) SetReadAddressDB();     // mark addressDB is read
         }
-        
+        MainFormReadDB();
+        FrmGotoForm(MainForm);
         handled = true;
         break;
     default:
@@ -2903,6 +2888,11 @@ static Boolean StartFormHandleEvent(EventPtr e)
 //
 //
 // $Log$
+// Revision 1.71  2002/11/26 19:40:55  jmjeong
+// * Fix 'run datebook once' error(I hope)
+// * Rearrance preference record
+// * Make 'custom field' optional
+//
 // Revision 1.70  2002/05/27 10:59:49  jmjeong
 // german resource
 //
