@@ -1,0 +1,6 @@
+*.prc
+*.bin
+*.grc
+.cvsignore
+AddressDB.PDB
+RESET
