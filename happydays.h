@@ -25,7 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define DEFAULT_DURATION    5
 
 #define HDAppID           	'Jmje'
-#define HDAppVer        	18
+#define HDAppVer        	19
 
 #define MainDBType          'DATA'
 #define MainDBName          "HappyDaysDB"
@@ -45,11 +45,10 @@ struct sDBNotifyPrefs
 {
     char alarm;             // alarm set?
     char icon;              // icon?
-    char datebk3icon;       // datebook 3 icon
     int  notifybefore;      // prenotify duration
     int  duration;          // interval of notified records
     TimeType when;          // no-time
-    char an_icon[5];        // action name icon?
+    char note[255];         // note field
 };
 
 /* ToDo Notify Preferences */
