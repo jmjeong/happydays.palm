@@ -108,7 +108,7 @@ BEGIN
         "#) means leap month in lunar"
 
     "long_cantFindAddrString" = ""\
-    "Can't find custom address book field: %s\n"\
+    "Can't find custom address book field: '%s'\n"\
     "Please rename a custom field of your address book."
 END
 
@@ -996,7 +996,7 @@ MODAL
 HELPID AboutHelpString
 BEGIN
     TITLE "HappyDays"
-    LABEL "HappyDays 1.22" AUTOID AT (Center@80 20) FONT 1
+    LABEL "HappyDays 1.23" AUTOID AT (Center@80 20) FONT 1
     LABEL "© 1999-2000, JaeMok Jeong"
         AUTOID AT (Center@80 PrevBottom+5) FONT 0
     LABEL "<jmjeong@oopsla.snu.ac.kr>" AUTOID AT (Center@80 PrevBottom)
@@ -1028,4 +1028,4 @@ APPLICATIONICONNAME 1000 "HappyDays"
 ICON "happydays.pbitm"
 SMALLICON "happydays-small.pbitm"
 
-VERSION 1 "1.22"
+VERSION 1 "1.23"

@@ -861,7 +861,8 @@ static Boolean PrefFormHandleEvent(EventPtr e)
             break;
         case PrefFormCancel:
             
-            // FrmUpdateForm(StartForm, frmRedrawUpdateCode);
+			// need for 'preference-cancel' work
+            FrmUpdateForm(StartForm, frmRedrawUpdateCode);
             FrmReturnToForm(0);
 
             handled = true;
