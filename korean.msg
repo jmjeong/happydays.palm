@@ -114,8 +114,7 @@ BEGIN
         "주소록으로부터 정보 수집중..."
 
     "HappyDays List" = "HappyDays 목록"
-    "Look up" = "찾아보기"
-    "Today" = "오늘"
+	"Look Up:" = "기준일:"
 
     "HappyDays View" = "HappyDays 보기"
     "Done"  = "완료"
@@ -239,7 +238,7 @@ BEGIN
 	"To Do" = "할 일"
 	"Scan note field" = "주소록의 노트 필드 읽기"
     "%d day(s) left" = "%d 일 남았습니다"
-
+    "%d day(s) passed" = "%d 일 지났습니다"
 	
 	"Notify Format:" = "알림 레코드 형식: "
 	"[Last, First] E(1) Year" = "[성, 이름] E(1) 나이"

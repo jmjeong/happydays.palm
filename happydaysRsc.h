@@ -20,12 +20,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define StartForm                   999
 
 #define MainForm 			        1000
-#define MainFormLookup              1001
-#define MainFormField               1002
-#define MainFormToday               1003
-#define MainFormTable               1004
-#define MainFormPopupTrigger        1005
-#define MainFormAddrCategories      1006
+#define MainFormStart	            1001
+#define MainFormTable               1002
+#define MainFormPopupTrigger        1003
+#define MainFormAddrCategories      1004
 #define MainFormPageUp              1010
 #define MainFormPageDown            1011
 
@@ -125,7 +123,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define BirthdateOrigin             1610
 #define BirthdateLeft				1611
 
-#define BirthLeftString				1699
+#define BirthLeftString				1698
+#define BirthPassedString			1699
 
 #define ToDoNotifyForm              1700
 #define ToDoNotifyPri1              1701

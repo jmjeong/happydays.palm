@@ -104,7 +104,7 @@ Int16 CompareBirthdateFunc(LineItemPtr p1, LineItemPtr p2, Int32 extra)
     return DateCompare(p1->date, p2->date);
 }
 
-UInt16 AddrGetBirthdate(DmOpenRef dbP, UInt16 AddrCategory)
+UInt16 AddrGetBirthdate(DmOpenRef dbP, UInt16 AddrCategory, DateType start)
 {
     UInt16 totalItems;
     UInt16 recordNum = 0;
@@ -112,7 +112,6 @@ UInt16 AddrGetBirthdate(DmOpenRef dbP, UInt16 AddrCategory)
     LineItemPtr ptr;
     PackedBirthDate* rp;
     BirthDate r;
-    DateType dt;
     UInt16 currindex = 0;
 
     // if exist, free the memory
@@ -146,12 +145,8 @@ UInt16 AddrGetBirthdate(DmOpenRef dbP, UInt16 AddrCategory)
                     //     local change for LineItemType
                     //
                     if (r.flag.bits.lunar || r.flag.bits.lunar_leap) {
-                        // now use the same routine in lunar an lunar_leap
-                        //
-                        DateType current;
-                        DateSecondsToDate(TimGetSeconds(), &current);
 
-                        if (!FindNearLunar(&r.date, current,
+                        if (!FindNearLunar(&r.date, start,
                                            r.flag.bits.lunar_leap)) {
                             // ignore the records
                             //
@@ -163,13 +158,12 @@ UInt16 AddrGetBirthdate(DmOpenRef dbP, UInt16 AddrCategory)
                     }
                     else if (r.flag.bits.solar) {
                         int maxtry = 4;
-                        // get current date
-                        //
-                        DateSecondsToDate(TimGetSeconds(), &dt);
+						DateType dt;
 
-                        // set current date
-                        //
-                        DateToInt(dt) = (DateToInt(dt) > DateToInt(r.date))
+						dt = start;
+
+                        DateToInt(dt) = 
+							(DateToInt(dt) > DateToInt(r.date))
                             ? DateToInt(dt) : DateToInt(r.date);
 
                         if (r.date.month < dt.month ||

@@ -32,7 +32,7 @@ void PackBirthdate(BirthDate *birthdate, void* recordP);
 void UnpackBirthdate(BirthDate *birthdate,
                      const PackedBirthDate *packedBirthdate);
 
-UInt16 AddrGetBirthdate(DmOpenRef dbP, UInt16 AddrCategory);
+UInt16 AddrGetBirthdate(DmOpenRef dbP, UInt16 AddrCategory, DateType start);
 Boolean AnalysisBirthDate(const char* birthdate,
                           BirthdateFlag *flag,
                           Int16* year, Int16* month, Int16* day);

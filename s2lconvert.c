@@ -72,7 +72,7 @@ Boolean Sl2LnFormHandleEvent(EventPtr e)
         DateSecondsToDate(TimGetSeconds(), &dt);
 
         DateToAsciiLong(dt.month, dt.day, dt.year + 1904,
-                        gDispdfmts, gAppErrStr);
+                        gPrefdfmts, gAppErrStr);
 
         SetFieldTextFromStr(Sl2LnFormInput, gAppErrStr);
 
@@ -105,7 +105,7 @@ Boolean Sl2LnFormHandleEvent(EventPtr e)
                         StrCopy(gAppErrStr, "-)");
                     }
                     DateToAsciiLong(rtVal.month, rtVal.day, rtVal.year,
-                                    gDispdfmts, &gAppErrStr[2]);
+                                    gPrefdfmts, &gAppErrStr[2]);
                           
                     FldDrawField(SetFieldTextFromStr(Sl2LnFormResult,
                                                      gAppErrStr));
@@ -155,7 +155,7 @@ Boolean Ln2SlFormHandleEvent(EventPtr e)
     case frmOpenEvent:
         DateSecondsToDate(TimGetSeconds(), &dt);
         DateToAsciiLong(dt.month, dt.day, dt.year + 1904,
-                        gDispdfmts, gAppErrStr);
+					gPrefdfmts, gAppErrStr);
         SetFieldTextFromStr(Ln2SlFormInput, gAppErrStr);
 
         FrmDrawForm(frm);
@@ -193,7 +193,7 @@ Boolean Ln2SlFormHandleEvent(EventPtr e)
                                                     rtVal.year) + SunString);
 
                     DateToAsciiLong(rtVal.month, rtVal.day, rtVal.year,
-                                    gDispdfmts, gAppErrStr);
+                                    gPrefdfmts, gAppErrStr);
                     StrNCat(gAppErrStr, " [", AppErrStrLen);
                     StrNCat(gAppErrStr, temp, AppErrStrLen);
                     StrNCat(gAppErrStr, "]", AppErrStrLen);

@@ -50,8 +50,9 @@ Int16 gMainTableRows;         // Main Form table num of rows(default 11) constan
 Int16 gMainTableTotals;       // Main Form table total rows;
 Int16 gMainTableHandleRow;    // The row of birthdate view to display
 DateFormatType gPrefdfmts;  // global date format for Birthday field
-DateFormatType gDispdfmts;  // global date format for display
+DateFormatType gSystemdfmts;  // global system date format 
 TimeFormatType gPreftfmts;  // global time format
+DateType gStartDate;		// staring date of birthday listing
 
 Boolean gProgramExit = false;    // Program exit control(set by Startform)
 
@@ -133,9 +134,9 @@ static void DisplayCategory(UInt32 trigger, Char* string, Boolean redraw)
     FntSetFont (currFont);
 }
 
-static void RereadBirthdateDB()
+static void RereadBirthdateDB(DateType start)
 {
-    gMainTableTotals = AddrGetBirthdate(MainDB, gAddrCategory);
+    gMainTableTotals = AddrGetBirthdate(MainDB, gAddrCategory, start);
 }
 
 static void HighlightAction(int selected, Boolean sound)
@@ -226,28 +227,29 @@ static void HighlightMatchRowName(Char first)
     }
 }
 
-static void DoDateSelect(Boolean popup)
+static void DoDateSelect()
 {
     Char titleStr[32];
-    Char dteStr[15];
     DateTimeType dt;
     Boolean selected = false;
 
-    TimSecondsToDateTime(TimGetSeconds(), &dt);
+	dt.year = gStartDate.year + 1904;
+	dt.month = gStartDate.month;
+	dt.day = gStartDate.day;
 
     /* Pop up the form and get the date */
-    if (popup) {
-        SysCopyStringResource(titleStr, SelectDateString);
-        selected = SelectDay(selectDayByDay, &(dt.month), &(dt.day),
-                             &(dt.year), titleStr);
-    }
-    if (!popup || selected) {
-        DateToAsciiLong(dt.month, dt.day, -1, gDispdfmts, dteStr);
-        FldDrawField(SetFieldTextFromStr(MainFormField, dteStr));
-    
-        // highlight table row matching the date
-        //
-        HighlightMatchRowDate(dt);
+	SysCopyStringResource(titleStr, SelectDateString);
+	selected = SelectDay(selectDayByDay, &(dt.month), &(dt.day),
+						 &(dt.year), titleStr);
+
+    if (selected) {
+		// make the starting date to user selected date
+		gStartDate.year = dt.year - 1904; 
+		gStartDate.month = dt.month;
+		gStartDate.day = dt.day;
+
+		gMainTableStart = 0;
+		FrmUpdateForm(MainForm, frmRedrawUpdateCode);
     }
 }
 
@@ -420,12 +422,12 @@ static void PerformExport(Char * memo, int mainDBIndex, DateType when)
 
         if (r.flag.bits.year) {
             StrNCat(memo, DateToAsciiLong(r.date.month, r.date.day,
-                                          r.date.year + 1904, gDispdfmts,
+                                          r.date.year + 1904, gPrefdfmts,
                                           gAppErrStr), 4096);
         }
         else {
             StrNCat(memo, DateToAsciiLong(r.date.month, r.date.day,
-                                          -1, gDispdfmts,
+                                          -1, gPrefdfmts,
                                           gAppErrStr), 4096);
         }
 
@@ -449,7 +451,6 @@ static Boolean MenuHandler(FormPtr frm, EventPtr e)
         TablePtr tableP = GetObjectPointer(frm, MainFormTable);
 
         TblUnhighlightSelection(tableP);
-        FldDrawField(ClearFieldText(MainFormField));
     }
     
     switch(e->data.menu.itemID) {
@@ -586,6 +587,7 @@ static Boolean MenuHandler(FormPtr frm, EventPtr e)
 static Boolean MainFormHandleEvent (EventPtr e)
 {
     Boolean handled = false;
+
     FormPtr frm = FrmGetFormPtr(MainForm);
     TablePtr tableP = GetObjectPointer(frm, MainFormTable);
 
@@ -617,7 +619,7 @@ static Boolean MainFormHandleEvent (EventPtr e)
             CategoryGetName(AddressDB, gAddrCategory, gPrefsR->addrCategory);
         }
 
-        RereadBirthdateDB();
+        RereadBirthdateDB(gStartDate);
 		if (e->eType == frmOpenEvent) {
 			MainFormLoadTable(frm, false);
 			FrmDrawForm(frm);
@@ -626,6 +628,11 @@ static Boolean MainFormHandleEvent (EventPtr e)
 		else {
 			MainFormLoadTable(frm, true);
 		}
+		// display starting date
+        DateToAsciiLong(gStartDate.month, gStartDate.day, 
+						gStartDate.year+1904, gPrefdfmts, gAppErrStr);
+		CtlSetLabel(GetObjectPointer(frm, MainFormStart), gAppErrStr);
+
         handled = true;
         break;
 
@@ -635,16 +642,17 @@ static Boolean MainFormHandleEvent (EventPtr e)
             
     case ctlSelectEvent:
         switch(e->data.ctlSelect.controlID) {
-        case MainFormLookup:
+        case MainFormStart:
+			// display starting date
+			DateToAsciiLong(gStartDate.month, gStartDate.day, 
+							gStartDate.year+1904, gPrefdfmts, gAppErrStr);
+			CtlSetLabel(GetObjectPointer(frm, MainFormStart), gAppErrStr);
+
             // popup select day window
-            DoDateSelect(true);
+            DoDateSelect();
             handled = true;
             break;
-        case MainFormToday:
-            // doesn't popup select day window
-            DoDateSelect(false);
-            handled = true;
-            break;
+
         case MainFormPopupTrigger: 
         {
             if (SelectCategoryPopup(AddressDB, &gAddrCategory,
@@ -652,9 +660,8 @@ static Boolean MainFormHandleEvent (EventPtr e)
                                     gPrefsR->addrCategory) ) {
                 // changed
                 gMainTableStart = 0;
-                RereadBirthdateDB();
+                RereadBirthdateDB(gStartDate);
                 MainFormLoadTable(frm, true);
-                FldDrawField(ClearFieldText(MainFormField));
             }
         
 
@@ -667,7 +674,6 @@ static Boolean MainFormHandleEvent (EventPtr e)
             if (gMainTableStart) {
                 gMainTableStart -= MIN(gMainTableStart, gMainTableRows-1);
                 MainFormLoadTable(frm, true);
-                FldDrawField(ClearFieldText(MainFormField));
             }
             
             break;
@@ -675,7 +681,6 @@ static Boolean MainFormHandleEvent (EventPtr e)
             if ((gMainTableStart + gMainTableRows) < gMainTableTotals) {
                 gMainTableStart += gMainTableRows-1;
                 MainFormLoadTable(frm, true);
-                FldDrawField(ClearFieldText(MainFormField));
             }
             break;
         default:
@@ -796,10 +801,10 @@ static Boolean UnloadPrefsFields()
     }
     else
     {
-        if (gPrefsR->BirthPrefs.sysdateover)
+        if (gPrefsR->BirthPrefs.sysdateover && gPrefdfmts != gSystemdfmts)
         {
             needrescan = 1;
-            gPrefdfmts = gDispdfmts;    // revert to system date format
+            gPrefdfmts = gSystemdfmts;    // revert to system date format
         }
     }
     gPrefsR->BirthPrefs.sysdateover = newoverride;
@@ -988,7 +993,7 @@ static void MainFormDrawRecord(MemPtr tableP, Int16 row, Int16 column,
 
 		if (drawRecord.date.year != INVALID_CONV_DATE) {
 			DateToAscii(drawRecord.date.month, drawRecord.date.day,
-						drawRecord.date.year+ 1904, gDispdfmts, gAppErrStr);
+						drawRecord.date.year+ 1904, gPrefdfmts, gAppErrStr);
 		}
 		else {
 			StrCopy(gAppErrStr, "-");
@@ -1108,7 +1113,7 @@ static void SetBirthdateViewForm(Int16 index, DateType converted)
 
         if (converted.year != INVALID_CONV_DATE) {
             DateToAsciiLong(converted.month, converted.day,
-                            converted.year+ 1904, gDispdfmts,
+                            converted.year+ 1904, gPrefdfmts,
                             displayStr);
 
             if (r.flag.bits.year            // year exist 
@@ -1137,10 +1142,10 @@ static void SetBirthdateViewForm(Int16 index, DateType converted)
 
         if (r.flag.bits.year) {
             DateToAsciiLong(r.date.month, r.date.day, r.date.year + 1904,
-                            gDispdfmts, gAppErrStr);
+                            gPrefdfmts, gAppErrStr);
         }
         else {
-            DateToAsciiLong(r.date.month, r.date.day, -1, gDispdfmts,
+            DateToAsciiLong(r.date.month, r.date.day, -1, gPrefdfmts,
                             gAppErrStr);
         }
             
@@ -1175,8 +1180,14 @@ static void SetBirthdateViewForm(Int16 index, DateType converted)
 		DateSecondsToDate(TimGetSeconds(), &current);
 		dateDiff = DateToDays(converted) - DateToDays(current);
 
-        SysCopyStringResource(gAppErrStr, BirthLeftString);
-		StrPrintF(displayStr, gAppErrStr, dateDiff);
+		if (dateDiff >= (Int16)0) {
+			SysCopyStringResource(gAppErrStr, BirthLeftString);
+			StrPrintF(displayStr, gAppErrStr, dateDiff);
+		}
+		else {
+			SysCopyStringResource(gAppErrStr, BirthPassedString);
+			StrPrintF(displayStr, gAppErrStr, -1 * dateDiff);
+		}
 		SetFieldTextFromStr(BirthdateLeft, displayStr);
 
         // read category information
@@ -1587,10 +1598,10 @@ static Char* NotifyDescString(DateType when, BirthDate birth, Boolean todo)
                     if (birth.flag.bits.year) {
                         DateToAscii(birth.date.month, birth.date.day,
                                     birth.date.year + 1904,
-                                    gDispdfmts, gAppErrStr);
+                                    gPrefdfmts, gAppErrStr);
                     }
                     else {
-                        DateToAsciiLong(birth.date.month, birth.date.day, -1, gDispdfmts,
+                        DateToAsciiLong(birth.date.month, birth.date.day, -1, gPrefdfmts,
                                         gAppErrStr);
                     }
     
@@ -2807,7 +2818,7 @@ static Int16 OpenDatabases(void)
     PrefGetPreferences(&sysPrefs);
     if (!sysPrefs.hideSecretRecords) mode |= dmModeShowSecret;
 
-    gDispdfmts = gPrefdfmts = sysPrefs.dateFormat;  // save global date format
+    gSystemdfmts = gPrefdfmts = sysPrefs.dateFormat;// save global date format
     gPreftfmts = sysPrefs.timeFormat;               // save global time format
     
     /*
@@ -3017,6 +3028,8 @@ static UInt16 StartApplication(void)
         freememories();
         return 1;
     }
+	// set current date to  the starting date
+	DateSecondsToDate(TimGetSeconds(), &gStartDate);
 
     FrmGotoForm(StartForm);     // read the address db and so
     
