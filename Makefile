@@ -1,6 +1,6 @@
 ## Makefile for HappyDays application
 
-VERSION = 2.12
+VERSION = 2.2
 TARGET = happydays
 APPNAME = "HappyDays"
 APPID = "Jmje"
@@ -397,7 +397,7 @@ html:
 prc/$(TARGET).prc: obj/$(TARGET).prc
 	mv obj/$(TARGET).prc prc
 
-zip: prc/$(TARGET).prc html
+zip: prc/$(TARGET).prc 
 	-@echo "Making distribution file(happydays-$(VERSION).zip) ..." &&\
 	\rm -rf dist && mkdir dist && mkdir dist/img && \
 	cp prc/$(TARGET).prc dist && cp manual/*.html dist  && \
