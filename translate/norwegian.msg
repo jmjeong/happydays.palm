@@ -55,7 +55,7 @@ BEGIN
     "is kept untouched." = "er beholdt."
     "is modified." = "er forandret."
 
-    "Collecting Information..." = "Samler Informasjon..."
+    "Collecting Information" = "Samler Informasjon"
 
     "HappyDays List" = "HappyDays liste"
     "Look Up:" = "Finn:"

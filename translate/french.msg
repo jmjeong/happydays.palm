@@ -53,7 +53,7 @@ BEGIN
     "is kept untouched." = "n'ont pas été modifiés."
     "is modified." = "ont été modifiés."
 
-    "Collecting Information..." = "Recherche des Informations..."
+    "Collecting Information" = "Recherche des Informations"
 
     "Look up:" = "Aller à:"
     "Look up" = "Aller à"

@@ -55,7 +55,7 @@ BEGIN
     "is kept untouched." = "is kept untouched."
     "is modified." = "is modified."
 
-    "Collecting Information..." = "Collecting Information..."
+    "Collecting Information" = "Collecting Information"
 
     "Look Up:" = "Look Up:"
 

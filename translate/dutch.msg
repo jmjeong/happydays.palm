@@ -110,7 +110,7 @@ BEGIN
 
         "Could not write prefs." = ""\
         "Kan niet worden aangepast."
-        "Collecting Information..." = "Verzamel informatie..."
+        "Collecting Information" = "Verzamel informatie"
 
         "HappyDays List" = "HappyDays Overzicht"
         "Look up" = "Ga naar datum..."

@@ -54,8 +54,8 @@ BEGIN
     "is kept untouched." = "를 그대로 유지했습니다."
     "is modified." = "가 수정되었습니다."
 
-    "Collecting Information..." = ""\
-        "주소록으로부터 정보 수집중..."
+    "Collecting Information" = ""\
+        "주소록으로부터 정보 수집중"
 
 	"Look Up:" = "기준일:"
 

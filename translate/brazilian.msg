@@ -55,7 +55,7 @@ BEGIN
     "is kept untouched." = "sem alterar."
     "is modified." = "alteradas."
 
-    "Collecting Information..." = "Coletando informações..."
+    "Collecting Information" = "Coletando informações"
 
     "HappyDays List" = "Lista do HappyDays"
     "Look Up:" = "Procurar:"

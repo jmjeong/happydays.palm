@@ -135,6 +135,20 @@ void PerformExport(Char * memo, int mainDBIndex, DateType when)
                                           -1, gPrefdfmts,
                                           gAppErrStr), 4096);
         }
+        StrNCat(memo, ",", 4096);
+        
+        // print converted date
+        //
+        if (when.year) {
+            StrNCat(memo, DateToAsciiLong(when.month, when.day,
+                                          when.year + 1904, gPrefdfmts,
+                                          gAppErrStr), 4096);
+        }
+        else {
+           StrNCat(memo, DateToAsciiLong(when.month, when.day,
+                                          -1, gPrefdfmts,
+                                          gAppErrStr), 4096);
+        }
 
         StrNCat(memo, ",", 4096);
         StrNCat(memo, EventTypeString(r), 4096);
@@ -811,26 +825,28 @@ static void NotifyDatebook(int mainDBIndex, DateType when, Int8 age,
             repeatInfo.repeatStartOfWeek = 0;
 
             if (gPrefsR.DBNotifyPrefs.duration > 1) {
-				Int16 year;
+                UInt16 end_year;
 
-				year = when.year + gPrefsR.DBNotifyPrefs.duration - 1;
+                repeatInfo.repeatEndDate = when;
+                // if end year is more than 2031, adjust it.
+                //
+                //  'when' is the current year. 
+                //
+                end_year = when.year + gPrefsR.DBNotifyPrefs.duration -1;
 
-                // if end year is more than 2301, set for ever
-				if ((Int16)year > (Int16)2301-1904) 
-                    DateToInt(repeatInfo.repeatEndDate) = -1;
+                if (end_year > 2031 - 1904) {
+                    repeatInfo.repeatEndDate.year = 2031-1904;
+                }
 				else {
-                	// if solar date, make entry repeat
-                	//
-					repeatInfo.repeatEndDate = when;
-					repeatInfo.repeatEndDate.year = year;
+					repeatInfo.repeatEndDate.year = end_year;
 				}
-
                 // if duration > 1, 'when' is the birthdate;
+                //     change when.year into original birthday.
                 if (r.flag.bits.year) when = r.date;
-
 				// Because Palm Desktop doesn't support events before 1970.
 				//
                 AdjustDesktopCompatible(&when);
+                
                 PerformNotifyDB(r, when, age, &repeatInfo, created, touched);
             }
             else if (gPrefsR.DBNotifyPrefs.duration == -1) {
@@ -1031,9 +1047,6 @@ static Char* DateBk3IconString()
 
     return bk3Icon;
 }
-
-
-
 
 static int dec(char hex)
 {

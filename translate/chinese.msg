@@ -46,7 +46,7 @@ BEGIN
     "is kept untouched." = "被保留。"
     "is modified." = "被修改。"
 
-    "Collecting Information..." = "正在蒐集資訊，請稍候..."
+    "Collecting Information" = "正在蒐集資訊，請稍候"
 
     "HappyDays List" = "HappyDays 清單"
     "Look Up:" = "搜尋："

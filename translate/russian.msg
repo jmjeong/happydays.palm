@@ -54,7 +54,7 @@ BEGIN
     "is kept untouched." = "(оставлено)"
     "is modified." = "(обновлено)"
 
-    "Collecting Information..." = "Собираю информацию..."
+    "Collecting Information" = "Собираю информацию"
 
     "Look Up:" = "Искать:"
 

@@ -66,7 +66,7 @@ FORM StartForm AT (0 0 160 160)
 NOFRAME
 SAVEBEHIND
 BEGIN
-    LABEL "Collecting Information..." AUTOID AT (Center@80 BOTTOM@125) FONT 1
+    LABEL "Collecting Information" AUTOID AT (Center@80 BOTTOM@108) FONT 1
 END
 
 FORM MainForm AT (0 0 160 160)
@@ -499,7 +499,7 @@ BEGIN
     TITLE "About HappyDays"
 
 	FORMBITMAP AT (6 18) BITMAP ID_BitmapIcon USABLE 
-    LABEL "HappyDays 2.07" AUTOID AT (PrevRight+38 PrevTop) FONT 1
+    LABEL "HappyDays 2.08" AUTOID AT (PrevRight+38 PrevTop) FONT 1
     LABEL "GPL free software"
         AUTOID AT (PrevLeft PrevTop+ABOUT_LINE_SPACING) FONT 0
     LABEL "(c) 1999-2001 Jaemok Jeong"
@@ -569,4 +569,4 @@ SMALLICONFAMILY
 	TRANSPARENT 192 192 0
 
 APPLICATIONICONNAME 1000 "HappyDays"
-VERSION ID 1 "2.07"
+VERSION ID 1 "2.08"

@@ -149,9 +149,9 @@ void MainFormDrawRecord(MemPtr tableP, Int16 row, Int16 column,
 
 Boolean MenuHandler(FormPtr frm, EventPtr e);
 void MainFormScroll(Int16 newValue, Int16 oldValue, Boolean force_redraw);
-void MainFormScrollLines(Int16 lines, Boolean force_redraw);
+void MainFormScrollLines(Int16 lines, Boolean force_redraw) SECT1;
 void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column, 
-                              RectanglePtr bounds);
+                              RectanglePtr bounds) SECT1;
 void DrawTiny(int size,int x,int y,int n) SECT1;
 void DrawSilkMonth(int mon, int year, int day, int x, int y) SECT1;
 

@@ -52,7 +52,7 @@ BEGIN
     "is kept untouched." = "belassen."
     "is modified." = "geändert."
 
-    "Collecting Information..." = "Daten werden eingelesen..."
+    "Collecting Information" = "Daten werden eingelesen"
 
     "HappyDays List" = "HappyDays Liste"
     "Look Up:" = "Gehe zu:"

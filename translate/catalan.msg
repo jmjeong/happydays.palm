@@ -107,7 +107,7 @@ BEGIN
     "is modified." = "modificades."
 
     "Could not write prefs." = "No s'ha pogut desar preferències."
-    "Collecting Information..." = "Reunint informació..."
+    "Collecting Information" = "Reunint informació"
 
     "HappyDays List" = "Llista HappyDays"
     "Look Up" = "Cercar"

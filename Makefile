@@ -1,6 +1,6 @@
 ## Makefile for HappyDays application
 
-VERSION = 2.07
+VERSION = 2.08
 TARGET = happydays
 APPNAME = "HappyDays"
 APPID = "Jmje"
@@ -65,32 +65,41 @@ ko: ENGLISH obj/$(TARGET)-k8.prc obj/$(TARGET)-k11.prc
 	zip $(TARGET)-$(VERSION)-ko.zip prc/$(TARGET)-k8.prc prc/$(TARGET)-k11.prc
 
 sp: ENGLISH obj/$(TARGET)-sp.prc
-	zip $(TARGET)-$(VERSION)-sp.zip obj/$(TARGET)-sp.prc
+	mv obj/$(TARGET)-sp.prc prc
+	zip $(TARGET)-$(VERSION)-sp.zip prc/$(TARGET)-sp.prc
 
 chi: ENGLISH obj/$(TARGET)-chi-big5.prc obj/$(TARGET)-chi-gb.prc
-	zip $(TARGET)-$(VERSION)-ch.zip obj/$(TARGET)-chi-big5.prc \
-			obj/$(TARGET)-chi-gb.prc
+	mv obj/$(TARGET)-chi-big5.prc obj/$(TARGET)-chi-gb.prc prc
+	zip $(TARGET)-$(VERSION)-ch.zip prc/$(TARGET)-chi-big5.prc \
+			prc/$(TARGET)-chi-gb.prc
 
 de: GERMAN obj/$(TARGET)-de.prc 
-	zip $(TARGET)-$(VERSION)-de.zip obj/$(TARGET)-de.prc
+	mv obj/$(TARGET)-de.prc prc
+	zip $(TARGET)-$(VERSION)-de.zip prc/$(TARGET)-de.prc
 
 br: PORTUGUESE_BR obj/$(TARGET)-br.prc
-	zip $(TARGET)-$(VERSION)-br.zip obj/$(TARGET)-br.prc
+	mv obj/$(TARGET)-br.prc prc
+	zip $(TARGET)-$(VERSION)-br.zip prc/$(TARGET)-br.prc
 
 nor: ENGLISH obj/$(TARGET)-nor.prc
-	zip $(TARGET)-$(VERSION)-nor.zip obj/$(TARGET)-nor.prc
+	mv obj/$(TARGET)-nor.prc prc
+	zip $(TARGET)-$(VERSION)-nor.zip prc/$(TARGET)-nor.prc
 
 cz: ENGLISH obj/$(TARGET)-cz.prc
-	zip $(TARGET)-$(VERSION)-cz.zip obj/$(TARGET)-cz.prc
+	mv obj/$(TARGET)-cz.prc prc
+	zip $(TARGET)-$(VERSION)-cz.zip prc/$(TARGET)-cz.prc
 
 fr: ENGLISH obj/$(TARGET)-fr.prc
-	zip $(TARGET)-$(VERSION)-fr.zip obj/$(TARGET)-fr.prc
+	mv obj/$(TARGET)-fr.prc prc
+	zip $(TARGET)-$(VERSION)-fr.zip prc/$(TARGET)-fr.prc
 
 ru: ENGLISH obj/$(TARGET)-ru.prc
-	zip $(TARGET)-$(VERSION)-ru.zip obj/$(TARGET)-ru.prc
+	mv obj/$(TARGET)-ru.prc prc
+	zip $(TARGET)-$(VERSION)-ru.zip prc/$(TARGET)-ru.prc
 
 th: $(TARGET)-th.prc
-	zip $(TARGET)-$(VERSION)-th.zip $(TARGET)-th.prc
+	mv obj/$(TARGET)-th.prc prc
+	zip $(TARGET)-$(VERSION)-th.zip prc/$(TARGET)-th.prc
 
 
 dutch: $(TARGET)-dutch.prc

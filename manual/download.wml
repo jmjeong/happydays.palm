@@ -8,10 +8,10 @@ File Download
 </h2>
 <p>
 <a
-href="ftp://jmjeong.com/pub/happydays/happydays-2.07.zip">happydays-2.07.zip</a>
+href="ftp://jmjeong.com/pub/happydays/happydays-2.08.zip">happydays-2.08.zip</a>
 - English version and manual<br>
 <a
-href="ftp://jmjeong.com/pub/happydays/happydays-src-2.07.zip">happydays-src-2.07.zip</a>
+href="ftp://jmjeong.com/pub/happydays/happydays-src-2.08.zip">happydays-src-2.08.zip</a>
 - source file<br>
 
 </P>
@@ -30,7 +30,7 @@ To get the latest CVS sources do the following
 $ export CVSROOT=":pserver:cvs@coconut.snu.ac.kr:/export/cvsroot"
 $ cvs login
 ( password = anonymous )
-$ cvs -z3 checkout -rver_207 happydays
+$ cvs -z3 checkout -rver_208 happydays
 </pre>
 
 <p>
@@ -44,7 +44,7 @@ Localizations
 <p>
 If you would like to translate HappyDays into your favorite language, please
 <a href="mailto:happydays@jmjeong.com">mail me</a> and let me know.  
-To translate HappyDays into your favorite languge, you need to copy 'translate/english.msg' file into xxx.msg and edit xxx.msg file. Translate the right part(
+To translate HappyDays into your favorite language, you need to copy 'translate/english.msg' file into xxx.msg and edit xxx.msg file. Translate the right part(
 i.e. the phase after '=') into your favorite language. See the sample <a
 href="local/english.msg">english.msg</a> file.(It is just sample file. If you
 want to do the localization, download the source file and refer
@@ -52,56 +52,56 @@ translate/english.msg file.)<p>
 
 HappyDays has been translated into the following languages:  <p>
 <ul>
-  <li> <a href="ftp://jmjeong.com/pub/happydays/happydays-2.07-ko.zip">
-  Korean</a>(2.07) - by Jaemok Jeong<br>
+  <li> <a href="ftp://jmjeong.com/pub/happydays/happydays-2.08-ko.zip">
+  Korean</a>(2.08) - by Jaemok Jeong<br>
 	  (happydays-k8.prc for 8x8 font,
 	  happydays-k11.prc for 11x11 font)
   <li> <a
-      href="ftp://jmjeong.com/pub/happydays/happydays-2.07-de.zip">
-			German</a>(2.07 beta1)
+      href="ftp://jmjeong.com/pub/happydays/happydays-2.08-de.zip">
+			German</a>(2.08 beta1)
       - by  Gunther Zagatta
 			(<a href="mailto:zagatta@web.de">zagatta@web.de</a>)
   <li><a
-  	  href="ftp://jmjeong.com/pub/happydays/happydays-2.07-sp.zip">
-			Spanish</a>(2.07 beta1)
+  	  href="ftp://jmjeong.com/pub/happydays/happydays-2.08-sp.zip">
+			Spanish</a>(2.08 beta1)
 	  - by Juan Fernando Calderón
 			(<a
 			href="mailto:jfcalderon@dominium.com.mx">jfcalderon@dominium.com.mx</a>)
   <li><a
-  	  href="ftp://jmjeong.com/pub/happydays/happydays-2.07-br.zip">
-			Portuguese Brazilian </a>(2.07 beta1)
+  	  href="ftp://jmjeong.com/pub/happydays/happydays-2.08-br.zip">
+			Portuguese Brazilian </a>(2.08 beta1)
 	  - by Mauricio Montel
 			(<a href="mailto:maumontel@hotmail.com">maumontel@hotmail.com</a>)
   <li><a
-      href="ftp://jmjeong.com/pub/happydays/happydays-2.07-ch.zip">
-			Chinese</a>(2.07 beta1)
+      href="ftp://jmjeong.com/pub/happydays/happydays-2.08-ch.zip">
+			Chinese</a>(2.08 beta1)
       - by Daitau Aaron(<a
 		href="mailto:daitau@hotmail.com">daitau@hotmail.com</a>)<br>
 		(happydays-chi-gb.prc for GB Encoding, happydays-chi-big5.prc for
 		Big5 encoding)
   <li><a
-  	  href="ftp://jmjeong.com/pub/happydays/happydays-2.07-nor.zip">
-			Norwegian</a>(2.07 beta2)
+  	  href="ftp://jmjeong.com/pub/happydays/happydays-2.08-nor.zip">
+			Norwegian</a>(2.08 beta2)
 	  - by Knut Zakariassen
 			(<a href="mailto:palmos@zakariassen.net">palmos@zakariassen.net</a>)
   <li><a
-      href="ftp://jmjeong.com/pub/happydays/happydays-2.07-cz.zip">
-			Czech</a>(2.07 beta1)
+      href="ftp://jmjeong.com/pub/happydays/happydays-2.08-cz.zip">
+			Czech</a>(2.08 beta1)
       - by Petr 'PePa' Pavel
 			(<a href="mailto:petr.pavel@quick.cz">petr.pavel@quick.cz</a>)
   <li><a
-      href="ftp://jmjeong.com/pub/happydays/happydays-2.07-tur.zip">
-			Turkish</a>(2.07)
+      href="ftp://jmjeong.com/pub/happydays/happydays-2.08-tur.zip">
+			Turkish</a>(2.08)
       - by Engin Utkan
 			(<a href="mailto:engin.utkan@usa.net">engin.utkan@usa.net</a>)
   <li><a
-      href="ftp://jmjeong.com/pub/happydays/happydays-2.07-it.zip">
-			Italian</a>(2.07)
+      href="ftp://jmjeong.com/pub/happydays/happydays-2.08-it.zip">
+			Italian</a>(2.08)
       - by Andrea Monteriu'
 			(<a href="mailto:monteriu@tin.it">monteriu@tin.it</a>)
   <li><a
-      href="ftp://jmjeong.com/pub/happydays/happydays-2.07-fr.zip">
-			French</a>(2.07 beta 2)
+      href="ftp://jmjeong.com/pub/happydays/happydays-2.08-fr.zip">
+			French</a>(2.08 beta 2)
       - by Cyril-Vianney BEKIER
 			(<a href="mailto:cyril@bekier.org">cyril@bekier.org</a>)
   <li><a
@@ -134,6 +134,14 @@ You want to see changes before HappyDays 2.0, look up the
 <a href="change_log.html">change_log.html</a> file.
 <p>
 
+<b>Happydays 2.08 version - 2/3/2002</b>
+<ul>
+  <li> Add a scan process widget in start screen.
+  <li> Fix a bug : If the value in 'repeat for' entry is too large, invalid
+  record is created.
+  <li> Change Export to memo format : for lunar entry, incoming event date
+  is recorded also.
+</ul>
 <b>HappyDays 2.07 version - 9/21/2001</b>
 <ul>
 	<li> Add calendar in HappyDays View screen in the case of Handera 330.
@@ -142,7 +150,7 @@ You want to see changes before HappyDays 2.0, look up the
 
 <b>HappyDays 2.06 version - 7/25/2001</b>
 <ul>
-	<li> Fix the bug which makes Palm crash if one try to edit the erraneous
+	<li> Fix the bug which makes Palm crash if one try to edit the erroneous
 	note field(Reported by Hendrik and Jeff).
 	<li> Fix a bug : When the entry is notified into DateBook or ToDo, 
 		the entry in lunar is not affected by 'Look up' Selector(Reported by

@@ -110,7 +110,7 @@ BEGIN
     "is modified." = "ได้ถูกเปลี่ยน"
 
     "Could not write prefs." = "ไม่สามารถจัดเก็บค่าตัวเลือกได้"
-    "Collecting Information..." = "กำลังรวบรวมข้อมูล..."
+    "Collecting Information" = "กำลังรวบรวมข้อมูล"
 
     "HappyDays List" = "HappyDays List"
     "Look Up:" = "ค้นหา"

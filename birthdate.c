@@ -25,6 +25,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "happydaysRsc.h"
 #include "calendar.h"
 
+extern Boolean gbVgaExists;
+
 void PackHappyDays(HappyDays *hd, void* recordP)
 {
     UInt16 offset = 0;
@@ -638,12 +640,69 @@ void  SetReadAddressDB()
     MemMove(gPrefsR.adrmdate, (char *)&gAdmdate, 4);
 }
 
+#define	INDICATE_TOP		110
+#define	INDICATE_LEFT		35
+#define	INDICATE_HEIGHT		6
+#define	INDICATE_WIDTH		15
+#define INDICATE_NUM        7
+
+void initIndicate()
+{
+	RectangleType rect;
+	CustomPatternType pattern;
+
+	pattern[0] = pattern[2] = pattern[4] = pattern[6] = 0xaa;
+    pattern[1] = pattern[3] = pattern[5] = pattern[7] = 0x55;
+
+	WinSetPattern( (const CustomPatternType*)&pattern );
+
+	rect.topLeft.x = INDICATE_LEFT;	
+	rect.topLeft.y = INDICATE_TOP;
+	rect.extent.x = INDICATE_WIDTH * (INDICATE_NUM -1);
+	rect.extent.y = INDICATE_HEIGHT;
+
+    if (gbVgaExists) {
+        rect.topLeft.x += rect.topLeft.x / 2;
+        rect.topLeft.y += rect.topLeft.y / 2;
+        rect.extent.x += rect.extent.x / 2 + 1;
+        rect.extent.y += rect.extent.y / 2;
+    }
+
+	WinFillRectangle( &rect, 0 );
+	return;
+}
+
+void displayNextIndicate( int index )
+{
+	FormPtr form;
+	RectangleType rect;
+	
+	form = FrmGetActiveForm();
+    
+    rect.topLeft.x = INDICATE_LEFT + INDICATE_WIDTH * (index-1);
+	rect.topLeft.y = INDICATE_TOP;
+	rect.extent.x = INDICATE_WIDTH;
+	rect.extent.y = INDICATE_HEIGHT;
+	
+    if (gbVgaExists) {
+        rect.topLeft.x += rect.topLeft.x / 2;
+        rect.topLeft.y += rect.topLeft.y / 2;
+        rect.extent.x += rect.extent.x / 2 + 1;
+        rect.extent.y += rect.extent.y / 2;
+    }
+    
+	WinDrawRectangle( &rect, 0 );
+	return;
+}
+
 Boolean UpdateHappyDaysDB(FormPtr frm)
 {
     UInt16 currIndex = 0;
     AddrPackedDBRecord *rp;
     AddrDBRecordType r;
     MemHandle recordH = 0;
+    UInt16 recordNum;
+    int i = 0, indicateNext;
 
     // create the happydays cache db
     HappyDays   hd;
@@ -659,6 +718,10 @@ Boolean UpdateHappyDaysDB(FormPtr frm)
     // clean up old database
     //
     CleanupHappyDaysCache(MainDB);
+
+    recordNum = DmNumRecords(AddressDB);
+    indicateNext = recordNum / INDICATE_NUM;
+    initIndicate();
             
     while (1) {
         char *name1, *name2;
@@ -667,6 +730,10 @@ Boolean UpdateHappyDaysDB(FormPtr frm)
         recordH = DmQueryNextInCategory(AddressDB, &currIndex,
                                         dmAllCategories);
         if (!recordH) break;
+        if (i++ == indicateNext) {
+            displayNextIndicate(i * INDICATE_NUM / recordNum);
+            indicateNext += recordNum / INDICATE_NUM;
+        }
 
         DmRecordInfo(AddressDB, currIndex, &addrattr, NULL, NULL);
         addrattr &= dmRecAttrCategoryMask;      // get category info
