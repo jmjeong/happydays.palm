@@ -1467,7 +1467,7 @@ static Int16 CheckToDoRecord(DateType when, BirthDate birth)
         toDoRec = MemHandleLock(recordH);
         note = GetToDoNotePtr(toDoRec);
         
-        if ((DateToInt(when) = DateToInt(toDoRec->dueDate))
+        if ((DateToInt(when) == DateToInt(toDoRec->dueDate))
             && IsSameRecord(note, birth)) {
             MemHandleUnlock(recordH);
 
@@ -1751,7 +1751,7 @@ static Int16 PerformNotifyTD(BirthDate birth, DateType when,
 
     // for the performance, check this first 
     if ( ((existIndex = CheckToDoRecord(when, birth)) >= 0)
-         && gPrefsR->existing == 0) {    // exist and keep the record
+         && !gPrefsR->existing ) {    // exists and keep the record
         (*touched)++;
         
         return 0;

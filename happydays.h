@@ -77,9 +77,9 @@ struct sBirthPrefs
 struct sPrefsR 
 {
     char version;           // version number
-    char records;			// all or selected
-    char existing;			// keep or modify
-    char private;
+    char records;			// all or selected(0: all, 1: selected)
+    char existing;			// keep or modify(0: keep, 1: modify)
+    char private;			// (0: public, 1: private)
 
     struct sDBNotifyPrefs DBNotifyPrefs;
     struct sTDNotifyPrefs TDNotifyPrefs;

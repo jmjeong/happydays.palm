@@ -421,7 +421,7 @@ MODAL
 HELPID AboutHelpString
 BEGIN
     TITLE "HappyDays"
-    LABEL "HappyDays 1.34" AUTOID AT (Center@80 20) FONT 1
+    LABEL "HappyDays 1.35" AUTOID AT (Center@80 20) FONT 1
     LABEL "(c) 1999-2000, JaeMok Jeong"
         AUTOID AT (Center@80 PrevBottom+5) FONT 0
     LABEL "<jmjeong@oopsla.snu.ac.kr>" AUTOID AT (Center@80 PrevBottom)
@@ -453,4 +453,4 @@ APPLICATIONICONNAME 1000 "HappyDays"
 ICON "HD_large.bmp"
 SMALLICON "HD_small.bmp"
 
-VERSION ID 1 "1.34"
+VERSION ID 1 "1.35"
