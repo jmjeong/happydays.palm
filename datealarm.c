@@ -4,6 +4,7 @@
 #include <PalmUtils.h>
 
 #include "datebook.h"
+#include "happydaysRsc.h"
 #include "section.h"
 
 #define apptNoAlarm                    -1
@@ -34,9 +35,9 @@ ApptAlarmMunger (
 	UInt16*						ioCountP,
 	DatebookAlarmType *		outAlarmListP,
 	Boolean*					outAudibleP )  SECT1;
-Boolean NextRepeat (ApptDBRecordPtr apptRec, DatePtr dateP)  SECT1;
+Boolean NextRepeat (ApptDBRecordPtr apptRec, DatePtr dateP) SECT1;
 
-static Boolean NextRepeat (ApptDBRecordPtr apptRec, DatePtr dateP) 
+Boolean NextRepeat (ApptDBRecordPtr apptRec, DatePtr dateP) 
 {
 	Int16  i;
 	UInt16 day;
@@ -75,176 +76,176 @@ static Boolean NextRepeat (ApptDBRecordPtr apptRec, DatePtr dateP)
 	
 
 	switch (apptRec->repeat->repeatType)
-		{
+    {
 		// Daily repeating appointment.
-		case repeatDaily:
-			dateInDays = DateToDays (date);
-			startInDays = DateToDays (start);
-			daysTilNext = (dateInDays - startInDays + freq - 1) / freq * freq;
-			if (startInDays + daysTilNext > (UInt32) maxDays)
-				return (false);
-			DateDaysToDate (startInDays + daysTilNext, &next);
-			break;
+    case repeatDaily:
+        dateInDays = DateToDays (date);
+        startInDays = DateToDays (start);
+        daysTilNext = (dateInDays - startInDays + freq - 1) / freq * freq;
+        if (startInDays + daysTilNext > (UInt32) maxDays)
+            return (false);
+        DateDaysToDate (startInDays + daysTilNext, &next);
+        break;
 			
 
 
 		// Weekly repeating appointment (ex: every Monday and Friday). 
 		// Yes, weekly repeating appointment can occur more then once a
 		// week.
-		case repeatWeekly:
-			dateInDays = DateToDays (date);
-			startInDays = DateToDays (start);
+    case repeatWeekly:
+        dateInDays = DateToDays (date);
+        startInDays = DateToDays (start);
 
-			firstDayOfWeek = (DayOfWeek (1, 1, firstYear) - 
-				apptRec->repeat->repeatStartOfWeek + daysInWeek) % daysInWeek;
+        firstDayOfWeek = (DayOfWeek (1, 1, firstYear) - 
+                          apptRec->repeat->repeatStartOfWeek + daysInWeek) % daysInWeek;
 
-			dayOfWeek = DayOfWeek (date.month, date.day, date.year+firstYear);
-			apptWeekDay = (dayOfWeek - apptRec->repeat->repeatStartOfWeek +
-				daysInWeek) % daysInWeek;
+        dayOfWeek = DayOfWeek (date.month, date.day, date.year+firstYear);
+        apptWeekDay = (dayOfWeek - apptRec->repeat->repeatStartOfWeek +
+                       daysInWeek) % daysInWeek;
 
-			// Are we in a week in which the appointment occurrs, if not 
-			// move to that start of the next week in which the appointment
-			// does occur.
-			weeksDiff = (((dateInDays + firstDayOfWeek) / daysInWeek) - 
-							 ((startInDays + firstDayOfWeek) / daysInWeek)) %freq;
-			if (weeksDiff)
-				{
-				adjust = ((freq - weeksDiff) * daysInWeek)- apptWeekDay;
-				apptWeekDay = 0;
-				dayOfWeek = (dayOfWeek + adjust) % daysInWeek;
-				}
-			else
-				adjust = 0;
+        // Are we in a week in which the appointment occurrs, if not 
+        // move to that start of the next week in which the appointment
+        // does occur.
+        weeksDiff = (((dateInDays + firstDayOfWeek) / daysInWeek) - 
+                     ((startInDays + firstDayOfWeek) / daysInWeek)) %freq;
+        if (weeksDiff)
+        {
+            adjust = ((freq - weeksDiff) * daysInWeek)- apptWeekDay;
+            apptWeekDay = 0;
+            dayOfWeek = (dayOfWeek + adjust) % daysInWeek;
+        }
+        else
+            adjust = 0;
 			
-			// Find the next day on which the appointment repeats.
-			for (i = 0; i < daysInWeek; i++)
-				{
-				if (apptRec->repeat->repeatOn & (1 << dayOfWeek)) break;
-				adjust++;
-				if (++dayOfWeek == daysInWeek)
-					dayOfWeek = 0;
-				if (++apptWeekDay == daysInWeek)
-					adjust += (freq - 1) * daysInWeek;
-				}
+        // Find the next day on which the appointment repeats.
+        for (i = 0; i < daysInWeek; i++)
+        {
+            if (apptRec->repeat->repeatOn & (1 << dayOfWeek)) break;
+            adjust++;
+            if (++dayOfWeek == daysInWeek)
+                dayOfWeek = 0;
+            if (++apptWeekDay == daysInWeek)
+                adjust += (freq - 1) * daysInWeek;
+        }
 
-			if (dateInDays + adjust > (UInt32) maxDays)
-				return (false);
-			DateDaysToDate (dateInDays + adjust, &next);
+        if (dateInDays + adjust > (UInt32) maxDays)
+            return (false);
+        DateDaysToDate (dateInDays + adjust, &next);
 //			next = date;
 //			DateAdjust (&next, adjust);
-			break;
+        break;
 
 
 
 		// Monthly-by-day repeating appointment (ex: the 3rd Friday of every
 		// month).
-		case repeatMonthlyByDay:
-			// Compute the number of month until the appointment repeats again.
-			monthsTilNext = (date.month - start.month);
+    case repeatMonthlyByDay:
+        // Compute the number of month until the appointment repeats again.
+        monthsTilNext = (date.month - start.month);
 
-			monthsTilNext = ((((date.year - start.year) * monthsInYear) + 
-						          (date.month - start.month)) + freq - 1) /
-						       freq * freq;
+        monthsTilNext = ((((date.year - start.year) * monthsInYear) + 
+                          (date.month - start.month)) + freq - 1) /
+            freq * freq;
 
-			while (true)
-				{
-				year = start.year + 
-								 (start.month - 1 + monthsTilNext) / monthsInYear;
-				if (year >= numberOfYears)
-					return (false);
+        while (true)
+        {
+            year = start.year + 
+                (start.month - 1 + monthsTilNext) / monthsInYear;
+            if (year >= numberOfYears)
+                return (false);
 
-				next.year = year;
-				next.month = (start.month - 1 + monthsTilNext) % monthsInYear + 1;
+            next.year = year;
+            next.month = (start.month - 1 + monthsTilNext) % monthsInYear + 1;
 	
-				dayOfWeek = DayOfWeek (next.month, 1, next.year+firstYear);
-				if ((apptRec->repeat->repeatOn % daysInWeek) >= dayOfWeek)
-					day = apptRec->repeat->repeatOn - dayOfWeek + 1;
-				else
-					day = apptRec->repeat->repeatOn + daysInWeek - dayOfWeek + 1;
+            dayOfWeek = DayOfWeek (next.month, 1, next.year+firstYear);
+            if ((apptRec->repeat->repeatOn % daysInWeek) >= dayOfWeek)
+                day = apptRec->repeat->repeatOn - dayOfWeek + 1;
+            else
+                day = apptRec->repeat->repeatOn + daysInWeek - dayOfWeek + 1;
 	
-				// If repeat-on day is between the last sunday and the last
-				// saturday, make sure we're not passed the end of the month.
-				if ( (apptRec->repeat->repeatOn >= domLastSun) &&
-					  (day > DaysInMonth (next.month, next.year+firstYear)))
-					{
-					day -= daysInWeek;
-					}
-				next.day = day;
+            // If repeat-on day is between the last sunday and the last
+            // saturday, make sure we're not passed the end of the month.
+            if ( (apptRec->repeat->repeatOn >= domLastSun) &&
+                 (day > DaysInMonth (next.month, next.year+firstYear)))
+            {
+                day -= daysInWeek;
+            }
+            next.day = day;
 
-				// Its posible that "next date" calculated above is 
-				// before the date passed.  If so, move forward
-				// by the length of the repeat freguency and preform
-				// the calculation again.
-				if ( DateToInt(date) > DateToInt (next))
-					monthsTilNext += freq;
-				else
-					break;
-				}
-			break;						
+            // Its posible that "next date" calculated above is 
+            // before the date passed.  If so, move forward
+            // by the length of the repeat freguency and preform
+            // the calculation again.
+            if ( DateToInt(date) > DateToInt (next))
+                monthsTilNext += freq;
+            else
+                break;
+        }
+        break;						
 
 
 
 		// Monthly-by-date repeating appointment (ex: the 15th of every
 		// month).
-		case repeatMonthlyByDate:
-			// Compute the number of month until the appointment repeats again.
-			monthsDiff = ((date.year - start.year) * monthsInYear) + 
-				(date.month - start.month);
-			monthsTilNext = (monthsDiff + freq - 1) / freq * freq;
+    case repeatMonthlyByDate:
+        // Compute the number of month until the appointment repeats again.
+        monthsDiff = ((date.year - start.year) * monthsInYear) + 
+            (date.month - start.month);
+        monthsTilNext = (monthsDiff + freq - 1) / freq * freq;
 
-			if ((date.day > start.day) && (!(monthsDiff % freq)))
-				monthsTilNext += freq;
+        if ((date.day > start.day) && (!(monthsDiff % freq)))
+            monthsTilNext += freq;
 				
-			year = start.year + 
-							 (start.month - 1 + monthsTilNext) / monthsInYear;
-			if (year >= numberOfYears)
-				return (false);
+        year = start.year + 
+            (start.month - 1 + monthsTilNext) / monthsInYear;
+        if (year >= numberOfYears)
+            return (false);
 
-			next.year = year;
-			next.month = (start.month - 1 + monthsTilNext) % monthsInYear + 1;
-			next.day = start.day;
+        next.year = year;
+        next.month = (start.month - 1 + monthsTilNext) % monthsInYear + 1;
+        next.day = start.day;
 
-			// Make sure we're not passed the last day of the month.
-			daysInMonth = DaysInMonth (next.month, next.year+firstYear);
-			if (next.day > daysInMonth)
-				next.day = daysInMonth;
-			break;
+        // Make sure we're not passed the last day of the month.
+        daysInMonth = DaysInMonth (next.month, next.year+firstYear);
+        if (next.day > daysInMonth)
+            next.day = daysInMonth;
+        break;
 
 
 
 		// Yearly repeating appointment.
-		case repeatYearly:
-			next.day = start.day;
-			next.month = start.month;
+    case repeatYearly:
+        next.day = start.day;
+        next.month = start.month;
 
-			year = start.year + 
-				((date.year - start.year + freq - 1) / freq * freq);
+        year = start.year + 
+            ((date.year - start.year + freq - 1) / freq * freq);
 			
-			if ((date.month > start.month) ||
-				((date.month == start.month) && (date.day > start.day)))
-				 year += freq;
+        if ((date.month > start.month) ||
+            ((date.month == start.month) && (date.day > start.day)))
+            year += freq;
 
-			// Specal leap day processing.
-			if ( (next.month == february) && (next.day == 29) &&
-				  (next.day > DaysInMonth (next.month, year+firstYear)))
-				{
-				next.day = DaysInMonth (next.month, year+firstYear);
-				}				      
-			if (year >= numberOfYears)
-				return (false);
+        // Specal leap day processing.
+        if ( (next.month == february) && (next.day == 29) &&
+             (next.day > DaysInMonth (next.month, year+firstYear)))
+        {
+            next.day = DaysInMonth (next.month, year+firstYear);
+        }				      
+        if (year >= numberOfYears)
+            return (false);
 
-			next.year = year;	
-			break;
-        default:
-            break;
-		}
+        next.year = year;	
+        break;
+    default:
+        break;
+    }
 
 	// Is the next occurrence after the end date of the appointment?
 	if (DateCompare (next, apptRec->repeat->repeatEndDate) > 0)
 		return (false);
 
 	ErrFatalDisplayIf ((DateToInt (next) < DateToInt (*dateP)),
-		"Calculation error");
+                       "Calculation error");
 
 	*dateP = next;
 	return (true);
@@ -256,14 +257,14 @@ static Boolean IsException (ApptDBRecordPtr apptRec, DateType date)
 	DatePtr exceptions;
 
 	if (apptRec->exceptions)
-		{
+    {
 		exceptions = &apptRec->exceptions->exception;
 		for (i = 0; i < apptRec->exceptions->numExceptions; i++)
-			{
+        {
 			if (DateCompare (date, exceptions[i]) == 0)
-			return (true);
-			}
-		}
+                return (true);
+        }
+    }
 	return (false);
 }
 
@@ -274,20 +275,20 @@ Boolean ApptNextRepeat (ApptDBRecordPtr apptRec, DatePtr dateP)
 	date = *dateP;
 	
 	while (true)
-		{
+    {
 		// Compute the next time the appointment repeats.
 		if (! NextRepeat (apptRec, &date))
 			return (false);
 
 		// Check if the date computed is in the exceptions list.
 		if (! IsException (apptRec, date))
-			{
+        {
 			*dateP = date;
 			return (true);
-			}
+        }
 			
 		DateAdjust (&date, 1);
-		}		
+    }		
 }
 
 UInt32 ApptGetAlarmTime (ApptDBRecordPtr apptRec, UInt32 currentTime) 
@@ -299,24 +300,24 @@ UInt32 ApptGetAlarmTime (ApptDBRecordPtr apptRec, UInt32 currentTime)
 	DateTimeType		apptDateTime;
 
 	if (!apptRec->alarm)
-		{
+    {
 		return apptNoTime;
-		}
+    }
 
 	// Non-repeating appointment?
 	if (! apptRec->repeat)
-		{
+    {
 		// An alarm on an untimed event triggers at midnight.
 		if (TimeToInt (apptRec->when->startTime) == apptNoTime)
-			{
+        {
 			apptDateTime.minute = 0;
 			apptDateTime.hour = 0;
-			}
+        }
 		else
-			{
+        {
 			apptDateTime.minute = apptRec->when->startTime.minutes;
 			apptDateTime.hour = apptRec->when->startTime.hours;
-			}
+        }
 		apptDateTime.second = 0;
 		apptDateTime.day = apptRec->when->date.day;
 		apptDateTime.month = apptRec->when->date.month;
@@ -328,24 +329,24 @@ UInt32 ApptGetAlarmTime (ApptDBRecordPtr apptRec, UInt32 currentTime)
 		// of the appointment by the length of the advance notice.
 		advance = apptRec->alarm->advance;
 		switch (apptRec->alarm->advanceUnit)
-			{
-			case aauMinutes:
-				advance *= minutesInSeconds;
-				break;
-			case aauHours:
-				advance *= hoursInSeconds;
-				break;
-			case aauDays:
-				advance *= daysInSeconds;
-				break;
-			}
+        {
+        case aauMinutes:
+            advance *= minutesInSeconds;
+            break;
+        case aauHours:
+            advance *= hoursInSeconds;
+            break;
+        case aauDays:
+            advance *= daysInSeconds;
+            break;
+        }
 
 		alarmTime = TimDateTimeToSeconds (&apptDateTime) - advance;
 		if (alarmTime >= currentTime)
 			return (alarmTime);
 		else
 			return (0);
-		}
+    }
 
 
 	// Repeating appointment.
@@ -355,18 +356,18 @@ UInt32 ApptGetAlarmTime (ApptDBRecordPtr apptRec, UInt32 currentTime)
 	repeatDate.day = curDateTime.day;
 	
 	while (ApptNextRepeat (apptRec, &repeatDate))
-		{
+    {
 		// An alarm on an untimed event triggers at midnight.
 		if (TimeToInt (apptRec->when->startTime) == apptNoTime)
-			{
+        {
 			apptDateTime.minute = 0;
 			apptDateTime.hour = 0;
-			}
+        }
 		else
-			{
+        {
 			apptDateTime.minute = apptRec->when->startTime.minutes;
 			apptDateTime.hour = apptRec->when->startTime.hours;
-			}
+        }
 		apptDateTime.second = 0;
 		apptDateTime.day = repeatDate.day;
 		apptDateTime.month = repeatDate.month;
@@ -375,24 +376,24 @@ UInt32 ApptGetAlarmTime (ApptDBRecordPtr apptRec, UInt32 currentTime)
 		// Compute the time of the alarm by adjusting the date and time 
 		// of the appointment by the length of the advance notice.
 		switch (apptRec->alarm->advanceUnit)
-			{
-			case aauMinutes:
-				advance = (UInt32) apptRec->alarm->advance * minutesInSeconds;
-				break;
-			case aauHours:
-				advance = (UInt32) apptRec->alarm->advance * hoursInSeconds;
-				break;
-			case aauDays:
-				advance = (UInt32) apptRec->alarm->advance * daysInSeconds;
-				break;
-			}
+        {
+        case aauMinutes:
+            advance = (UInt32) apptRec->alarm->advance * minutesInSeconds;
+            break;
+        case aauHours:
+            advance = (UInt32) apptRec->alarm->advance * hoursInSeconds;
+            break;
+        case aauDays:
+            advance = (UInt32) apptRec->alarm->advance * daysInSeconds;
+            break;
+        }
 
 		alarmTime = TimDateTimeToSeconds (&apptDateTime) - advance;
 		if (alarmTime >= currentTime)
 			return (alarmTime);
 
 		DateAdjust (&repeatDate, 1);
-		} 
+    } 
 		
 	return (0);
 }
@@ -693,44 +694,12 @@ void
 ReserveAlarmInternals (
 	PendingAlarmQueueType*		outAlarmInternalsP )
 {
-/*
-  #pragma unused (inInterrupt)
-  PendingAlarmQueueType**		alarmInternalsH;
-  PendingAlarmQueueType*		alarmInternalsP;
-  Err								err;
-	
-  err = FtrGet (sysFileCDatebook, alarmPendingListFeature, (UInt32*) &alarmInternalsH);
-  if (err == ftrErrNoSuchFeature)
-  {
-  alarmInternalsH = (PendingAlarmQueueType **) MemHandleNew (sizeof (PendingAlarmQueueType));
-  if (!alarmInternalsH)
-  {
-  ErrFatalDisplay ("Out of memory");
-  return NULL;
-  }
-			
-  MemHandleSetOwner ((MemHandle) alarmInternalsH, dmDynOwnerID);
-  FtrSet (sysFileCDatebook, alarmPendingListFeature, (UInt32) alarmInternalsH);
-  }
-	
-  alarmInternalsP = (PendingAlarmQueueType *) MemHandleLock ((MemHandle) alarmInternalsH);
-	
-  if (err == ftrErrNoSuchFeature)
-  {
-  MemSet (alarmInternalsP, sizeof (PendingAlarmQueueType), 0);
-  alarmInternalsP->snoozeAnchorTime = apptNoAlarm;
-  }
-	
-  return alarmInternalsP;
-*/
-	
-	
-//	static PendingAlarmQueueType	alarmInternals;
-	UInt16								prefsSize = sizeof (PendingAlarmQueueType);
-	Int16									prefsVersion;
-	
-	prefsVersion = PrefGetAppPreferences (sysFileCDatebook, datebookUnsavedPrefID,
-                                          outAlarmInternalsP, &prefsSize, false);
+	UInt16 prefsSize = sizeof (PendingAlarmQueueType);
+	Int16 prefsVersion;
+
+	prefsVersion = PrefGetAppPreferences
+        (sysFileCDatebook, datebookUnsavedPrefID,
+         outAlarmInternalsP, &prefsSize, false);
 	
 	if (prefsVersion == noPreferenceFound)
     {
@@ -738,7 +707,8 @@ ReserveAlarmInternals (
 		outAlarmInternalsP->snoozeAnchorTime = apptNoAlarm;
 		
 		PrefSetAppPreferences (sysFileCDatebook, datebookUnsavedPrefID,
-                               datebookUnsavedPrefsVersionNum, outAlarmInternalsP,
+                               datebookUnsavedPrefsVersionNum,
+                               outAlarmInternalsP,
                                sizeof (PendingAlarmQueueType), false);
     }
 }
@@ -772,10 +742,6 @@ void RescheduleAlarms (DmOpenRef dbP)
 	UInt32 scheduledAlarmTime;
 	PendingAlarmQueueType alarmInternals;
 	
-#if	DATEBOOK_DEBUG_LEVEL == DATEBOOK_DEBUG_FULL
-	DbgSrcMessage ("RescheduleAlarms()\n");
-#endif
-	
 	ReserveAlarmInternals (&alarmInternals);
 	
 	// The pending alarm queue used to be empty, as a rule, any time that
@@ -796,7 +762,6 @@ void RescheduleAlarms (DmOpenRef dbP)
 		    (ref > 0))
 			scheduledAlarmTime = timeInSeconds;
 		
-
 		nextAlarmTime = ApptGetTimeOfNextAlarm (dbP, scheduledAlarmTime);
 		
 		// If the scheduled time of the next alarm is not equal to the

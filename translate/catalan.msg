@@ -1,241 +1,235 @@
 TRANSLATION "CATALAN"
 BEGIN
-	"long_notifySettingMoreString" =  ""\
-	"Aquesta nota la fan servir altres programes d'Agenda como ara "\
-	"Action Names o  DateBk3/4.\n\n"\
-	"Amb aquesta nota, podeu triar la icona, tipus de lletra i altres opcions.\n\n"\
+	"long_notifySettingMoreString" = ""\
+	"Nomès per a usuaris avançats\n\n"\
+	"Aquesta nota la fan servir programes d'agenda de tercers"\
+	"com ara Action Names, DateBk3/4.\n\n"\
+	"Podeu indicar una icona, lletra, i més opcions fent servir aquesta nota.\n\n"\
 	"Per a més informació, consulteu el seu manual.\n"
 
-    "long_customErrorString" = ""\
-    "'Naixement' és el nom personalitzat per omisió."\
-    "Per a establir un camp personalitzat diferent"\
-    " trieu 'Preferències'.\n\n"\
-    "IMPORTANT: Haureu de fer servir Adreçes i seleccionar 'Opcions/"\
-    "Nom dels camps pers...' per a canviar un camp personalitzat a 'Naixement'"\
-    " o aquell nom que volgueu triar a les Preferències de "\
-    "HappyDays.\n"
-
     "long_aboutString" = ""\
-    "'HappyDays' os ajudará a recordar les dates claus i aniverssaris "\
+    "'HappyDays' us ajudarà a recordar les dates claus i anniversaris "\
     "dels vostres amics i familiars.\n\n"\
-    "trobareu informació detallada sobre l'ús de HappyDays als arxius"\
-    "index.html i manual.html\n\n"\
+    "Consulteu l'arxiu index.html i el manual.html on trobareu informació detallada "\
+    "sobre l'ús de HappyDays\n\n"\
     "HappyDays es distribueix sota els termes de la GNU General "\
     "Public License versió 2.0.\n"
 
     "long_cleanupAlertString" = ""\
-    "Les notificacions es consideren de HappyDays si tenen "\
-	"{Ident. HappyDays} en el camp Nota. "\ 	
-    "Si feu servir el mateis format a les vostres entrades, "\
-    "la Neteja també les podria eliminar.\n"
+    "Els registres notificats es consideren de HappyDays si tenen "\
+	"{HappyDays ID} en el seu camp de Notes. "\ 	
+    "Si feu servir aquest format en els vostres propis "\
+    "registres, es poden esborrar en fer la Neteja de HappyDays.\n"
 
     "long_sl2lnString" = ""\
         "-) significa mes lunar normal\n"\
         "#) significa mes lunar de traspàs"
 
-    "long_cantFindAddrString" = ""\
-    "A les Adreçes no hi cap camp personalitzat: '%s'\n"\
-    "Si us plau canvieu el nom d'un camp personalitzat a les vostres Adreçes."
-
     "Select Time" = "Establir hora"
     "No Time" = "Sense hora"
-    "Invalid input date" = "Data invàlida"
+    "Invalid input date" = "Data no vàlida"
     "Export to Memo Pad is completed." = "S'ha acabat l'exportació al Bloc de notes."
 
-    "SUN" =  "DIU"
-    "MON" =  "DIL"
-    "TUE" =  "DIM"
-    "WED" =  "DIC"
-    "THU" =  "DIJ"
-    "FRI" =  "DIV"
-    "SAT" =  "DIS"
+    "SUN"   = "DIU"
+    "MON"   = "DIL"
+    "TUE"   = "DIM"
+    "WED"   = "DIM"
+    "THU"   = "DIJ"
+    "FRI"   = "DIV"
+    "SAT"   = "DIS"
 
-    "Not enough memory" = "Memòria insuficient"
-    "%d notify entry is created.\n" = "%d notificacions creades.\n"
-    "%d existing entry " = "%d notificacions "
-    "is kept untouched." = "sense modificar."
-    "is modified." = "modificades."
+    "Not enough memory" = "Memòria Insuficient"
+    "%d notify entry have been created.\n" = "%d notificacions creades.\n"
+    "%d existing entries " = "%d notificacions "
+    "are kept untouched." = "sense modificar."
+    "have been modified." = "modificades."
 
-    "Collecting Information" = "Recollint informació"
+    "Collecting Information" = "Reunint informació"
 
-    "Look Up:" = "Cercar:"
+    "Look Up:" = "Cerca:"
 
     "HappyDays View" = "Detalls HappyDays"
     "Done"  = "Fet"
-    "DB" = "Agenda" 
+    "DB" = "Agenda"
     "TD" = "Tasques"
     "Goto" = "Anar a"
 
-    "Utilities" = "Eines"
-    "Date Book Notify" = "Notificar a l'Agenda"
-    "Cleanup Date Book"  = "Netejar l'Agenda"
-    "To Do Notify" = "Notificar a les Tasques"
-    "Cleanup To Do"  = "Netejar les Tasques"
-    "Export to Memo Pad" = "Exportar al Bloc de notes"
-    "Solar to Lunar" = "Solar a Lunar"
-    "Lunar to Solar" = "Lunar a Solar"
-	"Rescan Address Book" = "Rastrejar les adreçes"
+    "Utilities" = "Utilitats"
+    "Date Book Notify" = "Notifica a l'Agenda"
+    "Cleanup Date Book"  = "Neteja l'Agenda"
+    "To Do Notify" = "Notifica a les Tasques"
+    "Cleanup To Do"  = "Neteja les Tasques"
+    "Export to Memo Pad" = "Exporta al Bloc de notes"
+    "Solar to Lunar" = "Solar -> Lunar"
+    "Lunar to Solar" = "Lunar -> Solar"
+	"Rescan Address Book" = "Torna a cercar a la Llibreta d'Adreces"
 
     "Options" = "Opcions"
-	"Font..." = "Tipus de lletra..."
-    "Preferences" =  "Preferències"
-	"Display Preferences"= "Mostra preferències"
-    "About HappyDays" =  "Sobre HappyDays"
+	"Font..." = "Lletra..."
+    "Preferences" = "Preferències"
+	"Display Preferences" = "Mostra les Preferències"
+    "About HappyDays" = "Sobre HappyDays"
 
-    "Edit" =  "Edició"
-    "Undo" =  "Desfés"
-    "Cut" =  "Talla"
-    "Copy" =  "Copia"
-    "Paste" =  "Enganxa"
-    "Select All" =  "Seleccciona-ho tot"
-    "Keyboard" =  "Teclat"
-    "Graffiti" =  "Ajuda de Graffiti"
+    "Edit" = "Edició"
+    "Undo" = "Desfés"
+    "Cut" = "Retalla"
+    "Copy" = "Còpia" 
+    "Paste" = "Enganxa" 
+    "Select All" = "Selecciona-ho tot" 
+    "Keyboard" = "Teclat" 
+    "Graffiti" = "Ajuda de Graffiti"
 
 
 /* Font... */
 
 /* preferences screen */
-    "Custom field:" = "Camp personal.:"
-    "Instead of system date format" = "Format de data alternatiu"  
-    "Use" = "Usa"  
-    "M/D/Y" = "M/D/A"  
-    "D/M/Y" = "D/M/A"  
-    "D.M.Y" = "D.M.A"  
-    "D-M-Y" = "D-M-A"  
-    "Y/M/D" = "A/M/D"  
-    "Y.M.D" = "A.M.D"  
-    "Y-M-D" = "A-M-D"  
-	"Address Autoscan" = "Rastrejar adreçes"
+    "Custom field:" = "Camp personal:"
+    "Instead of system date format" = "Format de data alternatiu"
+    "Use" = "Usa"
+    "M/D/Y" = "M/D/A"
+    "D/M/Y" = "D/M/A"
+    "D.M.Y" = "D.M.A"
+    "D-M-Y" = "D-M-A"
+    "Y/M/D" = "A/M/D"
+    "Y.M.D" = "A.M.D"
+    "Y-M-D" = "A-M-D"
+	"Address Autoscan" = "Cerca les Adreces"
 	"Always" = "Sempre"
-	"Ask" = "Preguntar-ho"
+	"Ask" = "Pregunta-ho"
 	"Never" = "Mai"
 
-    "Notify Format:" = "Format de Notificació:"  
-    "[Last, First] E(1) Year" =  "[Cognoms, Nom] R(1) Any"
-    "[First Last] E(1) Year" =  "[Nom Cognoms] R(1) Any"
-    "Event - Last, First Year" = "Registre - Cognoms, Nom Any"  
-    "Event - First Last Year" = "Registre - Nom Cognoms Any"  
-    "First Last Year" = "Nom Cognoms Any"  
+      "Notify Format:" = "Format de Notificació:"
+      "[Last, First] E(1) Year" = "[Cognoms, Nom] E(1) Any"
+      "[First Last] E(1) Year" = "[Nom Cognoms] E(1) Any"
+      "Event - Last, First Year" = "Registre - Cognoms, Nom Any"
+      "Event - First Last Year" = "Registre - Nom Cognoms Any"
+      "First Last Year" = "Nom Cognoms Any"
 
-    
-	"Address Book:" = "Adreçes"
-	"Built-in" = "Programari inclòs"
+	"Address Book:" = "Llibreta d'Adreces:"
+	"Built-in" = "Incloses"
+
 
 /* Display preferences */
-    "Emphasize Lunar Date" = "Destaca el Calendari Lunar"
+    "Emphasize Lunar Date" = "Destaca Data Lunar"
+
 
 /* About HappyDays */	
-	"GPL free software" = "Programari gratuit GPL"
-	"E-Mail & Web Page" = "Correu i Pàgina Web"
+	"GPL free software" = "Programari gratuït GPL"
+	"E-Mail & Web Page" = "E-Mail & Web Page"
 
-    "Translator" = "Versió Catalana"
-    "Translator's email" = "Paco Rivière"
+    "Translator" = "Paco Rivière"
+    "Translator's email" = "friviere@wanadoo.es"
 
 
     "OK" = "D'acord"
-    "Cancel" = "Cancel·la"
+    "Cancel" = "Anul·la"
 
-    "Solar to Lunar Convert" = "Conversió de Solar a Lunar"
-    "Enter Solar date:" =  "Indiqueu la data Solar:"
-    "Year must be in 1881-2043" =  "L'any ha d'estar entre 1881 i 2043"
-    "Result Lunar date:" =  "Data Lunar resultant:"
+    "Solar to Lunar Convert" = "Solar -> Lunar"
+    "Enter Solar date:" = "Indiqueu la data Solar:"
+    "Year must be in 1881-2043" = "L'any ha de ser entre 1881 i 2043"
+    "Result Lunar date:" = "Data Lunar resultat:"
 
-    "Convert" =  "Convertir"
+    "Convert" = "Convertir"
 
-    "Lunar to Solar Convert" =  "Conversió de Lunar a Solar."
-    "Enter Lunar date:" =  "Indiqueu la data Lunar:"
-    "Leap" =  "De traspàs"
-    "Result Solar date:" =  "Data Solar resultant:"
+    "Lunar to Solar Convert" = "Lunar -> Solar."
+    "Enter Lunar date:" = "Indiqueu la data Lunar:"
+    "Leap" = "De traspàs"
+    "Result Solar date:" = "Data Solar resultat:"
+
 
 /* Date Book & To Do Notify */
-    "Records:" =  "Registres:"
-      "all" =  "tots"
-      "selected" =  "marcats"
-    "Existing:" =  "Actuals:"
-      "keep" =  "deixar-los"
-      "modify" =  "canviar-los"
+    "Records:" = "Registres:"
+      "all" = "tots"
+      "selected" = "marcats"
+    "Existing:" = "Actuals:"
+      "keep" = "deixa'ls"
+      "modify" = "canvia'ls"
     "Priority:" = "Prioritat:"
     "Category:" = "Categoria:"
     "Private:" = "Confidencial:"
-   "Alarm:" = "Alarma:"
-   "Time:" = "Hora:"
+    "Alarm:" = "Alarma:"
+    "Time:" = "Hora:"
     "Icon" = "Icona"
 
-    "Repeat for:" =  "Repetir:"
+    "Repeat for:" = "Repeteix:"
+    "years" = "any(s)"
 
-    "years" =  "anys"
-
-    "Notify warning" = "Notify warning" 
+    "Notify warning" = "Avís"
 	"long_notifywarningString" = ""\
-  		"^1: Segur que voleu crear notificacions de HappyDays per a "\
-		"^2 registres?"
+		"^1: Segur que voleu crear notificacions de HappyDays per a ^2 registres?"
       
 /* Date Book Icon */
     "Date Book Icon" = "Icona d'Agenda"  
-      "Icon Support" = "Suport per a icones"  
+      "Icon Support" = "Suport d'Icones"
       "AN" = "AN"  
-      "DateBk3" = "DateBk3"  
-      "AN Icon Number:" = "Número de Icona d'AN:"  
-      "DateBk3 Icon:" = "Icona de DateBk3:"  
+      "DateBk3" = "DBk3"  
+      "AN Icon Number:" = "Número d'Icona de AN:"
+      "DateBk3 Icon:" = "Icona de DateBk3:"
 
 /* HappyDays Cleanup */
-    "HappyDays Cleanup" = "Netejar HappyDays" 
+    "HappyDays Cleanup" = "Neteja" 
 
     "long_removeConfirmString" = ""\
-    "Segur que voleu eliminar totes "\
-    "les notificacions de HappyDays?"
-
+    "Desitjeu eliminar totes les notificacions "\
+    "de HappyDays?"
 
     "HappyDays says" = "HappyDays diu"
 
-    "HappyDays Export" = "HappyDays Export"
+    "HappyDays Export" = "Exportar HappyDays"
     "Would you like to export HappyDays List to Memo Pad?" = ""\
- 	      "Desitjeu exportar la llista HappyDays al Bloc de notes?" 
+"¿Voleu exportar la Llista de HappyDays al Bloc de notes?"
 
-    "Custom Field Error" = "Error en el camp personalitzat"
+    "Custom Field Error" = "Error en camp personalitzat"
     "Help" = "Ajuda" 
 
 
-    "Invalid event format" = "Format de registre invàlid." 
+    "Invalid event format" = "Format de registre no vàlid"
 
 	"long_invalidformatString" = ""\
-    	"El registre d'agenda de\n[^1]\n conté un registre invàlid. "\
+    	"El registre d'agenda de ^1\n contè un registre no vàlid. "\
 		"Què voleu fer?"
 
-    "Ignore" =  "Ignorar-lo"
-    "Ignore all" =  "Ignorar-los tots"
+    "Ignore" = "Ignora'l" 
+    "Ignore all" = "Ignora'ls tots" 
 
-    "Cleanup Done" = "Neteja acabada" 
+    "Cleanup Done" = "S'ha acabat la neteja" 
 
     "^1: ^2 HappyDays notify entries removed." = ""\
-    	      "^1: ^2 notificacions de HappyDays eliminades."
+    	"^1: ^2 notificacions de HappyDays eliminades."
 
-    "HappyDays Export List" = "Exportar Llista de HappyDays" 
-    "(not exist in this year)" = "(no existeix en aquest any)" 
-    "Please run Date Book once first." = "Si us plau primer trieu l'Agenda."  
+    "HappyDays Export List" = "Exportar la Llista de HappyDays"
+    "(not exist in this year)" = "(no hi ha aquest any)"
+    "Please run Date Book once first." = "Si us plau trieu l'Agenda primer."
     
     "Days" = "Dies"  
     "Date Book" = "Agenda"  
     "To Do" = "Tasques"  
-    "Scan note field" = "Cercar en les notes"  
-    "%ld days left" = "falten %ld dies"  
-    "%ld days passed" = "passen %ld dies"  
+    "Scan note field" = "Cerca de les Notes"
+    "%d day(s) left" = "%d dies per al registre"  
+    "%d day(s) passed" = "%d dies transcorreguts"  
 
     "Processing" = "Processant"  
     "Processed : " = "Processat : " 
 
-	"Address Change"= "Adreça canviada"
-    "AddressDB is changed. \nDo you want to rescan it?"= "Les adreçes han canviat, \nVoleu rastrejar-les"
+	"Address Change" = "Cerca de la llibreta d'Adreces"
+	"Address DB is changed. \nDo you want to rescan it?" = ""\
+		"la llibreta d'Adreces ha canviat. \nVoleu tornar a cercar a la llibreta d'Adreces?"
+
+ 	"Ignore record with prefix '!'" = "Ignora el registre amb prefix '!'"
+ 	"Databook note" = "Nota a l'Agenda"
+ 	"Add the following note" = "Afegeix la següent nota"
 
 /* HappyDays view */
 	"Type:" = "Tipus:"
-	"Next Date:" = "Nova Data:"
+	"Next Date:" = "Propera Data:"
 	"Origin:" = "Origen:"
 	"Age:" = "Edat:"
 	"UpTo Date:" = "Actualitzat:"
-	"%dY %dM %dD (%ld)" = "%dY %dM %dD (%ld)"
+	"%dY %dM %dD (%ld)" = "%dA %dM %dD (%ld)"
 
-	"Yes" = "Sí"
+	"Yes" = "Si"
 	"No" = "No"
 END
+
+ 
 
