@@ -8,10 +8,10 @@ File Download
 </h2>
 <p>
 <a
-href="ftp://jmjeong.com/pub/happydays/happydays-2.1b2.zip">happydays-2.1b2.zip</a>
+href="ftp://jmjeong.com/pub/happydays/happydays-2.1.zip">happydays-2.1.zip</a>
 - English version and manual<br>
 <a
-href="ftp://jmjeong.com/pub/happydays/happydays-src-2.1b2.zip">happydays-src-2.1b2.zip</a>
+href="ftp://jmjeong.com/pub/happydays/happydays-src-2.1.zip">happydays-src-2.1.zip</a>
 - source file<br>
 
 </P>
@@ -30,7 +30,7 @@ To get the latest CVS sources do the following
 $ export CVSROOT=":pserver:cvs@coconut.snu.ac.kr:/export/cvsroot"
 $ cvs login
 ( password = anonymous )
-$ cvs -z3 checkout -rver_21b2 happydays
+$ cvs -z3 checkout -rver_21 happydays
 </pre>
 
 <p>
@@ -52,21 +52,22 @@ translate/english.msg file.)<p>
 
 HappyDays has been translated into the following languages:  <p>
 <ul>
-  <li> <a href="ftp://jmjeong.com/pub/happydays/happydays-2.1b2-ko.zip">
-  Korean</a>(2.1 Beta 2) - by Jaemok Jeong<br>
+  <li> <a href="ftp://jmjeong.com/pub/happydays/happydays-2.1-ko.zip">
+  Korean</a>(2.1) - by Jaemok Jeong<br>
 	  (happydays-k8.prc for 8x8 font,
 	  happydays-k11.prc for 11x11 font)
   <li> <a
-      href="ftp://jmjeong.com/pub/happydays/happydays-2.1b2-de.zip">
-			German</a>(2.1 Beta 2)
+      href="ftp://jmjeong.com/pub/happydays/happydays-2.1-de.zip">
+			German</a>(2.1)
       - by  Gunther Zagatta
 			(<a href="mailto:zagatta@web.de">zagatta@web.de</a>)
   <li><a
-  	  href="ftp://jmjeong.com/pub/happydays/happydays-2.08-sp.zip">
-			Spanish</a>(2.08 beta1)
+  	  href="ftp://jmjeong.com/pub/happydays/happydays-2.1-sp.zip">
+			Spanish</a>(2.1 beta1)
 	  - by Juan Fernando Calderón
 			(<a
 			href="mailto:jfcalderon@dominium.com.mx">jfcalderon@dominium.com.mx</a>)
+			and Manuel Tornos(palm@povisa.es)
   <li><a
   	  href="ftp://jmjeong.com/pub/happydays/happydays-2.08-br.zip">
 			Portuguese Brazilian </a>(2.08 beta1)
@@ -134,7 +135,7 @@ You want to see changes before HappyDays 2.0, look up the
 <a href="change_log.html">change_log.html</a> file.
 <p>
 
-<b>Happydays 2.1(beta 2) version - 4/17/2002</b>
+<b>Happydays 2.1 version - 4/21/2002</b>
 <ul>
   <li> Add a general note field in DateBook Notify
   for Action Names, DateBk3/4, and old icon stuff is removed.<br>
