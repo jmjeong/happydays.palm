@@ -18,6 +18,7 @@
 #define __TDTODOMGR_H__
 
 #include <DateTime.h>
+#include "section.h"
 
 #define LocalizedAppInfoStr	1000
 
@@ -112,28 +113,28 @@ extern "C" {
 //-------------------------------------------------------------------
 // Routines
 //-------------------------------------------------------------------
-Err ToDoNewRecord(DmOpenRef dbP, ToDoItemPtr item, UInt16 category, UInt16 *index);
+extern Err ToDoNewRecord(DmOpenRef dbP, ToDoItemPtr item, UInt16 category, UInt16 *index) SECT1;
 
-Err ToDoInsertNewRecord (DmOpenRef dbP, UInt16 * index);
+extern Err ToDoInsertNewRecord (DmOpenRef dbP, UInt16 * index) SECT1;
 
-Err ToDoChangeRecord(DmOpenRef dbP, UInt16 * index, 
-                     ToDoRecordFieldType changedField, void * data);
+extern Err ToDoChangeRecord(DmOpenRef dbP, UInt16 * index, 
+                     ToDoRecordFieldType changedField, void * data) SECT1;
 
-Err ToDoChangeSortOrder(DmOpenRef dbP, UInt8 sortOrder);
+extern Err ToDoChangeSortOrder(DmOpenRef dbP, UInt8 sortOrder) SECT1;
 
-Err ToDoAppInfoInit(DmOpenRef dbP);
+extern Err ToDoAppInfoInit(DmOpenRef dbP) SECT1;
 
-MemHandle ToDoGetAppInfo  (DmOpenRef dbP);
+extern MemHandle ToDoGetAppInfo  (DmOpenRef dbP) SECT1;
 
-UInt8 ToDoGetSortOrder (DmOpenRef dbP);
+extern UInt8 ToDoGetSortOrder (DmOpenRef dbP) SECT1;
 
-void ToDoSort (DmOpenRef dbP);
+extern void ToDoSort (DmOpenRef dbP) SECT1;
 
-Err ToDoGetDatabase (DmOpenRef *dbPP, UInt16 mode);
+extern Err ToDoGetDatabase (DmOpenRef *dbPP, UInt16 mode) SECT1;
 
-void ToDoSetDBBackupBit (DmOpenRef dbP);
+extern void ToDoSetDBBackupBit (DmOpenRef dbP) SECT1;
 
-Char* GetToDoNotePtr (ToDoDBRecordPtr recordP);
+extern Char* GetToDoNotePtr (ToDoDBRecordPtr recordP) SECT1;
 
 #ifdef __cplusplus
 }

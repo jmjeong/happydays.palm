@@ -251,7 +251,7 @@ BEGIN
 			"Super Names" 
 			"TealPhone"
          ID PrefFormAddress
-         AT (PrevRight+4 PREVTOP-45 70 AUTO) VISIBLEITEMS 7 NONUSABLE
+         AT (PrevRight+4 PREVTOP-45 70 AUTO) VISIBLEITEMS 6 NONUSABLE
     POPUPTRIGGER "" ID PrefFormAddrTrigger
                  AT (PrevLeft PrevTop+44 40 13) LEFTANCHOR
     POPUPLIST ID PrefFormAddrTrigger PrefFormAddress
@@ -492,7 +492,7 @@ BEGIN
     TITLE "About HappyDays"
 
 	FORMBITMAP AT (6 18) BITMAP ID_BitmapIcon USABLE 
-    LABEL "HappyDays 2.22" AUTOID AT (PrevRight+38 PrevTop) FONT 1
+    LABEL "HappyDays 2.23" AUTOID AT (PrevRight+38 PrevTop) FONT 1
     LABEL "GPL free software"
         AUTOID AT (PrevLeft PrevTop+ABOUT_LINE_SPACING) FONT 0
     LABEL "(c) 1999-2002 Jaemok Jeong"
@@ -562,4 +562,4 @@ SMALLICONFAMILY
 	TRANSPARENT 192 192 0
 
 APPLICATIONICONNAME 1000 "HappyDays"
-VERSION ID 1 "2.22"
+VERSION ID 1 "2.23"

@@ -29,20 +29,20 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 extern Int16 gHappyDaysField;
 
-void PackHappyDays(HappyDays *birthdate, void* recordP) SECT2;
+void PackHappyDays(HappyDays *birthdate, void* recordP);
 void UnpackHappyDays(HappyDays *birthdate,
-                     const PackedHappyDays *packedHappyDays) SECT2;
+                     const PackedHappyDays *packedHappyDays) ;
 
 UInt16 AddrGetHappyDays(DmOpenRef dbP, 
-					UInt16 AddrCategory, DateType start) SECT2;
+					UInt16 AddrCategory, DateType start) ;
 Boolean AnalysisHappyDays(const char* birthdate,
                           HappyDaysFlag *flag,
-                          Int16* year, Int16* month, Int16* day) SECT2;
+                          Int16* year, Int16* month, Int16* day) ;
 
-Boolean UpdateHappyDaysDB(FormPtr frm) SECT2;
-void  SetReadAddressDB() SECT2;
+Boolean UpdateHappyDaysDB(FormPtr frm) ;
+void  SetReadAddressDB() ;
 
-Boolean FindHappyDaysField() SECT2;
-Boolean IsChangedAddressDB() SECT2;
+Boolean FindHappyDaysField() ;
+Boolean IsChangedAddressDB() ;
 
 #endif

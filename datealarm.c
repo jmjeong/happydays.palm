@@ -4,6 +4,7 @@
 #include <PalmUtils.h>
 
 #include "datebook.h"
+#include "section.h"
 
 #define apptNoAlarm                    -1
 #define apptMaxDisplayableAlarms        10
@@ -24,8 +25,18 @@ typedef ApptPackedDBRecordType * ApptPackedDBRecordPtr;
 
 extern void ApptUnpack(ApptPackedDBRecordPtr src, ApptDBRecordPtr dest);
 extern Int16 DateCompare(DateType d1, DateType d2);
+UInt32
+ApptAlarmMunger (
+	DmOpenRef					inDbR,
+	UInt32							inAlarmStart,
+	UInt32							inAlarmStop,
+	PendingAlarmQueueType *	inAlarmInternalsP,
+	UInt16*						ioCountP,
+	DatebookAlarmType *		outAlarmListP,
+	Boolean*					outAudibleP )  SECT1;
+Boolean NextRepeat (ApptDBRecordPtr apptRec, DatePtr dateP)  SECT1;
 
-static Boolean NextRepeat (ApptDBRecordPtr apptRec, DatePtr dateP)
+static Boolean NextRepeat (ApptDBRecordPtr apptRec, DatePtr dateP) 
 {
 	Int16  i;
 	UInt16 day;
@@ -239,7 +250,7 @@ static Boolean NextRepeat (ApptDBRecordPtr apptRec, DatePtr dateP)
 	return (true);
 }
 
-static Boolean IsException (ApptDBRecordPtr apptRec, DateType date)
+static Boolean IsException (ApptDBRecordPtr apptRec, DateType date) 
 {
 	int i;
 	DatePtr exceptions;
@@ -256,7 +267,7 @@ static Boolean IsException (ApptDBRecordPtr apptRec, DateType date)
 	return (false);
 }
 
-Boolean ApptNextRepeat (ApptDBRecordPtr apptRec, DatePtr dateP)
+Boolean ApptNextRepeat (ApptDBRecordPtr apptRec, DatePtr dateP) 
 {
 	DateType date;
 	
@@ -279,7 +290,7 @@ Boolean ApptNextRepeat (ApptDBRecordPtr apptRec, DatePtr dateP)
 		}		
 }
 
-UInt32 ApptGetAlarmTime (ApptDBRecordPtr apptRec, UInt32 currentTime)
+UInt32 ApptGetAlarmTime (ApptDBRecordPtr apptRec, UInt32 currentTime) 
 {
 	UInt32					advance = 0;
 	UInt32					alarmTime;
@@ -387,7 +398,7 @@ UInt32 ApptGetAlarmTime (ApptDBRecordPtr apptRec, UInt32 currentTime)
 }
 
 
-UInt32 AlarmGetTrigger (UInt32* refP)
+UInt32 AlarmGetTrigger (UInt32* refP) 
 {
 	UInt16 		cardNo;
 	LocalID 		dbID;
@@ -402,7 +413,7 @@ UInt32 AlarmGetTrigger (UInt32* refP)
 	return (alarmTime);
 }
 
-void AlarmSetTrigger (UInt32 alarmTime, UInt32 ref)
+void AlarmSetTrigger (UInt32 alarmTime, UInt32 ref) 
 {
 	UInt16 cardNo;
 	LocalID dbID;
@@ -416,7 +427,7 @@ void AlarmSetTrigger (UInt32 alarmTime, UInt32 ref)
 
 static UInt32
 GetSnoozeAnchorTime (
-	PendingAlarmQueueType*	inAlarmInternalsP )
+	PendingAlarmQueueType*	inAlarmInternalsP ) 
 {
 	return inAlarmInternalsP->snoozeAnchorTime;
 }
@@ -433,14 +444,14 @@ GetSnoozeAnchorTime (
 
 UInt16
 GetDismissedAlarmCount (
-	PendingAlarmQueueType*	inAlarmInternalsP )
+	PendingAlarmQueueType*	inAlarmInternalsP ) 
 {
 	return inAlarmInternalsP->dismissedCount;
 }
 
 UInt32 *
 GetDismissedAlarmList (
-	PendingAlarmQueueType*	inAlarmInternalsP )
+	PendingAlarmQueueType*	inAlarmInternalsP ) 
 {
 	return inAlarmInternalsP->dismissedAlarm;
 }
@@ -453,7 +464,7 @@ ApptAlarmMunger (
 	PendingAlarmQueueType *	inAlarmInternalsP,
 	UInt16*						ioCountP,
 	DatebookAlarmType *		outAlarmListP,
-	Boolean*					outAudibleP )
+	Boolean*					outAudibleP ) 
 {
 	UInt16							alarmListSize;
 	UInt16							baseIndex = 0;

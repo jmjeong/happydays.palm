@@ -111,15 +111,15 @@ static void MainFormResize(FormPtr frmP, Boolean draw);
 static void MainTableSelectItem(TablePtr table, Int16 row, Boolean selected);
 
 void MainFormDrawRecord(MemPtr tableP, Int16 row, Int16 column, 
-                               RectanglePtr bounds) SECT2;
+                               RectanglePtr bounds) SECT1;
 
-Boolean MenuHandler(FormPtr frm, EventPtr e) SECT2;
-void MainFormScroll(Int16 newValue, Int16 oldValue, Boolean force_redraw);
-void MainFormScrollLines(Int16 lines, Boolean force_redraw) SECT2;
+Boolean MenuHandler(FormPtr frm, EventPtr e) SECT1;
+void MainFormScroll(Int16 newValue, Int16 oldValue, Boolean force_redraw) SECT1;
+void MainFormScrollLines(Int16 lines, Boolean force_redraw) SECT1;
 void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column, 
-                              RectanglePtr bounds) SECT2;
-void DrawTiny(int size,int x,int y,int n) SECT2;
-void DrawSilkMonth(int mon, int year, int day, int x, int y) SECT2;
+                              RectanglePtr bounds) SECT1;
+void DrawTiny(int size,int x,int y,int n) SECT1;
+void DrawSilkMonth(int mon, int year, int day, int x, int y) SECT1;
 
 ////////////////////////////////////////////////////////////////////
 // private database for HappyDays
@@ -2888,6 +2888,9 @@ static Boolean StartFormHandleEvent(EventPtr e)
 //
 //
 // $Log$
+// Revision 1.73  2003/01/15 02:11:18  jmjeong
+// re-arrange multi segment
+//
 // Revision 1.72  2003/01/13 23:42:51  jmjeong
 // (Fix) Datebook Alarm (reschedule alarm after notifying)
 //

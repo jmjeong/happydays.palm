@@ -42,7 +42,7 @@ extern Int16 DateCompare (DateType d1, DateType d2); // defined in datebook.c
 extern void PrvMoveObject(FormPtr frmP, UInt16 objIndex, Coord y_diff, Boolean draw);
 extern void PrvResizeObject(FormPtr frmP, UInt16 objIndex, Coord y_diff, Boolean draw);
 
-Boolean TextMenuHandleEvent(UInt16 menuID, UInt16 objectID) SECT1;
+Boolean TextMenuHandleEvent(UInt16 menuID, UInt16 objectID);
 
 // Extract the bit at position index from bitfield.  0 is the high bit.
 #define BitAtPosition(pos)                ((UInt32)1 << (pos))

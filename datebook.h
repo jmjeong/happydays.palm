@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define _DATEBOOK_H__
 
 #include <PalmOS.h>
+#include "section.h"
 
 typedef struct {
     UInt16	renamedCategories;	// bitfield of categories with a different
@@ -258,13 +259,13 @@ typedef ApptDBRecordType*   ApptDBRecordPtr;
  *
  *************************************************************/
 
-extern Err ApptNewRecord (DmOpenRef dbP, ApptDBRecordPtr r, UInt16 *index);
+extern Err ApptNewRecord (DmOpenRef dbP, ApptDBRecordPtr r, UInt16 *index) SECT1;
 extern MemHandle ApptGetAppointments (DmOpenRef dbP, DateType date,
-                                      UInt16 *countP);
+                                      UInt16 *countP) SECT1;
 extern Err ApptGetRecord (DmOpenRef dbP, UInt16 index, ApptDBRecordPtr r,
-                   MemHandle * handleP);
+                   MemHandle * handleP) SECT1;
 extern Err ApptChangeRecord(DmOpenRef dbP, UInt16 *index, ApptDBRecordPtr r,
-                            ApptDBRecordFlags changedFields);
+                            ApptDBRecordFlags changedFields) SECT1;
 
 
 #endif
