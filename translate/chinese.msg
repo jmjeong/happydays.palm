@@ -11,8 +11,7 @@ BEGIN
     "以設定以上自訂欄目名稱\n"
 
     "long_aboutString" = ""\
-    "HappyDays 
-能幫助你紀錄每個重要事件的日期(例如你親朋戚友的生日及週年紀念等)\n\n"\
+    "HappyDays 能幫助你紀錄每個重要事件的日期(例如你親朋戚友的生日及週年紀念等)\n\n"\
     "詳細使用方法請參閱\ index.html 及 manual.html。\n\n"\
     "HappyDays 是根據 GNU GPL2.0 發行的軟體。\n"
 
@@ -118,8 +117,8 @@ BEGIN
     "Event - First Last Year" = "事件 - 名 姓 年"
     "First Last Year" = "名 姓 年"
 
-    "Address Book" = "地址簿"
-    "Bulit-in" = "內建"
+    "Address Book:" = "地址簿"
+    "Built-in" = "內建"
 
 /* Display preferences */
     "Emphasize Lunar Date" = "突顯陰曆事件"
@@ -166,8 +165,7 @@ BEGIN
 
     "Notify warning" = "提示"
 
-    "long_notifywarningString" = "^1: 你是否想建立 ^2 個 HappyDays 
-紀錄的提示？"
+    "long_notifywarningString" = "^1: 你是否想建立 ^2 個 HappyDays 紀錄的提示？"
 
 /* Date Book Icon */
     "Date Book Icon" = "行事曆圖示"
@@ -214,8 +212,6 @@ BEGIN
     "Date Book" = "行事曆"
     "To Do" = "待辦表"
     "Scan note field" = "連備注欄目也一併檢查"
-    "%d day(s) left" = "尚餘%d日"
-    "%d day(s) passed" = "已經過了%d日"
 
     "Processing" = "處理中"
     "Processed : " = "處理了："
@@ -232,6 +228,6 @@ BEGIN
 	"UpTo Date:" = "距下一次"
 	/* Daitau: the following lines should be localized as well */
 	"%d days left" = "尚餘%d日"
-	"%dY %dM %dD (%d)" = "%d年 %d月 %d日 (%d)"
+	"%dY %dM %dD (%ld)" = "%d年 %d月 %d日 (%ld)"
 END
 
