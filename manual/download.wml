@@ -8,10 +8,10 @@ File Download
 </h2>
 <p>
 <a
-href="ftp://jmjeong.com/pub/happydays/happydays-2.02.zip">happydays-2.02.zip</a>
+href="ftp://jmjeong.com/pub/happydays/happydays-2.03.zip">happydays-2.03.zip</a>
 - English version and manual<br>
 <a
-href="ftp://jmjeong.com/pub/happydays/happydays-src-2.02.zip">happydays-src-2.02.zip</a>
+href="ftp://jmjeong.com/pub/happydays/happydays-src-2.03.zip">happydays-src-2.03.zip</a>
 - source file<br>
 
 </P>
@@ -56,8 +56,8 @@ i.e. the phase after '=') into your favorite language. See the sample <a href="l
 
 HappyDays has been translated into the following languages:  <br>
 <ul>
-  <li> <a href="ftp://jmjeong.com/pub/happydays/happydays-2.02-ko.zip">
-  Korean</a>(2.02) - by Jaemok Jeong<br>
+  <li> <a href="ftp://jmjeong.com/pub/happydays/happydays-2.03-ko.zip">
+  Korean</a>(2.03) - by Jaemok Jeong<br>
 	  (happydays-k8.prc for 8x8 font,
 	  happydays-k11.prc for 11x11 font)
   <li> <a
@@ -100,7 +100,7 @@ You want to see changes before HappyDays 2.0, look up the
 <a href="change_log.html">change_log.html</a> file.
 <p>
 
-<b>HappyDays 2.02 version - 6/22/2001</b>
+<b>HappyDays 2.03 version - 6/22/2001</b>
 <ul>
 	<li> Fix a bug in 'Instead of system date format' option
 	<li> Fix a bug in date difference calculation

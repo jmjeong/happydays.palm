@@ -2118,7 +2118,7 @@ static void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column,
 
     PackedHappyDays* rp;
     HappyDays r;
-	Int16 dateDiff;
+	Int32 dateDiff;
 	DateType current;
 	char displayStr[55];
     char tempStr[25];
@@ -2256,7 +2256,7 @@ static void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column,
             DateType solBirth;
             DateTimeType rtVal;
             UInt8 ret;
-            Int16 d_diff = 0, m_diff = 0, y_diff = 0;
+            Int32 d_diff = 0, m_diff = 0, y_diff = 0;
             
             if (r.flag.bits.lunar || r.flag.bits.lunar_leap) {
                 ret = !lun2sol(r.date.year+1904,
@@ -2271,7 +2271,7 @@ static void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column,
             }
             else solBirth = r.date;
             
-            dateDiff = (Int16)(DateToDays(current)
+            dateDiff = (Int32)(DateToDays(current)
                                - DateToDays(solBirth));
 
             if (dateDiff > (Int16)0) {
