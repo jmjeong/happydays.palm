@@ -1660,12 +1660,21 @@ static void NotifyDatebook(int mainDBIndex, DateType when,
 
                 // if duration > 1, 'when' is the birthdate;
                 if (r.flag.bits.year) when = r.date;
+
+				// Because Palm Desktop doesn't support events before 1970.
+				//   
+				if (when.year < 1970 - 1904) when.year = 1970 - 1904;
                 
                 PerformNotify(r, when, &repeatInfo, created, touched);
             }
             else if (gPrefsR->NotifyPrefs.duration == -1) {
                 // if duration > 1, 'when' is the birthdate;
                 if (r.flag.bits.year) when = r.date;
+
+				// Because Palm Desktop doesn't support events before 1970.
+				//   
+				if (when.year < 1970 - 1904) when.year = 1970 - 1904;
+
                 DateToInt(repeatInfo.repeatEndDate) = -1;
                 PerformNotify(r, when, &repeatInfo, created, touched);
             }
