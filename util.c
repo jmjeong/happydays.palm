@@ -17,15 +17,14 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include <Pilot.h>
-#include <System/DataPrv.h>
+#include <PalmOS.h>
 #include "util.h"
 #include "calendar.h"
 
 //
 // GetObjectPointer - return an object pointer given a form and objID
 //
-void * GetObjectPointer(FormPtr frm, Word objID)
+void * GetObjectPointer(FormPtr frm, UInt16 objID)
 {
      return FrmGetObjectPtr(frm, FrmGetObjectIndex(frm, objID));
 }
@@ -34,9 +33,9 @@ void * GetObjectPointer(FormPtr frm, Word objID)
 //
 //  SetFieldTextFromHandle - set txtH into field object text
 //
-FieldPtr SetFieldTextFromHandle(Word fieldID, Handle txtH)
+FieldPtr SetFieldTextFromHandle(UInt16 fieldID, MemHandle txtH)
 {
-   Handle      oldTxtH;
+   MemHandle   oldTxtH;
    FormPtr     frm = FrmGetActiveForm();
    FieldPtr    fldP;
 
@@ -50,15 +49,15 @@ FieldPtr SetFieldTextFromHandle(Word fieldID, Handle txtH)
 
    // free the handle AFTER we call FldSetTextHandle().
    if (oldTxtH) 
-      MemHandleFree((VoidHand)oldTxtH);
+      MemHandleFree((MemHandle)oldTxtH);
    
    return fldP;
 }
 
 // Allocates new handle and copies incoming string
-FieldPtr SetFieldTextFromStr(Word fieldID, CharPtr strP)
+FieldPtr SetFieldTextFromStr(UInt16 fieldID, Char * strP)
 {
-   VoidHand    txtH;
+   MemHandle    txtH;
    
    // get some space in which to stash the string.
    txtH  = MemHandleNew(StrLen(strP) + 1);
@@ -66,16 +65,16 @@ FieldPtr SetFieldTextFromStr(Word fieldID, CharPtr strP)
       return NULL;
 
    // copy the string to the locked handle.
-   StrCopy((CharPtr)MemHandleLock(txtH), strP);
+   StrCopy((Char *)MemHandleLock(txtH), strP);
 
    // unlock the string handle.
    MemHandleUnlock(txtH);
    
    // set the field to the handle
-   return SetFieldTextFromHandle(fieldID, (Handle)txtH);
+   return SetFieldTextFromHandle(fieldID, txtH);
 }
 
-FieldPtr ClearFieldText(Word fieldID)
+FieldPtr ClearFieldText(UInt16 fieldID)
 {
     return SetFieldTextFromHandle(fieldID, NULL);
 }
@@ -84,7 +83,7 @@ Boolean FindNearLunar(DateType *dt, DateType base, Boolean leapyes)
 {
     int lunyear, lunmonth, lunday;
     DateTimeType rtVal;
-    Int i;
+    Int16 i;
 
     lunmonth = dt->month; lunday = dt->day;
 
@@ -103,8 +102,8 @@ Boolean FindNearLunar(DateType *dt, DateType base, Boolean leapyes)
 
 // if year is -1, ignore year field
 //
-Char* DateToAsciiLong(Byte months, Byte days, Int year,
-                            DateFormatType dateFormat, CharPtr pstring)
+Char* DateToAsciiLong(UInt8 months, UInt8 days, Int16 year,
+                            DateFormatType dateFormat, Char * pstring)
 {
     if (year >= 0) {
         switch (dateFormat) {
@@ -169,9 +168,9 @@ Char* DateToAsciiLong(Byte months, Byte days, Int year,
  *  RETURNS: locked ptr to the AppInfo or NULL
  *
  *************************************************************/
-VoidPtr AppInfoGetPtr(DmOpenRef dbP)
+MemPtr AppInfoGetPtr(DmOpenRef dbP)
 {
-    UInt       cardNo;
+    UInt16       cardNo;
     LocalID    dbID;
     LocalID    appInfoID;
    

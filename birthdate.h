@@ -20,25 +20,24 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _BIRTHDATE_H_
 #define _BIRTHDATE_H_
 
-#include <Pilot.h>
-#include <System/DataPrv.h>
+#include <PalmOS.h>
 
 #include "happydays.h"
 
 // custom field used Birthdate in AddressBook
 //
-extern Int gBirthDateField;
+extern Int16 gBirthDateField;
 
 void PackBirthdate(BirthDate *birthdate, void* recordP);
 void UnpackBirthdate(BirthDate *birthdate,
                      const PackedBirthDate *packedBirthdate);
 
-UInt AddrGetBirthdate(DmOpenRef dbP, Word AddrCategory);
+UInt16 AddrGetBirthdate(DmOpenRef dbP, UInt16 AddrCategory);
 Boolean AnalysisBirthDate(const char* birthdate,
                           BirthdateFlag *flag,
-                          Int* year, Int* month, Int* day);
+                          Int16* year, Int16* month, Int16* day);
 
-Int UpdateBirthdateDB(DmOpenRef dbP, FormPtr frm);
+Int16 UpdateBirthdateDB(DmOpenRef dbP, FormPtr frm);
 
 
 

@@ -26,6 +26,6 @@ extern int sol2lun(int syear, int smonth, int sday,
                    DateTimeType* lunar, int *leapyes);
 extern int lun2sol(int lyear, int lmonth, int lday, int leapyes,
                    DateTimeType* solar);
-extern Int month[12];
+extern Int16 month[12];
 
 #endif

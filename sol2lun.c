@@ -18,7 +18,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 
-#include <Pilot.h>
+#include <PalmOS.h>
 #include "calendar.h"
 
 Char convertIndex[163][13] = {
@@ -221,7 +221,7 @@ Char convertIndex[163][13] = {
     1, 2, 1, 1, 2, 1, 1, 2, 2, 1, 2, 2, 0
 };
 
-Int month[12] = { 31, 0, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+Int16 month[12] = { 31, 0, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
 //
 //  solarDay : the solar day to be converted

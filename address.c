@@ -23,10 +23,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  * I may have touched a few lines to get it to compile with gcc without
  * warnings.
  */
-#include <Pilot.h>
-#include <System/DataPrv.h>
+#include <PalmOS.h>
 
-#include "callback.h"
 #include "happydaysRsc.h"
 #include "happydays.h"
 #include "address.h"
@@ -53,8 +51,8 @@ char *UnnamedRecordStringPtr="";
  *************************************************************/
 void AddrUnpack(AddrPackedDBRecord *src, AddrDBRecordPtr dest)
 {
-    Int index;
-    ULong flags;
+    Int16 index;
+    UInt32 flags;
     char *p;
 
     dest->options = src->options;
@@ -93,11 +91,11 @@ void AddrUnpack(AddrPackedDBRecord *src, AddrDBRecordPtr dest)
 Boolean
 DetermineRecordName(AddrDBRecordPtr recordP, 
                     Boolean sortByCompany,
-                    CharPtr *name1,
-                    CharPtr *name2)
+                    Char **name1,
+                    Char **name2)
 {
-    UInt fieldNameChoiceList[4];
-    UInt fieldNameChoice;
+    UInt16 fieldNameChoiceList[4];
+    UInt16 fieldNameChoice;
     Boolean name1HasPriority;
 
     *name1 = NULL;
@@ -193,23 +191,23 @@ DetermineRecordName(AddrDBRecordPtr recordP,
 
 void DrawRecordName(
     char* name1, char* name2,
-    UInt nameExtent, SWord *x, SWord y,
+    UInt16 nameExtent, Int16 *x, Int16 y,
     Boolean center, Boolean priorityIsName1)
 {
-    Int name1MaxWidth;
-    Int name2MaxWidth;
+    Int16 name1MaxWidth;
+    Int16 name2MaxWidth;
     Boolean ignored;
-    Int totalWidth;
-    CharPtr lowPriName;
-    Int highPriNameWidth;
-    Int lowPriNameWidth;
-    Int highPriMaxWidth;
-    Int lowPriMaxWidth;
-    CharPtr spaceP;
-    UInt shortenedFieldWidth;
-    UInt fieldSeparatorWidth;
-    Int name1Length, name1Width;
-    Int name2Length, name2Width;
+    Int16 totalWidth;
+    Char * lowPriName;
+    Int16 highPriNameWidth;
+    Int16 lowPriNameWidth;
+    Int16 highPriMaxWidth;
+    Int16 lowPriMaxWidth;
+    Char * spaceP;
+    UInt16 shortenedFieldWidth;
+    UInt16 fieldSeparatorWidth;
+    Int16 name1Length, name1Width;
+    Int16 name2Length, name2Width;
 
     shortenedFieldWidth =  FntCharsWidth(shortenedFieldString, 
                                          shortenedFieldLength);
@@ -374,11 +372,11 @@ void DrawRecordName(
     *x += name2MaxWidth;
 }
 
-Int GotoAddress(Int index)
+Int16 GotoAddress(Int16 index)
 {
     GoToParamsPtr theGotoPointer;
     DmSearchStateType searchInfo;
-    UInt cardNo;
+    UInt16 cardNo;
     LocalID dbID;
 
     theGotoPointer = MemPtrNew(sizeof(GoToParamsType));
@@ -411,7 +409,7 @@ Int GotoAddress(Int index)
               true, &cardNo, &dbID) == 0)) {
             SysUIAppSwitch(cardNo, dbID,
                            sysAppLaunchCmdGoTo,
-                           (Ptr) theGotoPointer);
+                           (MemPtr) theGotoPointer);
             return 0;
         }
     }

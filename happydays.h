@@ -51,7 +51,7 @@ struct sNotifyPrefs
     int  notifybefore;      // prenotify duration
     int  duration;          // interval of notified records
     TimeType when;          // no-time
-    char an_icon[10];       // action name icon?
+    char an_icon[5];        // action name icon?
 };
 
 struct sBirthPrefs 
@@ -60,7 +60,8 @@ struct sBirthPrefs
     char notifywith[5+1];       // notify with (HD)
     char sort;                  // sorting order
     char emphasize;             // emphasize lunar
-    char scannote;              // scan from note field?
+    Boolean sysdateover;        // override system date format
+    DateFormatType dateformat;  // if sysdateover is true
 };
 
 struct sPrefsR 
@@ -87,12 +88,12 @@ typedef union
         unsigned lunar      :1;         // lunar calendar?
         unsigned solar      :1;         // solar calendar?
     } bits;
-    SWord allBits;          // 16 bit
+    Int16 allBits;          // 16 bit
 } BirthdateFlag;
 
 typedef struct 
 {
-    DWord addrRecordNum;    // address book record number
+    UInt32 addrRecordNum;   // address book record number
     DateType date;          // orignal address book birthdate 
     BirthdateFlag flag;     // about birthdate flag
     char *name1;
@@ -102,7 +103,7 @@ typedef struct
 
 typedef struct
 {
-    DWord addrRecordNum;
+    UInt32 addrRecordNum;
     DateType date;
     BirthdateFlag flag;
     char name[1];           // actually may be longer than 1
@@ -114,7 +115,7 @@ typedef struct
 // Table row item, used for sort
 typedef struct 
 {
-    UInt birthRecordNum;    // birthdate+ DB record num
+    UInt16 birthRecordNum;  // birthdate+ DB record num
     DateType    date;       // converted date
 } LineItemType;
 
@@ -131,14 +132,15 @@ typedef LineItemType* LineItemPtr;
 #define         EDBCREATE               -101
 
 // birthdate list
-extern VoidHand gTableRowHandle;
+extern MemHandle gTableRowHandle;
 extern struct sPrefsR *gPrefsR;
 extern Char gAppErrStr[AppErrStrLen];
 extern Boolean gPrefsRdirty;
 extern Boolean gSortByCompany;
 extern DmOpenRef MainDB;
 extern DmOpenRef AddressDB;
-extern DWord gDbcdate, gDbmdate, gAdcdate, gAdmdate;
-extern DateFormatType gPrefdfmts;  // global data format
+extern UInt32 gDbcdate, gDbmdate, gAdcdate, gAdmdate;
+extern DateFormatType gPrefdfmts;  // global date format for Birthday field
+extern DateFormatType gDispdfmts;  // global date format for display
 
 #endif

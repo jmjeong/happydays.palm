@@ -20,23 +20,22 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef UTIL_H__
 #define UTIL_H__
 
-#include <Pilot.h>
-#include <System/DataPrv.h>
+#include <PalmOS.h>
 
-extern void * GetObjectPointer(FormPtr frm, Word objID);
-extern FieldPtr SetFieldTextFromHandle(Word fieldID, Handle txtH);
-extern FieldPtr SetFieldTextFromStr(Word fieldID, CharPtr strP);
-extern FieldPtr ClearFieldText(Word fieldID);
-extern CharPtr DateToAsciiLong(Byte months, Byte days, Int year,
-                            DateFormatType dateFormat, CharPtr pstring);
+extern void * GetObjectPointer(FormPtr frm, UInt16 objID);
+extern FieldPtr SetFieldTextFromHandle(UInt16 fieldID, MemHandle txtH);
+extern FieldPtr SetFieldTextFromStr(UInt16 fieldID, Char * strP);
+extern FieldPtr ClearFieldText(UInt16 fieldID);
+extern Char * DateToAsciiLong(UInt8 months, UInt8 days, Int16 year,
+                            DateFormatType dateFormat, Char * pstring);
 
-extern VoidPtr AppInfoGetPtr(DmOpenRef dbP);
+extern MemPtr AppInfoGetPtr(DmOpenRef dbP);
 
 Boolean FindNearLunar(DateType *dt, DateType base, Boolean leapyes);
-Int DateCompare (DateType d1, DateType d2);     // defined in datebook.c
+Int16 DateCompare (DateType d1, DateType d2);     // defined in datebook.c
 
 // Extract the bit at position index from bitfield.  0 is the high bit.
-#define BitAtPosition(pos)                ((ULong)1 << (pos))
+#define BitAtPosition(pos)                ((UInt32)1 << (pos))
 #define GetBitMacro(bitfield, index)      ((bitfield) & BitAtPosition(index))
 #define SetBitMacro(bitfield, index)      ((bitfield) |= BitAtPosition(index))
 #define RemoveBitMacro(bitfield, index)   ((bitfield) &= ~BitAtPosition(index))

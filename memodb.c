@@ -20,23 +20,23 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Set this to get to private database defines
 #define __MEMOMGR_PRIVATE__
 
-#include <Pilot.h>
+#include <PalmOS.h>
 #include "memodb.h"
 
 
 
-Err MemoNewRecord (DmOpenRef dbP, MemoItemPtr item, UInt *index)
+Err MemoNewRecord (DmOpenRef dbP, MemoItemPtr item, UInt16 *index)
 {
     Err 					result;
-    ULong					size = 0;
-    VoidHand				recordH;
+    UInt32					size = 0;
+    MemHandle				recordH;
     MemoDBRecordPtr	recordP;
 
     // Compute the size of the new memo record.
     size = StrLen (item->note);
 
     //  Allocate a chunk in the database for the new record.
-    recordH = (VoidHand)DmNewHandle(dbP, size+1);
+    recordH = (MemHandle)DmNewHandle(dbP, size+1);
     if (recordH == NULL)
         return dmErrMemError;
 
@@ -48,7 +48,7 @@ Err MemoNewRecord (DmOpenRef dbP, MemoItemPtr item, UInt *index)
 
     // Insert the record.
     *index = dmMaxRecordIndex;
-    result = DmAttachRecord(dbP, index, (Handle)recordH, 0);
+    result = DmAttachRecord(dbP, index, recordH, 0);
     if (result)
         MemHandleFree(recordH);
 

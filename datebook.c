@@ -17,9 +17,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include <Pilot.h>
-#include <System/DataPrv.h>
-#include "callback.h"
+#include <PalmOS.h>
 #include "address.h"
 #include "datebook.h"
 
@@ -43,7 +41,7 @@ typedef struct {
 
 typedef ApptPackedDBRecordType * ApptPackedDBRecordPtr;
  
-typedef Int comparF (const void *, const void *, Int other);
+typedef Int16 comparF (const void *, const void *, Int16 other);
  
 /***********************************************************************
  *
@@ -51,7 +49,7 @@ typedef Int comparF (const void *, const void *, Int other);
  *
  ***********************************************************************/
 
-static Int TimeCompare (TimeType t1, TimeType t2);
+static Int16 TimeCompare (TimeType t1, TimeType t2);
 
 /***********************************************************************
  *
@@ -71,9 +69,9 @@ static Int TimeCompare (TimeType t1, TimeType t2);
  *       year, month, day form high bit to low low bit.
  *
  ***********************************************************************/
-Int DateCompare(DateType d1, DateType d2)
+Int16 DateCompare(DateType d1, DateType d2)
 {
-    UInt int1, int2;
+    UInt16 int1, int2;
     
     int1 = DateToInt(d1);
     int2 = DateToInt(d2);
@@ -102,8 +100,8 @@ Int DateCompare(DateType d1, DateType d2)
  *          art 6/12/95     Initial Revision
  *
  ***********************************************************************/
-static Int TimeCompare (TimeType t1, TimeType t2) {
-    Int int1, int2;
+static Int16 TimeCompare (TimeType t1, TimeType t2) {
+    Int16 int1, int2;
 
     int1 = TimeToInt(t1);
     int2 = TimeToInt(t2);
@@ -139,13 +137,13 @@ static Int TimeCompare (TimeType t1, TimeType t2) {
  *  seem identical then their unique IDs are compared!
  *
  *************************************************************/
-static Int
+static Int16
 ApptComparePackedRecords (ApptPackedDBRecordPtr r1,
-                          ApptPackedDBRecordPtr r2, Int extra,
+                          ApptPackedDBRecordPtr r2, Int16 extra,
                           SortRecordInfoPtr info1,
-                          SortRecordInfoPtr info2, VoidHand appInfoH)
+                          SortRecordInfoPtr info2, MemHandle appInfoH)
 {
-    Int result;
+    Int16 result;
 
     if ((r1->flags.repeat) || (r2->flags.repeat)) {
         if ((r1->flags.repeat) && (r2->flags.repeat))
@@ -179,8 +177,8 @@ ApptComparePackedRecords (ApptPackedDBRecordPtr r1,
  *  BY: Roger Flores
  *
  *************************************************************/
-static UInt ApptPackedSize (ApptDBRecordPtr r) {
-    UInt size;
+static UInt16 ApptPackedSize (ApptDBRecordPtr r) {
+    UInt16 size;
 
 
     size = sizeof (ApptDateTimeType) + sizeof (ApptDBRecordFlags);
@@ -192,7 +190,7 @@ static UInt ApptPackedSize (ApptDBRecordPtr r) {
         size += sizeof (RepeatInfoType);
 
     if (r->exceptions != NULL)
-        size += sizeof (UInt) +
+        size += sizeof (UInt16) +
             (r->exceptions->numExceptions * sizeof (DateType));
 
     if (r->description != NULL)
@@ -223,8 +221,8 @@ static UInt ApptPackedSize (ApptDBRecordPtr r) {
  *************************************************************/
 static void ApptPack(ApptDBRecordPtr s, ApptPackedDBRecordPtr d) {
     ApptDBRecordFlags   flags;
-    UInt    size;
-    ULong   offset = 0;
+    UInt16    size;
+    UInt32    offset = 0;
 
 
     *(unsigned char *)&flags = 0;           // clear the flags
@@ -252,7 +250,7 @@ static void ApptPack(ApptDBRecordPtr s, ApptPackedDBRecordPtr d) {
 
 
     if (s->exceptions != NULL) {
-        size = sizeof (UInt) +
+        size = sizeof (UInt16) +
             (s->exceptions->numExceptions * sizeof (DateType));
         DmWrite(d, offset, s->exceptions, size);
         offset += size;
@@ -319,7 +317,7 @@ static void ApptUnpack(ApptPackedDBRecordPtr src, ApptDBRecordPtr dest) {
 
     if (flags.exceptions) {
         dest->exceptions = (ExceptionsListType *) p;
-        p += sizeof (UInt) +
+        p += sizeof (UInt16) +
             (((ExceptionsListType *) p)->numExceptions * sizeof (DateType));
     } else
         dest->exceptions = NULL;
@@ -355,7 +353,7 @@ static void ApptUnpack(ApptPackedDBRecordPtr src, ApptDBRecordPtr dest) {
  *  BY: Roger Flores
  *
  *************************************************************/
-static UInt ApptFindSortPosition(DmOpenRef dbP, ApptPackedDBRecordPtr
+static UInt16 ApptFindSortPosition(DmOpenRef dbP, ApptPackedDBRecordPtr
                                  newRecord)
 {
     return (DmFindSortPosition (dbP, newRecord, NULL,
@@ -382,13 +380,13 @@ static UInt ApptFindSortPosition(DmOpenRef dbP, ApptPackedDBRecordPtr
  *          art 6/15/95     Initial Revision
  *
  ***********************************************************************/
-Boolean ApptFindFirst (DmOpenRef dbP, DateType date, UIntPtr indexP) {
+Boolean ApptFindFirst (DmOpenRef dbP, DateType date, UInt16 * indexP) {
     Err err;
-    Int numOfRecords;
-    Int kmin, probe, i;     // all positions in the database.
-    Int result = 0;         // result of comparing two records
-    UInt index;
-    VoidHand recordH;
+    Int16 numOfRecords;
+    Int16 kmin, probe, i;     // all positions in the database.
+    Int16 result = 0;         // result of comparing two records
+    UInt16 index;
+    MemHandle recordH;
     Boolean found = false;
     ApptPackedDBRecordPtr r;
 
@@ -481,9 +479,9 @@ Boolean ApptFindFirst (DmOpenRef dbP, DateType date, UIntPtr indexP) {
  *  BY: Roger Flores
  *
  *************************************************************/
-Err ApptGetRecord (DmOpenRef dbP, UInt index, ApptDBRecordPtr r,
-                   VoidHand * handleP) {
-    VoidHand handle;
+Err ApptGetRecord (DmOpenRef dbP, UInt16 index, ApptDBRecordPtr r,
+                   MemHandle * handleP) {
+    MemHandle handle;
     ApptPackedDBRecordPtr src;
 
     handle = DmQueryRecord(dbP, index);
@@ -530,15 +528,15 @@ Err ApptGetRecord (DmOpenRef dbP, UInt index, ApptDBRecordPtr r,
  *  5)  attach in position
  *
  *************************************************************/
-Err ApptChangeRecord(DmOpenRef dbP, UInt *index, ApptDBRecordPtr r,
+Err ApptChangeRecord(DmOpenRef dbP, UInt16 *index, ApptDBRecordPtr r,
                      ApptDBRecordFlags changedFields) {
     Err result;
-    Int newIndex;
-    UInt attributes;
+    Int16 newIndex;
+    UInt16 attributes;
     Boolean dontMove;
-    VoidHand oldH;
-    VoidHand srcH;
-    VoidHand dstH;
+    MemHandle oldH;
+    MemHandle srcH;
+    MemHandle dstH;
     ApptDBRecordType src;
     ApptPackedDBRecordPtr dst = 0;
     ApptPackedDBRecordPtr cmp;
@@ -569,7 +567,7 @@ Err ApptChangeRecord(DmOpenRef dbP, UInt *index, ApptDBRecordPtr r,
 
     // Allocate a new chunk with the correct size and pack the data from
     // the unpacked record into it.
-    dstH = DmNewHandle(dbP, (ULong) ApptPackedSize(&src));
+    dstH = DmNewHandle(dbP, (UInt32) ApptPackedSize(&src));
     if (dstH) {
         dst = MemHandleLock (dstH);
         ApptPack (&src, dst);
@@ -619,7 +617,7 @@ Err ApptChangeRecord(DmOpenRef dbP, UInt *index, ApptDBRecordPtr r,
  attachRecord:
     // Attach the new record to the old index,  the preserves the
     // category and record id.
-    result = DmAttachRecord (dbP, index, (Handle)dstH, (Handle*)&oldH);
+    result = DmAttachRecord (dbP, index, dstH, &oldH);
 
     MemPtrUnlock(dst);
 
@@ -650,13 +648,13 @@ Err ApptChangeRecord(DmOpenRef dbP, UInt *index, ApptDBRecordPtr r,
  ***********************************************************************/
 Boolean ApptRepeatsOnDate (ApptDBRecordPtr apptRec, DateType date)
 {
-	Int  i;
-	Word freq;
-	Word weeksDiff;
-	Word dayInMonth;
-	Word dayOfWeek;
-	Word dayOfMonth;
-	Word firstDayOfWeek;
+	Int16  i;
+	UInt16 freq;
+	UInt16 weeksDiff;
+	UInt16 dayInMonth;
+	UInt16 dayOfWeek;
+	UInt16 dayOfMonth;
+	UInt16 firstDayOfWeek;
 	long dateInDays;
 	long startInDays;
 	Boolean onDate = false;
@@ -838,14 +836,14 @@ Boolean ApptRepeatsOnDate (ApptDBRecordPtr apptRec, DateType date)
  *          art     6/15/95     Initial Revision
  *
  ***********************************************************************/
-VoidHand ApptGetAppointments (DmOpenRef dbP, DateType date, UIntPtr countP) {
+MemHandle ApptGetAppointments (DmOpenRef dbP, DateType date, UInt16 * countP) {
     Err error;
-    Int result;
-    Int count = 0;
-    UInt    recordNum;
+    Int16 result;
+    Int16 count = 0;
+    UInt16    recordNum;
     Boolean repeats;
-    VoidHand recordH;
-    VoidHand apptListH;
+    MemHandle recordH;
+    MemHandle apptListH;
     ApptInfoPtr apptList;
     ApptDBRecordType apptRec;
     ApptPackedDBRecordPtr r;
@@ -949,15 +947,15 @@ VoidHand ApptGetAppointments (DmOpenRef dbP, DateType date, UIntPtr countP) {
  *  BY: Roger Flores
  *
  *************************************************************/
-Err ApptNewRecord(DmOpenRef dbP, ApptDBRecordPtr r, UInt *index) {
-    VoidHand recordH;
+Err ApptNewRecord(DmOpenRef dbP, ApptDBRecordPtr r, UInt16 *index) {
+    MemHandle recordH;
     ApptPackedDBRecordPtr recordP;
-    UInt                    newIndex;
+    UInt16                    newIndex;
     Err err;
 
 
     // Make a new chunk with the correct size.
-    recordH = DmNewHandle (dbP, (ULong) ApptPackedSize(r));
+    recordH = DmNewHandle (dbP, (UInt32) ApptPackedSize(r));
     if (recordH == NULL)
         return dmErrMemError;
 
@@ -971,7 +969,7 @@ Err ApptNewRecord(DmOpenRef dbP, ApptDBRecordPtr r, UInt *index) {
     MemPtrUnlock (recordP);
 
     // 4) attach in place
-    err = DmAttachRecord(dbP, &newIndex, (Handle)recordH, 0);
+    err = DmAttachRecord(dbP, &newIndex, recordH, 0);
     if (err)
         MemHandleFree(recordH);
     else

@@ -34,19 +34,20 @@ BEGIN
     "Tap 'keep' if existing HappyDays entries in your "\
     "datebook should be left untouched. Tap 'modify' if you'd like "\
     "these entries to be changed.\n\n"\
-    "* Private\n"\
-    "will mark all datebook entries as 'private'\n\n"\
-    "* Datebk3 icon\n"\
-    "will set birthday-cake icon in notification record\n\n"\
     "* Alarm\n"\
-    "will set the alarm notification in your datebook entry.\n\n"\
-    "* # of days before\n"\
-    "to set the number of days in advance you'd like to get notified "\
-    "of the event.\n\n"\
+    "will set the alarm notification in your datebook entry. Set "\
+	"the number of days in advance you'd like to get notified.\n\n"\
+    "* Time\n\n"\
     "* Repeat for\n"\
     "is the interval of the notification record. "\
     "-1 means repeat forever in case of solar event, and "\
     "means repeat for 5 years in lunar event for convenience.\n"
+
+	"long_notifySettingMoreString" = ""\
+	"If you want to hide HappyDays ID to note field, check an option. "\
+	"For AN Icon Number, consult Action Names manual. DateBk3Icon is "\
+	"read from MemoPad. If you don't have DateBk3 Icon entry in MemoPad, "\
+	"nothing is displayed.\n"
 
     "long_customErrorString" = ""\
     "'Birthday' is the default custom field name."\
@@ -114,37 +115,40 @@ BEGIN
 
     "long_notifySettingString" = ""\
     "* 레코드\n"\
-    "선택된 카테고리에 있는 모든 이벤트를 일정관리로 옮기고 싶은 경우에는 "\
+    "선택된 분류에 있는 모든 이벤트를 일정관리로 옮기고 싶은 경우에는 "\
     "'전부'를 누르세요. 선택된 레코드만을 옮기고 싶은 경우에는 "\
     "'선택'을 누르세요.\n\n"\
     "* 존재하는 레코드\n"\
     "존재하는 HappyDays 항목을 유지하고 싶은 경우에는 '유지'를, "\
     "수정하고 싶은 경우에는 '수정'을 누르세요.\n\n"\
-    "* 비밀\n"\
-    "알림 설정할 일정관리 항목을 '비밀'로 만들고 싶을 때 선택.\n\n"\
-    "* Datebk3 아이콘\n"\
-    "알림 레코드에 Datebk3용 생일케익 아이콘을 설정.\n\n"\
+    "* 개인용\n"\
+    "알림 설정할 일정관리 항목을 '개인용'으로 만들고 싶을 때 선택.\n\n"\
     "* 알람\n"\
-    "일정관리 항목에 알람을 설정.\n\n"\
-    "* 몇 일전\n"\
-    "몇 일전에 알람 설정을 받고 싶은지 설정.\n\n"\
+    "일정관리 항목에 알람을 설정. 몇 일전에 알람 설정을 받고 싶은지 설정.\n\n"\
+	"* 시간\n"\
+	"일정관리 항목의 시간을 설정.\n\n"\
     "* 몇 년간\n"\
     "몇 년에 걸쳐 알림 레코드를 만들것인가를 설정. "\
     "-1을 입력한 경우에는 양력의 경우 '영원히'를, 음력인 경우엔 "\
     "편의상 5년간 반복하여 레코드를 만든다.\n"
 
+	"long_notifySettingMoreString" = ""\
+	"AN 사용자는 Action Names 매뉴얼을 참조하여 숫자를 입력하면 됨. "\
+	"DateBk3 아이콘은 메모장으로부터 읽어서 화면에 표시합니다. 메모장에 "\
+	"아이콘 데이터가 없는 경우에는 아무것도 표시되지 않습니다.\n"
+
     "long_customErrorString" = ""\
-    "'Birthday'가 초기 커스텀 필드 이름입니다."\
+    "'Birthday'가 초기 사용자정의 필드 이름입니다."\
     "다른 이름을 설정하고 싶은 경우 "\
     "'설정'을 누르세요.\n\n"\
-    "정보: 'Birthday' 커스텀 필드를 바꾸기 위해서는 주소록을 수행시켜 "\
+    "정보: 'Birthday' 사용자정의 필드를 바꾸기 위해서는 주소록을 수행시켜 "\
     "'Options/Rename Custom Fields'을 선택한 다음 수정하면 됩니다."\
-    "혹은 HappyDays의 설정 항목의 커스텀 필드를 적절하게 수정하세요.\n"
+    "혹은 HappyDays의 설정 항목의 사용자정의 필드를 적절하게 수정하세요.\n"
 
     "long_aboutString" = ""\
     "'HappyDays'는 친구나 가족의 생일이나 기념일을 기억하는 것을 도와"\
     "줍니다. 더욱이 제사나 다른 이벤트 항목도 관리할 수 있습니다.\n\n"\
-    "주소록의 커스텀 필드중 하나를 'Birthday'로 수정하세요."\
+    "주소록의 사용자정의 필드중 하나를 'Birthday'로 수정하세요."\
     "\n\n예:\n"\
     " Last Name: 정\n"\
     " First name: 재목\n"\
@@ -166,8 +170,8 @@ BEGIN
     "간주하고 삭제합니다. (주의 요망)\n"
 
     "long_prefFormString" = ""\
-    "* 커스텀 필드\n"\
-    "입력으로 사용되는 주소록의 커스텀 필드 이름.\n\n"\
+    "* 사용자정의 필드\n"\
+    "입력으로 사용되는 주소록의 사용자정의 필드 이름.\n\n"\
     "* HD 식별자\n"\
     "HappyDays 식별자. 알림과 레코드 정리에 사용.\n\n"\
     "* 정렬\n"\
@@ -179,8 +183,8 @@ BEGIN
     "일정관리로부터 모든 HappyDays 항목을 삭제하길 원하십니까?"
 
     "long_cantFindAddrString" = ""\
-        "주소록에서 커스텀 필드를 못 찾음: %s\n"\
-        "주소록의 커스텀 필드 항목 이름을 변경하세요."
+        "주소록에서 사용자정의 필드를 못 찾음: %s\n"\
+        "주소록의 사용자정의 필드 항목 이름을 변경하세요."
 
     "long_sl2lnString" = ""\
         "-)는 음력 평달을 의미합니다.\n"\
@@ -241,7 +245,7 @@ BEGIN
     "Graffiti" = "그래피티"
 
     "HappyDays Preferences" = "HappyDays 설정"
-    "Custom field:" = "커스텀 필드 :"
+    "Custom field:" = "사용자정의 필드 :"
     "HappyDays ID:" = "HD 식별자 :"
     "Sort by:" = "정렬 :"
     "Name" = "이름"
@@ -249,7 +253,7 @@ BEGIN
 
     "Emphasize Lunar:" = "음력강조 :"
 
-    "OK" = "선택"
+    "OK" = "승인"
     "Cancel" = "취소"
 
     "Solar to Lunar Convert" = "양력을 음력으로 변환"
@@ -275,7 +279,7 @@ BEGIN
     "keep" = "유지"
     "modify" = "수정"
 
-    "Private:" = "비밀 :"
+    "Private:" = "개인용 :"
 
     "Datebk3 icon:" = "Datebk3 아이콘 :"
 
@@ -291,7 +295,7 @@ BEGIN
     "Would you like to export HappyDays List to Memo Pad?" = ""\
         "메모장으로 HappyDays 목록을 옮길까요?"
 
-    "Custom Field Error" = "커스텀 필드 에러"
+    "Custom Field Error" = "사용자정의 필드 에러"
     "Help" = "도움말"
 
 
@@ -320,6 +324,21 @@ BEGIN
     "HappyDays Export List" = "HappyDays Export List"
     "(not exist in this year)" = "(올해엔 없는 날입니다)"
     "Please run Date Book once first." = "먼저 일정관리를 한번 수행하세요."
+
+    "Instead of system date format" = "시스템 날짜 형식 대신에"
+    "use" = "사용할 형식"
+    "M/D/Y" = "M/D/Y"
+    "D/M/Y" = "D/M/Y"
+    "D.M.Y" = "D.M.Y"
+    "D-M-Y" = "D-M-Y"
+    "Y/M/D" = "Y/M/D"
+    "Y.M.D" = "Y.M.D"
+    "Y-M-D" = "Y-M-D"
+
+	"Hide HappyDays ID" = "HappyDays 식별자를 메모장으로 숨김"
+	"Icon Support" = "아이콘 지원"
+	"AN ICON Number:" = "AN 아이콘 번호: "
+	"DateBk3 ICON" = "DateBook3 아이콘"
 END
 
 TRANSLATION "GERMAN"
@@ -523,9 +542,20 @@ BEGIN
     "HappyDays Export List" = "HappyDays Export Liste"
     "(not exist in this year)" = "(in diesem Jahr nicht vorhanden)"
     "Please run Date Book once first." = "Bitte vorher den Kalender einmal aufrufen."
+    
+    "Instead of system date format" = "Statt System-Datumsformat"
+    "use" = "verwenden"
+    "M/D/Y" = "M/T/J"
+    "D/M/Y" = "T/M/J"
+    "D.M.Y" = "T.M.J"
+    "D-M-Y" = "T-M-J"
+    "Y/M/D" = "J/M/T"
+    "Y.M.D" = "J.M.T"
+    "Y-M-D" = "J-M-T"
 END
 
 STRING ID NotifySettingHelpString "long_notifySettingString"
+STRING ID NotifySettingMoreHelpString "long_notifySettingMoreString"
 STRING ID SelectDateString  "HappyDays"
 STRING ID CustomErrorHelpString "long_customErrorString"
 STRING ID AboutHelpString "long_aboutString"
@@ -661,14 +691,22 @@ BEGIN
     END
 END
 
-FORM ID PrefForm AT (2 33 156 125)
+FORM ID PrefForm AT (2 28 156 130)
 FRAME
 MODAL
 USABLE
 HELPID PrefFormHelpString
 BEGIN
     TITLE "HappyDays Preferences"
-    LABEL "Custom field:" AUTOID AT (RIGHT@88 20) FONT 1 
+    CHECKBOX "Instead of system date format" ID PrefFormOverrideSystemDate AT 
+			(CENTER 20 AUTO AUTO)
+    LABEL "use" AUTOID AT (20 PREVBOTTOM)
+    LIST "M/D/Y" "D/M/Y" "D.M.Y" "D-M-Y" "Y/M/D" "Y.M.D" "Y-M-D" ID PrefFormDateFmts AT 
+			(PREVRIGHT+4 PREVTOP 40 AUTO) VISIBLEITEMS 7 NONUSABLE
+    POPUPTRIGGER "" ID PrefFormDateTrigger AT (PREVLEFT PREVTOP-1 40 13) LEFTANCHOR
+    POPUPLIST ID PrefFormDateTrigger PrefFormDateFmts
+
+    LABEL "Custom field:" AUTOID AT (RIGHT@88 PREVBOTTOM+3) FONT 1 
     FIELD ID PrefFormCustomField AT (PrevRight+3 PrevTop 50 AUTO) UNDERLINED
             MAXCHARS 12
     LABEL "HappyDays ID:" AUTOID AT (RIGHT@88 PrevBottom+3) FONT 1
@@ -681,15 +719,10 @@ BEGIN
     PUSHBUTTON "Date" ID PrefFormSortDate AT (PrevRight+1
             PrevTop AUTO AUTO) GROUP 1
 
-    LABEL "Emphasize Lunar:" AUTOID AT (RIGHT@88 PrevBottom+3) FONT 1
-    CHECKBOX " " ID PrefFormEmphasize at (PrevRight+3
-        PrevTop AUTO AUTO) RIGHTANCHOR FONT 0
+	LABEL "Emphasize Lunar:" AUTOID AT (RIGHT@88 PrevBottom+3) FONT 1
+    CHECKBOX " " ID PrefFormEmphasize AT (PrevRight+3 PrevTop AUTO AUTO) 
 
-    LABEL "Scan from note:" AUTOID AT (RIGHT@88 PrevBottom+3) FONT 1
-    CHECKBOX " " ID PrefFormScanNote at (PrevRight+3
-        PrevTop AUTO AUTO) RIGHTANCHOR FONT 0
-
-    BUTTON "OK" ID PrefFormOk AT (5 BOTTOM@118 40 AUTO)
+    BUTTON "OK" ID PrefFormOk AT (5 BOTTOM@123 40 AUTO)
     BUTTON "Cancel" ID PrefFormCancel AT (PrevRight+5 PrevTop 40 AUTO)
 END
 
@@ -789,12 +822,12 @@ FORM ID NotifySettingMoreForm AT (2 18 156 140)
 FRAME
 MODAL
 USABLE
-HELPID  NotifySettingHelpString
+HELPID  NotifySettingMoreHelpString
 BEGIN
     TITLE "Notify Settings"
 
-    CHECKBOX "Hide HappyDays ID" ID NotifySettingFormHide at (10 20 AUTO AUTO) 
-		RIGHTANCHOR FONT 0 
+    CHECKBOX "Hide HappyDays ID" ID NotifySettingFormHide 
+		at (10 20 AUTO AUTO) RIGHTANCHOR FONT 0 
 
     CHECKBOX "Icon Support" ID NotifySettingFormIcon 
 			at (10 PrevBottom AUTO AUTO) RIGHTANCHOR FONT 0 
@@ -803,9 +836,9 @@ BEGIN
     PUSHBUTTON "DateBk3" ID NotifySettingFormBk3 AT (PrevRight+1
             PrevTop AUTO AUTO) GROUP 1
 
-	LABEL "AN ICON String: " ID NotifySettingANLabel AT (5 PrevBottom+5) 
-	FIELD ID NotifySettingANInput AT (PrevRight+3 PrevTop 60 AUTO) 
-		UNDERLINED MAXCHARS 9
+	LABEL "AN ICON Number: " ID NotifySettingANLabel AT (5 PrevBottom+5) 
+	FIELD ID NotifySettingANInput AT (PrevRight+3 PrevTop 30 AUTO) 
+		UNDERLINED MAXCHARS 3
 
 	LABEL "DateBk3 ICON" ID NotifySettingBk3Label AT (5 PrevBottom+2) 
     TABLE ID NotifySettingBk3Table AT (7 PrevBottom 130 40) ROWS 4 
@@ -872,7 +905,7 @@ MODAL
 HELPID AboutHelpString
 BEGIN
     TITLE "HappyDays"
-    LABEL "HappyDays 1.1pre0" AUTOID AT (Center@80 20) FONT 1
+    LABEL "HappyDays 1.1pre1" AUTOID AT (Center@80 20) FONT 1
     LABEL "(c) 1999-2000, JaeMok Jeong"
         AUTOID AT (Center@80 PrevBottom+5) FONT 0
     LABEL "<jmjeong@oopsla.snu.ac.kr>" AUTOID AT (Center@80 PrevBottom)
@@ -895,4 +928,4 @@ APPLICATIONICONNAME 1000 "HappyDays"
 ICON "happydays.pbitm"
 SMALLICON "happydays-small.pbitm"
 
-VERSION 1 "1.1pre0"
+VERSION 1 "1.1p1"

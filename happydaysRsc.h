@@ -64,7 +64,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define PrefFormSortDate            1305
 #define PrefFormSortName            1306
 #define PrefFormNotifyWith          1307
-#define PrefFormScanNote          	1308
+#define PrefFormOverrideSystemDate  1308
+#define PrefFormDateFmts            1309
+#define PrefFormDateTrigger         1310
 
 #define NotifySettingForm           1400
 #define NotifySettingFormRecordAll  1401
@@ -92,7 +94,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define NotifySettingANLabel		1458
 #define NotifySettingANInput		1459
 
-#define NotifySettingHelpString     1499
+#define NotifySettingHelpString     1498
+#define NotifySettingMoreHelpString 1499
 
 #define Sl2LnForm                   1500
 #define Sl2LnFormInput              1501
