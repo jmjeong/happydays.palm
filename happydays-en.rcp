@@ -341,8 +341,7 @@ STRING ID TypeStr				"Type:"
 STRING ID NextDateStr			"Next Date:"
 STRING ID SourceDateStr			"Origin:"
 STRING ID AgeStr				"Age:"
-STRING ID RemainedDayStr		"Remained:"
-STRING ID UpToNowStr			"Up To Now:"
+STRING ID RemainedDayStr		"UpTo Date:"
 
 STRING ID FindHeaderString		"HappyDays"
 
@@ -422,7 +421,7 @@ BEGIN
     BEGIN
 		MENUITEM "Font..."					MainFormMenuFont    "F"
         MENUITEM "Preferences"              MainFormMenuPref    "R"
-        MENUITEM "Display Preferences"      MainFormMenuDispPref    
+        MENUITEM "Display Preferences"      FormMenuDispPref    
         MENUITEM SEPARATOR
         MENUITEM "About HappyDays"          MainFormMenuAbout   "A"
     END
@@ -437,8 +436,7 @@ BEGIN
     END
     PULLDOWN "Options"
     BEGIN
-		MENUITEM "Font..."					ViewFormMenuFont    "F"
-        MENUITEM "Display Preferences"      MainFormMenuDispPref    
+        MENUITEM "Display Preferences"      FormMenuDispPref    
         MENUITEM SEPARATOR
         MENUITEM "About HappyDays"          MainFormMenuAbout   "A"
     END

@@ -20,12 +20,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef CALENDAR_H_
 #define CALENDAR_H_
 
+#include "section.h"
+
 extern Char convertIndex[163][13];
 
 extern int sol2lun(int syear, int smonth, int sday,
-                   DateTimeType* lunar, int *leapyes);
+                   DateTimeType* lunar, int *leapyes) SECT1;
 extern int lun2sol(int lyear, int lmonth, int lday, int leapyes,
-                   DateTimeType* solar);
+                   DateTimeType* solar) SECT1;
 extern Int16 month[12];
 
 #endif

@@ -43,10 +43,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define	MainFormMenuPref	        1120
 #define	MainFormMenuAbout	        1121
 #define	MainFormMenuFont	        1122
-#define	MainFormMenuDispPref	    1123
+
+#define	FormMenuDispPref	        1130
 
 #define ViewFormMenu                1151
-#define ViewFormMenuFont            1152
 
 #define TextMenu                    1180
 #define TextMenuUndo                1181
@@ -194,7 +194,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define SourceDateStr				1938
 #define AgeStr						1939
 #define RemainedDayStr				1940
-#define UpToNowStr					1941
 
 #define ExportAlert                 1990
 
