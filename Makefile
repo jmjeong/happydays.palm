@@ -397,6 +397,11 @@ html:
 prc/$(TARGET).prc: obj/$(TARGET).prc
 	mv obj/$(TARGET).prc prc
 
+src:
+	cvs co palm/happydays && cd palm && \
+		zip -r ../happydays-src-$(VERSION).zip happydays && \
+		cd .. && \rm -rf palm
+
 zip: prc/$(TARGET).prc 
 	-@echo "Making distribution file(happydays-$(VERSION).zip) ..." &&\
 	\rm -rf dist && mkdir dist && mkdir dist/img && \
@@ -405,7 +410,8 @@ zip: prc/$(TARGET).prc
 	cd dist && \
 	zip -r ../happydays-$(VERSION).zip *  && \rm -rf dist
 
-upload: zip
+upload: zip src
 	scp *.zip jmjeong.com:~/public_html/palm/happydays/down
+	scp manual/*.html jmjeong.com:~/public_html/palm/happydays 
 
 -include .depend
