@@ -54,10 +54,10 @@ If you would like to translate HappyDays into your favorite language, please
 HappyDays has been translated into the following languages:  <br>
 
 <ul>
-  <li> <a href="ftp://jmjeong.com/pub/happydays/happydays-1.45-ko.zip">
-  Korean</a>(1.45) - by Jaemok Jeong<br>
-	  (happydays-kt.prc for hantip; fontwidth 8x8,
-	  happydays-km.prc for Hanme Hangul; fontwidth 11x11)
+  <li> <a href="ftp://jmjeong.com/pub/happydays/happydays-2.0-ko.zip">
+  Korean</a>(2.0) - by Jaemok Jeong<br>
+	  (happydays-k8.prc for 8x8 font,
+	  happydays-k11.prc for 11x11 font)
   <li> <a
       href="ftp://jmjeong.com/pub/happydays/happydays-1.45-de.zip">German</a>(1.45)
       - by  Gunther Zagatta(<a href="mailto:zagatta@web.de">zagatta@web.de</a>)
