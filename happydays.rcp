@@ -337,7 +337,7 @@ BEGIN
 
 	"Hide HappyDays ID" = "HappyDays ½Äº°ÀÚ¸¦ ¸Þ¸ðÀåÀ¸·Î ¼û±è"
 	"Icon Support" = "¾ÆÀÌÄÜ Áö¿ø"
-	"AN ICON Number:" = "AN ¾ÆÀÌÄÜ ¹øÈ£: "
+	"AN ICON Number: " = "AN ¾ÆÀÌÄÜ ¹øÈ£: "
 	"DateBk3 ICON" = "DateBook3 ¾ÆÀÌÄÜ"
 END
 
@@ -367,6 +367,14 @@ BEGIN
       "Gibt an, wie oft das Ereignis wiederholt werden soll. "\
       "Dabei bedeutet (-1) für den Gregorianischen Kalender unbegrenzt, "\
       "für den Lunarkalender 5 Jahre.\n\n"
+
+    "long_notifySettingMoreString" = ""\
+      "Wenn Sie die HappyDays ID nicht im Kalendereintrag sehen wollen, wählen Sie "\
+      "die entsprechende Option. "\
+      "Die AN Icon Nummer schlagen Sie bitte im ActionNames Handbuch nach. "\
+      "Das DateBk3 Icon wird aus dem Merkzettel gelesen. "\
+      "Wenn Sie kein DateBk3 Icon im Merkzettel vermerkt haben, "\
+      "wird auch keines angezeigt.\n"
 
     "long_customErrorString" = ""\
       "'Geburtstag' ist der Default Benutzerfeld-Name."\
@@ -552,6 +560,11 @@ BEGIN
     "Y/M/D" = "J/M/T"
     "Y.M.D" = "J.M.T"
     "Y-M-D" = "J-M-T"
+
+    "Hide HappyDays ID" = "keine HappyDays ID"
+    "Icon Support" = "Icons verwenden"
+    "AN ICON Number: " = "AN Icon Nummer: "
+    "DateBk3 ICON" = "DateBk3 Icon"
 END
 
 STRING ID NotifySettingHelpString "long_notifySettingString"
@@ -661,7 +674,7 @@ BEGIN
 
     PULLDOWN "Options"
     BEGIN
-        MENUITEM "Preferences"              MainFormMenuPref    "R"
+        MENUITEM "Preferences"              MainFormMenuPref    "P"
         MENUITEM "About HappyDays"          MainFormMenuAbout   "A"
     END
 END
@@ -905,7 +918,7 @@ MODAL
 HELPID AboutHelpString
 BEGIN
     TITLE "HappyDays"
-    LABEL "HappyDays 1.1" AUTOID AT (Center@80 20) FONT 1
+    LABEL "HappyDays 1.11" AUTOID AT (Center@80 20) FONT 1
     LABEL "(c) 1999-2000, JaeMok Jeong"
         AUTOID AT (Center@80 PrevBottom+5) FONT 0
     LABEL "<jmjeong@oopsla.snu.ac.kr>" AUTOID AT (Center@80 PrevBottom)
@@ -928,4 +941,4 @@ APPLICATIONICONNAME 1000 "HappyDays"
 ICON "happydays.pbitm"
 SMALLICON "happydays-small.pbitm"
 
-VERSION 1 "1.1"
+VERSION 1 "1.11"

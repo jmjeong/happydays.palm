@@ -61,9 +61,9 @@ struct sPrefsR *gPrefsR;
 struct sPrefsR DefaultPrefsR = {
     {  '0', '0', '0', '1', '1', '0', 9, 3, -1, {-1, -1}, "145" },
 #ifdef GERMAN
-    {  "Geburtstag", "HD ", '1', '1', 0, dfDMYWithDots },
+    {  "Geburtstag", "HD:", '1', '1', 0, dfDMYWithDots },
 #else
-    {  "Birthday", "HD ", '1', '1', 0, dfMDYWithSlashes },
+    {  "Birthday", "HD:", '1', '1', 0, dfMDYWithSlashes },
 #endif
     0,
 #ifdef GERMAN
@@ -2215,7 +2215,7 @@ static Boolean BirthdateFormHandleEvent(EventPtr e)
 
 static Boolean StartFormHandlerEvent(EventPtr e)
 {
-    Int8 err;
+    Int16 err;
     Boolean handled = false;
     FormPtr frm = FrmGetFormPtr(StartForm);
 

@@ -57,6 +57,7 @@ void PackBirthdate(BirthDate *birthdate, void* recordP)
 
     if (birthdate->custom) {
         DmStrCopy(recordP, offset, (Char*)birthdate->custom);
+        offset += StrLen(birthdate->custom) +1;
     }
     else {
         DmStrCopy(recordP, offset,"\0");
@@ -337,7 +338,7 @@ Boolean AnalysisBirthDate(const char* birthdate,
 
 static void CleanupBirthdateCache(DmOpenRef dbP)
 {
-    UInt16 currindex = 0;     // 0 is the preference record
+    UInt16 currindex = 0;     
     MemHandle recordH = 0;
 
     if (dbP) {
@@ -403,14 +404,14 @@ static Int16 BirthComparePackedRecords(PackedBirthDate *rec1,
         BirthFindKey(rec1, &key1, &whichKey1);
         BirthFindKey(rec2, &key2, &whichKey2);
 
-        if (*key1 == 0) {
-            if (*key2 == 0) {
+        if (!key1 || *key1 == 0) {
+            if (!key2 || *key2 == 0) {
                 result = 0;
                 return result;
             }
             else result = -1;
         }
-        else if (*key2 == 0) result = 1;
+        else if (!key2 || *key2 == 0) result = 1;
         else {
             result = StrCaselessCompare(key1, key2);
             if (result == 0)
@@ -465,12 +466,12 @@ static Int16 AnalOneRecord(UInt16 addrattr, Char* src,
     Int16 err;
     Int16 year, month, day;
 
-	while (*src == ' ' || *src == '\t') src++;     // skip white space
+	while (*src == ' ' || *src == '\t') src++;    // skip white space
     if (*src == '*') {
         if ((p = StrChr(src, ' '))) *p = 0;
         else goto ErrHandler;
     
-        if (*src == '*' && *(src+1)) {
+        if ( *(src+1) != 0 ) {                    // if src have 'custom' tag
             birthdate->custom = src+1;
             UnderscoreToSpace(src+1);
         }
@@ -480,10 +481,9 @@ static Int16 AnalOneRecord(UInt16 addrattr, Char* src,
         while (*src == ' ' || *src == '\t') src++;     // skip white space
 
         if ((p = StrChr(src, ' '))) *p = 0;
-
         else goto ErrHandler;
 
-        if (src[0] == '.') {
+        if (*src == '.') {
             birthdate->name1 = src+1;
             birthdate->name2 = 0;
         }
@@ -586,7 +586,7 @@ Int16 UpdateBirthdateDB(DmOpenRef dbP, FormPtr frm)
         BirthDate   birthdate;
         Boolean     ignore = false;         // ignore error record
         Char*       birthdateField;
-        UInt16        addrattr;
+        UInt16      addrattr;
         Char        *p, *q;
 
         // display collecting information
@@ -665,7 +665,6 @@ Int16 UpdateBirthdateDB(DmOpenRef dbP, FormPtr frm)
             
             currIndex++;
         }
-//        DmQuickSort(MainDB, (DmComparF *)BirthComparePackedRecords, 0L);
 
         MemMove(gPrefsR->adrcdate, (char *)&gAdcdate, 4);
         MemMove(gPrefsR->adrmdate, (char *)&gAdmdate, 4);
