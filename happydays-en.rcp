@@ -24,6 +24,8 @@ BEGIN
     "Translator's email" = ""
 
     "long_notifySettingString" = ""\
+	""
+/*
     "* Records\n"\
     "Tab 'all' if you'd like to "\
     "make notification entries created for all of your events in this"\
@@ -43,6 +45,7 @@ BEGIN
     "is the interval of the notification record. "\
     "-1 means repeat forever in case of solar event, and "\
     "means repeat for 5 years in lunar event for convenience.\n"
+*/
 
 	"long_notifySettingMoreString" = ""\
 	"For AN Icon Number, consult Action Names manual. DateBk3Icon is "\
@@ -59,6 +62,9 @@ BEGIN
     "HappyDays.\n"
 
     "long_aboutString" = ""\
+	""
+
+/*
     "'HappyDays' will help you remember the birthdays and anniversaries "\
     "of your friends and family members, as well as other events."\
     "\n\nUse one of the custom fields in Address Book application "\
@@ -86,6 +92,7 @@ BEGIN
 	"first record beginning with 'a' or 'A' is highlighted. "\
 	"If you write '1' in graffiti, the nearest incoming record after January "\
 	"is highlighted.\n"
+*/
 
     "long_cleanupAlertString" = ""\
     "Notification entries are considered HappyDays if they have "\
@@ -94,6 +101,8 @@ BEGIN
     "entries, this record might also be removed by CleanUp.\n"
 
     "long_prefFormString" = ""\
+	""
+/*
 	"* Instead of system date...\n"\
 	"Control the interpretation of the AddressDB Birthday custom field. "\
 	"By default this is the same as the system date format preference.\n\n"\
@@ -107,6 +116,7 @@ BEGIN
     "The name of custom fields in Address Book used for INPUT\n\n"\
     "* HappyDays ID\n"\
     "Used for Notify and Cleanup\n"
+*/
 
     "long_removeConfirmString" = ""\
     "Are you sure you want to remove all "\
@@ -284,6 +294,8 @@ BEGIN
 
 END
 
+HEX "sKst" ID 1000 0x00 0x00 0x00 0x00
+
 STRING ID DateBookNotifyHelpString "long_notifySettingString"
 STRING ID DateBookNotifyMoreHelpString "long_notifySettingMoreString"
 STRING ID SelectDateString  "HappyDays"
@@ -325,9 +337,12 @@ STRING ID ToDoString			"To Do"
 STRING ID BirthLeftString		"%d day(s) left"
 STRING ID BirthPassedString     "%d day(s) passed"
 
-STRING ID MainHdrNameStr		"Name"
-STRING ID MainHdrDateStr		"Date"
-STRING ID MainHdrAgeStr			"Age"
+STRING ID TypeStr				"Type:"
+STRING ID NextDateStr			"Next Date:"
+STRING ID SourceDateStr			"Source Date:"
+STRING ID AgeStr				"Age:"
+STRING ID RemainedDayStr		"Remained Day:"
+STRING ID UpToNowStr			"Up To Now:"
 
 STRING ID FindHeaderString		"HappyDays"
 
@@ -345,30 +360,31 @@ SAVEBEHIND
 MENUID MainFormMenu
 BEGIN
     TITLE "HappyDays"
+	
+  	TABLE ID MainFormTable AT (0 16 FULLWIDTH 11*VISIBLESLOT)  
+			ROWS MAXSLOT COLUMNS 1 COLUMNWIDTHS FULLWIDTH
+	SCROLLBAR ID MainFormScrollBar AT (FULLWIDTH+2 PREVTOP 7 PREVHEIGHT)
+			VALUE 0 MIN 0 MAX 0 PAGESIZE 0
 
-    TABLE ID MainFormHeader AT (0 16 160 11) ROWS 1 COLUMNS 3 
-				COLUMNWIDTHS 160-DATE_FIELD_WIDTH-AGE_FIELD_WIDTH 
-				DATE_FIELD_WIDTH AGE_FIELD_WIDTH 
-    TABLE ID MainFormTable AT (0 28 160 110) ROWS 10 COLUMNS 1
-                COLUMNWIDTHS 160
-
-    LABEL "Look Up:" AUTOID AT (1 BOTTOM@160-1) FONT 0
-    SELECTORTRIGGER "" ID MainFormStart at (PrevRight+6 PrevTop
+    LABEL "Look Up:" ID MainFormLookUp AT (1 BOTTOM@160-1) FONT 0
+    SELECTORTRIGGER "" ID MainFormStart at (PrevRight+3 PrevTop
             AUTO AUTO) LEFTANCHOR FONT 0
+    PUSHBUTTON "N" ID MainFormName AT
+		(PrevRight+70  PrevTop AUTO AUTO) GROUP 1
+    PUSHBUTTON "D" ID MainFormDate AT 
+		(PrevRight+1 PrevTop AUTO AUTO) GROUP 1
+    PUSHBUTTON "A" ID MainFormAge AT 
+		(PrevRight+1 PrevTop AUTO AUTO) GROUP 1
 
     POPUPTRIGGER "" ID MainFormPopupTrigger
-            AT ( RIGHT@159 1 AUTO AUTO ) RIGHTANCHOR 
+            AT ( RIGHT@160 1 AUTO AUTO ) RIGHTANCHOR 
     LIST "" ID MainFormAddrCategories AT (PREVLEFT PREVTOP 70 AUTO)
             NONUSABLE
     POPUPLIST ID MainFormPopupTrigger MainFormAddrCategories
 
-    BUTTON " " ID MainFormPageUp AT ( RIGHT@159 141 13 8 )
-        NONUSABLE NOFRAME FONT 5
-    BUTTON " " ID MainFormPageDown AT ( PREVLEFT PREVBOTTOM 13 8 )
-        NONUSABLE NOFRAME FONT 5
 END
 
-FORM BirthdateForm AT (0 0 160 160)
+FORM ViewForm AT (0 0 160 160)
 USABLE
 NOFRAME
 SAVEBEHIND
@@ -376,25 +392,15 @@ MENUID ViewFormMenu
 BEGIN
     TITLE "HappyDays View"
 
-	FIELD ID BirthdateCategory AT (RIGHT@158 1 65 AUTO) RIGHTALIGN 
-		NONEDITABLE FONT 0
+	FIELD ID ViewFormCategory AT (RIGHT@160 1 65 AUTO) RIGHTALIGN 
+			NONEDITABLE FONT 0
+  	TABLE ID ViewFormTable AT (0 16 160 11*7)  
+			ROWS 7 COLUMNS 2 COLUMNWIDTHS 60 100
 
-    FIELD ID BirthdateFirst AT (6 30 148 AUTO) NONEDITABLE FONT 2
-    FIELD ID BirthdateSecond AT (PrevLeft PrevBottom+2 148 AUTO) 
-		NONEDITABLE FONT 2
-    FIELD ID BirthdateCustom AT (PrevLeft PrevBottom+6 148 AUTO)
-        NONEDITABLE FONT 1
-    FIELD ID BirthdateDate AT (PrevLeft PrevBottom+3 148 AUTO)
-        NONEDITABLE FONT 2
-    FIELD ID BirthdateOrigin AT (PrevLeft PrevBottom+1 148 AUTO)
-        NONEDITABLE FONT 0
-    FIELD ID BirthdateLeft AT (PrevLeft+42 PrevBottom+2 128 AUTO)
-		NONEDITABLE FONT 0
-
-    BUTTON "Done" ID BirthdateDone AT (1 BOTTOM@159 AUTO AUTO)
-    BUTTON "DB" ID BirthdateNotifyDB AT (PrevRight+6 PrevTop AUTO AUTO)
-    BUTTON "TD" ID BirthdateNotifyTD AT (PrevRight+1 PrevTop AUTO AUTO)
-    BUTTON "Goto" ID BirthdateGoto AT ( PrevRight+6 PrevTop AUTO AUTO)
+    BUTTON "Done" ID ViewFormDone AT (1 BOTTOM@159 AUTO AUTO)
+    BUTTON "DB" ID ViewFormNotifyDB AT (PrevRight+6 PrevTop AUTO AUTO)
+    BUTTON "TD" ID ViewFormNotifyTD AT (PrevRight+1 PrevTop AUTO AUTO)
+    BUTTON "Goto" ID ViewFormGoto AT ( PrevRight+6 PrevTop AUTO AUTO)
 END
 
 MENU ID MainFormMenu
@@ -414,7 +420,9 @@ BEGIN
 
     PULLDOWN "Options"
     BEGIN
+		MENUITEM "Font..."					MainFormMenuFont    "F"
         MENUITEM "Preferences"              MainFormMenuPref    "R"
+        MENUITEM "Display Preferences"      MainFormMenuDispPref    
         MENUITEM SEPARATOR
         MENUITEM "About HappyDays"          MainFormMenuAbout   "A"
     END
@@ -452,9 +460,9 @@ USABLE
 DEFAULTBTNID PrefFormCancel
 HELPID PrefFormHelpString
 BEGIN
-    TITLE "HappyDays Preferences"
-    CHECKBOX "Instead of system date format" ID PrefFormOverrideSystemDate AT 
-			(10 20 AUTO AUTO)
+    TITLE "Preferences"
+    CHECKBOX "Instead of system date format" ID PrefFormOverrideSystemDate 
+			AT (10 20 AUTO AUTO)
     LABEL "Use" AUTOID AT (20 PREVBOTTOM)
     LIST "M/D/Y" "D/M/Y" "D.M.Y" "D-M-Y" "Y/M/D" "Y.M.D" "Y-M-D" 
 		ID PrefFormDateFmts 
@@ -736,7 +744,7 @@ BEGIN
     TITLE "About HappyDays"
 
 	FORMBITMAP AT (6 18) BITMAP ID_BitmapIcon USABLE 
-    LABEL "HappyDays 1.45" AUTOID AT (PrevRight+38 PrevTop) FONT 1
+    LABEL "HappyDays 1.5" AUTOID AT (PrevRight+38 PrevTop) FONT 1
     LABEL "GPL free software"
         AUTOID AT (PrevLeft PrevTop+ABOUT_LINE_SPACING) FONT 0
     LABEL "(c) 1999-2001 JaeMok Jeong"
@@ -779,4 +787,4 @@ SMALLICONFAMILY
 	TRANSPARENT 204 204 0
 
 APPLICATIONICONNAME 1000 "HappyDays"
-VERSION ID 1 "1.45"
+VERSION ID 1 "1.5"

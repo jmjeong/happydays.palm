@@ -49,6 +49,8 @@
 #ifndef __TDMEMOMGR_H__
 #define __TDMEMOMGR_H__
 
+#include "section.h"
+
 #define LocalizedAppInfoStr			1000
 
 typedef struct {
@@ -84,7 +86,7 @@ typedef struct {
 typedef MemoItemType * MemoItemPtr;
 
 
-extern Err MemoNewRecord(DmOpenRef dbP, MemoItemPtr item, UInt16 *index);
+extern Err MemoNewRecord(DmOpenRef dbP, MemoItemPtr item, UInt16 *index) SECT1;
 
 
 #endif

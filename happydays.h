@@ -20,16 +20,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _HAPPYDATE_H_
 #define _HAPPYDATE_H_
 
-#define PREFSVERSION        13
 
 #define AppErrStrLen        256
 #define DEFAULT_DURATION    5
 
-#define MainAppID           'Jmje'
+#define HDAppID           	'Jmje'
+#define HDAppVer        	15
+
 #define MainDBType          'DATA'
-#define MainDBName          "HappyDaysDB-Jmje"
-#define PrefsDBType         'DATA'
-#define PrefsDBName         "HappyDaysPrefs-Jmje"
+#define MainDBName          "HappyDaysDB"
 #define DatebookAppID       'date'
 #define DatebookDBName      "DatebookDB"
 #define ToDoAppID           'todo'
@@ -91,6 +90,9 @@ struct sPrefsR
     char addrCategory[dmCategoryLength];
     char adrcdate[4], adrmdate[4];      // address book create/modify date
     char memcdate[4], memmdate[4];      // memo create/modify date
+
+	FontID listFont;		// HappyDays list font
+	FontID viewFont;		// HappyDays view font
 };
 
 typedef union 
@@ -146,12 +148,9 @@ typedef LineItemType* LineItemPtr;
 #define MIN(_a,_b) ((_a)<(_b)?(_a):(_b))
 #endif
 
-#define         ENONBIRTHDATEFIELD      -100
-#define         EDBCREATE               -101
-
 // birthdate list
 extern MemHandle gTableRowHandle;
-extern struct sPrefsR *gPrefsR;
+extern struct sPrefsR gPrefsR;
 extern Char gAppErrStr[AppErrStrLen];
 extern Boolean gPrefsRdirty;
 extern Boolean gSortByCompany;

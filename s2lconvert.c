@@ -18,12 +18,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 #include <PalmOS.h>
+#include <HandEra/Vga.h>
 
 #include "happydays.h"
 #include "happydaysRsc.h"
 #include "calendar.h"
 #include "birthdate.h"
 #include "util.h"
+
+extern Boolean gbVgaExists;
 
 static Boolean TextMenuHandleEvent(UInt16 menuID, UInt16 objectID)
 {
@@ -60,91 +63,6 @@ static Boolean TextMenuHandleEvent(UInt16 menuID, UInt16 objectID)
     return false;
 }
 
-
-Boolean Sl2LnFormHandleEvent(EventPtr e)
-{
-    Boolean handled = false;
-    DateType dt = {0, 0};
-    FormPtr frm = FrmGetFormPtr(Sl2LnForm);
-
-    switch (e->eType) {
-    case frmOpenEvent:
-        DateSecondsToDate(TimGetSeconds(), &dt);
-
-        DateToAsciiLong(dt.month, dt.day, dt.year + 1904,
-                        gPrefdfmts, gAppErrStr);
-
-        SetFieldTextFromStr(Sl2LnFormInput, gAppErrStr);
-
-        FrmDrawForm(frm);
-        handled = true;
-        break;
-
-    case ctlSelectEvent:
-        switch(e->data.ctlSelect.controlID) {
-        case Sl2LnFormConvert:
-        {
-            DateTimeType rtVal;
-            BirthdateFlag dummy;
-            Int16 year, month, day;
-            Char* input;
-            int ret = false;
-
-            input = FldGetTextPtr(GetObjectPointer(frm, Sl2LnFormInput));
-            if ((ret = AnalysisBirthDate(input, &dummy,
-                                         &year, &month, &day))) {
-                int leapyes = 0;
-
-                ret = !sol2lun(year, month, day, &rtVal,
-                               &leapyes);
-                if (ret) {
-                    if (leapyes) {
-                        StrCopy(gAppErrStr, "#)");
-                    }
-                    else {
-                        StrCopy(gAppErrStr, "-)");
-                    }
-                    DateToAsciiLong(rtVal.month, rtVal.day, rtVal.year,
-                                    gPrefdfmts, &gAppErrStr[2]);
-                          
-                    FldDrawField(SetFieldTextFromStr(Sl2LnFormResult,
-                                                     gAppErrStr));
-                }
-
-            }
-            if (!ret) {
-                FldDrawField(ClearFieldText(Sl2LnFormResult));
-                SysCopyStringResource(gAppErrStr, InvalidDateString);
-                FrmCustomAlert(ErrorAlert, gAppErrStr, " ", " ");
-            }
-
-            handled = true;
-            break;
-        }
-
-        case Sl2LnFormOk:
-            FrmReturnToForm(0);
-
-            handled = true;
-            break;
-            
-        default:
-            break;
-                
-        }
-        break;
-
-    case menuEvent:
-        handled = TextMenuHandleEvent(e->data.menu.itemID, Sl2LnFormInput);
-        break;
-
-    default:
-        break;
-    }
-
-    return handled;
-}
-
 Boolean Ln2SlFormHandleEvent(EventPtr e)
 {
     Boolean handled = false;
@@ -153,6 +71,9 @@ Boolean Ln2SlFormHandleEvent(EventPtr e)
 
     switch (e->eType) {
     case frmOpenEvent:
+        if(gbVgaExists)
+       		VgaFormModify(frm, vgaFormModify160To240);
+
         DateSecondsToDate(TimGetSeconds(), &dt);
         DateToAsciiLong(dt.month, dt.day, dt.year + 1904,
 					gPrefdfmts, gAppErrStr);
@@ -229,3 +150,91 @@ Boolean Ln2SlFormHandleEvent(EventPtr e)
 
     return handled;
 }
+
+Boolean Sl2LnFormHandleEvent(EventPtr e)
+{
+    Boolean handled = false;
+    DateType dt = {0, 0};
+    FormPtr frm = FrmGetFormPtr(Sl2LnForm);
+
+    switch (e->eType) {
+    case frmOpenEvent:
+        if(gbVgaExists)
+       		VgaFormModify(frm, vgaFormModify160To240);
+
+        DateSecondsToDate(TimGetSeconds(), &dt);
+
+        DateToAsciiLong(dt.month, dt.day, dt.year + 1904,
+                        gPrefdfmts, gAppErrStr);
+
+        SetFieldTextFromStr(Sl2LnFormInput, gAppErrStr);
+
+        FrmDrawForm(frm);
+        handled = true;
+        break;
+
+    case ctlSelectEvent:
+        switch(e->data.ctlSelect.controlID) {
+        case Sl2LnFormConvert:
+        {
+            DateTimeType rtVal;
+            BirthdateFlag dummy;
+            Int16 year, month, day;
+            Char* input;
+            int ret = false;
+
+            input = FldGetTextPtr(GetObjectPointer(frm, Sl2LnFormInput));
+            if ((ret = AnalysisBirthDate(input, &dummy,
+                                         &year, &month, &day))) {
+                int leapyes = 0;
+
+                ret = !sol2lun(year, month, day, &rtVal,
+                               &leapyes);
+                if (ret) {
+                    if (leapyes) {
+                        StrCopy(gAppErrStr, "#)");
+                    }
+                    else {
+                        StrCopy(gAppErrStr, "-)");
+                    }
+                    DateToAsciiLong(rtVal.month, rtVal.day, rtVal.year,
+                                    gPrefdfmts, &gAppErrStr[2]);
+                          
+                    FldDrawField(SetFieldTextFromStr(Sl2LnFormResult,
+                                                     gAppErrStr));
+                }
+
+            }
+            if (!ret) {
+                FldDrawField(ClearFieldText(Sl2LnFormResult));
+                SysCopyStringResource(gAppErrStr, InvalidDateString);
+                FrmCustomAlert(ErrorAlert, gAppErrStr, " ", " ");
+            }
+
+            handled = true;
+            break;
+        }
+
+        case Sl2LnFormOk:
+            FrmReturnToForm(0);
+
+            handled = true;
+            break;
+            
+        default:
+            break;
+                
+        }
+        break;
+
+    case menuEvent:
+        handled = TextMenuHandleEvent(e->data.menu.itemID, Sl2LnFormInput);
+        break;
+
+    default:
+        break;
+    }
+
+    return handled;
+}
+

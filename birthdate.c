@@ -249,15 +249,15 @@ UInt16 AddrGetBirthdate(DmOpenRef dbP, UInt16 AddrCategory, DateType start)
             
             // sort the order if sort order is converted date
             //
-            if (gPrefsR->BirthPrefs.sort == 1) {      	// date sort
+            if (gPrefsR.BirthPrefs.sort == 1) {      	// date sort
                 SysInsertionSort(ptr, totalItems, sizeof(LineItemType),
                                  (_comparF *)CompareBirthdateFunc, 1L);
             }
-			else if (gPrefsR->BirthPrefs.sort == 2) {  	// age sort
+			else if (gPrefsR.BirthPrefs.sort == 2) {  	// age sort
                 SysInsertionSort(ptr, totalItems, sizeof(LineItemType),
                                  (_comparF *)CompareAgeFunc, 1L);
             }
-			else if (gPrefsR->BirthPrefs.sort == 3) {	// age sort(re)
+			else if (gPrefsR.BirthPrefs.sort == 3) {	// age sort(re)
                 SysInsertionSort(ptr, totalItems, sizeof(LineItemType),
                                  (_comparF *)CompareAgeFunc, -1L);
             }
@@ -620,7 +620,7 @@ Int16 UpdateBirthdateDB(DmOpenRef dbP, FormPtr frm)
     if ((addrInfoPtr = (AddrAppInfoPtr)AppInfoGetPtr(AddressDB))) {
         for (i= firstRenameableLabel; i <= lastRenameableLabel; i++) {
             if (!StrCaselessCompare(addrInfoPtr->fieldLabels[i],
-                                    gPrefsR->BirthPrefs.custom)) {
+                                    gPrefsR.BirthPrefs.custom)) {
                 gBirthDateField = i;
                 break;
             }
@@ -628,15 +628,15 @@ Int16 UpdateBirthdateDB(DmOpenRef dbP, FormPtr frm)
         MemPtrUnlock(addrInfoPtr);
     }
     if (gBirthDateField < 0) {
-        return ENONBIRTHDATEFIELD;
+        return -1;
     }
 
-    if (!MainDB) return EDBCREATE;
+    if (!MainDB) return -1;
 
     // cache the birthdate DB for the performance
     //
-    if ((MemCmp((char*) &gAdcdate, gPrefsR->adrcdate, 4) == 0) &&
-        (MemCmp((char*) &gAdmdate, gPrefsR->adrmdate, 4) == 0)) {
+    if ((MemCmp((char*) &gAdcdate, gPrefsR.adrcdate, 4) == 0) &&
+        (MemCmp((char*) &gAdmdate, gPrefsR.adrmdate, 4) == 0)) {
         // if matched, use the original birthdate db
         //
     }
@@ -675,8 +675,8 @@ Int16 UpdateBirthdateDB(DmOpenRef dbP, FormPtr frm)
             AddrUnpack(rp, &r);
 
             if (!r.fields[gBirthDateField]
-                && !(gPrefsR->BirthPrefs.scannote && r.fields[note]
-                     && StrStr(r.fields[note], gPrefsR->BirthPrefs.notifywith) ) ) {
+                && !(gPrefsR.BirthPrefs.scannote && r.fields[note]
+                     && StrStr(r.fields[note], gPrefsR.BirthPrefs.notifywith) ) ) {
                 // not exist in birthdate field or note field
                 //
                 MemHandleUnlock(recordH);
@@ -702,8 +702,8 @@ Int16 UpdateBirthdateDB(DmOpenRef dbP, FormPtr frm)
             while (whichField >= 0) {
 
                 if (whichField == note) {
-                    p = StrStr(r.fields[note], gPrefsR->BirthPrefs.notifywith)
-                        + StrLen(gPrefsR->BirthPrefs.notifywith) + 1;
+                    p = StrStr(r.fields[note], gPrefsR.BirthPrefs.notifywith)
+                        + StrLen(gPrefsR.BirthPrefs.notifywith) + 1;
 
 					if ( StrLen(r.fields[note]) < (p - r.fields[note]) ) break;
                 }
@@ -720,7 +720,7 @@ Int16 UpdateBirthdateDB(DmOpenRef dbP, FormPtr frm)
                 p = StrCopy(birthdateField, p);
 
 				if (whichField == note && 
-					(end = StrStr(p, gPrefsR->BirthPrefs.notifywith))) {
+					(end = StrStr(p, gPrefsR.BirthPrefs.notifywith))) {
 					// end delimeter
 					//
 					*end = 0;
@@ -751,9 +751,9 @@ Int16 UpdateBirthdateDB(DmOpenRef dbP, FormPtr frm)
                 }
                 
                 if (whichField == gBirthDateField       // next is note field
-                    && (gPrefsR->BirthPrefs.scannote    // scanNote & exists
+                    && (gPrefsR.BirthPrefs.scannote    // scanNote & exists
                         && r.fields[note]       
-                        && StrStr(r.fields[note], gPrefsR->BirthPrefs.notifywith)) ) {
+                        && StrStr(r.fields[note], gPrefsR.BirthPrefs.notifywith)) ) {
                     whichField = note;
                 }
                 else whichField = -1;
@@ -764,9 +764,8 @@ Int16 UpdateBirthdateDB(DmOpenRef dbP, FormPtr frm)
             currIndex++;
         }
 
-        MemMove(gPrefsR->adrcdate, (char *)&gAdcdate, 4);
-        MemMove(gPrefsR->adrmdate, (char *)&gAdmdate, 4);
-        gPrefsRdirty = true;
+        MemMove(gPrefsR.adrcdate, (char *)&gAdcdate, 4);
+        MemMove(gPrefsR.adrmdate, (char *)&gAdmdate, 4);
     }
     
     return 0;

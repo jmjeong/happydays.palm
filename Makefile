@@ -5,10 +5,11 @@ TARGET = happydays
 APPNAME = "HappyDays"
 APPID = "Jmje"
 
-FILES = happydays.c lun2sol.c sol2lun.c address.c datebook.c util.c \
-		birthdate.c memodb.c s2lconvert.c todo.c
-OBJS = happydays.o lun2sol.o sol2lun.o address.o datebook.o util.o \
-		birthdate.o memodb.o s2lconvert.o todo.o
+FILES = lun2sol.c sol2lun.c address.c datebook.c util.c \
+		birthdate.c happydays.c memodb.c s2lconvert.c todo.c
+OBJS = lun2sol.o sol2lun.o address.o datebook.o util.o \
+		birthdate.o happydays.o memodb.o s2lconvert.o todo.o \
+		happydays-sections.o
 
 CC = m68k-palmos-gcc
 
@@ -66,7 +67,16 @@ br: $(TARGET)-br.prc
 .c.s:
 	$(CC) $(CSFLAGS) $<
 
-$(TARGET).prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGET).grc pref0000.$(TARGET).grc rloc0000.$(TARGET).grc bin.res
+happydays-sections.o: happydays-sections.s
+	$(CC) -c happydays-sections.s
+
+happydays-sections.s happydays-sections.ld : happydays.def
+	multigen happydays.def
+
+$(TARGET).prc: $(TARGET) bin.res
+	$(BUILDPRC) $(TARGET).prc happydays.def *.bin $(TARGET)
+
+$(TARGET)-en.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGET).grc pref0000.$(TARGET).grc rloc0000.$(TARGET).grc bin.res
 	$(BUILDPRC) $(TARGET).prc $(APPNAME) $(APPID) code0001.$(TARGET).grc code0000.$(TARGET).grc data0000.$(TARGET).grc *.bin pref0000.$(TARGET).grc rloc0000.$(TARGET).grc
 
 $(TARGET)-kt.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGET).grc pref0000.$(TARGET).grc rloc0000.$(TARGET).grc bin-kt.res
@@ -118,7 +128,7 @@ rloc0000.$(TARGET).grc: code0000.$(TARGET).grc
 
 bin.res: $(TARGET)-en.rcp
 	rm -f *.bin
-	$(PILRC) -L ENGLISH $(TARGET)-en.rcp .
+	$(PILRC) -q -L ENGLISH $(TARGET)-en.rcp .
 
 bin-kt.res: $(TARGET)-ko.rcp
 	rm -f *.bin
@@ -204,8 +214,9 @@ $(TARGET)-catalan.rcp: $(TARGET).rcp catalan.msg hdr.msg
 $(TARGET)-br.rcp: $(TARGET).rcp brazilian.msg hdr.msg
 	cat hdr.msg brazilian.msg $(TARGET).rcp > $(TARGET)-br.rcp
 
-$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(TARGET) $(LIBS)
+$(TARGET): $(OBJS) happydays-sections.ld
+	$(CC) $(CFLAGS) $(OBJS) -o $(TARGET) $(LIBS) happydays-sections.ld
+	m68k-palmos-objdump --section-headers happydays
 #	! $(NM) -u $(TARGET) | grep .
 
 send: $(TARGET).prc

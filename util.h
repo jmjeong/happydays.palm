@@ -32,8 +32,8 @@ extern UInt32 Hash(Char* name1, Char* name2);
 
 extern MemPtr AppInfoGetPtr(DmOpenRef dbP);
 
-Boolean FindNearLunar(DateType *dt, DateType base, Boolean leapyes);
-Int16 DateCompare (DateType d1, DateType d2);     // defined in datebook.c
+extern Boolean FindNearLunar(DateType *dt, DateType base, Boolean leapyes);
+extern Int16 DateCompare (DateType d1, DateType d2); // defined in datebook.c
 
 // Extract the bit at position index from bitfield.  0 is the high bit.
 #define BitAtPosition(pos)                ((UInt32)1 << (pos))

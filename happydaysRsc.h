@@ -24,13 +24,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define MainFormTable               1002
 #define MainFormPopupTrigger        1003
 #define MainFormAddrCategories      1004
-#define MainFormHeader              1005
-#define MainFormPageUp              1010
-#define MainFormPageDown            1011
+#define MainFormScrollBar           1005
+#define MainFormName				1006
+#define MainFormDate				1007
+#define MainFormAge					1008
+#define MainFormLookUp				1009
 
-#define MainHdrNameStr				1091
-#define MainHdrDateStr				1092
-#define MainHdrAgeStr				1093
 #define SelectDateString            1099
 
 #define MainFormMenu		        1110
@@ -43,6 +42,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define	MainFormMenuCleanupTodo	    1117
 #define	MainFormMenuPref	        1120
 #define	MainFormMenuAbout	        1121
+#define	MainFormMenuFont	        1122
+#define	MainFormMenuDispPref	    1123
 
 #define ViewFormMenu                1151
 
@@ -116,18 +117,22 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define Ln2SlFormOk                 1556
 #define Ln2SlFormConvert            1557
 
-#define BirthdateForm               1600
-#define BirthdateDone               1601
-#define BirthdateNotifyDB           1602
-#define BirthdateNotifyTD           1603
-#define BirthdateGoto               1604
+#define ViewForm               		1600
+#define ViewFormDone                1601
+#define ViewFormNotifyDB            1602
+#define ViewFormNotifyTD            1603
+#define ViewFormGoto                1604
+#define ViewFormTable               1605
+#define ViewFormCategory            1609
+
+/*
 #define BirthdateFirst              1605
 #define BirthdateSecond             1606
 #define BirthdateCustom             1607
 #define BirthdateDate               1608
-#define BirthdateCategory           1609
 #define BirthdateOrigin             1610
 #define BirthdateLeft				1611
+*/
 
 #define BirthLeftString				1698
 #define BirthPassedString			1699
@@ -183,6 +188,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define DateBookString				1933
 #define ToDoString					1934
 #define FindHeaderString			1935	
+#define TypeStr						1936
+#define NextDateStr					1937
+#define SourceDateStr				1938
+#define AgeStr						1939
+#define RemainedDayStr				1940
+#define UpToNowStr					1941
 
 #define ExportAlert                 1990
 
@@ -193,3 +204,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define AGE_FIELD_WIDTH				24
 #define DATE_FIELD_WIDTH			46
+
+#define MAXSLOT						23
+#define VISIBLESLOT					11
+#define FULLWIDTH					151
