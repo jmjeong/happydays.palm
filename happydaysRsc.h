@@ -134,5 +134,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define NoTimeString                1926
 #define ExportDoneString            1927
 #define PrefFormHelpString          1928
+#define ExportHeaderString			1929
+#define ViewNotExistString			1930
+#define DateBookFirstAlertString	1931
 
-#define ExportAlert                 1930
+#define ExportAlert                 1990

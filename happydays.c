@@ -410,7 +410,9 @@ static Boolean MenuHandler(FormPtr frm, EventPtr e)
             ErrFatalDisplayIf(!memo.note, gAppErrStr);
             ptr = MemHandleLock(gTableRowHandle);
 
-            StrCopy(memo.note, "HappyDays Export List");
+            SysCopyStringResource(gAppErrStr, ExportHeaderString);
+            StrCopy(memo.note, gAppErrStr);
+
             for (i=0; i < gMainTableTotals; i++) {
                 if (ptr[i].date.year != INVALID_CONV_DATE) {
                     StrNCat(memo.note, "\n", 4096);
@@ -1129,7 +1131,8 @@ static void SetBirthdateViewForm(Int index, DateType converted)
             }
         }
         else {
-            StrNCopy(displayStr, "(not exist in this year)", 255);
+            SysCopyStringResource(gAppErrStr, ViewNotExistString);
+            StrNCopy(displayStr, gAppErrStr, 255);
         }
         SetFieldTextFromStr(BirthdateDate, displayStr);
 
@@ -1472,6 +1475,7 @@ static Int PerformNotify(BirthDate birth, DateType when,
         }
     
         StrNCat(description, gAppErrStr, 1024);
+        StrNCat(description, " ", 1024);
     }
     if (birth.flag.bits.year) {
 		if (!birth.flag.bits.solar || gPrefsR->NotifyPrefs.duration ==1) {
@@ -1627,7 +1631,7 @@ static Boolean NotifyFormHandleEvent(EventPtr e)
         {
             Int created = 0, touched = 0;
             Char* info = 0;
-            Char temp[25];
+            Char temp[255];
             
             UnloadNotifyPrefsFields();
             WritePrefsRec();
@@ -2162,8 +2166,9 @@ static Word StartApplication(void)
              * BTW make sure there is " " (single space) in unused ^1 ^2 ^3
              * entries or PalmOS <= 2 will blow up.
              */
-            FrmCustomAlert(ErrorAlert, "Please run Date Book once first.",
-                           " ", " ");
+
+            SysCopyStringResource(gAppErrStr, DateBookFirstAlertString);
+            FrmCustomAlert(ErrorAlert, gAppErrStr, " ", " ");
         }
 
         freememories();

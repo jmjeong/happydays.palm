@@ -11,18 +11,24 @@ OBJS = happydays.o lun2sol.o sol2lun.o address.o datebook.o util.o \
 
 CC = m68k-palmos-gcc
 
-CFLAGS = -Wall -O2
-#CFLAGS = -Wall -g -O2
+#CFLAGS = -Wall -O2
+CFLAGS = -Wall -g -O2
 
-PILRC = ../pilrc.new/pilrc
+PILRC = pilrc
 OBJRES = m68k-palmos-obj-res
 NM = m68k-palmos-nm
 BUILDPRC = build-prc
 PILOTXFER = pilot-xfer
 
-all: alwaysres $(TARGET).prc $(TARGET)-kt.prc $(TARGET)-km.prc
+all: en
 
-korean: alwaysres $(TARGET)-k.prc
+all-lang: en ko de
+
+en: alwaysres $(TARGET).prc
+
+ko: alwaysres $(TARGET)-kt.prc $(TARGET)-km.prc
+
+de: alwaysres $(TARGET)-de.prc 
 
 .S.o:
 	$(CC) $(TARGETFLAGS) -c $<
@@ -38,6 +44,10 @@ $(TARGET)-kt.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGE
 
 $(TARGET)-km.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGET).grc pref0000.$(TARGET).grc rloc0000.$(TARGET).grc bin-km.res
 	$(BUILDPRC) $(TARGET)-km.prc $(APPNAME) $(APPID) code0001.$(TARGET).grc code0000.$(TARGET).grc data0000.$(TARGET).grc *.bin pref0000.$(TARGET).grc rloc0000.$(TARGET).grc
+
+$(TARGET)-de.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGET).grc pref0000.$(TARGET).grc rloc0000.$(TARGET).grc bin-de.res
+	$(BUILDPRC) $(TARGET)-de.prc $(APPNAME) $(APPID) code0001.$(TARGET).grc code0000.$(TARGET).grc data0000.$(TARGET).grc *.bin pref0000.$(TARGET).grc rloc0000.$(TARGET).grc
+
 code0000.$(TARGET).grc: $(TARGET)
 	$(OBJRES) $(TARGET)
 
@@ -59,6 +69,10 @@ bin-kt.res: $(TARGET).rcp $(TARGET).pbitm
 
 bin-km.res: $(TARGET).rcp $(TARGET).pbitm
 	$(PILRC) -L KOREAN -Fkm $(TARGET).rcp .
+	touch bin.res
+
+bin-de.res: $(TARGET).rcp $(TARGET).pbitm
+	$(PILRC) -L GERMAN $(TARGET).rcp .
 	touch bin.res
 
 alwaysres:

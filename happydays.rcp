@@ -20,302 +20,509 @@
 
 TRANSLATION "ENGLISH"
 BEGIN
-	"Translator" = "English version"
-	"Translator's email" = ""
+    "Translator" = "English version"
+    "Translator's email" = ""
 
-	"long_notifySettingString" = ""\
-	"* Records\n"\
-	"Tab 'all' if you'd like to "\
-	"make date book entries created for all of your events in this"\
-	" category."\
-	"Tab 'selected' if only the currently selected record should be "\
-	"taken into account.\n\n"\
-	"* Existing entries\n"\
-	"Tap 'keep' if existing HappyDays entries in your "\
-	"datebook should be left untouched. Tap 'modify' if you'd like "\
-	"these entries to be changed.\n\n"\
-	"* Private\n"\
-	"will mark all datebook entries as 'private'\n\n"\
-	"* Datebk3 icon\n"\
-	"will set birthday-cake icon in notification record\n\n"\
-	"* Alarm\n"\
-	"will set the alarm notification in your datebook entry.\n\n"\
-	"* # of days before\n"\
-	"to set the number of days in advance you'd like to get notified "\
+    "long_notifySettingString" = ""\
+    "* Records\n"\
+    "Tab 'all' if you'd like to "\
+    "make date book entries created for all of your events in this"\
+    " category."\
+    "Tab 'selected' if only the currently selected record should be "\
+    "taken into account.\n\n"\
+    "* Existing entries\n"\
+    "Tap 'keep' if existing HappyDays entries in your "\
+    "datebook should be left untouched. Tap 'modify' if you'd like "\
+    "these entries to be changed.\n\n"\
+    "* Private\n"\
+    "will mark all datebook entries as 'private'\n\n"\
+    "* Datebk3 icon\n"\
+    "will set birthday-cake icon in notification record\n\n"\
+    "* Alarm\n"\
+    "will set the alarm notification in your datebook entry.\n\n"\
+    "* # of days before\n"\
+    "to set the number of days in advance you'd like to get notified "\
     "of the event.\n\n"\
-	"* Repeat for\n"\
+    "* Repeat for\n"\
     "is the interval of the notification record. "\
-	"-1 means repeat forever in case of solar event, and "\
-	"means repeat for 5 years in lunar event for convenience.\n"
+    "-1 means repeat forever in case of solar event, and "\
+    "means repeat for 5 years in lunar event for convenience.\n"
 
-	"long_customErrorString" = ""\
-	"'Birthday' is the default custom field name."\
-	"To set a different default custom field"\
-	" name, tap 'Preferences'.\n\n"\
-	"IMPORTANT: You need to launch your Addressbook and select 'Options/"\
-	"Rename Custom Fields' to rename a custom field to 'Birthday'"\
-	" or whatever you set as a custom field name in the Preferences of "\
-	"HappyDays.\n"
+    "long_customErrorString" = ""\
+    "'Birthday' is the default custom field name."\
+    "To set a different default custom field"\
+    " name, tap 'Preferences'.\n\n"\
+    "IMPORTANT: You need to launch your Addressbook and select 'Options/"\
+    "Rename Custom Fields' to rename a custom field to 'Birthday'"\
+    " or whatever you set as a custom field name in the Preferences of "\
+    "HappyDays.\n"
 
-	"long_aboutString" = ""\
-	"'HappyDays' will help you remember the birthdays and anniversaries "\
-	"of your friends and family members, as well as other events."\
-	"\n\nUse one of the custom fields in Address Book application "\
-	"and rename it to 'Birthday'."\
-	"\n\nExamples:\n"\
-	" Last Name: Jeong\n"\
-	" First name: JaeMok\n"\
-	" ...\n"\
-	" Birthday: -)12/4/1970\n\n"\
-	"Formats:\n"\
-	" [-)|#)]Date\n"\
-	" -) means lunar calendar\n"\
-	" #) means lunar leap month\n\n"\
+    "long_aboutString" = ""\
+    "'HappyDays' will help you remember the birthdays and anniversaries "\
+    "of your friends and family members, as well as other events."\
+    "\n\nUse one of the custom fields in Address Book application "\
+    "and rename it to 'Birthday'."\
+    "\n\nExamples:\n"\
+    " Last Name: Jeong\n"\
+    " First name: JaeMok\n"\
+    " ...\n"\
+    " Birthday: -)12/4/1970\n\n"\
+    "Formats:\n"\
+    " [-)|#)]Date\n"\
+    " -) means lunar calendar\n"\
+    " #) means lunar leap month\n\n"\
     "Date format is automatically read from the system preferences. "\
-	"You can omit the year field. Year input below 100 is assumed to be "\
-	"year in the 20th century, If you are not sure of the year format, "\
-	"just write it in form of YYYY(e.g. 1970).\n\n"\
-	"To set multiple entry, refer the manual.\n"
+    "You can omit the year field. Year input below 100 is assumed to be "\
+    "year in the 20th century, If you are not sure of the year format, "\
+    "just write it in form of YYYY(e.g. 1970).\n\n"\
+    "To set multiple entry, refer the manual.\n"
 
-	"long_cleanupAlertString" = ""\
-	"Datebook entries are considered HappyDays if their format in "\
-	"description are "\
-	"'[NAME] {HappyDays ID} ...'. If you use this format in your own "\
-	"entries, this record might also be removed by CleanUp.\n"
+    "long_cleanupAlertString" = ""\
+    "Datebook entries are considered HappyDays if their format in "\
+    "description are "\
+    "'[NAME] {HappyDays ID} ...'. If you use this format in your own "\
+    "entries, this record might also be removed by CleanUp.\n"
 
-	"long_prefFormString" = ""\
-	"* Custom field\n"\
-	"The name of custom fields in Address Book used for INPUT\n\n"\
-	"* HappyDays ID\n"\
-	"Used for Notify and Cleanup\n\n"\
-	"* Sort by\n"\
-	"Sort order of HappyDays List. Name is for the same order as "\
-	"Address Book\n\n"\
-	"* Emphasize Lunar\n"\
-	"If checkbox is on, the dashed line is drawed beneath lunar date.\n"
+    "long_prefFormString" = ""\
+    "* Custom field\n"\
+    "The name of custom fields in Address Book used for INPUT\n\n"\
+    "* HappyDays ID\n"\
+    "Used for Notify and Cleanup\n\n"\
+    "* Sort by\n"\
+    "Sort order of HappyDays List. Name is for the same order as "\
+    "Address Book\n\n"\
+    "* Emphasize Lunar\n"\
+    "If checkbox is on, the dashed line is drawed beneath lunar date.\n"
 
-	"long_removeConfirmString" = ""\
-	"Are you sure you want to remove all "\
-	"HappyDays notify entries from your datebook?"
+    "long_removeConfirmString" = ""\
+    "Are you sure you want to remove all "\
+    "HappyDays notify entries from your datebook?"
 
     "long_sl2lnString" = ""\
-		"-) means plain month in lunar\n"\
-		"#) means leap month in lunar"
+        "-) means plain month in lunar\n"\
+        "#) means leap month in lunar"
 
-	"long_cantFindAddrString" = ""\
-	"Can't find custom address book field: %s\n"\
-	"Please rename a custom field of your address book."
+    "long_cantFindAddrString" = ""\
+    "Can't find custom address book field: %s\n"\
+    "Please rename a custom field of your address book."
 END
 
 TRANSLATION "KOREAN"
 BEGIN
-	"Translator" = "ÇÑ±¹¾î ¹öÁ¯"
-	"Translator's email" = ""
+    "Translator" = "ÇÑ±¹¾î ¹öÁ¯"
+    "Translator's email" = ""
 
-	"long_notifySettingString" = ""\
-	"* ·¹ÄÚµå\n"\
-	"¼±ÅÃµÈ Ä«Å×°í¸®¿¡ ÀÖ´Â ¸ðµç ÀÌº¥Æ®¸¦ ÀÏÁ¤°ü¸®·Î ¿Å±â°í ½ÍÀº °æ¿ì¿¡´Â "\
-	"'ÀüºÎ'¸¦ ´©¸£¼¼¿ä. ¼±ÅÃµÈ ·¹ÄÚµå¸¸À» ¿Å±â°í ½ÍÀº °æ¿ì¿¡´Â "\
-	"'¼±ÅÃ'À» ´©¸£¼¼¿ä.\n\n"\
-	"* Á¸ÀçÇÏ´Â ·¹ÄÚµå\n"\
-	"Á¸ÀçÇÏ´Â HappyDays Ç×¸ñÀ» À¯ÁöÇÏ°í ½ÍÀº °æ¿ì¿¡´Â 'À¯Áö'¸¦, "\
-	"¼öÁ¤ÇÏ°í ½ÍÀº °æ¿ì¿¡´Â '¼öÁ¤'À» ´©¸£¼¼¿ä.\n\n"\
-	"* ºñ¹Ð\n"\
-	"¾Ë¸² ¼³Á¤ÇÒ ÀÏÁ¤°ü¸® Ç×¸ñÀ» 'ºñ¹Ð'·Î ¸¸µé°í ½ÍÀ» ¶§ ¼±ÅÃ.\n\n"\
-	"* Datebk3 ¾ÆÀÌÄÜ\n"\
-	"¾Ë¸² ·¹ÄÚµå¿¡ Datebk3¿ë »ýÀÏÄÉÀÍ ¾ÆÀÌÄÜÀ» ¼³Á¤.\n\n"\
-	"* ¾Ë¶÷\n"\
-	"ÀÏÁ¤°ü¸® Ç×¸ñ¿¡ ¾Ë¶÷À» ¼³Á¤.\n\n"\
-	"* ¸î ÀÏÀü\n"\
-	"¸î ÀÏÀü¿¡ ¾Ë¶÷ ¼³Á¤À» ¹Þ°í ½ÍÀºÁö ¼³Á¤.\n\n"\
-	"* ¸î ³â°£\n"\
+    "long_notifySettingString" = ""\
+    "* ·¹ÄÚµå\n"\
+    "¼±ÅÃµÈ Ä«Å×°í¸®¿¡ ÀÖ´Â ¸ðµç ÀÌº¥Æ®¸¦ ÀÏÁ¤°ü¸®·Î ¿Å±â°í ½ÍÀº °æ¿ì¿¡´Â "\
+    "'ÀüºÎ'¸¦ ´©¸£¼¼¿ä. ¼±ÅÃµÈ ·¹ÄÚµå¸¸À» ¿Å±â°í ½ÍÀº °æ¿ì¿¡´Â "\
+    "'¼±ÅÃ'À» ´©¸£¼¼¿ä.\n\n"\
+    "* Á¸ÀçÇÏ´Â ·¹ÄÚµå\n"\
+    "Á¸ÀçÇÏ´Â HappyDays Ç×¸ñÀ» À¯ÁöÇÏ°í ½ÍÀº °æ¿ì¿¡´Â 'À¯Áö'¸¦, "\
+    "¼öÁ¤ÇÏ°í ½ÍÀº °æ¿ì¿¡´Â '¼öÁ¤'À» ´©¸£¼¼¿ä.\n\n"\
+    "* ºñ¹Ð\n"\
+    "¾Ë¸² ¼³Á¤ÇÒ ÀÏÁ¤°ü¸® Ç×¸ñÀ» 'ºñ¹Ð'·Î ¸¸µé°í ½ÍÀ» ¶§ ¼±ÅÃ.\n\n"\
+    "* Datebk3 ¾ÆÀÌÄÜ\n"\
+    "¾Ë¸² ·¹ÄÚµå¿¡ Datebk3¿ë »ýÀÏÄÉÀÍ ¾ÆÀÌÄÜÀ» ¼³Á¤.\n\n"\
+    "* ¾Ë¶÷\n"\
+    "ÀÏÁ¤°ü¸® Ç×¸ñ¿¡ ¾Ë¶÷À» ¼³Á¤.\n\n"\
+    "* ¸î ÀÏÀü\n"\
+    "¸î ÀÏÀü¿¡ ¾Ë¶÷ ¼³Á¤À» ¹Þ°í ½ÍÀºÁö ¼³Á¤.\n\n"\
+    "* ¸î ³â°£\n"\
     "¸î ³â¿¡ °ÉÃÄ ¾Ë¸² ·¹ÄÚµå¸¦ ¸¸µé°ÍÀÎ°¡¸¦ ¼³Á¤. "\
-	"-1À» ÀÔ·ÂÇÑ °æ¿ì¿¡´Â ¾ç·ÂÀÇ °æ¿ì '¿µ¿øÈ÷'¸¦, À½·ÂÀÎ °æ¿ì¿£ "\
-	"ÆíÀÇ»ó 5³â°£ ¹Ýº¹ÇÏ¿© ·¹ÄÚµå¸¦ ¸¸µç´Ù.\n"
+    "-1À» ÀÔ·ÂÇÑ °æ¿ì¿¡´Â ¾ç·ÂÀÇ °æ¿ì '¿µ¿øÈ÷'¸¦, À½·ÂÀÎ °æ¿ì¿£ "\
+    "ÆíÀÇ»ó 5³â°£ ¹Ýº¹ÇÏ¿© ·¹ÄÚµå¸¦ ¸¸µç´Ù.\n"
 
-	"long_customErrorString" = ""\
-	"'Birthday'°¡ ÃÊ±â Ä¿½ºÅÒ ÇÊµå ÀÌ¸§ÀÔ´Ï´Ù."\
-	"´Ù¸¥ ÀÌ¸§À» ¼³Á¤ÇÏ°í ½ÍÀº °æ¿ì "\
-	"'¼³Á¤'À» ´©¸£¼¼¿ä.\n\n"\
-	"Á¤º¸: 'Birthday' Ä¿½ºÅÒ ÇÊµå¸¦ ¹Ù²Ù±â À§ÇØ¼­´Â ÁÖ¼Ò·ÏÀ» ¼öÇà½ÃÄÑ "\
-	"'Options/Rename Custom Fields'À» ¼±ÅÃÇÑ ´ÙÀ½ ¼öÁ¤ÇÏ¸é µË´Ï´Ù."\
-	"È¤Àº HappyDaysÀÇ ¼³Á¤ Ç×¸ñÀÇ Ä¿½ºÅÒ ÇÊµå¸¦ ÀûÀýÇÏ°Ô ¼öÁ¤ÇÏ¼¼¿ä.\n"
+    "long_customErrorString" = ""\
+    "'Birthday'°¡ ÃÊ±â Ä¿½ºÅÒ ÇÊµå ÀÌ¸§ÀÔ´Ï´Ù."\
+    "´Ù¸¥ ÀÌ¸§À» ¼³Á¤ÇÏ°í ½ÍÀº °æ¿ì "\
+    "'¼³Á¤'À» ´©¸£¼¼¿ä.\n\n"\
+    "Á¤º¸: 'Birthday' Ä¿½ºÅÒ ÇÊµå¸¦ ¹Ù²Ù±â À§ÇØ¼­´Â ÁÖ¼Ò·ÏÀ» ¼öÇà½ÃÄÑ "\
+    "'Options/Rename Custom Fields'À» ¼±ÅÃÇÑ ´ÙÀ½ ¼öÁ¤ÇÏ¸é µË´Ï´Ù."\
+    "È¤Àº HappyDaysÀÇ ¼³Á¤ Ç×¸ñÀÇ Ä¿½ºÅÒ ÇÊµå¸¦ ÀûÀýÇÏ°Ô ¼öÁ¤ÇÏ¼¼¿ä.\n"
 
-	"long_aboutString" = ""\
-	"'HappyDays'´Â Ä£±¸³ª °¡Á·ÀÇ »ýÀÏÀÌ³ª ±â³äÀÏÀ» ±â¾ïÇÏ´Â °ÍÀ» µµ¿Í"\
-	"ÁÝ´Ï´Ù. ´õ¿íÀÌ Á¦»ç³ª ´Ù¸¥ ÀÌº¥Æ® Ç×¸ñµµ °ü¸®ÇÒ ¼ö ÀÖ½À´Ï´Ù.\n\n"\
-	"ÁÖ¼Ò·ÏÀÇ Ä¿½ºÅÒ ÇÊµåÁß ÇÏ³ª¸¦ 'Birthday'·Î ¼öÁ¤ÇÏ¼¼¿ä."\
-	"\n\n¿¹:\n"\
-	" Last Name: Á¤\n"\
-	" First name: Àç¸ñ\n"\
-	" ...\n"\
-	" Birthday: -)12/4/1970\n\n"\
-	"Æ÷¸Ë:\n"\
-	" [-)|#)]³¯Â¥\n"\
-	" -) À½·Â Æò´Þ\n"\
-	" #) À½·Â À±´Þ\n\n"\
+    "long_aboutString" = ""\
+    "'HappyDays'´Â Ä£±¸³ª °¡Á·ÀÇ »ýÀÏÀÌ³ª ±â³äÀÏÀ» ±â¾ïÇÏ´Â °ÍÀ» µµ¿Í"\
+    "ÁÝ´Ï´Ù. ´õ¿íÀÌ Á¦»ç³ª ´Ù¸¥ ÀÌº¥Æ® Ç×¸ñµµ °ü¸®ÇÒ ¼ö ÀÖ½À´Ï´Ù.\n\n"\
+    "ÁÖ¼Ò·ÏÀÇ Ä¿½ºÅÒ ÇÊµåÁß ÇÏ³ª¸¦ 'Birthday'·Î ¼öÁ¤ÇÏ¼¼¿ä."\
+    "\n\n¿¹:\n"\
+    " Last Name: Á¤\n"\
+    " First name: Àç¸ñ\n"\
+    " ...\n"\
+    " Birthday: -)12/4/1970\n\n"\
+    "Æ÷¸Ë:\n"\
+    " [-)|#)]³¯Â¥\n"\
+    " -) À½·Â Æò´Þ\n"\
+    " #) À½·Â À±´Þ\n\n"\
     "³¯Â¥ Æ÷¸ËÀº ½Ã½ºÅÛ ¼³Á¤È­ÀÏ¿¡¼­ ÀÚµ¿À¸·Î ÀÐ¾î¿É´Ï´Ù. ±×·¯¹Ç·Î "\
-	"ÀÔ·ÂµÇ´Â ³¯Â¥ÀÇ Æ÷¸ËÀ» ½Ã½ºÅÛ°ú ÀÏÄ¡½ÃÅ°¼¼¿ä. '³âµµ' ºÎºÐÀº »ý·«"\
-	"°¡´ÉÇÕ´Ï´Ù. ³âµµ°¡ 100º¸´Ù ÀûÀº °æ¿ì¿¡´Â 19xx³â´ë¸¦ ¶æÇÕ´Ï´Ù."\
+    "ÀÔ·ÂµÇ´Â ³¯Â¥ÀÇ Æ÷¸ËÀ» ½Ã½ºÅÛ°ú ÀÏÄ¡½ÃÅ°¼¼¿ä. '³âµµ' ºÎºÐÀº »ý·«"\
+    "°¡´ÉÇÕ´Ï´Ù. ³âµµ°¡ 100º¸´Ù ÀûÀº °æ¿ì¿¡´Â 19xx³â´ë¸¦ ¶æÇÕ´Ï´Ù."\
     "È®½ÅÀÌ µéÁö ¾Ê´Â °æ¿ì ±×³É '1970'Ã³·³ 4ÀÚ¸®·Î ÀÔ·ÂÇÏ¼¼¿ä.\n\n"\
-	"ÀÚ¼¼ÇÑ °Ç ¸Å´º¾óÀ» ÂüÁ¶ÇÏ¼¼¿ä.\n"
+    "ÀÚ¼¼ÇÑ °Ç ¸Å´º¾óÀ» ÂüÁ¶ÇÏ¼¼¿ä.\n"
 
-	"long_cleanupAlertString" = ""\
-	"µ¥ÀÌÆ® ºÏ¿¡ ÀÖ´Â ·¹ÄÚµå ±â¼ú ÇüÅÂ°¡ "\
-	"'[ÀÌ¸§] {HD ½Äº°ÀÚ} ...' ÇüÅÂ¶ó¸é HappyDays ·¹ÄÚµå·Î "\
-	"°£ÁÖÇÏ°í »èÁ¦ÇÕ´Ï´Ù. (ÁÖÀÇ ¿ä¸Á)\n"
+    "long_cleanupAlertString" = ""\
+    "µ¥ÀÌÆ® ºÏ¿¡ ÀÖ´Â ·¹ÄÚµå ±â¼ú ÇüÅÂ°¡ "\
+    "'[ÀÌ¸§] {HD ½Äº°ÀÚ} ...' ÇüÅÂ¶ó¸é HappyDays ·¹ÄÚµå·Î "\
+    "°£ÁÖÇÏ°í »èÁ¦ÇÕ´Ï´Ù. (ÁÖÀÇ ¿ä¸Á)\n"
 
-	"long_prefFormString" = ""\
-	"* Ä¿½ºÅÒ ÇÊµå\n"\
-	"ÀÔ·ÂÀ¸·Î »ç¿ëµÇ´Â ÁÖ¼Ò·ÏÀÇ Ä¿½ºÅÒ ÇÊµå ÀÌ¸§.\n\n"\
-	"* HD ½Äº°ÀÚ\n"\
-	"HappyDays ½Äº°ÀÚ. ¾Ë¸²°ú ·¹ÄÚµå Á¤¸®¿¡ »ç¿ë.\n\n"\
-	"* Á¤·Ä\n"\
-	"'ÀÌ¸§'À» ¼±ÅÃÇÑ °æ¿ì ÁÖ¼Ò·Ï°ú ¶È°°Àº ¼ø¼­·Î Á¤·ÄÇÕ´Ï´Ù.\n\n"\
-	"* À½·Â°­Á¶\n"\
-	"¼±ÅÃµÈ °æ¿ì À½·Â»ýÀÏ ¹Ø¿¡ Á¡¼±ÀÌ ±×¾îÁý´Ï´Ù.\n"
+    "long_prefFormString" = ""\
+    "* Ä¿½ºÅÒ ÇÊµå\n"\
+    "ÀÔ·ÂÀ¸·Î »ç¿ëµÇ´Â ÁÖ¼Ò·ÏÀÇ Ä¿½ºÅÒ ÇÊµå ÀÌ¸§.\n\n"\
+    "* HD ½Äº°ÀÚ\n"\
+    "HappyDays ½Äº°ÀÚ. ¾Ë¸²°ú ·¹ÄÚµå Á¤¸®¿¡ »ç¿ë.\n\n"\
+    "* Á¤·Ä\n"\
+    "'ÀÌ¸§'À» ¼±ÅÃÇÑ °æ¿ì ÁÖ¼Ò·Ï°ú ¶È°°Àº ¼ø¼­·Î Á¤·ÄÇÕ´Ï´Ù.\n\n"\
+    "* À½·Â°­Á¶\n"\
+    "¼±ÅÃµÈ °æ¿ì À½·Â»ýÀÏ ¹Ø¿¡ Á¡¼±ÀÌ ±×¾îÁý´Ï´Ù.\n"
 
-	"long_removeConfirmString" = ""\
-	"ÀÏÁ¤°ü¸®·ÎºÎÅÍ ¸ðµç HappyDays Ç×¸ñÀ» »èÁ¦ÇÏ±æ ¿øÇÏ½Ê´Ï±î?"
+    "long_removeConfirmString" = ""\
+    "ÀÏÁ¤°ü¸®·ÎºÎÅÍ ¸ðµç HappyDays Ç×¸ñÀ» »èÁ¦ÇÏ±æ ¿øÇÏ½Ê´Ï±î?"
 
-	"long_cantFindAddrString" = ""\
-		"ÁÖ¼Ò·Ï¿¡¼­ Ä¿½ºÅÒ ÇÊµå¸¦ ¸ø Ã£À½: %s\n"\
-		"ÁÖ¼Ò·ÏÀÇ Ä¿½ºÅÒ ÇÊµå Ç×¸ñ ÀÌ¸§À» º¯°æÇÏ¼¼¿ä."
+    "long_cantFindAddrString" = ""\
+        "ÁÖ¼Ò·Ï¿¡¼­ Ä¿½ºÅÒ ÇÊµå¸¦ ¸ø Ã£À½: %s\n"\
+        "ÁÖ¼Ò·ÏÀÇ Ä¿½ºÅÒ ÇÊµå Ç×¸ñ ÀÌ¸§À» º¯°æÇÏ¼¼¿ä."
 
     "long_sl2lnString" = ""\
-		"-)´Â À½·Â Æò´ÞÀ» ÀÇ¹ÌÇÕ´Ï´Ù.\n"\
-		"#)Àº À½·Â À±´ÞÀ» ÀÇ¹ÌÇÕ´Ï´Ù."
+        "-)´Â À½·Â Æò´ÞÀ» ÀÇ¹ÌÇÕ´Ï´Ù.\n"\
+        "#)Àº À½·Â À±´ÞÀ» ÀÇ¹ÌÇÕ´Ï´Ù."
 
-	"Select Time" = "¾Ë¶÷ ½Ã°£"
-	"No Time" = "ÁöÁ¤¾ÈµÊ"
+    "Select Time" = "¾Ë¶÷ ½Ã°£"
+    "No Time" = "ÁöÁ¤¾ÈµÊ"
     "Invalid input date" = "³¯Â¥ ÀÔ·ÂÀÌ Àß¸øµÇ¾ú½À´Ï´Ù."
- 	"Export to Memo Pad is completed." =
-				"¸Þ¸ðÀåÀ¸·Î ¼º°øÀûÀ¸·Î ¿Å°ÜÁ³½À´Ï´Ù."
+    "Export to Memo Pad is completed." =
+                "¸Þ¸ðÀåÀ¸·Î ¼º°øÀûÀ¸·Î ¿Å°ÜÁ³½À´Ï´Ù."
 
-	"SUN"	= "ÀÏ"
-	"MON"	= "¿ù"
-	"TUE"	= "È­"
-	"WED"	= "¼ö"
-	"THU"	= "¸ñ"
-	"FRI"	= "±Ý"
-	"SAT"	= "Åä"
+    "SUN"   = "ÀÏ"
+    "MON"   = "¿ù"
+    "TUE"   = "È­"
+    "WED"   = "¼ö"
+    "THU"   = "¸ñ"
+    "FRI"   = "±Ý"
+    "SAT"   = "Åä"
 
- 	"Not enough memory" = "¸Þ¸ð¸® ºÎÁ·"
+    "Not enough memory" = "¸Þ¸ð¸® ºÎÁ·"
     "%d Datebook notify entry is created.\n" =
-		"%d °³ÀÇ ÀÏÁ¤°ü¸® ¾Ë¸² ·¹ÄÚµå°¡ »ý¼ºµÇ¾ú½À´Ï´Ù.\n"
- 	"%d existing entry " = "%d °³ÀÇ Á¸ÀçÇÏ´Â ·¹ÄÚµå"
-	"is kept untouched." = "¸¦ ±×´ë·Î À¯ÁöÇß½À´Ï´Ù."
- 	"is modified." = "°¡ ¼öÁ¤µÇ¾ú½À´Ï´Ù."
+        "%d °³ÀÇ ÀÏÁ¤°ü¸® ¾Ë¸² ·¹ÄÚµå°¡ »ý¼ºµÇ¾ú½À´Ï´Ù.\n"
+    "%d existing entry " = "%d °³ÀÇ Á¸ÀçÇÏ´Â ·¹ÄÚµå"
+    "is kept untouched." = "¸¦ ±×´ë·Î À¯ÁöÇß½À´Ï´Ù."
+    "is modified." = "°¡ ¼öÁ¤µÇ¾ú½À´Ï´Ù."
 
- 	"Could not write prefs." = ""\
-		"¼³Á¤È­ÀÏ ¾²±â ¿À·ù"
-	"Collecting Information..." = ""\
-		"Á¤º¸ ¼öÁýÁß..."
+    "Could not write prefs." = ""\
+        "¼³Á¤È­ÀÏ ¾²±â ¿À·ù"
+    "Collecting Information..." = ""\
+        "Á¤º¸ ¼öÁýÁß..."
 
     "HappyDays List" = "HappyDays ¸ñ·Ï"
-	"Look up" = "Ã£¾Æº¸±â"
-	"Today" = "¿À´Ã"
+    "Look up" = "Ã£¾Æº¸±â"
+    "Today" = "¿À´Ã"
 
-	"Done"  = "¿Ï·á"
-	"Notify" = "¾Ë¸²"
-	"Goto" = "ÀÌµ¿"
+    "Done"  = "¿Ï·á"
+    "Notify" = "¾Ë¸²"
+    "Goto" = "ÀÌµ¿"
 
-	"Utilities" = "À¯Æ¿¸®Æ¼"
+    "Utilities" = "À¯Æ¿¸®Æ¼"
     "Notify all in DateBook" = "ÀÏÁ¤°ü¸®¿¡ ¾Ë¸² ¸¸µé±â"
-	"Cleanup Datebook"	= "ÀÏÁ¤°ü¸®¿¡¼­ Á¤¸®"
- 	"Export to Memo Pad" = "¸Þ¸ðÀåÀ¸·Î Àü¼Û"
-	"Solar to Lunar" = "¾ç·ÂÀ» À½·ÂÀ¸·Î"
-	"Lunar to Solar" = "À½·ÂÀ» ¾ç·ÂÀ¸·Î"
+    "Cleanup Datebook"  = "ÀÏÁ¤°ü¸®¿¡¼­ Á¤¸®"
+    "Export to Memo Pad" = "¸Þ¸ðÀåÀ¸·Î Àü¼Û"
+    "Solar to Lunar" = "¾ç·ÂÀ» À½·ÂÀ¸·Î"
+    "Lunar to Solar" = "À½·ÂÀ» ¾ç·ÂÀ¸·Î"
 
-	"Options" = "¿É¼Ç"
-	"Preferences" = "¼³Á¤"
-	"About HappyDays" = "HappyDays¶õ?"
+    "Options" = "¿É¼Ç"
+    "Preferences" = "¼³Á¤"
+    "About HappyDays" = "HappyDays¶õ?"
 
- 	"Edit" = "¼öÁ¤"
-	"Undo" = "µÇµ¹¸®±â"
+    "Edit" = "¼öÁ¤"
+    "Undo" = "µÇµ¹¸®±â"
     "Cut" = "ÀÚ¸£±â"
-	"Copy" = "º¹»ç"
- 	"Paste" = "ºÙÀÌ±â"
-	"Select All" = "ÀüÃ¼ ¼±ÅÃ"
+    "Copy" = "º¹»ç"
+    "Paste" = "ºÙÀÌ±â"
+    "Select All" = "ÀüÃ¼ ¼±ÅÃ"
     "Keyboard" = "Å°º¸µå"
     "Graffiti" = "±×·¡ÇÇÆ¼"
 
-	"HappyDays Preferences" = "HappyDays ¼³Á¤"
-	"Custom field:" = "Ä¿½ºÅÒ ÇÊµå :"
-	"HappyDays ID:" = "HD ½Äº°ÀÚ :"
-	"Sort by:" = "Á¤·Ä :"
-	"Name" = "ÀÌ¸§"
-	"Date" = "³¯Â¥"
+    "HappyDays Preferences" = "HappyDays ¼³Á¤"
+    "Custom field:" = "Ä¿½ºÅÒ ÇÊµå :"
+    "HappyDays ID:" = "HD ½Äº°ÀÚ :"
+    "Sort by:" = "Á¤·Ä :"
+    "Name" = "ÀÌ¸§"
+    "Date" = "³¯Â¥"
 
-	"Emphasize Lunar:" = "À½·Â°­Á¶ :"
+    "Emphasize Lunar:" = "À½·Â°­Á¶ :"
 
-	"OK" = "¼±ÅÃ"
-	"Cancel" = "Ãë¼Ò"
+    "OK" = "¼±ÅÃ"
+    "Cancel" = "Ãë¼Ò"
 
-	"Solar to Lunar Convert" = "¾ç·ÂÀ» À½·ÂÀ¸·Î º¯È¯"
-	"Enter Solar date:" = "¾ç·Â ³¯Â¥´Â :"
-	"Year must be in 1881-2043" = "1881³â¿¡¼­ 2043³â±îÁö¸¸ Áö¿ø"
+    "Solar to Lunar Convert" = "¾ç·ÂÀ» À½·ÂÀ¸·Î º¯È¯"
+    "Enter Solar date:" = "¾ç·Â ³¯Â¥´Â :"
+    "Year must be in 1881-2043" = "1881³â¿¡¼­ 2043³â±îÁö¸¸ Áö¿ø"
 
-	"Result Lunar date:" = "º¯È¯µÈ À½·Â ³¯Â¥ :"
+    "Result Lunar date:" = "º¯È¯µÈ À½·Â ³¯Â¥ :"
 
-	"Convert" = "º¯È¯"
+    "Convert" = "º¯È¯"
 
     "Lunar to Solar Convert" = "À½·ÂÀ» ¾ç·ÂÀ¸·Î º¯È¯"
-	"Enter Lunar date:" = "À½·Â ³¯Â¥´Â :"
-	"Leap" = "À±´Þ"
+    "Enter Lunar date:" = "À½·Â ³¯Â¥´Â :"
+    "Leap" = "À±´Þ"
 
-	"Result Solar date:" = "º¯È¯µÈ ¾ç·Â ³¯Â¥ :"
+    "Result Solar date:" = "º¯È¯µÈ ¾ç·Â ³¯Â¥ :"
 
     "Notify Settings" = "¾Ë¸² ¼³Á¤"
-	"Records:" = "·¹ÄÚµå :"
-	"all" = "ÀüºÎ"
-	"selected" = "¼±ÅÃ"
+    "Records:" = "·¹ÄÚµå :"
+    "all" = "ÀüºÎ"
+    "selected" = "¼±ÅÃ"
 
-	"Existing entries:" = "Á¸ÀçÇÏ´Â ·¹ÄÚµå :"
-	"keep" = "À¯Áö"
-	"modify" = "¼öÁ¤"
+    "Existing entries:" = "Á¸ÀçÇÏ´Â ·¹ÄÚµå :"
+    "keep" = "À¯Áö"
+    "modify" = "¼öÁ¤"
 
-	"Private:" = "ºñ¹Ð :"
+    "Private:" = "ºñ¹Ð :"
 
-	"Datebk3 icon:" = "Datebk3 ¾ÆÀÌÄÜ :"
+    "Datebk3 icon:" = "Datebk3 ¾ÆÀÌÄÜ :"
 
-	"Alarm:" = "¾Ë¶÷ :"
-	"# of days before:" = "¸î ÀÏÀü :"
+    "Alarm:" = "¾Ë¶÷ :"
+    "# of days before:" = "¸î ÀÏÀü :"
 
-	"Repeat for:" = "¸î ³â°£ :"
-	"years" = "³â"
+    "Repeat for:" = "¸î ³â°£ :"
+    "years" = "³â"
 
     "HappyDays says" = "Á¤ º¸"
 
-	"HappyDays Export" = "HappyDays Àü¼Û"
-	"Would you like to export HappyDays List to Memo Pad?" = ""\
-		"¸Þ¸ðÀåÀ¸·Î HappyDays ¸ñ·ÏÀ» ¿Å±æ±î¿ä?"
+    "HappyDays Export" = "HappyDays Àü¼Û"
+    "Would you like to export HappyDays List to Memo Pad?" = ""\
+        "¸Þ¸ðÀåÀ¸·Î HappyDays ¸ñ·ÏÀ» ¿Å±æ±î¿ä?"
 
-	"Custom Field Error" = "Ä¿½ºÅÒ ÇÊµå ¿¡·¯"
-	"Help" = "µµ¿ò¸»"
+    "Custom Field Error" = "Ä¿½ºÅÒ ÇÊµå ¿¡·¯"
+    "Help" = "µµ¿ò¸»"
 
 
-	"HappyDays Cleanup" = "HappyDays Á¤¸®"
+    "HappyDays Cleanup" = "HappyDays Á¤¸®"
 
-	"Notify warning" = "¾Ë¸² °æ°í"
-	"Are you sure you want to create notify entries in your datebook for all your ^1 HappyDays records?" = ""\
-	"Á¤¸»·Î ÀÏÁ¤°ü¸®¿¡ ^1 °³ÀÇ HappyDays ·¹ÄÚµå¸¦ ¸¸µé±â ¿øÇÏ½Ê´Ï±î?"
+    "Notify warning" = "¾Ë¸² °æ°í"
+    "Are you sure you want to create notify entries in your datebook for all your ^1 HappyDays records?" = ""\
+    "Á¤¸»·Î ÀÏÁ¤°ü¸®¿¡ ^1 °³ÀÇ HappyDays ·¹ÄÚµå¸¦ ¸¸µé±â ¿øÇÏ½Ê´Ï±î?"
 
-	"Invalid event format" = "Àß¸øµÈ ÀÌº¥Æ® Æ÷¸Ë"
+    "Invalid event format" = "Àß¸øµÈ ÀÌº¥Æ® Æ÷¸Ë"
 
-	"The address record for ^1\n contains an invalid event. How would you like to handle it?" = ""\
-	"ÁÖ¼Ò·Ï ·¹ÄÚµå ^1\nÀÇ Æ÷¸ËÀÌ Àß¸øµÇ¾î ÀÖ½À´Ï´Ù. ¾î¶»°Ô Ã³¸®ÇÒ±î¿ä?"
+    "The address record for ^1\n contains an invalid event. How would you like to handle it?" = ""\
+    "ÁÖ¼Ò·Ï ·¹ÄÚµå ^1\nÀÇ Æ÷¸ËÀÌ Àß¸øµÇ¾î ÀÖ½À´Ï´Ù. ¾î¶»°Ô Ã³¸®ÇÒ±î¿ä?"
 
-	"Ignore" = "¹«½Ã"
-	"Ignore all" = "ÀüºÎ ¹«½Ã"
+    "Ignore" = "¹«½Ã"
+    "Ignore all" = "ÀüºÎ ¹«½Ã"
 
-	"Cleanup Done" = "Á¤¸®ÀÛ¾÷ ¿Ï·á"
+    "Cleanup Done" = "Á¤¸®ÀÛ¾÷ ¿Ï·á"
 
-	"^1 HappyDays notify entries removed from DateBook." = ""\
-	"^1 °³ÀÇ HappyDays ¾Ë¸² ¸ñ·ÏÀÌ ÀÏÁ¤°ü¸®¿¡¼­ Á¦°ÅµÇ¾ú½À´Ï´Ù."
+    "^1 HappyDays notify entries removed from DateBook." = ""\
+    "^1 °³ÀÇ HappyDays ¾Ë¸² ¸ñ·ÏÀÌ ÀÏÁ¤°ü¸®¿¡¼­ Á¦°ÅµÇ¾ú½À´Ï´Ù."
 
-	"(c) 1999-2000, JaeMok Jeong" = "(c) 1999-2000, Á¤ Àç¸ñ"
-	"Licensed under the GNU GPL" = "GNU GPL ¶óÀÌ¼¾½º¿¡ µû¸¨´Ï´Ù"
+    "(c) 1999-2000, JaeMok Jeong" = "(c) 1999-2000, Á¤ Àç¸ñ"
+    "Licensed under the GNU GPL" = "GNU GPL ¶óÀÌ¼¾½º¿¡ µû¸¨´Ï´Ù"
+
+    "HappyDays Export List" = "HappyDays Export List"
+    "(not exist in this year)" = "(¿ÃÇØ¿£ ¾ø´Â ³¯ÀÔ´Ï´Ù)"
+    "Please run Date Book once first." = "¸ÕÀú ÀÏÁ¤°ü¸®¸¦ ÇÑ¹ø ¼öÇàÇÏ¼¼¿ä."
+END
+
+TRANSLATION "GERMAN"
+BEGIN
+    "Translator" = "Übersetzung: Gunther Zagatta"
+    "Translator's email" = "zagatta@web.de"
+
+    "long_notifySettingString" = ""\
+      "* Einträge\n"\
+      "Wählen Sie \"alle\" wenn im Kalender Termine für "\
+      "alle Ereignisse dieser Kategorie erzeugt werden sollen. "\
+      "Wählen Sie \"Auswahl\" wenn nur die ausgewählten Einträge berücksichtigt werden "\
+      "sollen.\n\n"\
+      "* Vorhandene\n"\
+      "Wählen Sie \"lassen\" wenn existierende HappyDays Termine unberührt bleiben sollen. "\
+      "Wählen Sie \"ändern\" wenn diese Einträge geändert werden sollen.\n\n"\
+      "* Privat\n"\
+      "Markiert alle erzeugten Termine als \"privat\"\n\n"\
+      "* Datebk3 Icon\n"\
+      "Trägt das Geburtstagskuchen-Icon für Termine ein.\n\n"\
+      "* Alarm\n"\
+      "Erzeugt zusammen mit dem Termin einen Alarm zur gewählten Zeit.\n\n"\
+      "* Tage vorher\n"\
+      "Setzt die Anzahl Tage, die Sie vor dem Ereignis informiert werden wollen.\n\n"\
+      "* Wiederholung\n"\
+      "Gibt an, wie oft das Ereignis wiederholt werden soll. "\
+      "Dabei bedeutet (-1) für den Gregorianischen Kalender unbegrenzt, "\
+      "für den Lunarkalender 5 Jahre.\n\n"
+
+    "long_customErrorString" = ""\
+      "'Geburtstag' ist der Default Benutzerfeld-Name."\
+      "Wenn Sie diesen ändern wollen, tippen Sie 'Einstellungen'.\n\n"\
+      "WICHTIG: Sie müssen den Kalender aufrufen und mit 'Optionen/"\
+      "Benutzerfelder...' ein Benutzerfeld in 'Geburtstag' umbenennen"\
+      " oder einen anderen Namen entsprechend Ihren Einstellungen für HappyDays.\n"
+
+    "long_aboutString" = ""\
+      "'HappyDays' hilft Ihnen, Geburtstage und ähnliche Ereignisse Ihrer Freunde und Verwandten "\
+      "im Überblick zu behalten.\n\n"\
+      "Benutzen sie eines der Benutzerfelder im Adreßbuch und nennen Sie es 'Geburtstag'."\
+      "\n\nBeispiel:\n"\
+      " Nachname: Jeong\n"\
+      " Vorname: JaeMok\n"\
+      " ...\n"\
+      " Geburtstag: -)4.12.1970\n\n"\
+      "Formate:\n"\
+      " [-)|#)]Datum\n"\
+      " -) für Lunarkalender-Datum\n"\
+      " #) für Schaltmonat im Lunarkalender\n\n"\
+      "Das Datumsformat wird aus den Systemeinstellungen gelesen, wobei Sie das "\
+      "Jahr auch weglassen können. Jahreszahlen unter 100 werden dem 20. Jahrhundert zugeordnet. "\
+      "Wenn Sie unsicher sind bezüglich des Jahresformates, "\
+      "schreiben Sie einfach das Jahrhundert mit dazu (z.B. 1970).\n\n"\
+      "Zum Thema Mehrfach-Einträge lesen Sie bitte die Anleitung.\n"
+
+    "long_cleanupAlertString" = ""\
+      "Kalendereinträge werden als HappyDays Termine angenommen, wenn sie das Format "\
+      "'[NAME] {HappyDays ID} ...' haben. Wenn Sie dieses Format in Ihren eigenen Terminen "\
+      "verwenden, werden diese Einträge ebenfalls entfernt.\n"
+
+    "long_prefFormString" = ""\
+      "* Benutzerfeld\n"\
+      "Name des Benutzerfelds im Adreßbuch, aus dem Geburtstage übernommen werden\n\n"\
+      "* HappyDays ID\n"\
+      "Wird beim Anlegen und Entfernen von Terminen benutzt, um HappyDays Termine zu identifizieren\n\n"\
+      "* Sortieren\n"\
+      "Sortierung der HappyDays Liste. 'Name' erzeugt die gleiche Sortierung wie das Adreßbuch\n\n"\
+      "* Lunar zeigen\n"\
+      "Eine gestrichelte Linie wird unter Lunarkalender-Daten gezeichnet.\n"
+
+    "long_removeConfirmString" = ""\
+      "Wollen Sie wirklich alle HappyDays Termine aus dem Kalender entfernen?"
+
+    "long_sl2lnString" = ""\
+      "-) bedeutet normaler Monat im Lunarkalender\n"\
+      "#) bedeutet Schaltmonat im Lunarkalender"
+
+    "long_cantFindAddrString" = ""\
+      "Kein Benutzerfeld '%s' im Adreßbuch gefunden.\n"\
+      "Bitte ein Benutzerfeld umbenennen."
+
+    "Select Time" = "Zeit auswählen"
+    "No Time" = "Keine"
+    "Invalid input date" = "Ungültige Datumseingabe"
+    "Export to Memo Pad is completed." = "Merkzettel Export beendet."
+
+    "SUN"   = "SON"
+    "MON"   = "MON"
+    "TUE"   = "DIE"
+    "WED"   = "MIT"
+    "THU"   = "DON"
+    "FRI"   = "FRE"
+    "SAT"   = "SAM"
+
+    "Not enough memory" = "Nicht genug Speicher"
+    "%d Datebook notify entry is created.\n" = "%d Termin(e) erzeugt.\n"
+    "%d existing entry " = "%d bestehende(n) Termin(e) "
+    "is kept untouched." = "belassen."
+    "is modified." = "geändert."
+
+    "Could not write prefs." = "Einstellungen konnten nicht gespeichert werden."
+    "Collecting Information..." = "Daten werden eingelesen..."
+
+    "HappyDays List" = "HappyDays Liste"
+    "Look up" = "Gehe zu"
+    "Today" = "Heute"
+
+    "Done"  = "Fertig"
+    "Notify" = "Termin"
+    "Goto" = "Gehe zu"
+
+    "Utilities" = "Eintrag"
+    "Notify all in DateBook" = "Termine erzeugen"
+    "Cleanup Datebook"  = "Termine entfernen"
+    "Export to Memo Pad" = "Merkzettel exportieren"
+    "Solar to Lunar" = "Gregor. -> Lunar"
+    "Lunar to Solar" = "Lunar -> Gregor."
+
+    "Options" = "Optionen"
+    "Preferences" = "Einstellungen"
+    "About HappyDays" = "Über HappyDays"
+
+    "Edit" = "Bearb."
+    "Undo" = "Rückgängig"
+    "Cut" = "Ausschneiden"
+    "Copy" = "Kopieren"
+    "Paste" = "Einfügen"
+    "Select All" = "Alles auswählen"
+    "Keyboard" = "Tastatur"
+    "Graffiti" = "Graffiti-Hilfe"
+
+    "HappyDays Preferences" = "HappyDays Einstellungen"
+    "Custom field:" = "Benutzerfeld:"
+    "HappyDays ID:" = "HappyDays ID:"
+    "Sort by:" = "Sortieren:"
+    "Name" = "Name"
+    "Date" = "Datum"
+    "Emphasize Lunar:" = "Lunar zeigen:"
+
+    "OK" = "OK"
+    "Cancel" = "Abbruch"
+
+    "Solar to Lunar Convert" = "Gregor. -> Lunar"
+    "Enter Solar date:" = "Gregor. Datum eingeben:"
+    "Year must be in 1881-2043" = "Jahr muß zw. 1881 und 2043 liegen"
+    "Result Lunar date:" = "Ergebnis Lunar-Datum:"
+
+    "Convert" = "Rechnen"
+
+    "Lunar to Solar Convert" = "Lunar -> Gregor."
+    "Enter Lunar date:" = "Lunar-Datum eingeben:"
+    "Leap" = "Schaltmon."
+    "Result Solar date:" = "Ergebnis Gregor. Datum:"
+
+    "Notify Settings" = "Termine erzeugen"
+    "Records:" = "Einträge:"
+      "all" = "alle"
+      "selected" = "Auswahl"
+    "Existing entries:" = "Vorhandene:"
+      "keep" = "lassen"
+      "modify" = "ändern"
+    "Private:" = "Privat:"
+    "Datebk3 icon:" = "Datebk3 Icon:"
+    "Alarm:" = "Alarm:"
+    "# of days before:" = "Tage vorher:"
+
+    "Repeat for:" = "Wiederholung:"
+    "years" = "Jahr(e)"
+
+    "HappyDays says" = "HappyDays meldet"
+
+    "HappyDays Export" = "HappyDays Export"
+    "Would you like to export HappyDays List to Memo Pad?" = ""\
+      "Möchten Sie die HappyDays Liste als Merkzettel exportieren?"
+
+    "Custom Field Error" = "Benutzerfeld Fehler"
+    "Help" = "Hilfe"
+
+
+    "HappyDays Cleanup" = "Termine entfernen"
+
+    "Notify warning" = "Termin Warnung"
+    "Are you sure you want to create notify entries in your datebook for all your ^1 HappyDays records?" = ""\
+      "Möchten Sie wirklich Termine für alle HappyDays Einträge (^1) erzeugen?"
+
+    "Invalid event format" = "Ungültiges Ereignis-Format"
+
+    "The address record for ^1\n contains an invalid event. How would you like to handle it?" = ""\
+      "Der Adreßeintrag für ^1\nenthält ein ungültiges Ereignis. Was soll geschehen?"
+
+    "Ignore" = "Ignorieren"
+    "Ignore all" = "Alle Ignor."
+
+    "Cleanup Done" = "Aufräumen beendet"
+
+    "^1 HappyDays notify entries removed from DateBook." = ""\
+      "^1 HappyDays Termin(e) aus dem Kalender gelöscht."
+
+    "Birthday" = "Geburtstag"
+    "All" = "Alle"
+    "HappyDays Export List" = "HappyDays Export Liste"
+    "(not exist in this year)" = "(in diesem Jahr nicht vorhanden)"
+    "Please run Date Book once first." = "Bitte vorher den Kalender einmal aufrufen."
 END
 
 STRING ID NotifySettingHelpString "long_notifySettingString"
@@ -327,33 +534,36 @@ STRING ID PrefFormHelpString "long_prefFormString"
 STRING ID RemoveConfirmString "long_removeConfirmString"
 STRING ID InvalidDateString "Invalid input date"
 STRING ID SelectTimeString  "Select Time"
-STRING ID NoTimeString 		"No Time"
-STRING ID ExportDoneString 	"Export to Memo Pad is completed."
+STRING ID NoTimeString      "No Time"
+STRING ID ExportDoneString  "Export to Memo Pad is completed."
 STRING ID Sl2LnFormHelpString "long_sl2lnString"
 
-STRING ID SunString 	"SUN"
-STRING ID MonString	 	"MON" 
-STRING ID TueString 	"TUE"
-STRING ID WedString 	"WED"
-STRING ID ThuString 	"THU"
-STRING ID FriString 	"FRI"
-STRING ID SatString 	"SAT"
+STRING ID SunString     "SUN"
+STRING ID MonString     "MON" 
+STRING ID TueString     "TUE"
+STRING ID WedString     "WED"
+STRING ID ThuString     "THU"
+STRING ID FriString     "FRI"
+STRING ID SatString     "SAT"
 
 STRING ID NotEnoughMemoryString
-				"Not enough memory"
+                "Not enough memory"
 STRING ID NotifyCreateString
-				"%d Datebook notify entry is created.\n"
-STRING ID ExistingEntryString 	"%d existing entry "
-STRING ID UntouchedString		"is kept untouched."
+                "%d Datebook notify entry is created.\n"
+STRING ID ExistingEntryString   "%d existing entry "
+STRING ID UntouchedString       "is kept untouched."
 STRING ID ModifiedString        "is modified."
-STRING ID CantFindAddrString	"long_cantFindAddrString"
-STRING ID CantWritePrefsString 	"Could not write prefs."
+STRING ID CantFindAddrString    "long_cantFindAddrString"
+STRING ID CantWritePrefsString  "Could not write prefs."
+STRING ID ExportHeaderString 	"HappyDays Export List"
+STRING ID ViewNotExistString	"(not exist in this year)"
+STRING ID DateBookFirstAlertString  "Please run Date Book once first."
 
 FORM StartForm AT (0 0 160 160)
 NOFRAME
 SAVEBEHIND
 BEGIN
-	LABEL "Collecting Information..." AUTOID AT (Center@80 BOTTOM@125) FONT 1
+    LABEL "Collecting Information..." AUTOID AT (Center@80 BOTTOM@125) FONT 1
 END
 
 FORM MainForm AT (0 0 160 160)
@@ -363,19 +573,19 @@ SAVEBEHIND
 MENUID MainFormMenu
 BEGIN
     TITLE "HappyDays List"
-	TABLE ID MainFormTable AT (0 16 160 121) ROWS 11 COLUMNS 1
-				COLUMNWIDTHS 160
-	BUTTON "Look up" ID MainFormLookup AT (1 BOTTOM@160-1 AUTO AUTO)
-	FIELD  ID MainFormField AT (PrevRight+3 PrevTop 30 AUTO) UNDERLINED
-			NONEDITABLE	MAXCHARS 5
-	BUTTON "Today" ID MainFormToday AT (PrevRight+2 PrevTop AUTO AUTO)
-	POPUPTRIGGER "" ID MainFormPopupTrigger
-			AT ( RIGHT@159 0 AUTO AUTO ) RIGHTANCHOR 
-	LIST "" ID MainFormAddrCategories AT (PREVLEFT PREVTOP 70 AUTO)
-			NONUSABLE
-	POPUPLIST ID MainFormPopupTrigger MainFormAddrCategories
+    TABLE ID MainFormTable AT (0 16 160 121) ROWS 11 COLUMNS 1
+                COLUMNWIDTHS 160
+    BUTTON "Look up" ID MainFormLookup AT (1 BOTTOM@160-1 AUTO AUTO)
+    FIELD  ID MainFormField AT (PrevRight+3 PrevTop 30 AUTO) UNDERLINED
+            NONEDITABLE MAXCHARS 5
+    BUTTON "Today" ID MainFormToday AT (PrevRight+2 PrevTop AUTO AUTO)
+    POPUPTRIGGER "" ID MainFormPopupTrigger
+            AT ( RIGHT@159 0 AUTO AUTO ) RIGHTANCHOR 
+    LIST "" ID MainFormAddrCategories AT (PREVLEFT PREVTOP 70 AUTO)
+            NONUSABLE
+    POPUPLIST ID MainFormPopupTrigger MainFormAddrCategories
 
- 	BUTTON " " ID MainFormPageUp AT ( RIGHT@159 141 13 8 )
+    BUTTON " " ID MainFormPageUp AT ( RIGHT@159 141 13 8 )
         NONUSABLE NOFRAME FONT 5
     BUTTON " " ID MainFormPageDown AT ( PREVLEFT PREVBOTTOM 13 8 )
         NONUSABLE NOFRAME FONT 5
@@ -387,51 +597,51 @@ NOFRAME
 SAVEBEHIND
 MENUID ViewFormMenu
 BEGIN
-	TITLE "HappyDays View"
+    TITLE "HappyDays View"
 
-	LABEL " " ID BirthdateCategory AT (158 0) FONT 0	
-	FIELD ID BirthdateFirst AT (6 30 148 AUTO) NONEDITABLE FONT 2
-	FIELD ID BirthdateSecond AT (PrevLeft PrevBottom+5 148 AUTO) NONEDITABLE
-		FONT 2
-	FIELD ID BirthdateCustom AT (PrevLeft PrevBottom+8 148 AUTO)
-		NONEDITABLE FONT 1
-	FIELD ID BirthdateDate AT (PrevLeft PrevBottom+3 148 AUTO)
-		NONEDITABLE FONT 2
-	FIELD ID BirthdateOrigin AT (PrevLeft PrevBottom+3 148 AUTO)
-		NONEDITABLE FONT 0
+    LABEL " " ID BirthdateCategory AT (158 0) FONT 0    
+    FIELD ID BirthdateFirst AT (6 30 148 AUTO) NONEDITABLE FONT 2
+    FIELD ID BirthdateSecond AT (PrevLeft PrevBottom+5 148 AUTO) NONEDITABLE
+        FONT 2
+    FIELD ID BirthdateCustom AT (PrevLeft PrevBottom+8 148 AUTO)
+        NONEDITABLE FONT 1
+    FIELD ID BirthdateDate AT (PrevLeft PrevBottom+3 148 AUTO)
+        NONEDITABLE FONT 2
+    FIELD ID BirthdateOrigin AT (PrevLeft PrevBottom+3 148 AUTO)
+        NONEDITABLE FONT 0
 
-	BUTTON "Done" ID BirthdateDone AT (1 BOTTOM@159 AUTO AUTO)
-	BUTTON "Notify" ID BirthdateNotify AT (PrevRight+6 PrevTop AUTO AUTO)
-	BUTTON "Goto" ID BirthdateGoto AT ( PrevRight+6 PrevTop AUTO AUTO)
+    BUTTON "Done" ID BirthdateDone AT (1 BOTTOM@159 AUTO AUTO)
+    BUTTON "Notify" ID BirthdateNotify AT (PrevRight+6 PrevTop AUTO AUTO)
+    BUTTON "Goto" ID BirthdateGoto AT ( PrevRight+6 PrevTop AUTO AUTO)
 END
 
 MENU ID MainFormMenu
 BEGIN
-	PULLDOWN "Utilities"
-	BEGIN
-		MENUITEM "Notify all in DateBook" 	MainFormMenuNotify 	"N"
-		MENUITEM "Cleanup Datebook"			MainFormMenuCleanup	"C"
-		MENUITEM SEPARATOR
-		MENUITEM "Export to Memo Pad"		MainFormMenuExport 	"E" 
-		MENUITEM SEPARATOR
-		MENUITEM "Solar to Lunar"			MainFormMenuSl2Ln	"S"
-		MENUITEM "Lunar to Solar"			MainFormMenuLn2Sl	"L"
-	END
+    PULLDOWN "Utilities"
+    BEGIN
+        MENUITEM "Notify all in DateBook"   MainFormMenuNotify  "N"
+        MENUITEM "Cleanup Datebook"         MainFormMenuCleanup "C"
+        MENUITEM SEPARATOR
+        MENUITEM "Export to Memo Pad"       MainFormMenuExport  "E" 
+        MENUITEM SEPARATOR
+        MENUITEM "Solar to Lunar"           MainFormMenuSl2Ln   "S"
+        MENUITEM "Lunar to Solar"           MainFormMenuLn2Sl   "L"
+    END
 
-	PULLDOWN "Options"
-	BEGIN
-		MENUITEM "Preferences"				MainFormMenuPref	"R"
-		MENUITEM "About HappyDays"			MainFormMenuAbout	"A"
-	END
+    PULLDOWN "Options"
+    BEGIN
+        MENUITEM "Preferences"              MainFormMenuPref    "R"
+        MENUITEM "About HappyDays"          MainFormMenuAbout   "A"
+    END
 END
 
 MENU ID ViewFormMenu
 BEGIN
-	PULLDOWN "Utilities"
-	BEGIN
-		MENUITEM "Solar to Lunar"			MainFormMenuSl2Ln	"S"
-		MENUITEM "Lunar to Solar"			MainFormMenuLn2Sl	"L"
-	END
+    PULLDOWN "Utilities"
+    BEGIN
+        MENUITEM "Solar to Lunar"           MainFormMenuSl2Ln   "S"
+        MENUITEM "Lunar to Solar"           MainFormMenuLn2Sl   "L"
+    END
 END
 
 // Edit menu for S2L, L2S
@@ -439,14 +649,14 @@ MENU ID TextMenu
 BEGIN
     PULLDOWN   "Edit"
     BEGIN
-    MENUITEM "Undo"         				TextMenuUndo     	"U"
-    MENUITEM "Cut"          				TextMenuCut      	"X"
-    MENUITEM "Copy"         				TextMenuCopy     	"C"
-    MENUITEM "Paste"        				TextMenuPaste    	"P"
-    MENUITEM "Select All"   				TextMenuSAll	 	"S"
+    MENUITEM "Undo"                         TextMenuUndo        "U"
+    MENUITEM "Cut"                          TextMenuCut         "X"
+    MENUITEM "Copy"                         TextMenuCopy        "C"
+    MENUITEM "Paste"                        TextMenuPaste       "P"
+    MENUITEM "Select All"                   TextMenuSAll        "S"
     MENUITEM  SEPARATOR
-    MENUITEM "Keyboard"     				TextMenuKBoard 	 	"K"
-    MENUITEM "Graffiti" 					TextMenuGHelp   	"G"
+    MENUITEM "Keyboard"                     TextMenuKBoard      "K"
+    MENUITEM "Graffiti"                     TextMenuGHelp       "G"
     END
 END
 
@@ -456,26 +666,26 @@ MODAL
 USABLE
 HELPID PrefFormHelpString
 BEGIN
-	TITLE "HappyDays Preferences"
-	LABEL "Custom field:" AUTOID AT (RIGHT@88 20) FONT 1 
-	FIELD ID PrefFormCustomField AT (PrevRight+3 PrevTop 50 AUTO) UNDERLINED
-			MAXCHARS 12
-	LABEL "HappyDays ID:" AUTOID AT (RIGHT@88 PrevBottom+3) FONT 1
-	FIELD ID PrefFormNotifyWith AT (PrevRight+3 PrevTop 23 AUTO) UNDERLINED
-			MAXCHARS 5
+    TITLE "HappyDays Preferences"
+    LABEL "Custom field:" AUTOID AT (RIGHT@88 20) FONT 1 
+    FIELD ID PrefFormCustomField AT (PrevRight+3 PrevTop 50 AUTO) UNDERLINED
+            MAXCHARS 12
+    LABEL "HappyDays ID:" AUTOID AT (RIGHT@88 PrevBottom+3) FONT 1
+    FIELD ID PrefFormNotifyWith AT (PrevRight+3 PrevTop 23 AUTO) UNDERLINED
+            MAXCHARS 5
 
-	LABEL "Sort by:" AUTOID AT (RIGHT@88 PrevBottom+3) FONT 1
-	PUSHBUTTON "Name" ID PrefFormSortName AT (PrevRight+3
-			PrevTop AUTO AUTO) LEFTANCHOR GROUP 1
-	PUSHBUTTON "Date" ID PrefFormSortDate AT (PrevRight+1
-			PrevTop AUTO AUTO) GROUP 1
+    LABEL "Sort by:" AUTOID AT (RIGHT@88 PrevBottom+3) FONT 1
+    PUSHBUTTON "Name" ID PrefFormSortName AT (PrevRight+3
+            PrevTop AUTO AUTO) LEFTANCHOR GROUP 1
+    PUSHBUTTON "Date" ID PrefFormSortDate AT (PrevRight+1
+            PrevTop AUTO AUTO) GROUP 1
 
-	LABEL "Emphasize Lunar:" AUTOID AT (RIGHT@88 PrevBottom+3) FONT 1
-	CHECKBOX " " ID PrefFormInternal at (PrevRight+3
-		PrevTop AUTO AUTO) RIGHTANCHOR FONT 0
+    LABEL "Emphasize Lunar:" AUTOID AT (RIGHT@88 PrevBottom+3) FONT 1
+    CHECKBOX " " ID PrefFormInternal at (PrevRight+3
+        PrevTop AUTO AUTO) RIGHTANCHOR FONT 0
 
-	BUTTON "OK" ID PrefFormOk AT (5 BOTTOM@98 40 AUTO)
-	BUTTON "Cancel" ID PrefFormCancel AT (PrevRight+5 PrevTop 40 AUTO)
+    BUTTON "OK" ID PrefFormOk AT (5 BOTTOM@98 40 AUTO)
+    BUTTON "Cancel" ID PrefFormCancel AT (PrevRight+5 PrevTop 40 AUTO)
 END
 
 FORM ID Sl2LnForm AT (0 0 160 160)
@@ -486,18 +696,18 @@ HELPID Sl2LnFormHelpString
 MENUID TextMenu
 BEGIN
     TITLE "Solar to Lunar Convert"
-	LABEL "Enter Solar date:" AUTOID AT (10 30) FONT 1
-	FIELD ID Sl2LnFormInput AT (10 PrevBottom+3 70 AUTO) MAXCHARS 10
-		UNDERLINED
-	LABEL "Year must be in 1881-2043" AUTOID AT (10 PrevBottom+3) FONT 0
+    LABEL "Enter Solar date:" AUTOID AT (10 30) FONT 1
+    FIELD ID Sl2LnFormInput AT (10 PrevBottom+3 70 AUTO) MAXCHARS 10
+        UNDERLINED
+    LABEL "Year must be in 1881-2043" AUTOID AT (10 PrevBottom+3) FONT 0
 
-	LABEL "Result Lunar date:" AUTOID AT (10 PrevBottom+15) FONT 1
-	FIELD ID Sl2LnFormResult AT (10	PrevBottom+3 70 AUTO)
-		NONEDITABLE UNDERLINED MAXCHARS 15
+    LABEL "Result Lunar date:" AUTOID AT (10 PrevBottom+15) FONT 1
+    FIELD ID Sl2LnFormResult AT (10 PrevBottom+3 70 AUTO)
+        NONEDITABLE UNDERLINED MAXCHARS 15
 
-	BUTTON "Convert" ID Sl2LnFormConvert AT
-			(10 BOTTOM@153 40 AUTO)
- 	BUTTON "OK" ID Sl2LnFormOk AT (PrevRight+5 PrevTop 40 AUTO)
+    BUTTON "Convert" ID Sl2LnFormConvert AT
+            (10 BOTTOM@153 40 AUTO)
+    BUTTON "OK" ID Sl2LnFormOk AT (PrevRight+5 PrevTop 40 AUTO)
 
 END
 
@@ -508,20 +718,20 @@ MODAL
 MENUID TextMenu
 BEGIN
     TITLE "Lunar to Solar Convert"
-	LABEL "Enter Lunar date:" AUTOID AT (10 30) FONT 1
-	FIELD ID Ln2SlFormInput AT (10 PrevBottom+3 70 AUTO) MAXCHARS 10
-		UNDERLINED
-	CHECKBOX "Leap" ID Ln2SlFormInputLeap AT
-		(PrevRight+8 PrevTop AUTO AUTO)	LEFTANCHOR FONT 0
-	LABEL "Year must be in 1881-2043" AUTOID AT (10 PrevBottom+3) FONT 0
+    LABEL "Enter Lunar date:" AUTOID AT (10 30) FONT 1
+    FIELD ID Ln2SlFormInput AT (10 PrevBottom+3 70 AUTO) MAXCHARS 10
+        UNDERLINED
+    CHECKBOX "Leap" ID Ln2SlFormInputLeap AT
+        (PrevRight+8 PrevTop AUTO AUTO) LEFTANCHOR FONT 0
+    LABEL "Year must be in 1881-2043" AUTOID AT (10 PrevBottom+3) FONT 0
 
-	LABEL "Result Solar date:" AUTOID AT (10 PrevBottom+15) FONT 1
-	FIELD ID Ln2SlFormResult AT (10	PrevBottom+3 80 AUTO)
-		NONEDITABLE UNDERLINED MAXCHARS 15
+    LABEL "Result Solar date:" AUTOID AT (10 PrevBottom+15) FONT 1
+    FIELD ID Ln2SlFormResult AT (10 PrevBottom+3 80 AUTO)
+        NONEDITABLE UNDERLINED MAXCHARS 15
 
-	BUTTON "Convert" ID Ln2SlFormConvert AT
-			(10 BOTTOM@153 40 AUTO)
- 	BUTTON "OK" ID Ln2SlFormOk AT (PrevRight+5 PrevTop 40 AUTO)
+    BUTTON "Convert" ID Ln2SlFormConvert AT
+            (10 BOTTOM@153 40 AUTO)
+    BUTTON "OK" ID Ln2SlFormOk AT (PrevRight+5 PrevTop 40 AUTO)
 
 END
 
@@ -531,44 +741,44 @@ MODAL
 USABLE
 HELPID  NotifySettingHelpString
 BEGIN
-	TITLE "Notify Settings"
-	LABEL "Records:" AUTOID AT (RIGHT@88 20) FONT 1
-	PUSHBUTTON "all" ID NotifySettingFormRecordAll AT (PrevRight+3
-			PrevTop AUTO AUTO) GROUP 1
-	PUSHBUTTON "selected" ID NotifySettingFormRecordSlct AT (PrevRight+1
-			PrevTop AUTO AUTO) LEFTANCHOR GROUP 1
+    TITLE "Notify Settings"
+    LABEL "Records:" AUTOID AT (RIGHT@88 20) FONT 1
+    PUSHBUTTON "all" ID NotifySettingFormRecordAll AT (PrevRight+3
+            PrevTop AUTO AUTO) GROUP 1
+    PUSHBUTTON "selected" ID NotifySettingFormRecordSlct AT (PrevRight+1
+            PrevTop AUTO AUTO) LEFTANCHOR GROUP 1
 
-	LABEL "Existing entries:" AUTOID AT (RIGHT@88 PrevBottom+1) FONT 1
-	PUSHBUTTON "keep" ID NotifySettingFormEntryKeep at (PrevRight+3
-			PrevTop AUTO AUTO) GROUP 2
-	PUSHBUTTON "modify" ID NotifySettingFormEntryModify at (PrevRight+1
-			PrevTop AUTO AUTO) LEFTANCHOR GROUP 2
+    LABEL "Existing entries:" AUTOID AT (RIGHT@88 PrevBottom+1) FONT 1
+    PUSHBUTTON "keep" ID NotifySettingFormEntryKeep at (PrevRight+3
+            PrevTop AUTO AUTO) GROUP 2
+    PUSHBUTTON "modify" ID NotifySettingFormEntryModify at (PrevRight+1
+            PrevTop AUTO AUTO) LEFTANCHOR GROUP 2
 
-	LABEL "Private:" AUTOID AT (RIGHT@88 PrevBottom+3) FONT 1
-	CHECKBOX " " ID NotifySettingFormPrivate at (PrevRIght+3
-		PrevTop AUTO AUTO) RIGHTANCHOR FONT 1 
+    LABEL "Private:" AUTOID AT (RIGHT@88 PrevBottom+3) FONT 1
+    CHECKBOX " " ID NotifySettingFormPrivate at (PrevRIght+3
+        PrevTop AUTO AUTO) RIGHTANCHOR FONT 1 
 
-	LABEL "Datebk3 icon:" AUTOID AT (RIGHT@88 PrevBottom+1) FONT 1
-	CHECKBOX " " ID NotifySettingFormBK3 at (PrevRight+3
-			PrevTop AUTO AUTO) RIGHTANCHOR FONT 1 CHECKED
+    LABEL "Datebk3 icon:" AUTOID AT (RIGHT@88 PrevBottom+1) FONT 1
+    CHECKBOX " " ID NotifySettingFormBK3 at (PrevRight+3
+            PrevTop AUTO AUTO) RIGHTANCHOR FONT 1 CHECKED
 
-	LABEL "Alarm:" AUTOID AT (RIGHT@88 PrevBottom+1) FONT 1
-	CHECKBOX "" ID NotifySettingFormAlarm at (PrevRIght+3 PrevTop
-			AUTO AUTO) LEFTANCHOR FONT 1
-	SELECTORTRIGGER "" ID NotifySettingFormTime at (PrevRight+3 PrevTop
-			AUTO AUTO) LEFTANCHOR FONT 0
-		
-	LABEL "# of days before:" AUTOID AT (RIGHT@88 PrevBottom) Font 1
-	FIELD ID NotifySettingFormBefore AT (PrevRight+3 PrevTop 13 AUTO)
-		UNDERLINED MAXCHARS 2
+    LABEL "Alarm:" AUTOID AT (RIGHT@88 PrevBottom+1) FONT 1
+    CHECKBOX "" ID NotifySettingFormAlarm at (PrevRIght+3 PrevTop
+            AUTO AUTO) LEFTANCHOR FONT 1
+    SELECTORTRIGGER "" ID NotifySettingFormTime at (PrevRight+3 PrevTop
+            AUTO AUTO) LEFTANCHOR FONT 0
+        
+    LABEL "# of days before:" AUTOID AT (RIGHT@88 PrevBottom) Font 1
+    FIELD ID NotifySettingFormBefore AT (PrevRight+3 PrevTop 13 AUTO)
+        UNDERLINED MAXCHARS 2
 
-	LABEL "Repeat for:" AUTOID AT (RIGHT@88 PrevBottom+1) FONT 1
-	FIELD ID NotifySettingFormDuration AT (PrevRight+3 PrevTop 13 AUTO)
-    	    UNDERLINED MAXCHARS 2
-	LABEL "years" AUTOID AT (PrevRight+3 PrevTop) FONT 0
+    LABEL "Repeat for:" AUTOID AT (RIGHT@88 PrevBottom+1) FONT 1
+    FIELD ID NotifySettingFormDuration AT (PrevRight+3 PrevTop 13 AUTO)
+            UNDERLINED MAXCHARS 2
+    LABEL "years" AUTOID AT (PrevRight+3 PrevTop) FONT 0
 
-	BUTTON "OK" ID NotifySettingFormOk AT (5 Bottom@135 40 AUTO)
-	BUTTON "Cancel" ID NotifySettingFormCancel AT (PrevRight+5 PrevTop 40 AUTO)
+    BUTTON "OK" ID NotifySettingFormOk AT (5 Bottom@135 40 AUTO)
+    BUTTON "Cancel" ID NotifySettingFormCancel AT (PrevRight+5 PrevTop 40 AUTO)
 END
 
 ALERT ID ErrorAlert INFORMATION
@@ -580,47 +790,47 @@ END
 
 ALERT ID ExportAlert CONFIRMATION
 BEGIN
-	TITLE "HappyDays Export"
-	MESSAGE 
-		"Would you like to export HappyDays List to Memo Pad?"
-	BUTTONS "OK" "Cancel"
+    TITLE "HappyDays Export"
+    MESSAGE 
+        "Would you like to export HappyDays List to Memo Pad?"
+    BUTTONS "OK" "Cancel"
 END
 
 ALERT ID CustomFieldAlert INFORMATION
 HELPID CustomErrorHelpString
 BEGIN
-	TITLE "Custom Field Error"
-	MESSAGE "^1"
-	BUTTONS "OK" "Help" "Preferences"
+    TITLE "Custom Field Error"
+    MESSAGE "^1"
+    BUTTONS "OK" "Help" "Preferences"
 END
 
 ALERT ID CleanupAlert CONFIRMATION
 HELPID CleanupAlertHelpString
 BEGIN
-	TITLE "HappyDays Cleanup"
-	MESSAGE "^1"
-	BUTTONS "OK" "Cancel"
+    TITLE "HappyDays Cleanup"
+    MESSAGE "^1"
+    BUTTONS "OK" "Cancel"
 END
 
 ALERT ID NotifyWarning CONFIRMATION
 BEGIN
-	TITLE "Notify warning"
-	MESSAGE "Are you sure you want to create notify entries in your datebook for all your ^1 HappyDays records?"
-	BUTTONS "OK" "Cancel"
+    TITLE "Notify warning"
+    MESSAGE "Are you sure you want to create notify entries in your datebook for all your ^1 HappyDays records?"
+    BUTTONS "OK" "Cancel"
 END
 
 ALERT ID InvalidFormat CONFIRMATION
 BEGIN
-	TITLE "Invalid event format"
-	MESSAGE "The address record for ^1\n contains an invalid event. How would you like to handle it?"
-	BUTTONS "Edit" "Ignore" "Ignore all"
+    TITLE "Invalid event format"
+    MESSAGE "The address record for ^1\n contains an invalid event. How would you like to handle it?"
+    BUTTONS "Edit" "Ignore" "Ignore all"
 END
 
 ALERT ID CleanupDone INFORMATION
 BEGIN
-	TITLE "Cleanup Done"
-	MESSAGE "^1 HappyDays notify entries removed from DateBook."
-	BUTTONS "OK"
+    TITLE "Cleanup Done"
+    MESSAGE "^1 HappyDays notify entries removed from DateBook."
+    BUTTONS "OK"
 END
 
 FORM ID AboutForm AT (2 2 156 156)
@@ -628,28 +838,28 @@ USABLE
 MODAL
 HELPID AboutHelpString
 BEGIN
-	TITLE "HappyDays"
-	LABEL "HappyDays 1.0" AUTOID AT (Center@80 20) FONT 1
-	LABEL "(c) 1999-2000, JaeMok Jeong"
-		AUTOID AT (Center@80 PrevBottom+5) FONT 0
-	LABEL "<jmjeong@oopsla.snu.ac.kr>" AUTOID AT (Center@80 PrevBottom)
-		Font 0
-	LABEL "http://oopsla.snu.ac.kr/~jmjeong/"
-		AUTOID AT (Center@80 PrevBottom) FONT 0
-	LABEL "palm/happydays" AUTOID AT (PrevLeft+10 PrevBottom) FONT 0
+    TITLE "HappyDays"
+    LABEL "HappyDays 1.01" AUTOID AT (Center@80 20) FONT 1
+    LABEL "(c) 1999-2000, JaeMok Jeong"
+        AUTOID AT (Center@80 PrevBottom+5) FONT 0
+    LABEL "<jmjeong@oopsla.snu.ac.kr>" AUTOID AT (Center@80 PrevBottom)
+        Font 0
+    LABEL "http://oopsla.snu.ac.kr/~jmjeong/"
+        AUTOID AT (Center@80 PrevBottom) FONT 0
+    LABEL "palm/happydays" AUTOID AT (PrevLeft+10 PrevBottom) FONT 0
 
-	LABEL "Licensed under the GNU GPL" AUTOID AT (Center@80
-		PrevBottom+4) FONT 0
+    LABEL "Licensed under the GNU GPL" AUTOID AT (Center@80
+        PrevBottom+4) FONT 0
 
-	LABEL "Translator" AUTOID AT (Center@80 PrevBottom+3) USABLE FONT 0
-	LABEL "Translator's email" AUTOID AT (Center@80 PrevBottom) USABLE FONT 0
-			
-	BUTTON "OK" AboutFormOk AT (RIGHT@80-3 BOTTOM@148 44 AUTO) FONT 0
-	BUTTON "Help" AboutFormHelp AT (PrevRight+6 PrevTop 44 AUTO) FONT 0
+    LABEL "Translator" AUTOID AT (Center@80 PrevBottom+3) USABLE FONT 0
+    LABEL "Translator's email" AUTOID AT (Center@80 PrevBottom) USABLE FONT 0
+            
+    BUTTON "OK" AboutFormOk AT (RIGHT@80-3 BOTTOM@148 44 AUTO) FONT 0
+    BUTTON "Help" AboutFormHelp AT (PrevRight+6 PrevTop 44 AUTO) FONT 0
 END
 
 APPLICATIONICONNAME 1000 "HappyDays"
 ICON "happydays.pbitm"
 SMALLICON "happydays-small.pbitm"
 
-VERSION 1 "1.0"
+VERSION 1 "1.01"

@@ -3,6 +3,32 @@
 * Scan from notes field
 * Support Action Names and Datebk3 Icon(customizable)
 
+* From :  Jim (Jim_Bahosh@yahoo.com) 
+1. I would like to see the notification format changed so that the HappyDays
+flag is at the very end of the entry.
+ That way when events are viewed in DB3 it would be more likely that the # of
+years might be visible (instead of
+ the HappyDays flag). Maybe put the HappyDays flag into the note field instead
+to keep the actual notification less
+ cluttered.
+
+ 2. I would like to be able to pick a DB3 icon for the other events, not just
+birthdays (Perhaps some type of list that
+ would have an event title and associate it with a specific icon in DB3)
+
+ 3. The last names of people need to show up in the list & notifications. (I
+did notice that when I sort the list by
+ name, it is sorted correctly by last name eventhough the last name is not
+visible!)
+
+ 4. I would like to see it an option to display (or not display) the brackets
+[] in the notification entry, or even an
+ option to have the entire entry surrounded by the brackets if they cannot be
+eliminated (it just kind of seems busy
+ having the brackets, the HappyDays flag, the event type, and then the
+parentheses for the age. 
+
+
 * From : Dieter Pellkofer (dieterp@patente.de) 
 Only the day and the month, but not the year is redundant in the date book
 entry. I would, therefor, prefer that the year is shown in the
