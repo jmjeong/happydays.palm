@@ -26,7 +26,7 @@ LANG = ENGLISH
 all: en
 	ls -al happydays*.prc
 
-all-lang: en ko de th dutch fr sp cz catalan
+all-lang: en ko de th dutch fr sp cz catalan br chi
 
 en: $(TARGET).prc
 
@@ -56,6 +56,9 @@ cz: $(TARGET)-cz.prc
 
 catalan: $(TARGET)-catalan.prc
 	zip $(TARGET)-$(VERSION)-catalan.zip $(TARGET)-catalan.prc
+
+br: $(TARGET)-br.prc
+	zip $(TARGET)-$(VERSION)-br.zip $(TARGET)-br.prc
 
 .S.o:
 	$(CC) $(TARGETFLAGS) -c $<
@@ -98,6 +101,9 @@ $(TARGET)-cz.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGE
 
 $(TARGET)-catalan.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGET).grc pref0000.$(TARGET).grc rloc0000.$(TARGET).grc bin-catalan.res
 	$(BUILDPRC) $(TARGET)-catalan.prc $(APPNAME) $(APPID) code0001.$(TARGET).grc code0000.$(TARGET).grc data0000.$(TARGET).grc *.bin pref0000.$(TARGET).grc rloc0000.$(TARGET).grc
+
+$(TARGET)-br.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGET).grc pref0000.$(TARGET).grc rloc0000.$(TARGET).grc bin-br.res
+	$(BUILDPRC) $(TARGET)-br.prc $(APPNAME) $(APPID) code0001.$(TARGET).grc code0000.$(TARGET).grc data0000.$(TARGET).grc *.bin pref0000.$(TARGET).grc rloc0000.$(TARGET).grc
 
 code0000.$(TARGET).grc: $(TARGET)
 	$(OBJRES) $(TARGET)
@@ -158,6 +164,10 @@ bin-catalan.res: $(TARGET)-catalan.rcp
 	rm -f *.bin
 	$(PILRC) -L CATALAN $(TARGET)-catalan.rcp .
 
+bin-br.res: $(TARGET)-br.rcp
+	rm -f *.bin
+	$(PILRC) -L BRAZILIAN $(TARGET)-br.rcp .
+
 $(TARGET)-en.rcp: $(TARGET).rcp english.msg hdr.msg
 	cat hdr.msg english.msg $(TARGET).rcp > $(TARGET)-en.rcp
 
@@ -190,6 +200,9 @@ $(TARGET)-cz.rcp: $(TARGET).rcp czech.msg hdr.msg
 
 $(TARGET)-catalan.rcp: $(TARGET).rcp catalan.msg hdr.msg
 	cat hdr.msg catalan.msg $(TARGET).rcp > $(TARGET)-catalan.rcp
+
+$(TARGET)-br.rcp: $(TARGET).rcp brazilian.msg hdr.msg
+	cat hdr.msg brazilian.msg $(TARGET).rcp > $(TARGET)-br.rcp
 
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(TARGET) $(LIBS)
