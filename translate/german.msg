@@ -1,5 +1,6 @@
 TRANSLATION "GERMAN"
 BEGIN
+
     "long_notifySettingMoreString" =  ""\
       "Diese Notiz kann für Adressbuch Programme von Drittanbietern "\
       "verwendet werden, z.B. Action Names, DateBk3/4.\n"\
@@ -42,7 +43,7 @@ BEGIN
 
     "SMTWTFS" =  "SMDMDFS"
 
-    "Janunary" =  "Januar"
+    "January"= "Januar"
     "February" =  "Februar"
     "March" =  "März"
     "April" =  "April"
@@ -56,14 +57,14 @@ BEGIN
     "December" =  "Dezember"
 
     "Not enough memory" =  "Nicht genug Speicher"
-    "%d notify entry is created.\n" =  "%d Einträge erzeugt.\n"
-    "%d existing entry " =  "%d bestehende Einträge "
-    "is kept untouched." =  "belassen."
-    "is modified." =  "geändert."
+    "%d notify entries have been created.\n"= "%d Einträge erzeugt.\n"
+    "%d existing entries "= "%d bestehende Einträge "
+    "are kept untouched."= "belassen."
+    "have been modified."= "geändert."
     "HappyDays Export List" =  "HappyDays Export Liste"
     "(not exist in this year)" =  "(in diesem Jahr nicht vorhanden)"
     "Please run Date Book once first." =  "Bitte vorher den Kalender einmal aufrufen."
-    "Please run Todo once first."= "Bitte vorher die Aufgaben einmal aufrufen"
+    "Please run Todo once first." =  "Bitte vorher die Aufgaben einmal aufrufen"
     "Days" =  "Tage"
     "%dY %dM %dD (%ld)" =  "%dJ %dM %dT (%ld)"
 
@@ -77,8 +78,8 @@ BEGIN
     "Origin:" =  "Erster:"
     "Age:" =  "Alter:"
     "UpTo Date:" =  "Zeit:"
-    "BioRhythm:"= "Biorythmus:"
-    "P(%s) E(%s) I(%s)"= "P(%s) E(%s) I(%s)"
+    "BioRhythm:" =  "Biorythmus:"
+    "P(%s) E(%s) I(%s)" =  "P(%s) E(%s) I(%s)"
 
     "Datebook Note" =  "Kalender-Notiz"
     "ToDo Note" =  "Aufgaben-Notiz"
@@ -147,6 +148,7 @@ BEGIN
     "Notify Format:" =  "Eintrag-Format:"
     "[Last, First] E(1) Year" =  "[Nachn., Vorn.] E(1) Jahr"
     "[First Last] E(1) Year" =  "[Vorn. Nachn.] E(1) Jahr"
+    "[First] E(1) Year"= "[Vorn.] E(1) Jahr"
     "Event - Last, First Year" =  "Ereign. - Nachn., Vorn. Jahr"
     "Event - First Last Year" =  "Ereign. - Vorn. Nachn. Jahr"
     "First Last Year" =  "Vorn. Nachn. Jahr"
@@ -229,5 +231,5 @@ BEGIN
 
     "Processing" =  "Arbeite"
     "Processed : " =  "Bearbeitet : "
-END
 
+END

@@ -568,7 +568,7 @@ static Boolean IsHappyDaysRecord(Char* notefield)
     return false;
 }
 
-static Char* gNotifyFormatString[5] =
+static Char* gNotifyFormatString[6] =
 { "[+L] +e +y",     // [Jeong, JaeMok] B 1970
   "[+F] +e +y",     // [JaeMok Jeong] B 1970
   "[+f] +e +y",     // [JaeMok] B 1970
