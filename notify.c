@@ -691,7 +691,7 @@ static Int16 PerformNotifyDB(HappyDays birth, DateType when, Int8 age,
     Char* description = 0;
     Int16 existIndex;
     ApptDBRecordFlags changedFields;
-    Char noteField[100];        // (datebk3: 10, AN:14), HD id: 5
+    Char noteField[255];        // (datebk3: 10, AN:14), HD id: 5
 
     // for the performance, check this first 
     if ( ((existIndex = CheckDatebookRecord(when, birth)) >= 0)
@@ -793,7 +793,7 @@ static Int16 PerformNotifyDB(HappyDays birth, DateType when, Int8 age,
 static Int16 PerformNotifyTD(HappyDays birth, DateType when, Int8 age,
                              Int16 *created, Int16 *touched)
 {
-    Char noteField[100];      // (datebk3: 10, AN:14), HD id: 5
+    Char noteField[255];      // (datebk3: 10, AN:14), HD id: 5
     ToDoItemType todo;
     Char* description = 0;
     
