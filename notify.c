@@ -571,6 +571,7 @@ static Boolean IsHappyDaysRecord(Char* notefield)
 static Char* gNotifyFormatString[5] =
 { "[+L] +e +y",     // [Jeong, JaeMok] B 1970
   "[+F] +e +y",     // [JaeMok Jeong] B 1970
+  "[+f] +e +y",     // [JaeMok] B 1970
   "+E - +L +y",     // Birthday - Jeong, JaeMok 1970
   "+E - +F +y",     // Birthday - JaeMok Jeong 1970
   "+F +y",        	// JaeMok Jeong 1970
@@ -615,6 +616,11 @@ static Char* NotifyDescString(DateType when, HappyDays birth,
                         StrCat(pDesc, " ");
                     StrCat(pDesc, birth.name1);
                 }
+
+                pDesc += StrLen(pDesc);
+                break;
+            case 'f':       // FirstName
+                StrCopy(pDesc, birth.name2);
 
                 pDesc += StrLen(pDesc);
                 break;

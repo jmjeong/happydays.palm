@@ -737,7 +737,7 @@ Boolean UpdateHappyDaysDB(FormPtr frm)
         recordH = DmQueryNextInCategory(AddressDB, &currIndex,
                                         dmAllCategories);
         if (!recordH) break;
-        if (i++ == indicateNext) {
+        if (i++ == indicateNext+1) {
             if (recordNum > 50) displayNextIndicate(i * INDICATE_NUM / recordNum);
             indicateNext += recordNum / INDICATE_NUM;
         }

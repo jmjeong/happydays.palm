@@ -234,11 +234,12 @@ BEGIN
 	LABEL "Notify Format:" AUTOID AT (10 PrevBottom+1) 
     LIST 	"[Last, First] E(1) Year" 
 	    	"[First Last] E(1) Year" 
+	    	"[First] E(1) Year" 
 			"Event - Last, First Year"
 			"Event - First Last Year"
 			"First Last Year"
 		ID PrefFormNotifyFmts 
-			AT (20 PrevBottom 120 AUTO) VISIBLEITEMS 5 NONUSABLE
+			AT (20 PrevTop 120 AUTO) VISIBLEITEMS 6 NONUSABLE
     POPUPTRIGGER "" ID PrefFormNotifyTrigger 
 			AT (PREVLEFT PREVTOP-1 40 13) LEFTANCHOR
     POPUPLIST ID PrefFormNotifyTrigger PrefFormNotifyFmts
@@ -492,7 +493,7 @@ BEGIN
     TITLE "About HappyDays"
 
 	FORMBITMAP AT (6 18) BITMAP ID_BitmapIcon USABLE 
-    LABEL "HappyDays 2.24" AUTOID AT (PrevRight+38 PrevTop) FONT 1
+    LABEL "HappyDays 2.25" AUTOID AT (PrevRight+38 PrevTop) FONT 1
     LABEL "GPL free software"
         AUTOID AT (PrevLeft PrevTop+ABOUT_LINE_SPACING) FONT 0
     LABEL "(c) 1999-2002 Jaemok Jeong"
@@ -562,4 +563,4 @@ SMALLICONFAMILY
 	TRANSPARENT 192 192 0
 
 APPLICATIONICONNAME 1000 "HappyDays"
-VERSION ID 1 "2.24"
+VERSION ID 1 "2.25"

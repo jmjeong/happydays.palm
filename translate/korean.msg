@@ -149,6 +149,7 @@ BEGIN
     "Notify Format:" =  "알림 레코드 형식: "
     "[Last, First] E(1) Year" =  "[성, 이름] E(1) 나이"
     "[First Last] E(1) Year" =  "[이름 성] E(1) 나이"
+    "[First] E(1) Year" =  "[이름] E(1) 나이"
     "Event - Last, First Year" =  "행사 - 성, 이름 나이"
     "Event - First Last Year" =  "행사 - 이름 성 나이"
     "First Last Year" =  "이름 성 나이"
