@@ -80,7 +80,10 @@ BEGIN
     "Age:" =  "Alter:"
     "UpTo Date:" =  "Zeit:"
 
-    "Collecting Information"= "Daten werden eingelesen"
+    "Datebook Note" =  "Kalender-Notiz"
+    "ToDo Note"= "Aufgaben-Notiz"
+
+    "Collecting Information" =  "Daten werden eingelesen"
 
     "Look Up:" =  "Gehe zu:"
 
@@ -134,7 +137,7 @@ BEGIN
     "Y-M-D" =  "J-M-T"
 
     "Scan note field" =  "Notiz auswerten"
-    "Ignore record with prefix '!'"= "Einträge mit '!' ignorieren"
+    "Ignore record with prefix '!'" =  "Einträge mit '!' ignorieren"
 
     "Address Autoscan" =  "Adressbuch Autoscan"
     "Always" =  "immer"
@@ -184,11 +187,9 @@ BEGIN
     "Repeat for:" =  "Wiederholung:"
     "years" =  "Jahr(e)"
 
-    "Note"= "Notiz"
+    "Note" =  "Notiz"
 
-    "Datebook Note"= "Kalender-Notiz"
-
-    "Add the following note"= "Folgende Notiz hinzufügen"
+    "Add the following note" =  "Folgende Notiz hinzufügen"
 
     "Priority:" =  "Priorität:"
 
@@ -224,10 +225,10 @@ BEGIN
     "^1: ^2 HappyDays notify entries removed." =  ""\
       "^1: ^2 HappyDays Einträge gelöscht."
 
+
     "Translator" =  "Übersetzung: Gunther Zagatta"
     "Translator's email" =  "zagatta@web.de"
 
     "Processing" =  "Arbeite"
     "Processed : " =  "Bearbeitet : "
-
 END

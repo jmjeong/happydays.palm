@@ -107,7 +107,8 @@ enum ViewFormType { ViewType = 0,
                     ViewSrc,
                     ViewAge,
                     ViewRemained,
-                    ViewSpace
+					ViewBioRhythm,
+                    ViewSpace,
 };
 
 ////////////////////////////////////////////////////////////////////
@@ -2113,6 +2114,10 @@ static void ViewTableDrawHdr(MemPtr tableP, Int16 row, Int16 column,
         break;
     case ViewRemained:
         SysCopyStringResource(gAppErrStr, RemainedDayStr);
+		break;
+
+    case ViewBioRhythm:
+        SysCopyStringResource(gAppErrStr, BioRhythmStr);
 
         break;
     default:
@@ -2349,14 +2354,38 @@ void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column,
         FntCharsInWidth(gAppErrStr, &width, &length, &ignored);
         WinDrawChars(gAppErrStr, length, x, y);
     }
-    
     break;
+	case ViewBioRhythm:
+	{
+		Int16 phys, emot, intel;
+
+        dateDiff = (Int32)DateToDays(converted) - (Int32)DateToDays(current);
+
+        if (dateDiff >= (Int32)0) {
+			phys = (dateDiff+12) % 23;
+			emot = (dateDiff+14) % 28;
+			intel = (dateDiff+17) % 33;
+
+            SysCopyStringResource(displayStr, BioString);
+            StrPrintF(gAppErrStr, displayStr,
+			(phys<12 ? "+" : (phys>12 ? "-" : "C" )),
+			(emot<14 ? "+" : (emot>14 ? "-" : "C" )),
+			(intel<17 ? "+" : (phys>17 ? "-" : "C" )));
+
+			length = StrLen(gAppErrStr);
+			FntCharsInWidth(gAppErrStr, &width, &length, &ignored);
+			WinDrawChars(gAppErrStr, length, x, y);
+        }
+            
+	}
+	break;
     }
     MemHandleUnlock(recordH);
 
     // restore font
     FntSetFont (currFont);
 }
+
 static void ViewFormInitTable(FormPtr frm)
 {
     TablePtr 		tableP;
@@ -2874,6 +2903,9 @@ static Boolean StartFormHandleEvent(EventPtr e)
 //
 //
 // $Log$
+// Revision 1.70  2002/05/27 10:59:49  jmjeong
+// german resource
+//
 // Revision 1.69  2002/04/23 19:29:18  jmjeong
 // Fix memory leaks in Datebook Notify
 // Fix a compabibility issue on Palm OS 3.3
