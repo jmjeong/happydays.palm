@@ -458,14 +458,14 @@ ALERT ID NotifyWarning CONFIRMATION
 DEFAULTBUTTON 1
 BEGIN
     TITLE "Notify warning"
-    MESSAGE "^1: Are you sure you want to create notify entries for ^2 HappyDays records?"
+    MESSAGE "long_notifywarningString"
     BUTTONS "OK" "Cancel"
 END
 
 ALERT ID InvalidFormat CONFIRMATION
 BEGIN
     TITLE "Invalid event format"
-    MESSAGE "The address record for ^1\n contains an invalid event. How would you like to handle it?"
+    MESSAGE "long_invalidformatString"
     BUTTONS "Edit" "Ignore" "Ignore all"
 END
 

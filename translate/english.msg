@@ -1,8 +1,5 @@
 TRANSLATION "ENGLISH"
 BEGIN
-    "Translator" = "English version"
-    "Translator's email" = "Jaemok Jeong"
-
 	"long_notifySettingMoreString" = ""\
 	"For AN Icon Number, consult Action Names manual. DateBk3Icon is "\
 	"read from MemoPad. If you don't have DateBk3 Icon entry in MemoPad, "\
@@ -31,15 +28,6 @@ BEGIN
     "If you use this format in your own "\
     "entries, this record might also be removed by CleanUp.\n"
 
-    "long_checkDateString" = ""\
-    "As HappyDays algorithms use the current date for various date "\
-    "calculation, incorrect data value would mislead it."
-
-
-    "long_removeConfirmString" = ""\
-    "Are you sure you want to remove all "\
-    "HappyDays notify entries?"
-
     "long_sl2lnString" = ""\
         "-) means plain month in lunar\n"\
         "#) means leap month in lunar"
@@ -67,8 +55,6 @@ BEGIN
     "is kept untouched." = "is kept untouched."
     "is modified." = "is modified."
 
-    "Could not write prefs." = ""\
-		"Could not write prefs."
     "Collecting Information..." = "Collecting Information..."
 
     "HappyDays List" = "HappyDays List"
@@ -88,8 +74,12 @@ BEGIN
     "Export to Memo Pad" = "Export to Memo Pad"
     "Solar to Lunar" = "Solar to Lunar"
     "Lunar to Solar" = "Lunar to Solar"
+	"Rescan Address Book" = "Rescan Address Book"
+
     "Options" = "Options"
+	"Font..." = "Font..."
     "Preferences" = "Preferences"
+	"Display Preferences" = "Display Preferences"
     "About HappyDays" = "About HappyDays"
 
     "Edit" = "Edit"
@@ -101,10 +91,48 @@ BEGIN
     "Keyboard" = "Keyboard" 
     "Graffiti" = "Graffiti"
 
-    "HappyDays Preferences" = "HappyDays Preferences"
+
+/* Font... */
+	"Select Font" = "Select Font"
+
+/* preferences screen */
     "Custom field:" = "Custom field:"
-    "HappyDays ID:" = "HappyDays ID:"
+    "Instead of system date format" = "Instead of system date format"  
+    "Use" = "Use"  
+    "M/D/Y" = "M/D/Y"  
+    "D/M/Y" = "D/M/Y"  
+    "D.M.Y" = "D.M.Y"  
+    "D-M-Y" = "D-M-Y"  
+    "Y/M/D" = "Y/M/D"  
+    "Y.M.D" = "Y.M.D"  
+    "Y-M-D" = "Y-M-D"  
+	"Address Autoscan" = "Address Autoscan"
+	"Always" = "Always"
+	"Ask" = "Ask"
+	"Never" = "Never"
+
+    "Notify Format:" = "Notify Format:"  
+    "[Last, First] E(1) Year" = "[Last, First] E(1) Year"  
+    "[First Last] E(1) Year" = "[First Last] E(1) Year"  
+    "Event - Last, First Year" = "Event - Last, First Year"  
+    "Event - First Last Year" = "Event - First Last Year"  
+    "First Last Year" = "First Last Year"  
+    
+	"Address Book" = "Address Book"
+	"Bulit-in" = "Built-in"
+
+
+/* Display preferences */
     "Emphasize Lunar Date" = "Emphasize Lunar Date"
+
+
+/* About HappyDays */	
+	"GPL free software" = "GPL free software"
+	"E-Mail & Web Page" = "E-Mail & Web Page"
+
+    "Translator" = "English version"
+    "Translator's email" = "Jaemok Jeong"
+
 
     "OK" = "OK"
     "Cancel" = "Cancel"
@@ -121,6 +149,8 @@ BEGIN
     "Leap" = "Leap"
     "Result Solar date:" = "Result Solar date:"
 
+
+/* Date Book & To Do Notify */
     "Records:" = "Records:"
       "all" = "all"
       "selected" = "selected" 
@@ -132,10 +162,32 @@ BEGIN
     "Private:" = "Private:"
     "Alarm:" = "Alarm:"
     "Time:" = "Time:"
-    "More..." = "More..."
+    "Icon" = "Icon"
 
     "Repeat for:" = "Repeat for:"
     "years" = "years"
+
+    "Notify warning" = "Notify warning" 
+	"long_notifywarningString" = ""\
+  		"^1: Are you sure you want to create notify entries for "\
+		"^2 HappyDays records?" 
+      
+/* Date Book Icon */
+    "Date Book Icon" = "Date Book Icon"  
+      "Icon Support" = "Icon Support"  
+      "AN" = "AN"  
+      "DateBk3" = "DateBk3"  
+      "AN Icon Number:" = "AN Icon Number:"  
+      "DateBk3 Icon:" = "DateBk3 Icon:"  
+
+/* HappyDays Cleanup */
+    "HappyDays Cleanup" = "HappyDays Cleanup" 
+
+    "long_removeConfirmString" = ""\
+    "Are you sure you want to remove all "\
+    "HappyDays notify entries?"
+
+
 
     "HappyDays says" = "HappyDays says"
 
@@ -147,17 +199,11 @@ BEGIN
     "Help" = "Help" 
 
 
-    "HappyDays Cleanup" = "HappyDays Cleanup" 
-
-    "Notify warning" = "Notify warning" 
-    "^1: Are you sure you want to create notify entries for ^2 HappyDays records?" = ""\
-  	"^1: Are you sure you want to create notify entries for ^2 HappyDays records?" 
-      
-
     "Invalid event format" = "Invalid event format" 
 
-    "The address record for ^1\n contains an invalid event. How would you like to handle it?" = ""\
-    "The address record for ^1\n contains an invalid event. How would you like to handle it?" 
+	"long_invalidformatString" = ""\
+    	"The address record for ^1\n contains an invalid event. "\
+		"How would you like to handle it?" 
 
     "Ignore" = "Ignore" 
     "Ignore all" = "Ignore all" 
@@ -167,48 +213,23 @@ BEGIN
     "^1: ^2 HappyDays notify entries removed." = ""\
     	"^1: ^2 HappyDays notify entries removed." 
 
-    "Birthday" = "Birthday" 
-    "All" = "All" 
     "HappyDays Export List" = "HappyDays Export List" 
     "(not exist in this year)" = "(not exist in this year)" 
     "Please run Date Book once first." = "Please run Date Book once first."  
     
-    "Instead of system date format" = "Instead of system date format"  
-    "Use" = "Use"  
-    "M/D/Y" = "M/D/Y"  
-    "D/M/Y" = "D/M/Y"  
-    "D.M.Y" = "D.M.Y"  
-    "D-M-Y" = "D-M-Y"  
-    "Y/M/D" = "Y/M/D"  
-    "Y.M.D" = "Y.M.D"  
-    "Y-M-D" = "Y-M-D"  
-
-    "Date Book Icon" = "Date Book Icon"  
-      "Icon Support" = "Icon Support"  
-      "AN" = "AN"  
-      "DateBk3" = "DateBk3"  
-      "AN Icon Number:" = "AN Icon Number:"  
-      "DateBk3 Icon:" = "DateBk3 Icon:"  
-
     "Days" = "Days"  
     "Date Book" = "Date Book"  
     "To Do" = "To Do"  
     "Scan note field" = "Scan note field"  
     "%d day(s) left" = "%d day(s) left"  
     "%d day(s) passed" = "%d day(s) passed"  
-    "Notify Format:" = "Notify Format:"  
-    "[Last, First] E(1) Year" = "[Last, First] E(1) Year"  
-    "[First Last] E(1) Year" = "[First Last] E(1) Year"  
-    "Event - Last, First Year" = "Event - Last, First Year"  
-    "Event - First Last Year" = "Event - First Last Year"  
-    "First Last Year" = "First Last Year"  
-    
+
     "Processing" = "Processing"  
     "Processed : " = "Processed : " 
 
-	"Name" = "Name"
-	"Date" = "Date"
-	"Age" = "Age"
 
+	"Address Rescan" = "Address Rescan"
+	"AddressDB is changed. Do you want to rescan it?"= ""\
+		"Address DB is changed. Do you want to rescan it?"
 END
 
