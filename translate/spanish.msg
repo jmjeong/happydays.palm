@@ -132,6 +132,7 @@ BEGIN
     "Translator" = "Trad: Juan Fernando Calderón"
     "Translator's email" = "jfcalderon@usa.net"
 
+
     "OK" = "Hecho"
     "Cancel" = "Cancelar"
 
@@ -219,15 +220,15 @@ BEGIN
     "Date Book" = "Agenda"
     "To Do" = "Tareas"
     "Scan note field" = "Buscar en Notas"
-    "%d days left" = "%d días para el evento"  
-    "%d days passed" = "%d días transcurridos"
+    "%ld days left" = "%ld días para el evento"  
+    "%ld days passed" = "%ld días transcurridos"  
 
       "Processing" = "Procesando"
 	"Processed : " = "Procesado : "	
 
-	"Address Change" = "Actualización de Agenda"
+	"Address Change" = "Cambio en Direcciones"
 	"AddressDB is changed. \nDo you want to rescan it?"= ""\
-		"La Lista de Direcciones. \n¿Desea actualizar los eventos?"
+		"La Lista de Direcciones ha cambiado. \n¿Desea actualizar los eventos?"
 
 /* HappyDays view */
 	"Type:" = "Tipo:"

@@ -1,28 +1,28 @@
 -*- mode:outline -*-
 
-* Automatic scan of Address
+* Automatic scan of Address(done)
   Always/Ask/Never
 
 * 'Are you sure this is the current date?.. Mon Jun 18, 2001' (error)
   As HappyDays algorithms use the current date for various date
    calculation, incorrect data value would mislead it.
 
-* Add 'Reread Address' menu after preference menu
+* Add 'Reread Address' menu after preference menu(done)
 
-* Display preferences
+* Display preferences(modified)
 ** Emphasize lunar date
 ** Display additional event info(origin screen)
 ** Display sexseasonary info
 
-* Fix selection code
+* Fix selection code(done)
 
-* Refine the code
+* Refine the code(on going)
 
-* consider lunar date in age calculation routine
+* consider lunar date in age calculation routine(done)
 
-* Replace the start form into 'progress widget'
+* Replace the start form into 'progress widget'(consider)
 
-* Write the detailed manual with screenshot
+* Write the detailed manual with screenshot(done)
 
 * Support 'last Sunday of September' code 
 
