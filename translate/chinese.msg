@@ -11,8 +11,8 @@ BEGIN
     "以設定以上自訂欄目名稱\n"
 
     "long_aboutString" = ""\
-    "HappyDays"\
-	"能幫助你紀錄每個重要事件的日期(例如你親朋戚友的生日及週年紀念等)\n\n"\
+    "HappyDays 
+能幫助你紀錄每個重要事件的日期(例如你親朋戚友的生日及週年紀念等)\n\n"\
     "詳細使用方法請參閱\ index.html 及 manual.html。\n\n"\
     "HappyDays 是根據 GNU GPL2.0 發行的軟體。\n"
 
@@ -166,8 +166,8 @@ BEGIN
 
     "Notify warning" = "提示"
 
-    "long_notifywarningString" = "^1: 你是否想建立 ^2 個 "\
-		"HappyDays 紀錄的提示？"
+    "long_notifywarningString" = "^1: 你是否想建立 ^2 個 HappyDays 
+紀錄的提示？"
 
 /* Date Book Icon */
     "Date Book Icon" = "行事曆圖示"
@@ -230,5 +230,5 @@ BEGIN
 	"UpTo Date:" = "距下一次"
 	"%dY %dM %dD (%ld)" = "%d年 %d月 %d日 (%ld)"
 	/* Daitau: the following line is still not localized */
-	"%ld days left" = "日"
+	"days left" = "日"
 END

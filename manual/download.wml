@@ -8,10 +8,10 @@ File Download
 </h2>
 <p>
 <a
-href="ftp://jmjeong.com/pub/happydays/happydays-2.04.zip">happydays-2.04.zip</a>
+href="ftp://jmjeong.com/pub/happydays/happydays-2.05.zip">happydays-2.05.zip</a>
 - English version and manual<br>
 <a
-href="ftp://jmjeong.com/pub/happydays/happydays-src-2.04.zip">happydays-src-2.04.zip</a>
+href="ftp://jmjeong.com/pub/happydays/happydays-src-2.05.zip">happydays-src-2.05.zip</a>
 - source file<br>
 
 </P>
@@ -30,7 +30,7 @@ To get the latest CVS sources do the following
 $ export CVSROOT=":pserver:cvs@coconut.snu.ac.kr:/export/cvsroot"
 $ cvs login
 ( password = anonymous )
-$ cvs -z3 checkout -rver_204 happydays
+$ cvs -z3 checkout -rver_205 happydays
 </pre>
 
 <p>
@@ -52,8 +52,8 @@ translate/english.msg file.)<p>
 
 HappyDays has been translated into the following languages:  <p>
 <ul>
-  <li> <a href="ftp://jmjeong.com/pub/happydays/happydays-2.04-ko.zip">
-  Korean</a>(2.04) - by Jaemok Jeong<br>
+  <li> <a href="ftp://jmjeong.com/pub/happydays/happydays-2.05-ko.zip">
+  Korean</a>(2.05) - by Jaemok Jeong<br>
 	  (happydays-k8.prc for 8x8 font,
 	  happydays-k11.prc for 11x11 font)
   <li> <a
@@ -75,8 +75,8 @@ HappyDays has been translated into the following languages:  <p>
       href="mailto:kteotrakool@hotmail.com">kteotrakool@hotmail.com</a>)<br>
       Requires Thai Language Hack (ThaiPOS or ThaiHack)
   <li><a
-  	  href="ftp://jmjeong.com/pub/happydays/happydays-2.04b2-sp.zip">
-			Spanish</a>(2.04 beta release 2)
+  	  href="ftp://jmjeong.com/pub/happydays/happydays-2.05-sp.zip">
+			Spanish</a>(2.05)
 	  - by Juan Fernando Calderón
 			(<a href="mailto:jfcalderon@usa.net">jfcalderon@usa.net</a>)
   <li><a
@@ -107,6 +107,11 @@ Change log
 You want to see changes before HappyDays 2.0, look up the
 <a href="change_log.html">change_log.html</a> file.
 <p>
+
+<b>HappyDays 2.05 version - 6/29/2001</b>
+<ul>
+	<li> Fix a bug in Age calculation routine. 
+</ul>
 
 <b>HappyDays 2.04 version - 6/22/2001</b>
 <ul>

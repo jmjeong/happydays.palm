@@ -2295,7 +2295,7 @@ void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column,
                     y_diff--;
                 }
                 else {
-                    m_diff = current.month - solBirth.month;
+                    m_diff += current.month - solBirth.month;
                 }
                 y_diff += current.year - solBirth.year;
                     
