@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <PalmOS.h>
 #include <HandEra/Vga.h>
+#include <HandEra/Silk.h>
 
 #include "address.h"
 #include "memodb.h"
@@ -30,6 +31,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "s2lconvert.h"
 #include "util.h"
 #include "notify.h"
+#include "section.h"
 
 #define frmRescanUpdateCode (frmRedrawUpdateCode + 1)
 #define frmUpdateFontCode (frmRedrawUpdateCode + 2)
@@ -146,6 +148,8 @@ void MainFormScroll(Int16 newValue, Int16 oldValue, Boolean force_redraw);
 void MainFormScrollLines(Int16 lines, Boolean force_redraw);
 void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column, 
                               RectanglePtr bounds);
+void DrawTiny(int size,int x,int y,int n) SECT1;
+void DrawSilkMonth(int mon, int year, int day, int x, int y) SECT1;
 
 ////////////////////////////////////////////////////////////////////
 // private database for HappyDays
@@ -177,6 +181,7 @@ DmOpenRef AddressDB;
 ////////////////////////////////////////////////////////////////////
 
 DmOpenRef MemoDB;
+
 
 /* Main entry point; it is unlikely you will need to change this except to
    handle other launch command codes */
@@ -1432,13 +1437,13 @@ static Boolean MainFormHandleEvent (EventPtr e)
 		switch (e->data.keyDown.chr) {
 		case vchrPageUp:
 			gMainTableHandleRow = -1;			
-			MainFormScrollLines(-pageSizeP, true);
+			MainFormScrollLines(-(pageSizeP-1), true);
 			handled = true;
 			break;
 		
 		case vchrPageDown:
 			gMainTableHandleRow = -1;			
-			MainFormScrollLines(pageSizeP, true);
+			MainFormScrollLines((pageSizeP-1), true);
 			handled = true;
 			break;
 
@@ -2490,6 +2495,152 @@ static void ViewFormInit(FormPtr frm, Boolean bformModify)
     ViewFormSetInfo(frm);
 }
 
+
+void DrawTiny(int size,int x,int y,int n) 
+{
+  int a,b,c;
+
+  if (size==1)
+  {
+    a=4;
+    b=3;
+    c=6;
+  } else
+  {
+    a=2;
+    b=2;
+    c=4;
+  }
+
+
+  if (n & 1)
+    WinDrawLine(x,y,x+a,y);
+  if (n & 2)
+    WinDrawLine(x,y,x,y+b);
+  if (n & 4)
+    WinDrawLine(x+a,y,x+a,y+b);
+  if (n & 8)
+    WinDrawLine(x,y+b,x+a,y+b);
+  if (n & 16)
+    WinDrawLine(x,y+b,x,y+c);
+  if (n & 32)
+    WinDrawLine(x+a,y+b,x+a,y+c);
+  if (n & 64)
+    WinDrawLine(x,y+c,x+a,y+c);
+}
+
+void TinyNumber(int size,int x,int y,int num) 
+{
+  const int numbers[10] = {119,36,93,109,46,107,123,37,127,111};
+  //if ((num >=0) && (num<=9))
+  DrawTiny(size,x,y,numbers[num ]);
+}
+
+void DrawSilkMonth(int mon, int year, int day, int x, int y) 
+{
+	int i, width;
+	char tempStr[255];
+	int day_max, week;
+	int day_cnt, week_cnt;
+	RectangleType rc;
+
+	FntSetFont(1);
+
+	for (i = 0; i < 7; i++) {
+		SysCopyStringResource(tempStr, WeekInitialString);
+		width = FntCharWidth(tempStr[i]);
+		WinDrawChars(&tempStr[i], 1, x+i * 11+ 5 - (width/2), y);
+	}
+
+	year += 1904 - (mon < 1) + ( mon > 12);
+	if (mon < 1) mon = 12;
+	else if ( mon > 12 ) mon = 1;
+
+	day_max = DaysInMonth(mon, year);
+	week = DayOfWeek(mon, 1, year);
+
+	day_cnt = 1;
+	week_cnt = 0;
+
+	rc.extent.x = 9;
+	rc.extent.y = 7;
+
+	while ( day_cnt <= day_max && week_cnt < 7 ) {
+		rc.topLeft.x = x + week * 11;
+		rc.topLeft.y = y + week_cnt * 6 + 11;
+
+
+		if ((day_cnt / 10) != 0) {
+			TinyNumber(0, x + week*11, week_cnt*6+y+12, day_cnt / 10);
+			TinyNumber(0, x + week*11+4, week_cnt*6+y+12, day_cnt % 10);
+		}
+		else {
+			TinyNumber(0, x+week*11+2, week_cnt*6+y+12, day_cnt % 10);
+		}
+
+		if ( day == day_cnt ) {
+			WinInvertRectangle(&rc, 0);
+		}
+
+		week++;
+		if ( week >= 7) {
+			week_cnt++; week = 0;
+		}
+
+		day_cnt++;
+	}
+
+	FntSetFont(0);
+
+	rc.topLeft.x = x;
+	rc.topLeft.y = y + 48;
+
+	rc.extent.x = 74;
+	rc.extent.x = FntLineHeight();
+
+	WinEraseRectangle(&rc, 0);
+
+	SysCopyStringResource(gAppErrStr, mon - 1 + JanString);
+	StrPrintF(tempStr, "%d", year);
+	StrCat(gAppErrStr, " ");
+	StrCat(gAppErrStr, tempStr);
+	width = FntCharsWidth(gAppErrStr,StrLen(gAppErrStr));
+  	WinDrawChars( gAppErrStr,StrLen(gAppErrStr),x+(240/6)-(width/2),y+48);
+}
+
+void DrawMonth(DateType converted)
+{
+	const int start = 185;
+
+	RectangleType rc = { {0, start}, {240, 66}};
+	WinEraseRectangle(&rc, 0);
+
+	WinDrawLine(1,start,239,start);
+
+	DrawSilkMonth(converted.month-1, converted.year, 0, 1, start+4);
+	WinDrawLine(79,start,79,start+66);
+	DrawSilkMonth(converted.month, converted.year, converted.day, 80+4, start+4);
+	WinDrawLine(161,start,161,start+66);
+	DrawSilkMonth(converted.month+1, converted.year, 0, 160+6, start+4);
+
+	WinDrawLine(1,start+66,239,start+66);
+}
+
+static void ViewFormSilk()
+{
+    LineItemPtr ptr;
+
+    DateType converted;
+
+	if (gbVgaExists && !SilkWindowMaximized()) {
+		ptr = MemHandleLock(gTableRowHandle);
+		converted = ptr[gMainTableHandleRow].date;
+		MemPtrUnlock(ptr);
+
+		DrawMonth(converted);
+	}
+}
+
 static Boolean ViewFormHandleEvent(EventPtr e)
 {
     Boolean handled = false;
@@ -2502,6 +2653,8 @@ static Boolean ViewFormHandleEvent(EventPtr e)
     case frmOpenEvent: {
         ViewFormInit(frm, bformModify);
         FrmDrawForm(frm);
+
+		ViewFormSilk();
         
         handled = true;
         break;
@@ -2527,6 +2680,8 @@ static Boolean ViewFormHandleEvent(EventPtr e)
                     ViewFormLoadTable(frm);
                     FrmDrawForm(FrmGetFormPtr(ViewForm));
 
+					ViewFormSilk();
+
                     handled = true;
                 }
                 break;
@@ -2541,6 +2696,8 @@ static Boolean ViewFormHandleEvent(EventPtr e)
                     ViewFormLoadTable(frm);
                     FrmDrawForm(FrmGetFormPtr(ViewForm));
 
+					ViewFormSilk();
+
                     handled = true;
                 }
                 break;
@@ -2554,6 +2711,9 @@ static Boolean ViewFormHandleEvent(EventPtr e)
     }
 	case displayExtentChangedEvent:
 		ViewFormResize(FrmGetActiveForm(), true);
+
+		ViewFormSilk();
+
 		break;
     
     case menuEvent: 

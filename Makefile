@@ -1,6 +1,6 @@
 ## Makefile for HappyDays application
 
-VERSION = 2.06
+VERSION = 2.07
 TARGET = happydays
 APPNAME = "HappyDays"
 APPID = "Jmje"
@@ -64,6 +64,9 @@ de: GERMAN obj/$(TARGET)-de.prc
 
 br: PORTUGUESE_BR obj/$(TARGET)-br.prc
 	zip $(TARGET)-$(VERSION)-br.zip obj/$(TARGET)-br.prc
+
+nor: ENGLISH obj/$(TARGET)-nor.prc
+	zip $(TARGET)-$(VERSION)-nor.zip obj/$(TARGET)-nor.prc
 
 th: $(TARGET)-th.prc
 	zip $(TARGET)-$(VERSION)-th.zip $(TARGET)-th.prc
@@ -131,6 +134,11 @@ obj/$(TARGET)-br.prc: obj/$(TARGET) obj/bin-br.res
 	$(BUILDPRC) -o obj/$(TARGET)-br.prc happydays.def \
 		obj/*.bin obj/$(TARGET)
 
+obj/$(TARGET)-nor.prc: obj/$(TARGET) obj/bin-nor.res
+	@echo "Building program file ./obj/happydays-nor.prc..." && \
+	$(BUILDPRC) -o obj/$(TARGET)-nor.prc happydays.def \
+		obj/*.bin obj/$(TARGET)
+
 $(TARGET)-th.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGET).grc pref0000.$(TARGET).grc rloc0000.$(TARGET).grc bin-th.res
 	$(BUILDPRC) $(TARGET)-th.prc $(APPNAME) $(APPID) code0001.$(TARGET).grc code0000.$(TARGET).grc data0000.$(TARGET).grc *.bin pref0000.$(TARGET).grc rloc0000.$(TARGET).grc
 
@@ -185,6 +193,11 @@ obj/bin-br.res: obj/$(TARGET)-br.rcp
 	@echo "Compiling resource happydays-br.rcp..." &&\
 	(cd obj && rm -f *.bin ) && \
 	$(PILRC) -q -L PORTUGUESE-BR obj/$(TARGET)-br.rcp obj
+
+obj/bin-nor.res: obj/$(TARGET)-nor.rcp
+	@echo "Compiling resource happydays-nor.rcp..." &&\
+	(cd obj && rm -f *.bin ) && \
+	$(PILRC) -q -L NORWEGIAN obj/$(TARGET)-nor.rcp obj
 
 
 bin-th.res: $(TARGET)-th.rcp
@@ -246,8 +259,11 @@ obj/$(TARGET)-br.rcp: $(TARGET).rcp translate/brazilian.msg translate/hdr.msg
 	cat translate/hdr.msg translate/brazilian.msg $(TARGET).rcp \
 			> obj/$(TARGET)-br.rcp
 
-$(TARGET)-de.rcp: $(TARGET).rcp german.msg hdr.msg
-	cat hdr.msg german.msg $(TARGET).rcp > $(TARGET)-de.rcp
+obj/$(TARGET)-nor.rcp: $(TARGET).rcp translate/norwegian.msg translate/hdr.msg
+	@echo "Generating happydays-nor.rcp file..." && \
+	cat translate/hdr.msg translate/norwegian.msg $(TARGET).rcp \
+			> obj/$(TARGET)-nor.rcp
+
 
 $(TARGET)-th.rcp: $(TARGET).rcp thai.msg hdr.msg
 	cat hdr.msg thai.msg $(TARGET).rcp > $(TARGET)-th.rcp

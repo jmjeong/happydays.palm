@@ -20,6 +20,21 @@ STRING ID ThuString     "THU"
 STRING ID FriString     "FRI"
 STRING ID SatString     "SAT"
 
+STRING ID WeekInitialString "SMTWTFS"
+
+STRING ID JanString		"Janunary"
+STRING ID FebString		"February"
+STRING ID MarString		"March"
+STRING ID AprString		"April"
+STRING ID MayString		"May"
+STRING ID JunString		"June"
+STRING ID JulString		"July"
+STRING ID AugString		"August"
+STRING ID SepString		"September"
+STRING ID OctString		"October"
+STRING ID NovString		"November"
+STRING ID DecString		"December"
+
 STRING ID NotEnoughMemoryString
                 "Not enough memory"
 STRING ID NotifyCreateString
@@ -98,7 +113,7 @@ BEGIN
                         
 	FIELD ID ViewFormName AT (0 25 160 AUTO) NONEDITABLE FONT 2
     TABLE ID ViewFormTable AT (0 PrevBottom+10 160 11*7)  
-			ROWS 7 COLUMNS 2 COLUMNWIDTHS 50 110
+			ROWS 5 COLUMNS 2 COLUMNWIDTHS 50 110
 
     BUTTON "Done" ID ViewFormDone AT (1 BOTTOM@159 AUTO AUTO)
     BUTTON "DB" ID ViewFormNotifyDB AT (PrevRight+6 PrevTop AUTO AUTO)
@@ -484,7 +499,7 @@ BEGIN
     TITLE "About HappyDays"
 
 	FORMBITMAP AT (6 18) BITMAP ID_BitmapIcon USABLE 
-    LABEL "HappyDays 2.06" AUTOID AT (PrevRight+38 PrevTop) FONT 1
+    LABEL "HappyDays 2.07" AUTOID AT (PrevRight+38 PrevTop) FONT 1
     LABEL "GPL free software"
         AUTOID AT (PrevLeft PrevTop+ABOUT_LINE_SPACING) FONT 0
     LABEL "(c) 1999-2001 Jaemok Jeong"
@@ -554,4 +569,4 @@ SMALLICONFAMILY
 	TRANSPARENT 192 192 0
 
 APPLICATIONICONNAME 1000 "HappyDays"
-VERSION ID 1 "2.06"
+VERSION ID 1 "2.07"

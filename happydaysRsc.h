@@ -193,6 +193,22 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define RemainedDayStr				1940
 #define AgeFormatString				1941
 
+
+#define JanString					1950		
+#define FebString					1951	
+#define MarString					1952
+#define AprString					1953
+#define MayString					1954
+#define JunString					1955
+#define JulString					1956	
+#define AugString					1957
+#define SepString					1958
+#define OctString					1959
+#define NovString					1960
+#define DecString					1961
+
+#define WeekInitialString 			1965
+
 #define ExportAlert                 1990
 #define AddrRescanAlert             1991
 
