@@ -40,12 +40,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define DATEBK3_MEMO_STRING "DATEBK3\n"       // datebk3 icon in memo list
 
-/* Notify Preferences */
-struct sNotifyPrefs 
+/* DateBook Notify Preferences */
+struct sDBNotifyPrefs 
 {
-    char records;			// all or selected
-    char existing;			// keep or modify
-    char private;
     char alarm;             // alarm set?
     char icon;              // icon?
     char datebk3icon;       // datebook 3 icon
@@ -53,6 +50,14 @@ struct sNotifyPrefs
     int  duration;          // interval of notified records
     TimeType when;          // no-time
     char an_icon[5];        // action name icon?
+};
+
+/* ToDo Notify Preferences */
+struct sTDNotifyPrefs 
+{
+    char priority;			// priority of TODO
+    char private;
+    char todoCategory[33];
 };
 
 struct sBirthPrefs 
@@ -68,8 +73,13 @@ struct sBirthPrefs
 
 struct sPrefsR 
 {
-    struct sNotifyPrefs NotifyPrefs;
-    struct sBirthPrefs  BirthPrefs;
+    char records;			// all or selected
+    char existing;			// keep or modify
+    char private;
+
+    struct sDBNotifyPrefs DBNotifyPrefs;
+    struct sTDNotifyPrefs TDNotifyPrefs;
+    struct sBirthPrefs    BirthPrefs;
 
     // HideSecretRecord in system global preference
     Boolean gHideSecretRecord;

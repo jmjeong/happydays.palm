@@ -30,7 +30,7 @@ BEGIN
     " category."\
     "Tab 'selected' if only the currently selected record should be "\
     "taken into account.\n\n"\
-    "* Existing entries\n"\
+    "* Existing\n"\
     "Tap 'keep' if existing HappyDays entries in your "\
     "datebook should be left untouched. Tap 'modify' if you'd like "\
     "these entries to be changed.\n\n"\
@@ -98,7 +98,7 @@ BEGIN
 
     "long_removeConfirmString" = ""\
     "Are you sure you want to remove all "\
-    "HappyDays notify entries from your datebook?"
+    "HappyDays notify entries?"
 
     "long_sl2lnString" = ""\
         "-) means plain month in lunar\n"\
@@ -276,7 +276,7 @@ BEGIN
     "all" = "ÀüºÎ"
     "selected" = "¼±ÅÃ"
 
-    "Existing entries:" = "Á¸ÀçÇÏ´Â ·¹ÄÚµå :"
+    "Existing:" = "Á¸ÀçÇÏ´Â ·¹ÄÚµå :"
     "keep" = "À¯Áö"
     "modify" = "¼öÁ¤"
 
@@ -511,7 +511,7 @@ BEGIN
     "Records:" = "Einträge:"
       "all" = "alle"
       "selected" = "Auswahl"
-    "Existing entries:" = "Vorhandene:"
+    "Existing:" = "Vorhandene:"
       "keep" = "lassen"
       "modify" = "ändern"
     "Private:" = "Privat:"
@@ -574,8 +574,8 @@ BEGIN
     "Days" = "Tage"
 END
 
-STRING ID NotifySettingHelpString "long_notifySettingString"
-STRING ID NotifySettingMoreHelpString "long_notifySettingMoreString"
+STRING ID DateBookNotifyHelpString "long_notifySettingString"
+STRING ID DateBookNotifyMoreHelpString "long_notifySettingMoreString"
 STRING ID SelectDateString  "HappyDays"
 STRING ID CustomErrorHelpString "long_customErrorString"
 STRING ID AboutHelpString "long_aboutString"
@@ -608,7 +608,10 @@ STRING ID CantWritePrefsString  "Could not write prefs."
 STRING ID ExportHeaderString 	"HappyDays Export List"
 STRING ID ViewNotExistString	"(not exist in this year)"
 STRING ID DateBookFirstAlertString  "Please run Date Book once first."
-STRING ID NotifySettingDaysString "Days"
+STRING ID DateBookNotifyDaysString "Days"
+
+STRING ID DateBookString		"Datebook"
+STRING ID ToDoString			"ToDo"
 
 FORM StartForm AT (0 0 160 160)
 NOFRAME
@@ -811,76 +814,122 @@ BEGIN
 
 END
 
-FORM ID NotifySettingForm AT (2 18 156 140)
+FORM ID DateBookNotifyForm AT (2 18 156 140)
 FRAME
 MODAL
 USABLE
-HELPID  NotifySettingHelpString
+HELPID  DateBookNotifyHelpString
 BEGIN
-    TITLE "Notify Settings"
-    LABEL "Records:" AUTOID AT (RIGHT@88 25) FONT 1
-    PUSHBUTTON "all" ID NotifySettingFormRecordAll AT (PrevRight+3
-            PrevTop AUTO AUTO) GROUP 1
-    PUSHBUTTON "selected" ID NotifySettingFormRecordSlct AT (PrevRight+1
-            PrevTop AUTO AUTO) LEFTANCHOR GROUP 1
+    TITLE "DateBook Notify"
+    LABEL "Records:" AUTOID AT (RIGHT@78 25) FONT 1
+    PUSHBUTTON "all" ID NotifyFormRecordAll 
+			AT (PrevRight+5 PrevTop AUTO AUTO) GROUP 1
+    PUSHBUTTON "selected" ID NotifyFormRecordSlct 
+			AT (PrevRight+1 PrevTop AUTO AUTO) LEFTANCHOR GROUP 1
 
-    LABEL "Existing entries:" AUTOID AT (RIGHT@88 PrevBottom+3) FONT 1
-    PUSHBUTTON "keep" ID NotifySettingFormEntryKeep at (PrevRight+3
-            PrevTop AUTO AUTO) GROUP 2
-    PUSHBUTTON "modify" ID NotifySettingFormEntryModify at (PrevRight+1
-            PrevTop AUTO AUTO) LEFTANCHOR GROUP 2
+    LABEL "Existing:" AUTOID AT (RIGHT@78 PrevBottom+3) FONT 1
+    PUSHBUTTON "keep" ID NotifyFormEntryKeep 
+			at (PrevRight+5 PrevTop AUTO AUTO) GROUP 2
+    PUSHBUTTON "modify" ID NotifyFormEntryModify 
+			at (PrevRight+1 PrevTop AUTO AUTO) LEFTANCHOR GROUP 2
 
-    LABEL "Private:" AUTOID AT (RIGHT@88 PrevBottom+3) FONT 1
-    CHECKBOX " " ID NotifySettingFormPrivate at (PrevRIght+3
-        PrevTop AUTO AUTO) RIGHTANCHOR FONT 1 
+    LABEL "Private:" AUTOID AT (RIGHT@78 PrevBottom+3) FONT 1
+    CHECKBOX " " ID NotifyFormPrivate 
+			at (PrevRIght+3 PrevTop AUTO AUTO) RIGHTANCHOR FONT 1 
 
-    LABEL "Alarm:" AUTOID AT (RIGHT@88 PrevBottom+3) FONT 1
-    CHECKBOX "" ID NotifySettingFormAlarm at (PrevRight+3 PrevTop
+    LABEL "Alarm:" AUTOID AT (RIGHT@78 PrevBottom+3) FONT 1
+    CHECKBOX "" ID DateBookNotifyFormAlarm at (PrevRight+5 PrevTop
             AUTO AUTO) RIGHTANCHOR FONT 1
-    FIELD ID NotifySettingFormBefore AT (PrevRight+2 PrevTop 13 AUTO)
+    FIELD ID DateBookNotifyFormBefore AT (PrevRight+2 PrevTop 13 AUTO)
         UNDERLINED MAXCHARS 2
-    FIELD  ID NotifySettingFormLabelDays AT (PrevRight PrevTop 30 AUTO) 
+    FIELD  ID DateBookNotifyFormLabelDays AT (PrevRight PrevTop 30 AUTO) 
 		NONEDITABLE 
 
-    LABEL "Time:" AUTOID AT (RIGHT@88 PrevBottom+3) FONT 1
-    SELECTORTRIGGER "" ID NotifySettingFormTime at (PrevRight+3 PrevTop
+    LABEL "Time:" AUTOID AT (RIGHT@78 PrevBottom+3) FONT 1
+    SELECTORTRIGGER "" ID DateBookNotifyFormTime at (PrevRight+5 PrevTop
             AUTO AUTO) LEFTANCHOR FONT 0
 
-    LABEL "Repeat for:" AUTOID AT (RIGHT@88 PrevBottom+3) FONT 1
-    FIELD ID NotifySettingFormDuration AT (PrevRight+3 PrevTop 13 AUTO)
+    LABEL "Repeat for:" AUTOID AT (RIGHT@78 PrevBottom+3) FONT 1
+    FIELD ID DateBookNotifyFormDuration AT (PrevRight+5 PrevTop 13 AUTO)
             UNDERLINED MAXCHARS 2
     LABEL "years" AUTOID AT (PrevRight+3 PrevTop) FONT 0
 
-    BUTTON "OK" ID NotifySettingFormOk AT (5 Bottom@135 40 AUTO)
-    BUTTON "Cancel" ID NotifySettingFormCancel AT (PrevRight+5 PrevTop 40 AUTO)
-	BUTTON "More..." ID NotifySettingFormMore AT (RIGHT@150 PrevTop AUTO AUTO)
+    BUTTON "OK" ID DateBookNotifyFormOk AT (5 Bottom@135 40 AUTO)
+    BUTTON "Cancel" ID DateBookNotifyFormCancel AT (PrevRight+5 PrevTop 40 AUTO)
+	BUTTON "More..." ID DateBookNotifyFormMore AT (RIGHT@150 PrevTop AUTO AUTO)
 END
 
-FORM ID NotifySettingMoreForm AT (2 18 156 140)
+FORM ID DateBookNotifyMoreForm AT (2 18 156 140)
 FRAME
 MODAL
 USABLE
-HELPID  NotifySettingMoreHelpString
+HELPID  DateBookNotifyMoreHelpString
 BEGIN
-    TITLE "Notify Settings"
+    TITLE "DateBook Notify More"
 
-    CHECKBOX "Icon Support" ID NotifySettingFormIcon 
+    CHECKBOX "Icon Support" ID DateBookNotifyFormIcon 
 			at (10 20 AUTO AUTO) RIGHTANCHOR FONT 0 
-    PUSHBUTTON "AN" ID NotifySettingFormAN AT (PrevRight+3
+    PUSHBUTTON "AN" ID DateBookNotifyFormAN AT (PrevRight+3
             PrevTop AUTO AUTO) LEFTANCHOR GROUP 1
-    PUSHBUTTON "DateBk3" ID NotifySettingFormBk3 AT (PrevRight+1
+    PUSHBUTTON "DateBk3" ID DateBookNotifyFormBk3 AT (PrevRight+1
             PrevTop AUTO AUTO) GROUP 1
 
-	LABEL "AN ICON Number: " ID NotifySettingANLabel AT (5 PrevBottom+10) 
-	FIELD ID NotifySettingANInput AT (PrevRight+3 PrevTop 30 AUTO) 
+	LABEL "AN ICON Number: " ID DateBookNotifyANLabel AT (5 PrevBottom+10) 
+	FIELD ID DateBookNotifyANInput AT (PrevRight+3 PrevTop 30 AUTO) 
 		UNDERLINED MAXCHARS 3
 
-	LABEL "DateBk3 ICON" ID NotifySettingBk3Label AT (5 PrevBottom+2) 
-    TABLE ID NotifySettingBk3Table AT (7 PrevBottom 143 40) ROWS 4 
+	LABEL "DateBk3 ICON" ID DateBookNotifyBk3Label AT (5 PrevBottom+2) 
+    TABLE ID DateBookNotifyBk3Table AT (7 PrevBottom 143 40) ROWS 4 
 		COLUMNS 13 COLUMNWIDTHS 10 10 10 10 10 10 10 10 10 10 10 10 10
 
-    BUTTON "OK" ID NotifySettingMoreFormOk AT (5 Bottom@135 40 AUTO)
+    BUTTON "OK" ID DateBookNotifyMoreFormOk AT (5 Bottom@135 40 AUTO)
 	GRAFFITISTATEINDICATOR AT (PrevRight+5 PrevTop)
+END
+
+FORM ID ToDoNotifyForm AT (1 28 156 130)
+FRAME
+MODAL
+USABLE
+BEGIN
+	TITLE "ToDo Notify"
+
+    LABEL "Records:" AUTOID AT (RIGHT@65 20) FONT 1
+    PUSHBUTTON "all" ID NotifyFormRecordAll 
+			AT (PrevRight+5 PrevTop AUTO AUTO) GROUP 1
+    PUSHBUTTON "selected" ID NotifyFormRecordSlct 
+			AT (PrevRight+1 PrevTop AUTO AUTO) LEFTANCHOR GROUP 1
+
+    LABEL "Existing:" AUTOID AT (RIGHT@65 PrevBottom+3) FONT 1
+    PUSHBUTTON "keep" ID NotifyFormEntryKeep 
+			at (PrevRight+5 PrevTop AUTO AUTO) GROUP 2
+    PUSHBUTTON "modify" ID NotifyFormEntryModify 
+			at (PrevRight+1 PrevTop AUTO AUTO) LEFTANCHOR GROUP 2
+
+	LABEL "Priority:" AUTOID AT (RIGHT@65 PrevBottom+5) FONT 1
+	PUSHBUTTON "1" ID ToDoNotifyPri1 AT (PrevRight+5 PrevTop AUTO AUTO)
+		LEFTANCHOR GROUP 3
+	PUSHBUTTON "2" ID ToDoNotifyPri2 AT (PrevRight+1 PrevTop AUTO AUTO)
+		LEFTANCHOR GROUP 3
+	PUSHBUTTON "3" ID ToDoNotifyPri3 AT (PrevRight+1 PrevTop AUTO AUTO)
+		LEFTANCHOR GROUP 3
+	PUSHBUTTON "4" ID ToDoNotifyPri4 AT (PrevRight+1 PrevTop AUTO AUTO)
+		LEFTANCHOR GROUP 3
+	PUSHBUTTON "5" ID ToDoNotifyPri5 AT (PrevRight+1 PrevTop AUTO AUTO)
+		LEFTANCHOR GROUP 3
+
+	LABEL "Category:" AUTOID AT (RIGHT@65 PrevBottom+3) FONT 1
+    POPUPTRIGGER "" ID ToDoPopupTrigger
+            AT ( PrevRight+5 PrevTop AUTO AUTO ) LeftAnchor 
+	LIST "" ID ToDoNotifyCategory AT ( PrevLeft PrevTop 70 AUTO ) 
+		NONUSABLE 
+    POPUPLIST ID ToDoPopupTrigger ToDoNotifyCategory
+	
+    LABEL "Private:" AUTOID AT (RIGHT@65 PrevBottom+3) FONT 1
+    CHECKBOX " " ID NotifyFormPrivate 
+			at (PrevRight+5 PrevTop AUTO AUTO) RIGHTANCHOR FONT 1 
+
+    BUTTON "OK" ID ToDoNotifyFormOk AT (5 Bottom@125 40 AUTO)
+    BUTTON "Cancel" ID ToDoNotifyFormCancel AT (PrevRight+5 PrevTop 40 AUTO)
 END
 
 ALERT ID ErrorAlert INFORMATION
@@ -910,14 +959,14 @@ ALERT ID CleanupAlert CONFIRMATION
 HELPID CleanupAlertHelpString
 BEGIN
     TITLE "HappyDays Cleanup"
-    MESSAGE "^1"
+    MESSAGE "^1: ^2"
     BUTTONS "OK" "Cancel"
 END
 
 ALERT ID NotifyWarning CONFIRMATION
 BEGIN
     TITLE "Notify warning"
-    MESSAGE "Are you sure you want to create notify entries in your datebook for all your ^1 HappyDays records?"
+    MESSAGE "^1: Are you sure you want to create notify entries for all your ^2 HappyDays records?"
     BUTTONS "OK" "Cancel"
 END
 
@@ -931,7 +980,7 @@ END
 ALERT ID CleanupDone INFORMATION
 BEGIN
     TITLE "Cleanup Done"
-    MESSAGE "^1 HappyDays notify entries removed from DateBook."
+    MESSAGE "^1: ^2 HappyDays notify entries removed from DateBook."
     BUTTONS "OK"
 END
 

@@ -70,33 +70,33 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define PrefFormNotifyFmts          1309
 #define PrefFormNotifyTrigger       1310
 
-#define NotifySettingForm           1400
-#define NotifySettingFormRecordAll  1401
-#define NotifySettingFormRecordSlct 1402
-#define NotifySettingFormEntryKeep  1403
-#define NotifySettingFormEntryModify  1404
-#define NotifySettingFormBefore     1406
-#define NotifySettingFormPrivate    1407
-#define NotifySettingFormAlarm      1408
-#define NotifySettingFormTime       1409
-#define NotifySettingFormOk         1420
-#define NotifySettingFormCancel     1421
-#define NotifySettingFormDuration   1422
-#define NotifySettingFormMore    	1423
-#define NotifySettingFormLabelDays	1424
+#define DateBookNotifyForm          1400
+#define NotifyFormRecordAll  		1401
+#define NotifyFormRecordSlct 		1402
+#define NotifyFormEntryKeep  		1403
+#define NotifyFormEntryModify  		1404
+#define NotifyFormPrivate    	 	1406
+#define DateBookNotifyFormBefore    1407
+#define DateBookNotifyFormAlarm     1408
+#define DateBookNotifyFormTime      1409
+#define DateBookNotifyFormOk        1420
+#define DateBookNotifyFormCancel    1421
+#define DateBookNotifyFormDuration  1422
+#define DateBookNotifyFormMore    	1423
+#define DateBookNotifyFormLabelDays	1424
 
-#define NotifySettingMoreForm		1450
-#define NotifySettingMoreFormOk		1451
-#define NotifySettingFormIcon		1453
-#define NotifySettingFormBk3		1454
-#define NotifySettingFormAN			1455
-#define NotifySettingBk3Table		1456
-#define NotifySettingBk3Label		1457
-#define NotifySettingANLabel		1458
-#define NotifySettingANInput		1459
+#define DateBookNotifyMoreForm		1450
+#define DateBookNotifyMoreFormOk		1451
+#define DateBookNotifyFormIcon		1453
+#define DateBookNotifyFormBk3		1454
+#define DateBookNotifyFormAN			1455
+#define DateBookNotifyBk3Table		1456
+#define DateBookNotifyBk3Label		1457
+#define DateBookNotifyANLabel		1458
+#define DateBookNotifyANInput		1459
 
-#define NotifySettingHelpString     1498
-#define NotifySettingMoreHelpString 1499
+#define DateBookNotifyHelpString     1498
+#define DateBookNotifyMoreHelpString 1499
 
 #define Sl2LnForm                   1500
 #define Sl2LnFormInput              1501
@@ -121,6 +121,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define BirthdateDate               1607
 #define BirthdateCategory           1608
 #define BirthdateOrigin             1609
+
+#define ToDoNotifyForm              1700
+#define ToDoNotifyPri1              1701
+#define ToDoNotifyPri2              1702
+#define ToDoNotifyPri3              1703
+#define ToDoNotifyPri4              1704
+#define ToDoNotifyPri5              1705
+#define ToDoNotifyCategory          1706
+#define ToDoPopupTrigger            1707
+#define ToDoNotifyFormOk            1708
+#define ToDoNotifyFormCancel        1709
 
 #define ErrorAlert                  1900
 #define CleanupAlert                1901
@@ -155,6 +166,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define ExportHeaderString			1929
 #define ViewNotExistString			1930
 #define DateBookFirstAlertString	1931
-#define NotifySettingDaysString		1932
+#define DateBookNotifyDaysString	1932
+#define DateBookString				1933
+#define ToDoString					1934
+
 
 #define ExportAlert                 1990
