@@ -1,9 +1,9 @@
 TRANSLATION "CHINESE"
 BEGIN
     "long_notifySettingMoreString" = ""\
-    "關於 AN 圖示編號，請參考 Action Names 說明書"\
-    "DateBk3 圖示將由記事本處取得。"\
-    "假如沒有設定，則不會顯示圖示。\n"
+    "進階使用提示：\n\n"\
+    "你可使用本欄為行事曆替代程式設定圖示，字型等。\n\n"\
+    "關於詳細使用方法，請參考他們的說明書。\n"
 
     "long_customErrorString" = ""\
     "'Birthday' 為預設的自訂欄目名稱。你可於'喜好設定'中更改此名稱\n\n"\
@@ -46,7 +46,7 @@ BEGIN
     "is kept untouched." = "被保留。"
     "is modified." = "被修改。"
 
-    "Collecting Information" = "正在蒐集資訊，請稍候"
+    "Collecting Information" = "      正在蒐集資訊，請稍候"
 
     "HappyDays List" = "HappyDays 清單"
     "Look Up:" = "搜尋："
@@ -164,6 +164,12 @@ BEGIN
     "Repeat for:" = "重覆："
     "years" = "年"
 
+    "Note" = "進階"
+    "ToDo Note" = "進階設定"
+    "Datebook Note" = "進階設定"
+
+    "Add the following note" = "行事曆替代程式進階設定"
+
     "Notify warning" = "提示"
 
     "long_notifywarningString" = "^1: 你是否想建立 ^2 個 HappyDays"\
@@ -214,6 +220,7 @@ BEGIN
     "Date Book" = "行事曆"
     "To Do" = "待辦表"
     "Scan note field" = "連備注欄目也一併檢查"
+    "Ignore record with prefix '!'"= "不要處理以'!'為開始之紀錄"
 
     "Processing" = "處理中"
     "Processed : " = "處理了："

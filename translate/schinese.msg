@@ -1,9 +1,9 @@
 TRANSLATION "CHINESE"
 BEGIN
     "long_notifySettingMoreString" = ""\
-    "关于 AN 图标编号，请参考 Action Names 说明书"\
-    "DateBk3 图标将由记事本处取得。"\
-    "假如没有设定，则不会显示图标。\n"
+    "进阶使用提示：\n\n"\
+    "你可使用本栏为行事历替代程序设定图标，字型等。\n\n"\
+    "关于详细使用方法，请参考他们的说明书。\n"
 
     "long_customErrorString" = ""\
     "'Birthday' 为预设的自订栏目名称。你可于'喜好设定'中更改此名称\n\n"\
@@ -46,7 +46,7 @@ BEGIN
     "is kept untouched." = "被保留。"
     "is modified." = "被修改。"
 
-    "Collecting Information" = "正在搜集信息，请稍候"
+    "Collecting Information" = "      正在搜集信息，请稍候"
 
     "HappyDays List" = "HappyDays 清单"
     "Look Up:" = "搜寻："
@@ -159,23 +159,29 @@ BEGIN
     "Private:" = "私人的："
     "Alarm:" = "响闹："
     "Time:" = "时间："
-    "Icon" = "图标"
+    "Icon" = "图示"
 
     "Repeat for:" = "重复："
     "years" = "年"
 
+    "Note" = "进阶"
+    "ToDo Note" = "进阶设定"
+    "Datebook Note" = "进阶设定"
+
+    "Add the following note" = "行事历替代程序进阶设定"
+
     "Notify warning" = "提示"
 
     "long_notifywarningString" = "^1: 你是否想建立 ^2 个 HappyDays"\
-		"纪录的提示？"
+	"纪录的提示？"
 
 /* Date Book Icon */
-    "Date Book Icon" = "行事历图标"
-    "Icon Support" = "图标支持"
+    "Date Book Icon" = "行事历图示"
+    "Icon Support" = "图示支持"
     "AN" = "AN"
     "DateBk3" = "DateBook3"
-    "AN Icon Number:" = "AN 图标编号："
-    "DateBk3 Icon:" = "DateBook3 图标："
+    "AN Icon Number:" = "AN 图示编号："
+    "DateBk3 Icon:" = "DateBook3 图示："
 
 /* HappyDays Cleanup */
     "HappyDays Cleanup" = "清理 HappyDays"
@@ -214,6 +220,7 @@ BEGIN
     "Date Book" = "行事历"
     "To Do" = "待办表"
     "Scan note field" = "连备注栏目也一并检查"
+    "Ignore record with prefix '!'"= "不要处理以'!'为开始之纪录"
 
     "Processing" = "处理中"
     "Processed : " = "处理了："
