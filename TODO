@@ -7,7 +7,7 @@
   As HappyDays algorithms use the current date for various date
    calculation, incorrect data value would mislead it.
 
-* Add 'Reread Address' after preference
+* Add 'Reread Address' menu after preference menu
 
 * Display preferences
 ** Emphasize lunar date
@@ -18,10 +18,10 @@
 
 * Refine the code
 
-* Repleace the start form into 'progress widget'
+* Replace the start form into 'progress widget'
 
 * Write the detailed manual with screenshot
 
-* Support 'last sunday of september' code 
+* Support 'last Sunday of September' code 
 
    
