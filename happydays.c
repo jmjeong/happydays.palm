@@ -1069,7 +1069,7 @@ static void SetBirthdateViewForm(Int16 index, DateType converted)
     FormPtr frm;
     Char displayStr[255];
     UInt16 addrattr;
-	UInt16 dateDiff;
+	Int16 dateDiff;
     Int16 age = 0;
 	DateType current;
             
@@ -1164,9 +1164,11 @@ static void SetBirthdateViewForm(Int16 index, DateType converted)
             }
             else solBirth = r.date;
             
-            dateDiff = DateToDays(current) - DateToDays(solBirth);
-            StrPrintF(gAppErrStr, " (%d)", dateDiff);
-            StrCat(displayStr,gAppErrStr);
+            dateDiff = (Int16)(DateToDays(current) - DateToDays(solBirth));
+			if (dateDiff > (Int16)0) {
+				StrPrintF(gAppErrStr, " (%d)", dateDiff);
+				StrCat(displayStr,gAppErrStr);
+			}
         }
         SetFieldTextFromStr(BirthdateOrigin, displayStr);
 
@@ -3093,7 +3095,7 @@ static Boolean SpecialKeyDown(EventPtr e)
         push_chr = chr;
         
         HighlightMatchRowDate(dt);
-        return true;;
+        return true;
     }
     else if ((chr >= 'A' && chr <= 'Z') || (chr >= 'a' && chr <= 'z')) {
         // is alpha?
@@ -3101,6 +3103,8 @@ static Boolean SpecialKeyDown(EventPtr e)
 
         if (chr >= 'a') chr -=  'a' - 'A';      // make capital
         HighlightMatchRowName(chr);
+
+		return true;
     }
     // else if ( chr == 0xA4 || (chr >= 0xA1 && chr <= 0xFE) ) {
     // is korean letter?

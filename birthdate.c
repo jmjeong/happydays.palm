@@ -167,17 +167,22 @@ UInt16 AddrGetBirthdate(DmOpenRef dbP, UInt16 AddrCategory)
                         //
                         DateSecondsToDate(TimGetSeconds(), &dt);
 
+                        // set current date
+                        //
+                        DateToInt(dt) = (DateToInt(dt) > DateToInt(r.date))
+                            ? DateToInt(dt) : DateToInt(r.date);
+
                         if (r.date.month < dt.month ||
                             ( r.date.month == dt.month
                               && r.date.day < dt.day)) {
                             // birthdate is in last year?
-                            while (DaysInMonth(r.date.month, ++dt.year) <
-                                   r.date.day && maxtry-- > 0) 
+                            while (DaysInMonth(r.date.month, ++dt.year) < r.date.day
+                                   && maxtry-- > 0) 
                                 ;
                         }
                         else {
-                            while (DaysInMonth(r.date.month, dt.year) <
-                                   r.date.day && maxtry-- >0) {
+                            while (DaysInMonth(r.date.month, dt.year) < r.date.day
+                                   && maxtry-- >0) {
                                 dt.year++;
                             }
                             
