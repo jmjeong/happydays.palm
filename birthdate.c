@@ -552,6 +552,7 @@ static Int16 AnalOneRecord(UInt16 addrattr, Char* src,
         src = p+1;
         while (*src == ' ' || *src == '\t') src++;     // skip white space
     }
+    else if (*src == '!') return 0;
     
     if (!AnalysisHappyDays(src, &hd->flag,
                            &year, &month, &day)) goto ErrHandler;
