@@ -76,7 +76,7 @@ br: $(TARGET)-br.prc
 
 obj/happydays-sections.o: obj/happydays-sections.s
 	@echo "Compiling happydays-sections.s..." && \
-	$(CC) -c happydays-sections.s -o obj/happydays-sections.o
+	$(CC) -c obj/happydays-sections.s -o obj/happydays-sections.o
 
 obj/happydays-sections.s obj/happydays-sections.ld : happydays.def
 	@echo "Making multi-section info files..." && \
@@ -247,7 +247,16 @@ clean:
 veryclean: clean
 	-rm -f $(TARGET)*.prc pilot.ram pilot.scratch
 
-save:
-	zip $@ *.c Makefile *.rcp README COPYING *.h *.pbitm 
+html: 
+	@echo "Generating html file" && \
+	cd manual && wmk
+
+zip: prc/$(TARGET).prc html
+	-@echo "Making distribution file(happydays-$(VERSION).zip) ..." &&\
+	\rm -rf dist && mkdir dist && mkdir dist/img && \
+	cp prc/$(TARGET).prc dist && cp manual/*.html dist  && \
+	cp manual/img/*.gif dist/img && cp manual/img/*.png dist/img && \
+	cd dist && \
+	zip -r ../happydays-$(VERSION).zip *  && \rm -rf dist
 
 -include .depend

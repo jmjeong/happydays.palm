@@ -1,7 +1,7 @@
 #use "template.inc" select=About
 
 <IMG alt="HappyDays view" ALIGN=right border=1
-SRC="title-animate.gif">
+SRC="img/title-animate.gif">
 
 <h1> HappyDays </h1>
 <P>
