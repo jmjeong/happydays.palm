@@ -134,7 +134,7 @@ static void MainFormInit(FormPtr formP, Boolean resize);
 static void MainFormResize(FormPtr frmP, Boolean draw);
 static void MainTableSelectItem(TablePtr table, Int16 row, Boolean selected);
 static void MainFormDrawRecord(MemPtr tableP, Int16 row, Int16 column, 
-                               RectanglePtr bounds);
+                               RectanglePtr bounds) SECT1;
 
 ////////////////////////////////////////////////////////////////////
 // private database for HappyDays
