@@ -29,11 +29,17 @@ extern FieldPtr ClearFieldText(UInt16 fieldID);
 extern Char * DateToAsciiLong(UInt8 months, UInt8 days, Int16 year,
                             DateFormatType dateFormat, Char * pstring);
 extern UInt32 Hash(Char* name1, Char* name2);
+extern Boolean SelectCategoryPopup(DmOpenRef dbP, UInt16* selected,
+                                   UInt32 list, UInt32 trigger, Char *string);
+extern void DisplayCategory(UInt32 trigger, Char* string, Boolean redraw);
 
 extern MemPtr AppInfoGetPtr(DmOpenRef dbP);
 
 extern Boolean FindNearLunar(DateType *dt, DateType base, Boolean leapyes);
 extern Int16 DateCompare (DateType d1, DateType d2); // defined in datebook.c
+
+void PrvMoveObject(FormPtr frmP, UInt16 objIndex, Coord y_diff, Boolean draw);
+void PrvResizeObject(FormPtr frmP, UInt16 objIndex, Coord y_diff, Boolean draw);
 
 // Extract the bit at position index from bitfield.  0 is the high bit.
 #define BitAtPosition(pos)                ((UInt32)1 << (pos))

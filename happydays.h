@@ -63,8 +63,9 @@ struct sBirthPrefs
 {
     char custom[12+1];          // addr label length
     char notifywith[5+1];       // notify with (HD)
-    char sort;                  // sorting order
+    char sort;                  // sortbing order
     char notifyformat;          // notify format list
+    char autoscan;              // Automatic scan of address
     char scannote;              // scan from notes?
     char addrapp;               // address appid(used for GOTO operation)
     Boolean sysdateover;        // override system date format
@@ -74,8 +75,8 @@ struct sBirthPrefs
 struct sDispPrefs
 {
     char emphasize;             // emphasize lunar
-    char dispextrainfo;         // display extra day information
-    char dispsexagenary;  
+    char extrainfo;             // display extra day information
+    char sexagenary;            // sexagenary cycle
 };
 
 struct sPrefsR 
@@ -97,7 +98,7 @@ struct sPrefsR
     char adrcdate[4], adrmdate[4];      // address book create/modify date
     char memcdate[4], memmdate[4];      // memo create/modify date
 
-	FontID listFont;		// HappyDays list font
+	FontID listFont;		            // HappyDays list font
 };
 
 typedef union 

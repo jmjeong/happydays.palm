@@ -403,7 +403,6 @@ Int16 GotoAddress(Int16 index)
        handler.
     */
     
-    
     if ((MemPtrSetOwner(theGotoPointer, 0) == 0) &&
         (DmGetNextDatabaseByTypeCreator(true, &searchInfo, 0,
                                         addrID, true, &cardNo, &dbID)
@@ -425,6 +424,7 @@ Int16 GotoAddress(Int16 index)
             SysUIAppSwitch(cardNo, dbID,
                            sysAppLaunchCmdGoTo,
                            (MemPtr) theGotoPointer);
+            
             return 0;
         }
     }

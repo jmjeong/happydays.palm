@@ -6,9 +6,11 @@ APPNAME = "HappyDays"
 APPID = "Jmje"
 
 FILES = lun2sol.c sol2lun.c address.c datebook.c util.c \
-		birthdate.c happydays.c memodb.c s2lconvert.c todo.c
+		birthdate.c happydays.c memodb.c s2lconvert.c todo.c \
+		notify.c
 OBJS = lun2sol.o sol2lun.o address.o datebook.o util.o \
 		birthdate.o happydays.o memodb.o s2lconvert.o todo.o \
+		notify.o \
 		happydays-sections.o
 
 CC = m68k-palmos-gcc

@@ -213,3 +213,105 @@ UInt32 Hash(Char* name1, Char* name2)
     // return h & 65213L;
     return h % 524289L;
 }
+
+void DisplayCategory(UInt32 trigger, Char* string, Boolean redraw)
+{
+    ControlPtr ctl;
+//    FontID currFont;
+    UInt16 categoryLen;
+    FormPtr frm = FrmGetActiveForm();
+
+/*	if (gbVgaExists) 
+		currFont = VgaBaseToVgaFont(stdFont);
+	else 
+		currFont = stdFont;
+*/
+    categoryLen = StrLen(string);
+    
+    ctl = GetObjectPointer(frm, trigger);
+    if ( redraw ) CtlEraseControl(ctl);
+
+    CtlSetLabel(ctl, string);
+
+    if (redraw) CtlDrawControl(ctl);
+    
+//    FntSetFont (currFont);
+}
+
+Boolean SelectCategoryPopup(DmOpenRef dbP, UInt16* selected,
+                            UInt32 list, UInt32 trigger, Char *string)
+{
+    FormPtr frm;
+    ListPtr lst;
+    Int16 curSelection, newSelection;
+    Char * name;
+    Boolean ret = false;
+
+    frm = FrmGetActiveForm();
+
+    lst = GetObjectPointer(frm, list);
+
+    // create a list of categories 
+    CategoryCreateList(dbP, lst, *selected, true, true, 1, 0, true);
+
+    // display the category list
+    curSelection = LstGetSelection(lst);
+    newSelection = LstPopupList(lst);
+
+    // was a new category selected? 
+    if ((newSelection != curSelection) && (newSelection != -1)) {
+        if ((name = LstGetSelectionText(lst, newSelection))) {
+            *selected = CategoryFind(dbP, name);
+
+            MemSet(string, dmCategoryLength, 0);
+            MemMove(string, name, StrLen(name));
+
+            DisplayCategory(trigger, string, true);
+            ret = true;
+        }
+    }
+    CategoryFreeList(dbP, lst, false, false);
+    return ret;
+}
+
+void PrvMoveObject(FormPtr frmP, UInt16 objIndex, 
+                          Coord y_diff, Boolean draw)
+{
+    RectangleType r;
+
+	FrmGetObjectBounds(frmP, objIndex, &r);
+	if (draw) {
+		RctInsetRectangle(&r, -2);   //need to erase the frame as well
+		WinEraseRectangle(&r, 0);
+		RctInsetRectangle(&r, 2);
+	}
+	r.topLeft.y += y_diff;
+	FrmSetObjectBounds(frmP, objIndex, &r);
+}
+
+void PrvResizeObject(FormPtr frmP, UInt16 objIndex, 
+                            Coord y_diff, Boolean draw)
+{
+    RectangleType r;
+
+	FrmGetObjectBounds(frmP, objIndex, &r);
+	if (draw) WinEraseRectangle(&r, 0);
+	r.extent.y += y_diff;
+	FrmSetObjectBounds(frmP, objIndex, &r);
+}
+
+/*
+static UInt16 PrvFrmGetGSI(FormPtr frmP)
+{
+    UInt16 i, numObjects;
+
+	numObjects = FrmGetNumberOfObjects(frmP);
+
+	for (i=0; i<numObjects; i++)
+	{
+		if (FrmGetObjectType(frmP, i) == frmGraffitiStateObj)
+			return(i);
+	}
+	return(-1);
+}
+*/

@@ -3,7 +3,7 @@
 * Automatic scan of Address
   Always/Ask/Never
 
-* 'Are you sure this is the current date?.. Mon Jun 18, 2001'
+* 'Are you sure this is the current date?.. Mon Jun 18, 2001' (error)
   As HappyDays algorithms use the current date for various date
    calculation, incorrect data value would mislead it.
 

@@ -32,21 +32,22 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define SelectDateString            1099
 
-#define MainFormMenu		        1110
-#define	MainFormMenuNotifyDatebook	1111
-#define	MainFormMenuCleanupDatebook	1112
-#define MainFormMenuExport          1113
-#define MainFormMenuSl2Ln           1114
-#define MainFormMenuLn2Sl           1115
-#define MainFormMenuNotifyTodo      1116
-#define	MainFormMenuCleanupTodo	    1117
-#define	MainFormMenuPref	        1120
-#define	MainFormMenuAbout	        1121
-#define	MainFormMenuFont	        1122
+#define MainMenu		            1110
+#define	MainMenuNotifyDatebook	    1111
+#define	MainMenuCleanupDatebook	    1112
+#define MainMenuExport              1113
+#define MainMenuSl2Ln               1114
+#define MainMenuLn2Sl               1115
+#define MainMenuNotifyTodo          1116
+#define	MainMenuCleanupTodo	        1117
+#define	MainMenuPref	            1120
+#define	MainMenuAbout	            1121
+#define	MainMenuFont	            1122
+#define	MainMenuRescanAddr          1123
 
-#define	FormMenuDispPref	        1130
+#define	MainMenuDispPref	        1130
 
-#define ViewFormMenu                1151
+#define ViewMenu                    1151
 
 #define TextMenu                    1180
 #define TextMenuUndo                1181
@@ -64,7 +65,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define PrefForm                    1300
 #define PrefFormCustomField         1301
-#define PrefFormEmphasize           1302
 #define PrefFormOk					1303
 #define PrefFormCancel				1304
 #define PrefFormNotifyWith          1305
@@ -76,6 +76,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define PrefFormScanNote			1311
 #define PrefFormAddress             1312
 #define PrefFormAddrTrigger         1313
+#define PrefFormRescanTrigger       1314
+#define PrefFormAutoRescan          1315
+
+#define DispPrefForm                1350
+#define DispPrefOk                  1351
+#define DispPrefCancel              1352
+#define DispPrefEmphasize           1353
+#define DispPrefExtraInfo           1354
+#define DispPrefSexagen             1355
 
 #define DateBookNotifyForm          1400
 #define NotifyFormRecordAll  		1401

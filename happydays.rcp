@@ -61,7 +61,7 @@ FORM MainForm AT (0 0 160 160)
 USABLE
 NOFRAME
 SAVEBEHIND
-MENUID MainFormMenu
+MENUID MainMenu
 BEGIN
     TITLE "HappyDays"
 	
@@ -92,7 +92,7 @@ FORM ViewForm AT (0 0 160 160)
 USABLE
 NOFRAME
 SAVEBEHIND
-MENUID ViewFormMenu
+MENUID ViewMenu
 BEGIN
     TITLE "HappyDays View"
 
@@ -109,43 +109,39 @@ BEGIN
     BUTTON "Goto" ID ViewFormGoto AT ( PrevRight+6 PrevTop AUTO AUTO)
 END
 
-MENU ID MainFormMenu
+MENU ID MainMenu
 BEGIN
     PULLDOWN "Utilities"
     BEGIN
-        MENUITEM "Date Book Notify"   	MainFormMenuNotifyDatebook  "D"
-        MENUITEM "Cleanup Date Book"    MainFormMenuCleanupDatebook "C"
-        MENUITEM "To Do Notify"   		MainFormMenuNotifyTodo		"T"
-        MENUITEM "Cleanup To Do"       	MainFormMenuCleanupTodo 	"O"
+        MENUITEM "Date Book Notify"   	MainMenuNotifyDatebook  "D"
+        MENUITEM "Cleanup Date Book"    MainMenuCleanupDatebook "C"
+        MENUITEM "To Do Notify"   		MainMenuNotifyTodo		"T"
+        MENUITEM "Cleanup To Do"       	MainMenuCleanupTodo 	"O"
         MENUITEM SEPARATOR
-        MENUITEM "Export to Memo Pad"   MainFormMenuExport  		"E" 
+        MENUITEM "Export to Memo Pad"   MainMenuExport  		"E" 
         MENUITEM SEPARATOR
-        MENUITEM "Solar to Lunar"       MainFormMenuSl2Ln   		"S"
-        MENUITEM "Lunar to Solar"       MainFormMenuLn2Sl   		"L"
+        MENUITEM "Solar to Lunar"       MainMenuSl2Ln   		"S"
+        MENUITEM "Lunar to Solar"       MainMenuLn2Sl   		"L"
+        MENUITEM SEPARATOR
+        MENUITEM "Rescan Address Book"  MainMenuRescanAddr                
     END
 
     PULLDOWN "Options"
     BEGIN
-		MENUITEM "Font..."					MainFormMenuFont    "F"
-        MENUITEM "Preferences"              MainFormMenuPref    "R"
-        MENUITEM "Display Preferences"      FormMenuDispPref    
+		MENUITEM "Font..."					MainMenuFont    "F"
+        MENUITEM "Preferences"              MainMenuPref    "R"
+        MENUITEM "Display Preferences"      MainMenuDispPref    
         MENUITEM SEPARATOR
-        MENUITEM "About HappyDays"          MainFormMenuAbout   "A"
+        MENUITEM "About HappyDays"          MainMenuAbout   "A"
     END
 END
 
-MENU ID ViewFormMenu
+MENU ID ViewMenu
 BEGIN
     PULLDOWN "Utilities"
     BEGIN
-        MENUITEM "Solar to Lunar"           MainFormMenuSl2Ln   "S"
-        MENUITEM "Lunar to Solar"           MainFormMenuLn2Sl   "L"
-    END
-    PULLDOWN "Options"
-    BEGIN
-        MENUITEM "Display Preferences"      FormMenuDispPref    
-        MENUITEM SEPARATOR
-        MENUITEM "About HappyDays"          MainFormMenuAbout   "A"
+        MENUITEM "Solar to Lunar"           MainMenuSl2Ln   "S"
+        MENUITEM "Lunar to Solar"           MainMenuLn2Sl   "L"
     END
 END
 
@@ -165,6 +161,25 @@ BEGIN
     END
 END
 
+FORM ID DispPrefForm AT (2 2 156 156)
+FRAME
+MODAL
+USABLE
+DEFAULTBTNID DispPrefCancel
+BEGIN
+    TITLE "Display Preferences"
+
+    CHECKBOX "Emphasize Lunar Date" ID DispPrefEmphasize 
+		AT (10 20 AUTO AUTO)
+    CHECKBOX "Display solar/lunar info in View" ID DispPrefExtraInfo
+        AT (10 PrevBottom+10 AUTO AUTO)
+    CHECKBOX "Display sexagenary cycle" ID DispPrefSexagen
+        AT (10 PrevBottom+10 AUTO AUTO)
+
+    BUTTON "OK" ID DispPrefOk AT (5 BOTTOM@149 40 AUTO)
+    BUTTON "Cancel" ID DispPrefCancel AT (PrevRight+5 PrevTop 40 AUTO)
+END
+
 FORM ID PrefForm AT (2 2 156 156)
 FRAME
 MODAL
@@ -180,15 +195,21 @@ BEGIN
 		ID PrefFormDateFmts 
 		AT (PREVRIGHT+4 PREVTOP 40 AUTO) VISIBLEITEMS 7 NONUSABLE
     POPUPTRIGGER "" ID PrefFormDateTrigger
-                 AT (PREVLEFT PREVTOP-1 40 13) LEFTANCHOR
+                 AT (PREVLEFT PREVTOP-1 40 AUTO) LEFTANCHOR
     POPUPLIST ID PrefFormDateTrigger PrefFormDateFmts
 
 	CHECKBOX "Scan note field" ID PrefFormScanNote
-		AT (10 PrevBottom AUTO AUTO)
-    CHECKBOX "Emphasize Lunar Date" ID PrefFormEmphasize 
-		AT (10 PrevBottom AUTO AUTO) 
-
-	LABEL "Notify Format:" AUTOID AT (10 PrevBottom+2) 
+		AT (10 PrevBottom+1 AUTO AUTO)
+        
+    LABEL "Address auto scan" AUTOID AT (10 PrevBottom)
+    LIST "Always" "Ask" "Never"
+		ID PrefFormAutoRescan
+		AT (PREVRIGHT PREVTOP 50 AUTO) VISIBLEITEMS 3 NONUSABLE
+    POPUPTRIGGER "" ID PrefFormRescanTrigger
+                 AT (PREVLEFT PREVTOP-1 50 AUTO) LEFTANCHOR
+    POPUPLIST ID PrefFormRescanTrigger PrefFormAutoRescan
+        
+	LABEL "Notify Format:" AUTOID AT (10 PrevBottom+1) 
     LIST 	"[Last, First] E(1) Year" 
 	    	"[First Last] E(1) Year" 
 			"Event - Last, First Year"
@@ -200,14 +221,14 @@ BEGIN
 			AT (PREVLEFT PREVTOP-1 40 13) LEFTANCHOR
     POPUPLIST ID PrefFormNotifyTrigger PrefFormNotifyFmts
 
-    LABEL "Custom field:" AUTOID AT (10 PrevBottom+2) 
+    LABEL "Custom field:" AUTOID AT (10 PrevBottom+1) 
     FIELD ID PrefFormCustomField AT (85 PrevTop 50 AUTO) UNDERLINED
             MAXCHARS 12
     LABEL "HappyDays ID:" AUTOID AT (10 PrevBottom) 
     FIELD ID PrefFormNotifyWith AT (85 PrevTop 28 AUTO) UNDERLINED
             MAXCHARS 5
 
-    LABEL "Address Book:" AUTOID AT (10 PrevBottom)
+    LABEL "Address Book:" AUTOID AT (10 PrevBottom+1)
     LIST 	"Built-in" 
 			"Address.kr" 
 			"Address Album"
@@ -405,7 +426,7 @@ DEFAULTBUTTON 1
 HELPID DateCheckHelpString
 BEGIN
     TITLE "Date Check"
-    MESSAGE "Are you sure this is the current date?\n^1"
+    MESSAGE "Are you sure this is the current date?\n\n^1\n\n"
     BUTTONS "Yes" "No"
 END
 

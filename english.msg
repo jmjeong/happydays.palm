@@ -33,7 +33,7 @@ BEGIN
     "'Birthday' is the default custom field name."\
     "To set a different default custom field"\
     " name, tap 'Preferences'.\n\n"\
-    "IMPORTANT: You need to launch your Addressbook and select 'Options/"\
+    "IMPORTANT: You need to launch your Address Book and select 'Options/"\
     "Rename Custom Fields' to rename a custom field to 'Birthday'"\
     " or whatever you set as a custom field name in the Preferences of "\
     "HappyDays.\n"
@@ -58,7 +58,7 @@ BEGIN
     "just write it in form of YYYY(e.g. 1970).\n\n"\
     "To set multiple entry, refer the manual.\n\n" \
 	"Name1 & name2 displayed in HappyDays List is determined by "\
-	"'AddressBook/Preferences/List by'. If you change this preferences, "\
+	"'Address Book/Preferences/List by'. If you change this preferences, "\
 	"you can see the different views.\n\n"\
 	"Date format is determined by System/Prefs/Formats/Date Format.\n\n"\
 	"If you write character or number in graffiti area, the matching row "\
