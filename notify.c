@@ -44,13 +44,13 @@ extern Int16 gMainTableHandleRow;   // The row of birthdate view to display
 extern DateType gStartDate;			// staring date of birthday listing
 
 UInt16 gToDoCategory;               // todo category
-Char gDateBk3Icon[52][8];      	    // dateBk3 icon string
-Boolean gDateBk3IconLoaded = false; // datebk3 icon loaded
 
 
 ////////////////////////////////////////////////////////////////////
 // function declaration 
 ////////////////////////////////////////////////////////////////////
+
+extern Boolean TextMenuHandleEvent(UInt16 menuID, UInt16 objectID);
 
 static Boolean IsHappyDaysRecord(Char* notefield);
 static void LoadTDNotifyPrefsFields(void);
@@ -68,12 +68,11 @@ static void NotifyDatebook(int mainDBIndex, DateType when, Int8 age,
                            Int16 *created, Int16 *touched);
 static void TimeToAsciiLocal(TimeType when, TimeFormatType timeFormat,
                              Char * pString);
-static Boolean LoadDBNotifyPrefsFieldsMore(void);
+static void LoadDBNotifyPrefsFieldsMore(void);
 static void UnloadDBNotifyPrefsFieldsMore();
-static void ShowIconStuff();
-static void HideIconStuff();
+static void ShowNoteStuff();
+static void HideNoteStuff();
 static Int16 CheckDatebookRecord(DateType when, HappyDays birth);
-static Char* DateBk3IconString();
 static void ChkNMakePrivateRecord(DmOpenRef db, Int16 index);
 static Int16 CheckToDoRecord(DateType when, HappyDays birth);
 static void LoadCommonPrefsFields(FormPtr frm);
@@ -386,31 +385,87 @@ Boolean DBNotifyFormHandleEvent(EventPtr e)
     return handled;
 }
 
+
+static void FieldUpdateScrollBar (FieldPtr fld, ScrollBarPtr bar)
+{
+	UInt16 scrollPos;
+	UInt16 textHeight;
+	UInt16 fieldHeight;
+	Int16 maxValue;
+	
+	FldGetScrollValues (fld, &scrollPos, &textHeight,  &fieldHeight);
+
+	if (textHeight > fieldHeight)
+		{
+		// On occasion, such as after deleting a multi-line selection of text,
+		// the display might be the last few lines of a field followed by some
+		// blank lines.  To keep the current position in place and allow the user
+		// to "gracefully" scroll out of the blank area, the number of blank lines
+		// visible needs to be added to max value.  Otherwise the scroll position
+		// may be greater than maxValue, get pinned to maxvalue in SclSetScrollBar
+		// resulting in the scroll bar and the display being out of sync.
+		maxValue = (textHeight - fieldHeight) + FldGetNumberOfBlankLines (fld);
+		}
+	else if (scrollPos)
+		maxValue = scrollPos;
+	else
+		maxValue = 0;
+
+	SclSetScrollBar (bar, scrollPos, 0, maxValue, fieldHeight-1);
+}
+
+static void FieldViewScroll (FieldPtr fld, ScrollBarPtr bar, Int16 linesToScroll, Boolean updateScrollbar)
+{
+	UInt16			blankLines = FldGetNumberOfBlankLines (fld);
+
+	if (linesToScroll < 0)
+		FldScrollField (fld, -linesToScroll, winUp);
+	else if (linesToScroll > 0)
+		FldScrollField (fld, linesToScroll, winDown);
+		
+	// If there were blank lines visible at the end of the field
+	// then we need to update the scroll bar.
+	if ( (blankLines && linesToScroll < 0) || updateScrollbar)
+	{
+		FieldUpdateScrollBar(fld, bar);
+	}
+}
+
+static void FieldPageScroll (FieldPtr fld, ScrollBarPtr bar, WinDirectionType direction)
+{
+	UInt16 linesToScroll;
+
+	if (FldScrollable (fld, direction))
+	{
+		linesToScroll = FldGetVisibleLines (fld) - 1;
+		
+		if (direction == winUp)
+			linesToScroll = -linesToScroll;
+		
+		FieldViewScroll(fld, bar, linesToScroll, true);
+	}
+}
+
+
 Boolean DBNotifyFormMoreHandleEvent(EventPtr e)
 {
     Boolean handled = false;
     FormPtr frm = FrmGetActiveForm();
-    Boolean loadDateBk3Icon;
+    FieldPtr fld = GetObjectPointer(frm, DBNoteField);
+   	ScrollBarPtr bar = GetObjectPointer(frm, DBNoteScrollBar);
+
 
     switch (e->eType) {
     case frmOpenEvent: 
     {
-        TablePtr tableP;
-        Int16 numColumns;
-
         if(gbVgaExists) {
        		VgaFormModify(frm, vgaFormModify160To240);
         }
 
-        loadDateBk3Icon = LoadDBNotifyPrefsFieldsMore();
+        LoadDBNotifyPrefsFieldsMore();
+        FieldUpdateScrollBar (fld, bar); 
+        
         FrmDrawForm(frm);
-
-        if (loadDateBk3Icon) {
-            tableP = GetObjectPointer(frm, DateBookNotifyBk3Table);
-            numColumns = 13;
-            TblSelectItem(tableP, gPrefsR.DBNotifyPrefs.datebk3icon/numColumns,
-                          gPrefsR.DBNotifyPrefs.datebk3icon % numColumns);
-        }
 
         handled = true;
         break;
@@ -426,14 +481,14 @@ Boolean DBNotifyFormMoreHandleEvent(EventPtr e)
             handled = true;
             break;
         }
-        case DateBookNotifyFormIcon:
+        case DBNoteCheckBox:
         {
-            if (CtlGetValue(GetObjectPointer(frm, DateBookNotifyFormIcon)))
+            if (CtlGetValue(GetObjectPointer(frm, DBNoteCheckBox)))
             {
-                ShowIconStuff();
+                ShowNoteStuff();
             }
             else {
-                HideIconStuff();
+                HideNoteStuff();
             }
             
             handled = true;
@@ -443,22 +498,35 @@ Boolean DBNotifyFormMoreHandleEvent(EventPtr e)
         default:
             break;
         }
-    case tblSelectEvent: 
-    {
-        if (e->data.tblSelect.tableID == DateBookNotifyBk3Table) {
-            gPrefsR.DBNotifyPrefs.datebk3icon =
-                e->data.tblSelect.column + e->data.tblSelect.row * 13;
 
+    case keyDownEvent:
+        switch (e->data.keyDown.chr) {
+        case vchrPageUp:
+            FieldPageScroll(fld, bar, winUp);
+            handled = true;
+            break;
+        case vchrPageDown:
+            FieldPageScroll(fld, bar, winDown);
             handled = true;
             break;
         }
-    }
-
-    case menuEvent:
-        MenuEraseStatus(NULL);
-        handled = true;
         break;
 
+    case fldChangedEvent:
+        FieldUpdateScrollBar (fld, bar);
+        handled = true;
+			
+        break;
+			
+    case sclRepeatEvent:
+        FieldViewScroll (fld, bar, e->data.sclRepeat.newValue - e->data.sclRepeat.value, false);
+			
+        break;			
+        
+    case menuEvent:
+        handled = TextMenuHandleEvent(e->data.menu.itemID, DBNoteField);
+        break;
+        
     default:
         break;
     }
@@ -604,7 +672,7 @@ static Int16 PerformNotifyDB(HappyDays birth, DateType when, Int8 age,
     Char* description = 0;
     Int16 existIndex;
     ApptDBRecordFlags changedFields;
-    Char noteField[256];        // (datebk3: 10, AN:14), HD id: 5
+    Char noteField[356];        // (datebk3: 10, AN:14), HD id: 5
 
     // for the performance, check this first 
     if ( ((existIndex = CheckDatebookRecord(when, birth)) >= 0)
@@ -648,16 +716,12 @@ static Int16 PerformNotifyDB(HappyDays birth, DateType when, Int8 age,
     //
     datebook.exceptions = NULL;
 
-	// if datebook is datebk3 or AN, set icon
+	// General note field edit
 	//
-    if (gPrefsR.DBNotifyPrefs.icon == 1) {     // AN
-        StrCopy(noteField, "ICON: ");
-        StrCat(noteField, gPrefsR.DBNotifyPrefs.an_icon);
-        StrCat(noteField, "\n#AN\n");
+    if (gPrefsR.DBNotifyPrefs.icon) {     
+        StrCat(noteField, gPrefsR.DBNotifyPrefs.note);
+        StrCat(noteField, "\n");
     }
-	else if (gPrefsR.DBNotifyPrefs.icon == 2) {
-        StrCopy(noteField, DateBk3IconString());
-	}
     else noteField[0] = 0;
 
     StrCat(noteField, gPrefsR.Prefs.notifywith);
@@ -1038,197 +1102,42 @@ static void NotifyAction(UInt32 whatAlert,
     return;
 }
 
-static Char* DateBk3IconString()
-{
-    static Char bk3Icon[11];
-
-    StrCopy(bk3Icon, "##@@@@@@@\n");
-    bk3Icon[5] = gPrefsR.DBNotifyPrefs.datebk3icon + 'A';
-
-    return bk3Icon;
-}
-
-static int dec(char hex)
-{
-    if (hex >= '0' && hex <= '9') {
-        return hex - '0';
-    }
-    else if (hex >= 'A' && hex <= 'F') {
-        return hex - 'A' + 10;
-    }
-    else if (hex >= 'a' && hex <= 'f') {
-        return hex - 'a' + 10;
-    }
-    else return 0;  
-}
-
-static Int8 convertWord(char first, char second)
-{
-    return dec(first) * 16 + dec(second);
-}
-
-static void DateBk3CustomDrawTable(MemPtr tableP, Int16 row, Int16 column, 
-                                   RectanglePtr bounds)
-{
-    Int16 x, y;
-    Int8 drawItem = row * 13 + column;
-    Int8 drawFixel;
-    Int8 i, j;
-    
-    x = bounds->topLeft.x + (bounds->extent.x - 8) / 2 -1;
-    y = bounds->topLeft.y + (bounds->extent.y - 8) / 2 -1; 
-
-    for (i = 0; i < 8; i++) {
-        drawFixel = gDateBk3Icon[drawItem][i];
-        if (drawFixel) {        // if not 0
-            for (j=0; j < 8; j++) {
-                if (drawFixel & 1) {
-                    WinDrawLine(x+8-j, y+i+1, x+8-j, y+i+1);
-                }
-                drawFixel >>= 1;
-            }
-        }
-    }
-}
-
-static Boolean loadDatebk3Icon()
-{
-    UInt16 currIndex = 0;
-    MemHandle recordH = 0;
-    Char* rp;       // memoPad record
-    Boolean found = false;
-    Char IconString[16];
-    Char *p=0;
-
-    if ((MemCmp((char*) &gMmcdate, gPrefsR.memcdate, 4) == 0) &&
-        (MemCmp((char*) &gMmmdate, gPrefsR.memmdate, 4) == 0)) {
-        // if matched, use the original datebk3 icon set
-        //
-        return gDateBk3IconLoaded;
-    }
-
-    while (1) {
-        recordH = DmQueryNextInCategory(MemoDB, &currIndex,
-                                        dmAllCategories);
-        if (!recordH) break;
-
-        rp = (Char*)MemHandleLock(recordH);
-        if (StrNCompare(rp, DATEBK3_MEMO_STRING,
-                        StrLen(DATEBK3_MEMO_STRING)) == 0) {
-            p = StrChr(rp, '\n');
-            found = true;
-            break;
-        }
-            
-        MemHandleUnlock(recordH);
-        currIndex++;
-    }
-    if (found) {
-        Int8 i=0, j;
-        
-        while ((p = StrChr(p+1, '=')) && i < 52) {
-            MemMove(IconString, p+1, 16);
-
-            for (j = 0; j < 8; j++) {
-                gDateBk3Icon[i][j] =
-                    convertWord(IconString[j*2], IconString[j*2+1]);
-            }
-            i++;
-        }
-
-        for (; i < 52; i++) {
-            MemSet(gDateBk3Icon[i], 8, 0);
-        }
-        MemHandleUnlock(recordH);
-    }
-    
-    return (gDateBk3IconLoaded = found);
-}
-
-static Boolean DateBk3IconLoadTable(FormPtr frm, Boolean redraw)
-{
-    TablePtr tableP;
-    Int8 row, column, numRows, numColumns;
-    RectangleType rect;
-
-    if (!loadDatebk3Icon()) return false;
-
-    tableP = GetObjectPointer(frm, DateBookNotifyBk3Table);
-    if (redraw) {
-        TblEraseTable(tableP);
-    }
-
-    numRows = TblGetNumberOfRows(tableP);
-    numColumns = 13;
-    TblGetBounds(tableP, &rect);
-    
-    for (row=0; row < numRows; row++) {
-        for (column=0; column < numColumns; column++) {
-            TblSetItemStyle(tableP, row, column, customTableItem);
-        }
-        TblSetRowSelectable(tableP, row, true);
-
-        TblSetRowHeight(tableP, row, rect.extent.y / 4 +1);
-        TblSetRowUsable(tableP, row, true);
-    }
-
-    for (column=0; column < numColumns; column++) {
-        TblSetColumnUsable(tableP, column, true);
-        TblSetCustomDrawProcedure(tableP, column, DateBk3CustomDrawTable);
-    }
-
-    if (redraw) {
-        TblDrawTable(tableP);
-    }
-    return true;
-}
-
-static void HideIconStuff()
+static void HideNoteStuff()
 {
     FormPtr frm;
 
     if ((frm = FrmGetFormPtr(DateBookNotifyMoreForm)) == 0) return;
 
-    FrmHideObject(frm, FrmGetObjectIndex(frm, DateBookNotifyFormBk3));
-    FrmHideObject(frm, FrmGetObjectIndex(frm, DateBookNotifyFormAN));
+    FrmHideObject(frm, FrmGetObjectIndex(frm, DBNoteField));
+    FrmHideObject(frm, FrmGetObjectIndex(frm, DBNoteScrollBar));
 }
 
-static void ShowIconStuff()
+static void ShowNoteStuff()
 {
     FormPtr frm;
 
     if ((frm = FrmGetFormPtr(DateBookNotifyMoreForm)) == 0) return;
 
-    FrmShowObject(frm, FrmGetObjectIndex(frm, DateBookNotifyFormBk3));
-    FrmShowObject(frm, FrmGetObjectIndex(frm, DateBookNotifyFormAN));
+    FrmShowObject(frm, FrmGetObjectIndex(frm, DBNoteField));
+    FrmShowObject(frm, FrmGetObjectIndex(frm, DBNoteScrollBar));
 }
 
-static Boolean LoadDBNotifyPrefsFieldsMore(void)
+static void LoadDBNotifyPrefsFieldsMore(void)
 {
     FormPtr frm;
 
-    if ((frm = FrmGetFormPtr(DateBookNotifyMoreForm)) == 0) return false;
+    if ((frm = FrmGetFormPtr(DateBookNotifyMoreForm)) == 0) return;
+
+    CtlSetValue(GetObjectPointer(frm, DBNoteCheckBox), gPrefsR.DBNotifyPrefs.icon);
 
     if (gPrefsR.DBNotifyPrefs.icon == 0) {
-        CtlSetValue(GetObjectPointer(frm, DateBookNotifyFormIcon), 0);
-        HideIconStuff();
-    }
-    else {
-        CtlSetValue(GetObjectPointer(frm, DateBookNotifyFormIcon), 1);
+        HideNoteStuff();
     }
     
-    if (gPrefsR.DBNotifyPrefs.icon == 1) {     // AN selected
-        CtlSetValue(GetObjectPointer(frm, DateBookNotifyFormAN), 1);
-    }
-    else {                                      // Datebk3 Icon selected 
-        CtlSetValue(GetObjectPointer(frm, DateBookNotifyFormBk3), 1);
-    }
+    SetFieldTextFromStr(DBNoteField,
+                        gPrefsR.DBNotifyPrefs.note);
 
-    SetFieldTextFromStr(DateBookNotifyANInput,
-                        gPrefsR.DBNotifyPrefs.an_icon);
-
-    return DateBk3IconLoadTable(frm, false);
-
+    return;
 }
 
 static void UnloadDBNotifyPrefsFieldsMore()
@@ -1238,22 +1147,17 @@ static void UnloadDBNotifyPrefsFieldsMore()
     
     if ((frm = FrmGetFormPtr(DateBookNotifyMoreForm)) == 0) return;
     
-    ptr = GetObjectPointer(frm, DateBookNotifyFormIcon);
-    if (!CtlGetValue(ptr)) gPrefsR.DBNotifyPrefs.icon = 0;
-    else {
-        ptr = GetObjectPointer(frm, DateBookNotifyFormAN);
-        if (CtlGetValue(ptr)) gPrefsR.DBNotifyPrefs.icon = 1;
-        else gPrefsR.DBNotifyPrefs.icon = 2;
-    }
+    ptr = GetObjectPointer(frm, DBNoteCheckBox);
     
-    if (FldDirty(GetObjectPointer(frm, DateBookNotifyANInput))) {
-        if (FldGetTextPtr(GetObjectPointer(frm, DateBookNotifyANInput))) {
-            StrNCopy(gPrefsR.DBNotifyPrefs.an_icon,
-                     FldGetTextPtr(GetObjectPointer(frm, DateBookNotifyANInput)), 9);
+    gPrefsR.DBNotifyPrefs.icon = CtlGetValue(ptr);
+    
+    if (FldDirty(GetObjectPointer(frm, DBNoteField))) {
+        if (FldGetTextPtr(GetObjectPointer(frm, DBNoteField))) {
+            StrCopy(gPrefsR.DBNotifyPrefs.note,
+                    FldGetTextPtr(GetObjectPointer(frm, DBNoteField)));
         }
     }
 }
-
 static void LoadDBNotifyPrefsFields(void)
 {
     FormPtr frm;

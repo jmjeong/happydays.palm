@@ -28,7 +28,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 extern Boolean gbVgaExists;
 
-static Boolean TextMenuHandleEvent(UInt16 menuID, UInt16 objectID)
+Boolean TextMenuHandleEvent(UInt16 menuID, UInt16 objectID)
 {
     FormPtr   form = FrmGetActiveForm();
     FieldPtr  field = GetObjectPointer(form, objectID);
