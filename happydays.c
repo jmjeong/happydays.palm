@@ -1553,7 +1553,7 @@ static Char* NotifyDescString(DateType when, BirthDate birth, Boolean todo)
                                         gDispdfmts, gAppErrStr);
                     }
                     else {
-                        DateToAscii(birth.date.month, birth.date.day, -1, gDispdfmts,
+                        DateToAsciiLong(birth.date.month, birth.date.day, -1, gDispdfmts,
                                         gAppErrStr);
                     }
     
