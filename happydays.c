@@ -116,7 +116,6 @@ static int CalcPageSize(FormPtr frm);
 
 static void ViewFormLoadTable(FormPtr frm);
 
-static Boolean MenuHandler(FormPtr frm, EventPtr e);
 
 static Boolean StartFormHandleEvent(EventPtr e);
 static Boolean PrefFormHandleEvent(EventPtr e);
@@ -132,8 +131,15 @@ static void MainFormLoadTable(FormPtr frm, Int16 listOffset);
 static void MainFormInit(FormPtr formP, Boolean resize);
 static void MainFormResize(FormPtr frmP, Boolean draw);
 static void MainTableSelectItem(TablePtr table, Int16 row, Boolean selected);
-static void MainFormDrawRecord(MemPtr tableP, Int16 row, Int16 column, 
-                               RectanglePtr bounds) SECT1;
+
+void MainFormDrawRecord(MemPtr tableP, Int16 row, Int16 column, 
+                               RectanglePtr bounds);
+
+Boolean MenuHandler(FormPtr frm, EventPtr e);
+void MainFormScroll(Int16 newValue, Int16 oldValue, Boolean force_redraw);
+void MainFormScrollLines(Int16 lines, Boolean force_redraw);
+void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column, 
+                              RectanglePtr bounds);
 
 ////////////////////////////////////////////////////////////////////
 // private database for HappyDays
@@ -907,7 +913,7 @@ static void DoDateSelect()
 
 
 
-static Boolean MenuHandler(FormPtr frm, EventPtr e)
+Boolean MenuHandler(FormPtr frm, EventPtr e)
 {
     Boolean 	handled = false;
 	static Char tmpString[25];
@@ -1083,7 +1089,7 @@ static Boolean MenuHandler(FormPtr frm, EventPtr e)
     return handled;
 }
 
-static void MainFormScroll(Int16 newValue, Int16 oldValue, Boolean force_redraw)
+void MainFormScroll(Int16 newValue, Int16 oldValue, Boolean force_redraw)
 {
     TablePtr    tableP;
 	FormPtr 	frm = FrmGetActiveForm();
@@ -1098,7 +1104,7 @@ static void MainFormScroll(Int16 newValue, Int16 oldValue, Boolean force_redraw)
 	}
 }
 
-static void MainFormScrollLines(Int16 lines, Boolean force_redraw)
+void MainFormScrollLines(Int16 lines, Boolean force_redraw)
 {
 	ScrollBarPtr    barP;
     Int16           valueP, minP, maxP, pageSizeP;
@@ -1753,7 +1759,7 @@ static void MainTableSelectItem(TablePtr table, Int16 row, Boolean select)
     else WinInvertRectangle(&r, 0);
 }
 
-static void MainFormDrawRecord(MemPtr tableP, Int16 row, Int16 column, 
+void MainFormDrawRecord(MemPtr tableP, Int16 row, Int16 column, 
                                RectanglePtr bounds)
 {
     FontID currFont;
@@ -2104,7 +2110,7 @@ static void ViewTableDrawHdr(MemPtr tableP, Int16 row, Int16 column,
     FntSetFont (currFont);
 }
 
-static void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column, 
+void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column, 
                               RectanglePtr bounds)
 {
     FontID currFont;
@@ -2256,7 +2262,7 @@ static void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column,
             DateType solBirth;
             DateTimeType rtVal;
             UInt8 ret;
-            Int32 d_diff = 0, m_diff = 0, y_diff = 0;
+            Int16 d_diff = 0, m_diff = 0, y_diff = 0;
             
             if (r.flag.bits.lunar || r.flag.bits.lunar_leap) {
                 ret = !lun2sol(r.date.year+1904,
@@ -2272,19 +2278,19 @@ static void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column,
             else solBirth = r.date;
             
             dateDiff = (Int32)(DateToDays(current)
-                               - DateToDays(solBirth));
+                               - (Int32)DateToDays(solBirth));
 
-            if (dateDiff > (Int16)0) {
+            if (dateDiff > (Int32)0) {
                 if (current.day < solBirth.day) {
                     d_diff = DaysInMonth(solBirth.month, solBirth.year+1904)
-                        + current.day- solBirth.day;
+                        + current.day - solBirth.day;
                     m_diff--;
                 }
                 else {
                     d_diff = current.day - solBirth.day;
                 }
                         
-                if (current.month + m_diff  < solBirth.month) {
+                if ((Int32)current.month + m_diff  < (Int32)solBirth.month) {
                     m_diff += 12 + current.month - solBirth.month;
                     y_diff--;
                 }
@@ -2309,9 +2315,9 @@ static void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column,
     break;
     case ViewRemained:
     {
-        dateDiff = DateToDays(converted) - DateToDays(current);
+        dateDiff = (Int32)DateToDays(converted) - (Int32)DateToDays(current);
 
-        if (dateDiff >= (Int16)0) {
+        if (dateDiff >= (Int32)0) {
             SysCopyStringResource(displayStr, BirthLeftString);
             StrPrintF(gAppErrStr, displayStr, dateDiff);
         }

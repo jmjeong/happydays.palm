@@ -220,8 +220,8 @@ BEGIN
     "Date Book" = "Date Book"  
     "To Do" = "To Do"  
     "Scan note field" = "Scan note field"  
-    "%d days left" = "%d days left"  
-    "%d days passed" = "%d days passed"  
+    "%ld days left" = "%ld days left"  
+    "%ld days passed" = "%ld days passed"  
 
     "Processing" = "Processing"  
     "Processed : " = "Processed : " 
@@ -236,6 +236,6 @@ BEGIN
 	"Origin:" = "Origin:"
 	"Age:" = "Age:"
 	"UpTo Date:" = "UpTo Date:"
-	"%dY %dM %dD (%d)" = "%dY %dM %dD (%d)"
+	"%dY %dM %dD (%ld)" = "%dY %dM %dD (%ld)"
 END
 

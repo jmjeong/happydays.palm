@@ -33,12 +33,12 @@ STRING ID ExportHeaderString 	"HappyDays Export List"
 STRING ID ViewNotExistString	"(not exist in this year)"
 STRING ID DateBookFirstAlertString  "Please run Date Book once first."
 STRING ID DateBookNotifyDaysString "Days"
-STRING ID AgeFormatString		"%dY %dM %dD (%d)"
+STRING ID AgeFormatString		"%dY %dM %dD (%ld)"
 
 STRING ID DateBookString		"Date Book"
 STRING ID ToDoString			"To Do"
-STRING ID BirthLeftString		"%d days left"
-STRING ID BirthPassedString     "%d days passed"
+STRING ID BirthLeftString		"%ld days left"
+STRING ID BirthPassedString     "%ld days passed"
 
 STRING ID TypeStr				"Type:"
 STRING ID NextDateStr			"Next Date:"
@@ -61,7 +61,7 @@ NOFRAME
 SAVEBEHIND
 MENUID MainMenu
 BEGIN
-    TITLE "HappyDays"
+    TITLE "HappyDays "
 	
   	TABLE ID MainFormTable AT (0 16 FULLWIDTH 11*VISIBLESLOT)  
 			ROWS MAXSLOT COLUMNS 1 COLUMNWIDTHS FULLWIDTH

@@ -30,7 +30,7 @@ To get the latest CVS sources do the following
 $ export CVSROOT=":pserver:cvs@coconut.snu.ac.kr:/export/cvsroot"
 $ cvs login
 ( password = anonymous )
-$ cvs -z3 checkout -rver_202 happydays
+$ cvs -z3 checkout -rver_203 happydays
 </pre>
 
 <br>
@@ -61,33 +61,46 @@ HappyDays has been translated into the following languages:  <br>
 	  (happydays-k8.prc for 8x8 font,
 	  happydays-k11.prc for 11x11 font)
   <li> <a
-      href="ftp://jmjeong.com/pub/happydays/happydays-1.45-de.zip">German</a>(1.45)
-      - by  Gunther Zagatta(<a href="mailto:zagatta@web.de">zagatta@web.de</a>)
+      href="ftp://jmjeong.com/pub/happydays/happydays-1.45-de.zip">
+			German</a>(1.45)
+      - by  Gunther Zagatta
+			(<a href="mailto:zagatta@web.de">zagatta@web.de</a>)
   <li><a
-      href="ftp://jmjeong.com/pub/happydays/happydays-1.45-ch.zip">Chinese</a>(1.45)
+      href="ftp://jmjeong.com/pub/happydays/happydays-1.45-ch.zip">
+			Chinese</a>(1.45)
       - by Daitau Aaron(<a
 		href="mailto:daitau@hotmail.com">daitau@hotmail.com</a>)<br>
 		(happydays-chi-gb5.prc for GB Encoding, happydays-chi-big5.prc for
 		Big5 encoding)
   <li><a
-      href="ftp://jmjeong.com/pub/happydays/happydays-1.45-th.zip">Thai</a>(1.45)
+      href="ftp://jmjeong.com/pub/happydays/happydays-1.45-th.zip">
+		Thai</a>(1.45)
       - by Kaptan Teotrakool(<a
       href="mailto:kteotrakool@hotmail.com">kteotrakool@hotmail.com</a>)<br>
       Requires Thai Language Hack (ThaiPOS or ThaiHack)
   <li><a
-  	  href="ftp://jmjeong.com/pub/happydays/happydays-1.45-sp.zip">Spanish</a>(1.45)
-	  - by Juan Fernando Calderón(<a href="mailto:jfcalderon@usa.net">jfcalderon@usa.net</a>)
+  	  href="ftp://jmjeong.com/pub/happydays/happydays-2.03-sp.zip">
+			Spanish</a>(2.03 beta release)
+	  - by Juan Fernando Calderón
+			(<a href="mailto:jfcalderon@usa.net">jfcalderon@usa.net</a>)
   <li><a
-      href="ftp://jmjeong.com/pub/happydays/happydays-1.45-fr.zip">French</a>(1.45)
-      - by Cyril-Vianney BEKIER(<a href="mailto:cyril@bekier.org">cyril@bekier.org</a>)
+      href="ftp://jmjeong.com/pub/happydays/happydays-1.45-fr.zip">
+			French</a>(1.45)
+      - by Cyril-Vianney BEKIER
+			(<a href="mailto:cyril@bekier.org">cyril@bekier.org</a>)
   <li><a
-      href="ftp://jmjeong.com/pub/happydays/happydays-1.45-cz.zip">Czech</a>(1.45)
-      - by Petr 'PePa' Pavel(<a href="mailto:petr.pavel@quick.cz">petr.pavel@quick.cz</a>)
+      href="ftp://jmjeong.com/pub/happydays/happydays-1.45-cz.zip">
+			Czech</a>(1.45)
+      - by Petr 'PePa' Pavel
+			(<a href="mailto:petr.pavel@quick.cz">petr.pavel@quick.cz</a>)
   <li><a
-  href="ftp://jmjeong.com/pub/happydays/happydays-1.45-catalan.zip">Catalan</a>(1.45)
-      - by Paco Rivière(<a href="mailto:friviere@teleline.es">friviere@teleline.es</a>)
+  href="ftp://jmjeong.com/pub/happydays/happydays-1.45-catalan.zip">
+			Catalan</a>(1.45)
+      - by Paco Rivière
+			(<a href="mailto:friviere@teleline.es">friviere@teleline.es</a>)
   <li><a
-  href="ftp://jmjeong.com/pub/happydays/happydays-1.45-dutch.zip">Dutch</a>(1.45)
+  href="ftp://jmjeong.com/pub/happydays/happydays-1.45-dutch.zip">
+			Dutch</a>(1.45)
       - by Roy Huijts
 </ul>
 </p>
@@ -102,6 +115,7 @@ You want to see changes before HappyDays 2.0, look up the
 
 <b>HappyDays 2.03 version - 6/22/2001</b>
 <ul>
+	<li> Fix a bug in global find
 	<li> Fix a bug in 'Instead of system date format' option
 	<li> Fix a bug in date difference calculation
 </ul>

@@ -78,6 +78,7 @@ static Int16 CheckToDoRecord(DateType when, HappyDays birth);
 static void LoadCommonPrefsFields(FormPtr frm);
 static void UnloadCommonNotifyPrefs(FormPtr frm);
 static Boolean IsSameRecord(Char* notefield, HappyDays birth);
+
 // temporary return value;
 Char* EventTypeString(HappyDays r)
 {

@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <PalmOS.h>
 
 #include "happydays.h"
+#include "section.h"
 
 // custom field used Birthdate in AddressBook
 //
@@ -32,15 +33,16 @@ void PackHappyDays(HappyDays *birthdate, void* recordP);
 void UnpackHappyDays(HappyDays *birthdate,
                      const PackedHappyDays *packedHappyDays);
 
-UInt16 AddrGetHappyDays(DmOpenRef dbP, UInt16 AddrCategory, DateType start);
+UInt16 AddrGetHappyDays(DmOpenRef dbP, 
+					UInt16 AddrCategory, DateType start) SECT1;
 Boolean AnalysisHappyDays(const char* birthdate,
                           HappyDaysFlag *flag,
-                          Int16* year, Int16* month, Int16* day);
+                          Int16* year, Int16* month, Int16* day) SECT1;
 
-Boolean UpdateHappyDaysDB(FormPtr frm);
-void  SetReadAddressDB();
+Boolean UpdateHappyDaysDB(FormPtr frm) SECT1;
+void  SetReadAddressDB() SECT1;
 
-Boolean FindHappyDaysField();
-Boolean IsChangedAddressDB();
+Boolean FindHappyDaysField() SECT1;
+Boolean IsChangedAddressDB() SECT1;
 
 #endif
