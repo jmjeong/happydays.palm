@@ -2863,3 +2863,12 @@ static Boolean StartFormHandleEvent(EventPtr e)
     
     return handled;
 }
+
+// $Revision$
+//
+//
+// $Log$
+// Revision 1.66  2002/02/03 14:20:48  jmjeong
+// add log, revision
+//
+//
