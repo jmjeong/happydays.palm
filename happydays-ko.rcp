@@ -283,6 +283,8 @@ BEGIN
 	"Name" = "이름"
 	"Date" = "생일"
 	"Age" = "나이"
+
+	"Address Book" = "주소록"
 END
 STRING ID DateBookNotifyHelpString "long_notifySettingString"
 STRING ID DateBookNotifyMoreHelpString "long_notifySettingMoreString"
@@ -487,10 +489,14 @@ BEGIN
     FIELD ID PrefFormNotifyWith AT (85 PrevTop 28 AUTO) UNDERLINED
             MAXCHARS 5
 
-    LABEL "Address:" AUTOID AT (10 PrevBottom)
-    LIST "Built-in" "Address.kr" "AddressBkR" "Super Names" "TealPhone"
+    LABEL "Address Book:" AUTOID AT (10 PrevBottom)
+    LIST 	"Built-in" 
+			"Address.kr" 
+			"AddressBkR" 
+			"Super Names" 
+			"TealPhone"
          ID PrefFormAddress
-         AT (PREVRIGHT+4 PREVTOP 80 AUTO) VISIBLEITEMS 5 NONUSABLE
+         AT (PREVRIGHT+4 PREVTOP 70 AUTO) VISIBLEITEMS 5 NONUSABLE
     POPUPTRIGGER "" ID PrefFormAddrTrigger
                  AT (PrevLeft PrevTop-1 40 13) LEFTANCHOR
     POPUPLIST ID PrefFormAddrTrigger PrefFormAddress
@@ -730,7 +736,7 @@ BEGIN
     TITLE "About HappyDays"
 
 	FORMBITMAP AT (6 18) BITMAP ID_BitmapIcon USABLE 
-    LABEL "HappyDays 1.42b" AUTOID AT (PrevRight+38 PrevTop) FONT 1
+    LABEL "HappyDays 1.43" AUTOID AT (PrevRight+38 PrevTop) FONT 1
     LABEL "GPL free software"
         AUTOID AT (PrevLeft PrevTop+ABOUT_LINE_SPACING) FONT 0
     LABEL "(c) 1999-2001 JaeMok Jeong"
@@ -773,4 +779,4 @@ SMALLICONFAMILY
 	TRANSPARENT 204 204 0
 
 APPLICATIONICONNAME 1000 "HappyDays"
-VERSION ID 1 "1.42"
+VERSION ID 1 "1.43"

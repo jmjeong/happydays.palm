@@ -1,6 +1,6 @@
 // HappyDays - A birthday display for the PalmPilot
 //
-//      Copyright(c) 1999-2000 JaeMok Jeong
+//      Copyright(c) 1999-2001 JaeMok Jeong
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -398,7 +398,7 @@ BEGIN
     PULLDOWN "Utilities"
     BEGIN
         MENUITEM "Date Book Notify"   	MainFormMenuNotifyDatebook  "D"
-        MENUITEM "Cleanup Date Book"     MainFormMenuCleanupDatebook "C"
+        MENUITEM "Cleanup Date Book"    MainFormMenuCleanupDatebook "C"
         MENUITEM "To Do Notify"   		MainFormMenuNotifyTodo		"T"
         MENUITEM "Cleanup To Do"       	MainFormMenuCleanupTodo 	"O"
         MENUITEM SEPARATOR
@@ -455,7 +455,8 @@ BEGIN
     LIST "M/D/Y" "D/M/Y" "D.M.Y" "D-M-Y" "Y/M/D" "Y.M.D" "Y-M-D" 
 		ID PrefFormDateFmts 
 		AT (PREVRIGHT+4 PREVTOP 40 AUTO) VISIBLEITEMS 7 NONUSABLE
-    POPUPTRIGGER "" ID PrefFormDateTrigger AT (PREVLEFT PREVTOP-1 40 13) LEFTANCHOR
+    POPUPTRIGGER "" ID PrefFormDateTrigger
+                 AT (PREVLEFT PREVTOP-1 40 13) LEFTANCHOR
     POPUPLIST ID PrefFormDateTrigger PrefFormDateFmts
 
 	CHECKBOX "Scan note field" ID PrefFormScanNote
@@ -463,7 +464,7 @@ BEGIN
     CHECKBOX "Emphasize Lunar Date" ID PrefFormEmphasize 
 		AT (10 PrevBottom AUTO AUTO) 
 
-	LABEL "Notify Format:" AUTOID AT (10 PrevBottom+5) 
+	LABEL "Notify Format:" AUTOID AT (10 PrevBottom+2) 
     LIST 	"[Last, First] E(1) Year" 
 	    	"[First Last] E(1) Year" 
 			"Event - Last, First Year"
@@ -475,13 +476,25 @@ BEGIN
 			AT (PREVLEFT PREVTOP-1 40 13) LEFTANCHOR
     POPUPLIST ID PrefFormNotifyTrigger PrefFormNotifyFmts
 
-    LABEL "Custom field:" AUTOID AT (10 PrevBottom+5) 
+    LABEL "Custom field:" AUTOID AT (10 PrevBottom+2) 
     FIELD ID PrefFormCustomField AT (85 PrevTop 50 AUTO) UNDERLINED
             MAXCHARS 12
-    LABEL "HappyDays ID:" AUTOID AT (10 PrevBottom+1) 
+    LABEL "HappyDays ID:" AUTOID AT (10 PrevBottom) 
     FIELD ID PrefFormNotifyWith AT (85 PrevTop 28 AUTO) UNDERLINED
             MAXCHARS 5
 
+    LABEL "Address Book:" AUTOID AT (10 PrevBottom)
+    LIST 	"Built-in" 
+			"Address.kr" 
+			"AddressBkR" 
+			"Super Names" 
+			"TealPhone"
+         ID PrefFormAddress
+         AT (PREVRIGHT+4 PREVTOP 70 AUTO) VISIBLEITEMS 5 NONUSABLE
+    POPUPTRIGGER "" ID PrefFormAddrTrigger
+                 AT (PrevLeft PrevTop-1 40 13) LEFTANCHOR
+    POPUPLIST ID PrefFormAddrTrigger PrefFormAddress
+         
     BUTTON "OK" ID PrefFormOk AT (5 BOTTOM@149 40 AUTO)
     BUTTON "Cancel" ID PrefFormCancel AT (PrevRight+5 PrevTop 40 AUTO)
 	GRAFFITISTATEINDICATOR AT (PrevRight+5 PrevTop)
@@ -717,7 +730,7 @@ BEGIN
     TITLE "About HappyDays"
 
 	FORMBITMAP AT (6 18) BITMAP ID_BitmapIcon USABLE 
-    LABEL "HappyDays 1.41" AUTOID AT (PrevRight+38 PrevTop) FONT 1
+    LABEL "HappyDays 1.43" AUTOID AT (PrevRight+38 PrevTop) FONT 1
     LABEL "GPL free software"
         AUTOID AT (PrevLeft PrevTop+ABOUT_LINE_SPACING) FONT 0
     LABEL "(c) 1999-2001 JaeMok Jeong"
@@ -748,16 +761,16 @@ END
 // Bitmaps //
 /////////////
 BitMapFamily ID ID_BitmapIcon
-	"HD_large.bmp" "HD_large.bmp" "" "HD_large.bmp"
+	"HD_large.bmp" "HD_large.bmp" "" "HD_large_color.bmp"
 	COMPRESS
 	TRANSPARENT 204 204 0
 
 ICONFAMILY 
-	"HD_large.bmp" "HD_large.bmp" "" "HD_large.bmp"
+	"HD_large.bmp" "HD_large.bmp" "" "HD_large_color.bmp"
 	TRANSPARENT 204 204 0
 SMALLICONFAMILY
-	"HD_small.bmp" "HD_small.bmp" "" "HD_small.bmp"
+	"HD_small.bmp" "HD_small.bmp" "" "HD_small_color.bmp"
 	TRANSPARENT 204 204 0
 
 APPLICATIONICONNAME 1000 "HappyDays"
-VERSION ID 1 "1.41"
+VERSION ID 1 "1.43"

@@ -263,4 +263,6 @@ BEGIN
 	"Name" = "이름"
 	"Date" = "생일"
 	"Age" = "나이"
+
+	"Address Book" = "주소록"
 END
