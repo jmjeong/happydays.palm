@@ -69,6 +69,11 @@ HappyDays has been translated into the following languages:  <p>
 			href="mailto:jfcalderon@dominium.com.mx">jfcalderon@dominium.com.mx</a>)
 			and Manuel Tornos(palm@povisa.es)
   <li><a
+  href="ftp://jmjeong.com/pub/happydays/happydays-2.12-catalan.zip">
+			Catalan</a>(2.12 beta1)
+      - by Paco Rivière
+			(<a href="mailto:friviere@wanadoo.es">friviere@wanadoo.es</a>)
+  <li><a
   	  href="ftp://jmjeong.com/pub/happydays/happydays-2.08-br.zip">
 			Portuguese Brazilian </a>(2.08 beta1)
 	  - by Mauricio Montel
@@ -116,11 +121,6 @@ HappyDays has been translated into the following languages:  <p>
       - by Kaptan Teotrakool(<a
       href="mailto:kteotrakool@hotmail.com">kteotrakool@hotmail.com</a>)<br>
       Requires Thai Language Hack (ThaiPOS or ThaiHack)
-  <li><a
-  href="ftp://jmjeong.com/pub/happydays/happydays1.xx/happydays-1.45-catalan.zip">
-			Catalan</a>(1.45)
-      - by Paco Rivière
-			(<a href="mailto:friviere@wanadoo.es">friviere@wanadoo.es</a>)
   <li><a
   href="ftp://jmjeong.com/pub/happydays/happydays1.xx/happydays-1.45-dutch.zip">
 			Dutch</a>(1.45)

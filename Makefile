@@ -97,6 +97,10 @@ ru: ENGLISH obj/$(TARGET)-ru.prc
 	mv obj/$(TARGET)-ru.prc prc
 	zip $(TARGET)-$(VERSION)-ru.zip prc/$(TARGET)-ru.prc
 
+catalan: ENGLISH obj/$(TARGET)-catalan.prc
+	mv obj/$(TARGET)-catalan.prc prc
+	zip $(TARGET)-$(VERSION)-catalan.zip prc/$(TARGET)-catalan.prc
+
 th: $(TARGET)-th.prc
 	mv obj/$(TARGET)-th.prc prc
 	zip $(TARGET)-$(VERSION)-th.zip prc/$(TARGET)-th.prc
@@ -105,8 +109,6 @@ th: $(TARGET)-th.prc
 dutch: $(TARGET)-dutch.prc
 	zip $(TARGET)-$(VERSION)-dutch.zip $(TARGET)-dutch.prc
 
-catalan: $(TARGET)-catalan.prc
-	zip $(TARGET)-$(VERSION)-catalan.zip $(TARGET)-catalan.prc
 
 .S.o:
 	$(CC) $(TARGETFLAGS) -c $<
@@ -186,14 +188,17 @@ obj/$(TARGET)-ru.prc: obj/$(TARGET) obj/bin-ru.res
 	$(BUILDPRC) -o obj/$(TARGET)-ru.prc happydays.def \
 		obj/*.bin obj/$(TARGET)
 
+obj/$(TARGET)-catalan.prc: obj/$(TARGET) obj/bin-catalan.res
+	@echo "Building program file ./obj/happydays-catalan.prc..." && \
+	$(BUILDPRC) -o obj/$(TARGET)-catalan.prc happydays.def \
+		obj/*.bin obj/$(TARGET)
+
 $(TARGET)-th.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGET).grc pref0000.$(TARGET).grc rloc0000.$(TARGET).grc bin-th.res
 	$(BUILDPRC) $(TARGET)-th.prc $(APPNAME) $(APPID) code0001.$(TARGET).grc code0000.$(TARGET).grc data0000.$(TARGET).grc *.bin pref0000.$(TARGET).grc rloc0000.$(TARGET).grc
 
 $(TARGET)-dutch.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGET).grc pref0000.$(TARGET).grc rloc0000.$(TARGET).grc bin-dutch.res
 	$(BUILDPRC) $(TARGET)-dutch.prc $(APPNAME) $(APPID) code0001.$(TARGET).grc code0000.$(TARGET).grc data0000.$(TARGET).grc *.bin pref0000.$(TARGET).grc rloc0000.$(TARGET).grc
 
-$(TARGET)-catalan.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGET).grc pref0000.$(TARGET).grc rloc0000.$(TARGET).grc bin-catalan.res
-	$(BUILDPRC) $(TARGET)-catalan.prc $(APPNAME) $(APPID) code0001.$(TARGET).grc code0000.$(TARGET).grc data0000.$(TARGET).grc *.bin pref0000.$(TARGET).grc rloc0000.$(TARGET).grc
 
 obj/bin.res: obj/$(TARGET)-en.rcp
 	@echo "Compiling resource happydays.rcp..." &&\
@@ -266,6 +271,11 @@ obj/bin-ru.res: obj/$(TARGET)-ru.rcp
 	(cd obj && rm -f *.bin ) && \
 	$(PILRC) -q -L RUSSIAN obj/$(TARGET)-ru.rcp obj
 
+obj/bin-catalan.res: obj/$(TARGET)-catalan.rcp
+	@echo "Compiling resource happydays-catalan.rcp..." &&\
+	(cd obj && rm -f *.bin ) && \
+	$(PILRC) -q -L CATALAN  obj/$(TARGET)-catalan.rcp obj
+
 bin-th.res: $(TARGET)-th.rcp
 	rm -f *.bin
 	$(PILRC) -L THAI $(TARGET)-th.rcp .
@@ -274,9 +284,6 @@ bin-dutch.res: $(TARGET)-dutch.rcp
 	rm -f *.bin
 	$(PILRC) -L DUTCH $(TARGET)-dutch.rcp .
 
-bin-catalan.res: $(TARGET)-catalan.rcp
-	rm -f *.bin
-	$(PILRC) -L CATALAN $(TARGET)-catalan.rcp .
 
 bin-br.res: $(TARGET)-br.rcp
 	rm -f *.bin
@@ -347,6 +354,11 @@ obj/$(TARGET)-ru.rcp: $(TARGET).rcp translate/russian.msg translate/hdr.msg
 	cat translate/hdr.msg translate/russian.msg $(TARGET).rcp \
 			> obj/$(TARGET)-ru.rcp
 
+obj/$(TARGET)-catalan.rcp: $(TARGET).rcp translate/catalan.msg translate/hdr.msg
+	@echo "Generating happydays-catalan.rcp file..." && \
+	cat translate/hdr.msg translate/catalan.msg $(TARGET).rcp \
+			> obj/$(TARGET)-catalan.rcp
+
 $(TARGET)-th.rcp: $(TARGET).rcp thai.msg hdr.msg
 	cat hdr.msg thai.msg $(TARGET).rcp > $(TARGET)-th.rcp
 
@@ -356,8 +368,6 @@ $(TARGET)-dutch.rcp: $(TARGET).rcp dutch.msg hdr.msg
 $(TARGET)-fr.rcp: $(TARGET).rcp french.msg hdr.msg
 	cat hdr.msg french.msg $(TARGET).rcp > $(TARGET)-fr.rcp
 
-$(TARGET)-catalan.rcp: $(TARGET).rcp catalan.msg hdr.msg
-	cat hdr.msg catalan.msg $(TARGET).rcp > $(TARGET)-catalan.rcp
 
 obj/$(TARGET): $(OBJS) obj/happydays-sections.ld
 	@echo "Linking..." && \
