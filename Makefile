@@ -74,19 +74,19 @@ pref0000.$(TARGET).grc: code0000.$(TARGET).grc
 
 rloc0000.$(TARGET).grc: code0000.$(TARGET).grc
 
-bin.res: $(TARGET)-en.rcp $(TARGET).pbitm
+bin.res: $(TARGET)-en.rcp 
 	$(PILRC) -L ENGLISH $(TARGET)-en.rcp .
 
-bin-kt.res: $(TARGET)-ko.rcp $(TARGET).pbitm
+bin-kt.res: $(TARGET)-ko.rcp 
 	$(PILRC) -L KOREAN -Fkt $(TARGET)-ko.rcp .
 
-bin-km.res: $(TARGET)-ko.rcp $(TARGET).pbitm
+bin-km.res: $(TARGET)-ko.rcp
 	$(PILRC) -L KOREAN -Fkm $(TARGET)-ko.rcp .
 
-bin-de.res: $(TARGET)-de.rcp $(TARGET).pbitm
+bin-de.res: $(TARGET)-de.rcp 
 	$(PILRC) -L GERMAN $(TARGET)-de.rcp .
 
-bin-th.res: $(TARGET)-th.rcp $(TARGET).pbitm
+bin-th.res: $(TARGET)-th.rcp 
 	$(PILRC) -L THAI $(TARGET)-th.rcp .
 
 $(TARGET)-en.rcp: $(TARGET).rcp english.msg hdr.msg
