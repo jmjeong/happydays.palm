@@ -47,7 +47,6 @@ Int16 gMainTableHandleRow;    // The row of birthdate view to display
 DateFormatType gPrefdfmts;  // global date format for Birthday field
 DateFormatType gDispdfmts;  // global date format for display
 TimeFormatType gPreftfmts;  // global time format
-Int16 gFormID;              // global form id(which form is displayed)
 
 Boolean gProgramExit = false;    // Program exit control(set by Startform)
 
@@ -829,7 +828,6 @@ static Boolean Sl2LnFormHandleEvent(EventPtr e)
 
         case Sl2LnFormOk:
             FrmReturnToForm(0);
-			gFormID = MainForm;			// used for SpecialKeyDown
 
             handled = true;
             break;
@@ -872,7 +870,6 @@ static Boolean Ln2SlFormHandleEvent(EventPtr e)
         switch(e->data.ctlSelect.controlID) {
         case Ln2SlFormOk:
             FrmReturnToForm(0);
-			gFormID = MainForm;			// used for SpecialKeyDown
 
             handled = true;
             break;
@@ -1237,7 +1234,6 @@ static void MainFormLoadTable(FormPtr frm, Boolean redraw)
     int row;
 
     tableP = GetObjectPointer(frm, MainFormTable);
-	gFormID = MainForm;			// used for SpecialKeyDown
 
     if (redraw) {
         TblEraseTable(tableP);
@@ -1790,7 +1786,6 @@ static Boolean NotifyFormHandleEvent(EventPtr e)
                 MemPtrFree(info);
             } 
             FrmReturnToForm(0);
-			gFormID = MainForm;			// used for SpecialKeyDown
 
             handled = true;
             break;
@@ -1801,7 +1796,6 @@ static Boolean NotifyFormHandleEvent(EventPtr e)
             WritePrefsRec();
 
             FrmReturnToForm(0);
-			gFormID = MainForm;			// used for SpecialKeyDown
 
             handled = true;
             break;
@@ -2178,7 +2172,6 @@ static Boolean BirthdateFormHandleEvent(EventPtr e)
         switch(e->data.ctlSelect.controlID) {
         case BirthdateDone:
             FrmReturnToForm(0);
-			gFormID = MainForm;			// used for SpecialKeyDown
 
             handled = true;
             break;
@@ -2270,13 +2263,14 @@ static Boolean ApplicationHandleEvent(EventPtr e)
 {
     FormPtr frm;
     Boolean handled = false;
+	UInt16 formID;
 
     if (e->eType == frmLoadEvent) {
-        gFormID = e->data.frmLoad.formID;
-        frm = FrmInitForm(gFormID);
+        formID = e->data.frmLoad.formID;
+        frm = FrmInitForm(formID);
         FrmSetActiveForm(frm);
 
-        switch(gFormID) {
+        switch(formID) {
         case StartForm:
             FrmSetEventHandler(frm, StartFormHandlerEvent);
             break;
@@ -2580,17 +2574,21 @@ static void StopApplication(void)
 static Boolean SpecialKeyDown(EventPtr e) 
 {
     Int16 chr;
+    // DateTimeType dt;
+
     if (e->eType != keyDownEvent) return false;
 
+	// softkey only work on main screen
+	//
+	if (FrmGetActiveFormID() != MainForm) return false;
+		
+	// chr = e->data.keyDown.chr;
     if (e->data.keyDown.modifiers & commandKeyMask) {
-        chr = e->data.keyDown.chr;
+    	chr = e->data.keyDown.chr;
 
         if (e->data.keyDown.modifiers & autoRepeatKeyMask) return false;
         if (e->data.keyDown.modifiers & poweredOnKeyMask) return false;
 
-        // softkey only work on main screen
-        if (gFormID != MainForm) return false;
-            
         if (keyboardAlphaChr == chr) {
             gPrefsR->BirthPrefs.sort = '0';     // sort by name
 			SndPlaySystemSound(sndClick);
@@ -2604,6 +2602,19 @@ static Boolean SpecialKeyDown(EventPtr e)
             return true;
         }
     }
+	/*
+		else if (chr >= '0' && chr <= '9') {
+			TimSecondsToDateTime(TimGetSeconds(), &dt);
+			
+			dt.month = chr - '0';
+			dt.day = 1;
+
+			HighlightMatchRow(dt);
+
+			return true;
+		}
+	*/
+	
     return false;
 }
 
