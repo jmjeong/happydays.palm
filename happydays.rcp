@@ -485,7 +485,7 @@ BEGIN
     TITLE "About HappyDays"
 
 	FORMBITMAP AT (6 18) BITMAP ID_BitmapIcon USABLE 
-    LABEL "HappyDays 1.5" AUTOID AT (PrevRight+38 PrevTop) FONT 1
+    LABEL "HappyDays 2.0b" AUTOID AT (PrevRight+38 PrevTop) FONT 1
     LABEL "GPL free software"
         AUTOID AT (PrevLeft PrevTop+ABOUT_LINE_SPACING) FONT 0
     LABEL "(c) 1999-2001 JaeMok Jeong"
@@ -517,40 +517,40 @@ END
 /////////////
 
 BITMAP ID ID_BitmapIcon+0x1000
-	"largeIconBW.bmp"
+	"bitmap/largeIconBW.bmp"
 	COMPRESS
 
 ICON ID 2000
-	"largeIconBW.bmp"
+	"bitmap/largeIconBW.bmp"
 
 ICON ID 2001
-	"mediumIconBW.bmp"
+	"bitmap/mediumIconBW.bmp"
 
 ICON ID 2002
-	"largeInvertedIconBW.bmp"
+	"bitmap/largeInvertedIconBW.bmp"
 
 
 BitMapFamily ID ID_BitmapIcon
-	"HD_large.bmp" 
+	"bitmap/HD_large.bmp" 
 	""
 	"" 
-	"HD_large_color.bmp"
+	"bitmap/HD_large_color.bmp"
 	COMPRESS
 	TRANSPARENT 192 192 0
 
 ICONFAMILY 
-	"HD_large.bmp" 
+	"bitmap/HD_large.bmp" 
 	""
 	"" 
-	"HD_large_color.bmp"
+	"bitmap/HD_large_color.bmp"
 	TRANSPARENT 192 192 0
 
 SMALLICONFAMILY
-	"HD_small.bmp" 
+	"bitmap/HD_small.bmp" 
 	""
 	"" 
-	"HD_small_color.bmp"
+	"bitmap/HD_small_color.bmp"
 	TRANSPARENT 192 192 0
 
 APPLICATIONICONNAME 1000 "HappyDays"
-VERSION ID 1 "1.5"
+VERSION ID 1 "2.0b"

@@ -958,6 +958,18 @@ static Boolean MenuHandler(FormPtr frm, EventPtr e)
             
         handled = true;
         break;
+
+    case MainMenuRescanAddr:
+        MemSet(&gPrefsR.adrmdate, 4, 0);  	    // force a re-scan
+
+        if (gPrefsR.Prefs.autoscan == 2) {      // trick (force rescan)
+            gPrefsR.Prefs.autoscan = 3;         //    process Never
+        }
+    
+        FrmGotoForm(StartForm);
+
+        handled = true;
+        break;
         
     case MainMenuNotifyDatebook:
 
@@ -2584,9 +2596,17 @@ static Boolean StartFormHandleEvent(EventPtr e)
                                            gAppErrStr, " ", " ")) {
                     case 0:             // Yes
                         rescan = true;
-                    case 1:             // Help
+                        break;
+                    case 1:             // No
                     }
+                    break;
                 case 2: // no
+                    break;
+                case 3:
+                    rescan = true;      // trick, force rescan
+                    
+                    gPrefsR.Prefs.autoscan = 2;
+                    break;
                 }
                 if (rescan) UpdateHappyDaysDB(frm);
                 SetReadAddressDB();     // mark addressDB is read
