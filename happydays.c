@@ -614,6 +614,7 @@ static Boolean MainFormHandleEvent (EventPtr e)
             handled = true;
 			break;
         }
+		MainFormReadDB();
         // frmRedrawUpdateCode invoked by SpecialKeyDown
         //
 		// else execute frmOpenEvent
@@ -676,7 +677,6 @@ static Boolean MainFormHandleEvent (EventPtr e)
             
             break;
         }
-
         case MainFormPageUp:
             if (gMainTableStart) {
                 gMainTableStart -= MIN(gMainTableStart, gMainTableRows-1);
@@ -690,6 +690,7 @@ static Boolean MainFormHandleEvent (EventPtr e)
                 MainFormLoadTable(frm, true);
             }
             break;
+
         default:
             break;
                 
