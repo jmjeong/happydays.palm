@@ -18,7 +18,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 #include <PalmOS.h>
-#include <HandEra/Vga.h>
+#include "Handera/Vga.h"
 
 #include "happydays.h"
 #include "happydaysRsc.h"

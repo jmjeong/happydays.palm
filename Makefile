@@ -15,7 +15,7 @@ OBJS = obj/lun2sol.o obj/sol2lun.o obj/address.o obj/datebook.o obj/util.o \
 
 CC = m68k-palmos-gcc
 
-CFLAGS = -Wall -O2 -I/opt/palmdev/sdk-5r3/include/Clie -I/opt/palmdev/sdk-5r3/include/Clie/System -I/opt/palmdev/sdk-5r3/include/Clie/Libraries
+CFLAGS = -Wall -O2 -I/usr/local/share/palmdev/sonysdk -I/usr/local/share/palmdev/sonysdk/System -I/usr/local/share/palmdev/sonysdk/Libraries
 #CFLAGS = -Wall -g -O2
 
 PILRC = pilrc

@@ -19,8 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <PalmOS.h>
 #include <SonyCLIE.h>
-#include "HandEra/Vga.h"
-#include "HandEra/Silk.h"
+#include "Handera/Vga.h"
+#include "Handera/Silk.h"
 
 #include "address.h"
 #include "memodb.h"
@@ -1118,7 +1118,7 @@ static void HighlightMatchRowName(Char first)
     MemHandle recordH = 0;
     PackedHappyDays* rp;
     HappyDays r;
-    Char p;
+    Char p; 
 
     if (gMainTableTotals <= 0) return;
 
@@ -2008,7 +2008,6 @@ static Boolean PrefFormHandleEvent(EventPtr e)
     default:
         break;
     }
-
 
     return handled;
 }
@@ -3149,7 +3148,7 @@ static Boolean StartFormHandleEvent(EventPtr e)
 // $Revision$
 //
 //
-// $Log$
+// $Log: happydays.c,v $
 // Revision 1.77  2004/11/21 15:51:18  jmjeong
 // Fix lunar mismatch(2006.1.1)
 // Enforce to check the wrong lunar input

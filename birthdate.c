@@ -426,11 +426,13 @@ Boolean AnalysisHappyDays(const char* field,
 
         if (flag->bits.lunar || flag->bits.lunar_leap) {
             DateTimeType rtVal;
-            UInt8 ret;
+            int ret;
             
             ret = lun2sol(year, month, day, flag->bits.lunar_leap, &rtVal);
 
-            if (!ret) return false;
+            if (!ret) {
+				return false;
+			}
         }
     }
     *dMonth = month; *dDay = day;

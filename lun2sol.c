@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <PalmOS.h>
 #include "calendar.h"
+#include "happydaysRsc.h"
 
 //  lunayDay : the lunar day to be converted
 //  leapyes  : leap yes or no(0/1)
@@ -47,7 +48,10 @@ int lun2sol(int lyear, int lmonth, int lday, int leapyes,
     if( leapyes == 0 )
     {
         for(i = 1; i <= 12; i++) if(convertIndex[lyear-1881][i-1] > 2 ) j++;
-        if(lday > convertIndex[lyear-1881][j]+28) return -1;
+        if(lday > convertIndex[lyear-1881][j]+28) {
+			FrmAlert(ErrorAlert);
+			return -1;
+		}
     }
 
     m1 = -1;
