@@ -1,5 +1,5 @@
 /*
-HappyDays - A Birthdate displayer for the PalmPilot
+HappyDays - A Birthday displayer for the PalmPilot
 Copyright (C) 1999-2001 JaeMok Jeong
 
 This program is free software; you can redistribute it and/or

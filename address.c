@@ -1,5 +1,5 @@
 /*
-HappyDays - A Birthdate displayer for the PalmPilot
+HappyDays - A Birthday displayer for the PalmPilot
 Copyright (C) 1999-2001 JaeMok Jeong
 
 This program is free software; you can redistribute it and/or
@@ -391,7 +391,7 @@ Int16 GotoAddress(Int16 index)
     DmSearchStateType searchInfo;
     UInt16 cardNo;
     LocalID dbID;
-    UInt32 addrID = AddrGotoCreatorId[(int)gPrefsR.BirthPrefs.addrapp];
+    UInt32 addrID = AddrGotoCreatorId[(int)gPrefsR.Prefs.addrapp];
 
     theGotoPointer = MemPtrNew(sizeof(GoToParamsType));
     if (!theGotoPointer) return -1;

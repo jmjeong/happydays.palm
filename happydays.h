@@ -59,7 +59,7 @@ struct sTDNotifyPrefs
     char todoCategory[dmCategoryLength];
 };
 
-struct sBirthPrefs 
+struct sPrefs 
 {
     char custom[12+1];          // addr label length
     char notifywith[5+1];       // notify with (HD)
@@ -88,7 +88,7 @@ struct sPrefsR
 
     struct sDBNotifyPrefs DBNotifyPrefs;
     struct sTDNotifyPrefs TDNotifyPrefs;
-    struct sBirthPrefs    BirthPrefs;
+    struct sPrefs         Prefs;
     struct sDispPrefs     DispPrefs;
 
     // HideSecretRecord in system global preference
@@ -114,25 +114,25 @@ typedef union
         unsigned solar      :1;         // solar calendar?
     } bits;
     Int16 allBits;          // 16 bit
-} BirthdateFlag;
+} HappyDaysFlag;
 
 typedef struct 
 {
     UInt32 addrRecordNum;   // address book record number
     DateType date;          // orignal address book birthdate 
-    BirthdateFlag flag;     // about birthdate flag
+    HappyDaysFlag flag;     // about birthdate flag
     char *name1;
     char *name2;
     char *custom;
-} BirthDate;
+} HappyDays;
 
 typedef struct
 {
     UInt32 addrRecordNum;
     DateType date;
-    BirthdateFlag flag;
+    HappyDaysFlag flag;
     char name[1];           // actually may be longer than 1
-} PackedBirthDate;
+} PackedHappyDays;
 
 #define INVALID_CONV_DATE       127
 

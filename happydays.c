@@ -40,7 +40,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 MemHandle gTableRowHandle;
 
-Int16 gBirthDateField;
+Int16 gHappyDaysField;
 Char gAppErrStr[AppErrStrLen];
 Char gLookupDate[12];			// date string of look up
 UInt32 gAdcdate, gAdmdate;      // AddressBook create/modify time
@@ -342,12 +342,12 @@ static void GoToItem (GoToParamsPtr goToParams, Boolean launchingApp)
    	EvtAddEventToQueue (&event);
 }
 
-static void DrawSearchLine(BirthDate birthdate, RectangleType r)
+static void DrawSearchLine(HappyDays hd, RectangleType r)
 {
-	DrawRecordName(birthdate.name1, birthdate.name2, 
+	DrawRecordName(hd.name1, hd.name2, 
                    r.extent.x, &r.topLeft.x, 
                    r.topLeft.y, false,
-                   birthdate.flag.bits.priority_name1);
+                   hd.flag.bits.priority_name1);
 	return;
 
 	/*
@@ -360,21 +360,21 @@ static void DrawSearchLine(BirthDate birthdate, RectangleType r)
      // Char displayStr[255];
      Int16 x = r.topLeft.x;
 
-     if (birthdate.flag.bits.lunar) {
+     if (hd.flag.bits.lunar) {
      StrCopy(displayStr, "-)");
      }
-     else if (birthdate.flag.bits.lunar_leap) {
+     else if (hd.flag.bits.lunar_leap) {
      StrCopy(displayStr, "#)");
      }
      else displayStr[0] = 0;
 
-     if (birthdate.flag.bits.year) {
-     DateToAsciiLong(birthdate.date.month, birthdate.date.day, 
-     birthdate.date.year + 1904,
+     if (hd.flag.bits.year) {
+     DateToAsciiLong(hd.date.month, hd.date.day, 
+     hd.date.year + 1904,
      gPrefdfmts, displayStr + StrLen(displayStr));
      }
      else {
-     DateToAsciiLong(birthdate.date.month, birthdate.date.day, -1, 
+     DateToAsciiLong(hd.date.month, hd.date.day, -1, 
      gPrefdfmts, displayStr + StrLen(displayStr));
      }
 
@@ -428,7 +428,7 @@ static void Search(FindParamsPtr findParams)
       	recordNum = findParams->recordNum;
       	for(;;) {
          	Boolean match = false;
-         	BirthDate       birthdate;
+         	HappyDays       hd;
          
          	// Because applications can take a long time to finish a find 
          	// users like to be able to stop the find.  Stop the find 
@@ -455,12 +455,12 @@ static void Search(FindParamsPtr findParams)
          
          	// Search each of the fields of the birthdate
       
-         	UnpackBirthdate(&birthdate, MemHandleLock(recordH));
+         	UnpackHappyDays(&hd, MemHandleLock(recordH));
          
-         	if ((match = FindStrInStr((Char*) birthdate.name1, 
+         	if ((match = FindStrInStr((Char*) hd.name1, 
                                       findParams->strToFind, &pos)) != false)
             	fieldNum = 1;
-         	else if ((match = FindStrInStr((Char*) birthdate.name2, 
+         	else if ((match = FindStrInStr((Char*) hd.name2, 
                                            findParams->strToFind, &pos)) != false)
             	fieldNum = 2;
             
@@ -472,7 +472,7 @@ static void Search(FindParamsPtr findParams)
             	FindGetLineBounds(findParams, &r);
             
             	// Display the title of the description.
-				DrawSearchLine(birthdate, r);
+				DrawSearchLine(hd, r);
 
             	findParams->lineNumber++;
          	}
@@ -560,8 +560,8 @@ static void ReadPrefsRec(void)
 		MemMove(&gPrefsR, &defaultPref, sizeof(defaultPref));
 		gPrefsR.listFont = (gbVgaExists) ? VgaBaseToVgaFont(stdFont) 
             : stdFont;
-        if (gPrefsR.BirthPrefs.sysdateover)
-            gPrefdfmts = gPrefsR.BirthPrefs.dateformat;
+        if (gPrefsR.Prefs.sysdateover)
+            gPrefdfmts = gPrefsR.Prefs.dateformat;
     }
 }
 
@@ -718,7 +718,7 @@ static Boolean SpecialKeyDown(EventPtr e)
 /*
   if (e->data.keyDown.modifiers & commandKeyMask) {
   if (keyboardAlphaChr == chr) {
-  gPrefsR.BirthPrefs.sort = 0;     // sort by name
+  gPrefsR.Prefs.sort = 0;     // sort by name
   SndPlaySystemSound(sndClick);
 
   gMainTableStart = 0;
@@ -726,7 +726,7 @@ static Boolean SpecialKeyDown(EventPtr e)
   return true;
   }
   else if (keyboardNumericChr == chr) {
-  gPrefsR.BirthPrefs.sort = 1;     // sort by date
+  gPrefsR.Prefs.sort = 1;     // sort by date
   SndPlaySystemSound(sndClick);
 
   gMainTableStart = 0;
@@ -783,7 +783,7 @@ static Boolean SpecialKeyDown(EventPtr e)
 
 static void RereadHappyDaysDB(DateType start)
 {
-    gMainTableTotals = AddrGetBirthdate(MainDB, gAddrCategory, start);
+    gMainTableTotals = AddrGetHappyDays(MainDB, gAddrCategory, start);
 }
 
 static void HighlightAction(int selected, Boolean sound)
@@ -841,8 +841,8 @@ static void HighlightMatchRowName(Char first)
     Int16 selected = -1;
     Int16 i;
     MemHandle recordH = 0;
-    PackedBirthDate* rp;
-    BirthDate r;
+    PackedHappyDays* rp;
+    HappyDays r;
     Char p;
 
     if (gMainTableTotals <= 0) return;
@@ -850,8 +850,8 @@ static void HighlightMatchRowName(Char first)
     if ((ptr = MemHandleLock(gTableRowHandle))) {
         for (i = 0; i < gMainTableTotals; i++) {
             if ((recordH = DmQueryRecord(MainDB, ptr[i].birthRecordNum))) {
-                rp = (PackedBirthDate*) MemHandleLock(recordH);
-                UnpackBirthdate(&r,rp);
+                rp = (PackedHappyDays*) MemHandleLock(recordH);
+                UnpackHappyDays(&r,rp);
 
                 p = (r.name1[0]) ? r.name1[0] : r.name2[0];
                 // make capital letter
@@ -1344,8 +1344,8 @@ static Boolean MainFormHandleEvent (EventPtr e)
 		case MainFormName:
 		{
 			Boolean change = true;
-			if (gPrefsR.BirthPrefs.sort == 0) change = false;
-			else gPrefsR.BirthPrefs.sort = 0;	// sort by name
+			if (gPrefsR.Prefs.sort == 0) change = false;
+			else gPrefsR.Prefs.sort = 0;	// sort by name
 
 			if (change) {
 				FrmUpdateForm(MainForm, frmRedrawUpdateCode);
@@ -1357,8 +1357,8 @@ static Boolean MainFormHandleEvent (EventPtr e)
 		case MainFormDate:
 		{
 			Boolean change = true;
-			if (gPrefsR.BirthPrefs.sort == 1) change = false;
-			else gPrefsR.BirthPrefs.sort = 1; 	// sort by date
+			if (gPrefsR.Prefs.sort == 1) change = false;
+			else gPrefsR.Prefs.sort = 1; 	// sort by date
 
 			if (change) {
 				FrmUpdateForm(MainForm, frmRedrawUpdateCode);
@@ -1371,9 +1371,9 @@ static Boolean MainFormHandleEvent (EventPtr e)
 		{
 			Boolean change = true;
 
-			if (gPrefsR.BirthPrefs.sort == 2) 
-				gPrefsR.BirthPrefs.sort = 3;  	// sort by age(re)
-			else gPrefsR.BirthPrefs.sort = 2; 	// sort by age
+			if (gPrefsR.Prefs.sort == 2) 
+				gPrefsR.Prefs.sort = 3;  	// sort by age(re)
+			else gPrefsR.Prefs.sort = 2; 	// sort by age
 
 			if (change) {
 				FrmUpdateForm(MainForm, frmRedrawUpdateCode);
@@ -1466,32 +1466,32 @@ static void LoadPrefsFields()
     if ((frm = FrmGetFormPtr(PrefForm)) == 0) return;
     
     CtlSetValue(GetObjectPointer(frm, PrefFormOverrideSystemDate),
-                gPrefsR.BirthPrefs.sysdateover);
+                gPrefsR.Prefs.sysdateover);
 
     lstdate = GetObjectPointer(frm, PrefFormDateFmts);
-    LstSetSelection(lstdate, gPrefsR.BirthPrefs.dateformat);
+    LstSetSelection(lstdate, gPrefsR.Prefs.dateformat);
     CtlSetLabel(GetObjectPointer(frm, PrefFormDateTrigger),
-                LstGetSelectionText(lstdate, gPrefsR.BirthPrefs.dateformat));
+                LstGetSelectionText(lstdate, gPrefsR.Prefs.dateformat));
 
     lstauto = GetObjectPointer(frm, PrefFormAutoRescan);
-    LstSetSelection(lstauto, gPrefsR.BirthPrefs.autoscan);
+    LstSetSelection(lstauto, gPrefsR.Prefs.autoscan);
     CtlSetLabel(GetObjectPointer(frm, PrefFormRescanTrigger),
-                LstGetSelectionText(lstauto, gPrefsR.BirthPrefs.autoscan));
+                LstGetSelectionText(lstauto, gPrefsR.Prefs.autoscan));
 
     lstnotify = GetObjectPointer(frm, PrefFormNotifyFmts);
-    LstSetSelection(lstnotify, gPrefsR.BirthPrefs.notifyformat);
+    LstSetSelection(lstnotify, gPrefsR.Prefs.notifyformat);
     CtlSetLabel(GetObjectPointer(frm, PrefFormNotifyTrigger),
-                LstGetSelectionText(lstnotify, gPrefsR.BirthPrefs.notifyformat));
+                LstGetSelectionText(lstnotify, gPrefsR.Prefs.notifyformat));
     
     lstaddr = GetObjectPointer(frm,PrefFormAddress);
-    LstSetSelection(lstaddr, gPrefsR.BirthPrefs.addrapp);
+    LstSetSelection(lstaddr, gPrefsR.Prefs.addrapp);
     CtlSetLabel(GetObjectPointer(frm,PrefFormAddrTrigger),
-                LstGetSelectionText(lstaddr,gPrefsR.BirthPrefs.addrapp));
+                LstGetSelectionText(lstaddr,gPrefsR.Prefs.addrapp));
                     
-    SetFieldTextFromStr(PrefFormCustomField, gPrefsR.BirthPrefs.custom);
-    SetFieldTextFromStr(PrefFormNotifyWith, gPrefsR.BirthPrefs.notifywith);
+    SetFieldTextFromStr(PrefFormCustomField, gPrefsR.Prefs.custom);
+    SetFieldTextFromStr(PrefFormNotifyWith, gPrefsR.Prefs.notifywith);
 
-    if (gPrefsR.BirthPrefs.scannote == 1) {
+    if (gPrefsR.Prefs.scannote == 1) {
         CtlSetValue(GetObjectPointer(frm, PrefFormScanNote), 1);
     }
     else {
@@ -1513,14 +1513,14 @@ static Boolean UnloadPrefsFields()
     if (FldDirty(GetObjectPointer(frm, PrefFormCustomField))) {
         needrescan = 1;
         if (FldGetTextPtr(GetObjectPointer(frm, PrefFormCustomField))) {
-            StrNCopy(gPrefsR.BirthPrefs.custom,
+            StrNCopy(gPrefsR.Prefs.custom,
                      FldGetTextPtr(GetObjectPointer(frm,
                                                     PrefFormCustomField)), 12);
         }
     }
     if (FldDirty(GetObjectPointer(frm, PrefFormNotifyWith))) {
         if (FldGetTextPtr(GetObjectPointer(frm, PrefFormNotifyWith))) {
-            StrNCopy(gPrefsR.BirthPrefs.notifywith,
+            StrNCopy(gPrefsR.Prefs.notifywith,
                      FldGetTextPtr(GetObjectPointer(frm,
                                                     PrefFormNotifyWith)), 5);
         }
@@ -1542,33 +1542,33 @@ static Boolean UnloadPrefsFields()
     }
     else
     {
-        if (gPrefsR.BirthPrefs.sysdateover && gPrefdfmts != gSystemdfmts)
+        if (gPrefsR.Prefs.sysdateover && gPrefdfmts != gSystemdfmts)
         {
             needrescan = 1;
             gPrefdfmts = gSystemdfmts;    // revert to system date format
         }
     }
-    gPrefsR.BirthPrefs.sysdateover = newoverride;
-    gPrefsR.BirthPrefs.dateformat = newdateformat;
+    gPrefsR.Prefs.sysdateover = newoverride;
+    gPrefsR.Prefs.dateformat = newdateformat;
 
     // notify string
     lstnotify = GetObjectPointer(frm, PrefFormNotifyFmts);
-    gPrefsR.BirthPrefs.notifyformat = LstGetSelection(lstnotify);
+    gPrefsR.Prefs.notifyformat = LstGetSelection(lstnotify);
 
     // automatic scan of Address
     lstaddr = GetObjectPointer(frm, PrefFormAutoRescan);
-    gPrefsR.BirthPrefs.autoscan = LstGetSelection(lstaddr);
+    gPrefsR.Prefs.autoscan = LstGetSelection(lstaddr);
 
 
     // addr goto application id
     lstaddr = GetObjectPointer(frm, PrefFormAddress);
-    gPrefsR.BirthPrefs.addrapp = LstGetSelection(lstaddr);
+    gPrefsR.Prefs.addrapp = LstGetSelection(lstaddr);
     
     ptr = GetObjectPointer(frm, PrefFormScanNote);
-    if (CtlGetValue(ptr) != gPrefsR.BirthPrefs.scannote ) {
+    if (CtlGetValue(ptr) != gPrefsR.Prefs.scannote ) {
         needrescan = 1;
     }
-    gPrefsR.BirthPrefs.scannote = CtlGetValue(ptr);
+    gPrefsR.Prefs.scannote = CtlGetValue(ptr);
 
     return needrescan;
 }
@@ -1753,8 +1753,8 @@ static void MainFormDrawRecord(MemPtr tableP, Int16 row, Int16 column,
     MemHandle recordH = 0;
     Int16 x, y;
     UInt16 nameExtent;
-    PackedBirthDate* rp;
-    BirthDate r;
+    PackedHappyDays* rp;
+    HappyDays r;
     LineItemPtr ptr;
     LineItemType drawRecord;
 	Boolean ignored = true;
@@ -1790,12 +1790,12 @@ static void MainFormDrawRecord(MemPtr tableP, Int16 row, Int16 column,
 		Int16 categoryWidth = FntCharWidth('W');
 		Int16 ageFieldWidth = FntCharsWidth("100", 3);
 
-        rp = (PackedBirthDate *) MemHandleLock(recordH);
+        rp = (PackedHappyDays *) MemHandleLock(recordH);
         /*
          * Build the unpacked structure for an AddressDB record.  It
          * is just a bunch of pointers into the rp structure.
          */
-        UnpackBirthdate(&r, rp);
+        UnpackHappyDays(&r, rp);
 
 		// Display date(converted date)
 		// 
@@ -1995,10 +1995,10 @@ static void MainFormInit(FormPtr frm, Boolean bformModify)
 					gStartDate.year+1904, gPrefdfmts, gLookupDate);
 	CtlSetLabel(GetObjectPointer(frm, MainFormStart), gLookupDate);
 
-    if (gPrefsR.BirthPrefs.sort == 0) {
+    if (gPrefsR.Prefs.sort == 0) {
         CtlSetValue(GetObjectPointer(frm, MainFormName), 1);
     }
-    else if (gPrefsR.BirthPrefs.sort == 1) {
+    else if (gPrefsR.Prefs.sort == 1) {
         CtlSetValue(GetObjectPointer(frm, MainFormDate), 1);
     }
     else {
@@ -2018,8 +2018,8 @@ static void ViewFormDrawRecord(MemPtr tableP, Int16 row, Int16 column,
     DateType converted;
     Int8 age;
 
-    PackedBirthDate* rp;
-    BirthDate r;
+    PackedHappyDays* rp;
+    HappyDays r;
 	Int16 dateDiff;
 	DateType current;
 	char displayStr[25];
@@ -2047,12 +2047,12 @@ static void ViewFormDrawRecord(MemPtr tableP, Int16 row, Int16 column,
         width = bounds->extent.x;
 
         viewItem = TblGetItemInt(tableP, row, column);
-        rp = (PackedBirthDate *) MemHandleLock(recordH);
+        rp = (PackedHappyDays *) MemHandleLock(recordH);
         /*
          * Build the unpacked structure for an AddressDB record.  It
          * is just a bunch of pointers into the rp structure.
          */
-        UnpackBirthdate(&r, rp);
+        UnpackHappyDays(&r, rp);
 
         if (gbVgaExists) {
             currFont = FntSetFont(VgaBaseToVgaFont(stdFont));
@@ -2076,7 +2076,7 @@ static void ViewFormDrawRecord(MemPtr tableP, Int16 row, Int16 column,
                 char* p;
                 
                 if (!r.custom[0]) {         // custom does not exist
-                    p = gPrefsR.BirthPrefs.custom;
+                    p = gPrefsR.Prefs.custom;
                 }
                 else {
                     p = r.custom;
@@ -2333,8 +2333,8 @@ static void ViewFormSetInfo(FormPtr frm)
     LineItemPtr ptr;
     MemHandle recordH = 0;
     Int16 index;
-    PackedBirthDate* rp;
-    BirthDate r;
+    PackedHappyDays* rp;
+    HappyDays r;
     // RectangleType rect;
     
     // Read the necessary information from LineItem
@@ -2362,12 +2362,12 @@ static void ViewFormSetInfo(FormPtr frm)
     SetFieldTextFromStr(ViewFormCategory, gAppErrStr);
 
     if ((recordH = DmQueryRecord(MainDB, index))) {
-        rp = (PackedBirthDate *) MemHandleLock(recordH);
+        rp = (PackedHappyDays *) MemHandleLock(recordH);
         /*
          * Build the unpacked structure for an AddressDB record.  It
          * is just a bunch of pointers into the rp structure.
          */
-        UnpackBirthdate(&r, rp);
+        UnpackHappyDays(&r, rp);
 //        FrmGetObjectBounds(frm, FrmGetObjectIndex(frm, ViewFormName), &rect);
         
 //        DrawRecordName(r.name1, r.name2, rect.extent.x,
@@ -2505,7 +2505,7 @@ static Boolean ViewFormHandleEvent(EventPtr e)
         case ViewFormGoto:
         {
             MemHandle recordH = 0;
-            PackedBirthDate* rp;
+            PackedHappyDays* rp;
             UInt32 gotoIndex;
             
             LineItemPtr ptr = MemHandleLock(gTableRowHandle);
@@ -2513,7 +2513,7 @@ static Boolean ViewFormHandleEvent(EventPtr e)
             if ((recordH =
                  DmQueryRecord(MainDB,
                                ptr[gMainTableHandleRow].birthRecordNum))) {
-                rp = (PackedBirthDate *) MemHandleLock(recordH);
+                rp = (PackedHappyDays *) MemHandleLock(recordH);
                 gotoIndex = rp->addrRecordNum;
                 MemHandleUnlock(recordH);
 
@@ -2537,8 +2537,9 @@ static Boolean ViewFormHandleEvent(EventPtr e)
 
 static Boolean StartFormHandleEvent(EventPtr e)
 {
-    Int16 err;
     Boolean handled = false;
+    Boolean rescan;
+    
     FormPtr frm = FrmGetFormPtr(StartForm);
 
     // no event procedure
@@ -2549,12 +2550,11 @@ static Boolean StartFormHandleEvent(EventPtr e)
         if(gbVgaExists) 
        		VgaFormModify(frm, vgaFormModify160To240);
 
-        err = UpdateBirthdateDB(MainDB, frm);
-        if (err < 0) {
+        if (!FindHappyDaysField()) {
             char ErrStr[200];
 
             SysCopyStringResource(ErrStr, CantFindAddrString);
-            StrPrintF(gAppErrStr, ErrStr, gPrefsR.BirthPrefs.custom);
+            StrPrintF(gAppErrStr, ErrStr, gPrefsR.Prefs.custom);
 
             switch (FrmCustomAlert(CustomFieldAlert,
                                    gAppErrStr, " ", " ")) {
@@ -2572,9 +2572,29 @@ static Boolean StartFormHandleEvent(EventPtr e)
             }
         }
         else {
-			MainFormReadDB();
-			FrmGotoForm(MainForm);
-		}
+            rescan = false;
+            
+            if (IsChangedAddressDB()) {
+                switch (gPrefsR.Prefs.autoscan) {
+                case 0: // always
+                    rescan = true;
+                    break;
+                case 1: // ask
+                    switch (FrmCustomAlert(AddrRescanAlert,
+                                           gAppErrStr, " ", " ")) {
+                    case 0:             // Yes
+                        rescan = true;
+                    case 1:             // Help
+                    }
+                case 2: // no
+                }
+                if (rescan) UpdateHappyDaysDB(frm);
+                SetReadAddressDB();     // mark addressDB is read
+            }
+            MainFormReadDB();
+            FrmGotoForm(MainForm);
+        }
+        
         handled = true;
         break;
     default:

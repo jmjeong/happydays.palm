@@ -180,8 +180,8 @@ bin-br.res: $(TARGET)-br.rcp
 	rm -f *.bin
 	$(PILRC) -L BRAZILIAN $(TARGET)-br.rcp .
 
-$(TARGET)-en.rcp: $(TARGET).rcp english.msg hdr.msg
-	cat hdr.msg english.msg $(TARGET).rcp > $(TARGET)-en.rcp
+$(TARGET)-en.rcp: $(TARGET).rcp translate/english.msg translate/hdr.msg
+	cat translate/hdr.msg translate/english.msg $(TARGET).rcp > $(TARGET)-en.rcp
 
 $(TARGET)-ko.rcp: $(TARGET).rcp korean.msg hdr.msg
 	cat hdr.msg korean.msg $(TARGET).rcp > $(TARGET)-ko.rcp

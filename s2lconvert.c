@@ -94,14 +94,14 @@ Boolean Ln2SlFormHandleEvent(EventPtr e)
         case Ln2SlFormConvert:
         {
             DateTimeType rtVal;
-            BirthdateFlag dummy;
+            HappyDaysFlag dummy;
             Int16 year, month, day;
             Char* input;
             int ret;
             
             input = FldGetTextPtr(GetObjectPointer(frm, Ln2SlFormInput));
 
-            if ((ret = AnalysisBirthDate(input, &dummy,
+            if ((ret = AnalysisHappyDays(input, &dummy,
                                          &year, &month, &day))) {
                 int leapyes
                     = CtlGetValue(GetObjectPointer(frm, Ln2SlFormInputLeap));
@@ -178,13 +178,13 @@ Boolean Sl2LnFormHandleEvent(EventPtr e)
         case Sl2LnFormConvert:
         {
             DateTimeType rtVal;
-            BirthdateFlag dummy;
+            HappyDaysFlag dummy;
             Int16 year, month, day;
             Char* input;
             int ret = false;
 
             input = FldGetTextPtr(GetObjectPointer(frm, Sl2LnFormInput));
-            if ((ret = AnalysisBirthDate(input, &dummy,
+            if ((ret = AnalysisHappyDays(input, &dummy,
                                          &year, &month, &day))) {
                 int leapyes = 0;
 

@@ -71,19 +71,19 @@ static Boolean LoadDBNotifyPrefsFieldsMore(void);
 static void UnloadDBNotifyPrefsFieldsMore();
 static void ShowIconStuff();
 static void HideIconStuff();
-static Int16 CheckDatebookRecord(DateType when, BirthDate birth);
+static Int16 CheckDatebookRecord(DateType when, HappyDays birth);
 static Char* DateBk3IconString();
 static void ChkNMakePrivateRecord(DmOpenRef db, Int16 index);
-static Int16 CheckToDoRecord(DateType when, BirthDate birth);
+static Int16 CheckToDoRecord(DateType when, HappyDays birth);
 static void LoadCommonPrefsFields(FormPtr frm);
 static void UnloadCommonNotifyPrefs(FormPtr frm);
-static Boolean IsSameRecord(Char* notefield, BirthDate birth);
+static Boolean IsSameRecord(Char* notefield, HappyDays birth);
 // temporary return value;
-Char* EventTypeString(BirthDate r)
+Char* EventTypeString(HappyDays r)
 {
 	static char tmpString[4];
     if (!r.custom[0]) {
-        tmpString[0] = gPrefsR.BirthPrefs.custom[0];
+        tmpString[0] = gPrefsR.Prefs.custom[0];
     }
     else tmpString[0] = r.custom[0];
     tmpString[1] = 0;
@@ -97,16 +97,16 @@ Char* EventTypeString(BirthDate r)
 void PerformExport(Char * memo, int mainDBIndex, DateType when)
 {
     MemHandle recordH = 0;
-    PackedBirthDate* rp;
-    BirthDate r;
+    PackedHappyDays* rp;
+    HappyDays r;
     
     if ((recordH = DmQueryRecord(MainDB, mainDBIndex))) {
-        rp = (PackedBirthDate *) MemHandleLock(recordH);
+        rp = (PackedHappyDays *) MemHandleLock(recordH);
         /*
          * Build the unpacked structure for an AddressDB record.  It
          * is just a bunch of pointers into the rp structure.
          */
-        UnpackBirthdate(&r, rp);
+        UnpackHappyDays(&r, rp);
 
         StrNCat(memo, "\"", 4096);
         StrNCat(memo, r.name1, 4096);
@@ -452,7 +452,7 @@ Boolean DBNotifyFormMoreHandleEvent(EventPtr e)
 
 static Boolean IsHappyDaysRecord(Char* notefield)
 {
-    if (notefield && StrStr(notefield, gPrefsR.BirthPrefs.notifywith)) {
+    if (notefield && StrStr(notefield, gPrefsR.Prefs.notifywith)) {
         return true; 
     }
     return false;
@@ -469,7 +469,7 @@ static Char* gNotifyFormatString[5] =
 //
 // Memory is allocated, after calling this routine, user must free the memory
 //
-static Char* NotifyDescString(DateType when, BirthDate birth, 
+static Char* NotifyDescString(DateType when, HappyDays birth, 
 							  Int8 age,Boolean todo)
 {
     Char* description, *pDesc;
@@ -482,7 +482,7 @@ static Char* NotifyDescString(DateType when, BirthDate birth,
 
     // boundary check must be inserted
     //
-    pfmtString = gNotifyFormatString[(int)gPrefsR.BirthPrefs.notifyformat];
+    pfmtString = gNotifyFormatString[(int)gPrefsR.Prefs.notifyformat];
     while (*pfmtString) {
         if (*pfmtString == '+') {
             switch (*(pfmtString+1)) {
@@ -517,7 +517,7 @@ static Char* NotifyDescString(DateType when, BirthDate birth,
 
             case 'E':       // Event Type (like 'Birthday')
                 if (!birth.custom[0]) {
-                    StrCopy(pDesc, gPrefsR.BirthPrefs.custom);
+                    StrCopy(pDesc, gPrefsR.Prefs.custom);
                 }
                 else {
                     StrCopy(pDesc, birth.custom);
@@ -578,7 +578,7 @@ static Char* NotifyDescString(DateType when, BirthDate birth,
     return description;
 }
     
-static Int16 PerformNotifyDB(BirthDate birth, DateType when, Int8 age,
+static Int16 PerformNotifyDB(HappyDays birth, DateType when, Int8 age,
                              RepeatInfoType* repeatInfoPtr,
                              Int16 *created, Int16 *touched)
 {
@@ -644,7 +644,7 @@ static Int16 PerformNotifyDB(BirthDate birth, DateType when, Int8 age,
 	}
     else noteField[0] = 0;
 
-    StrCat(noteField, gPrefsR.BirthPrefs.notifywith);
+    StrCat(noteField, gPrefsR.Prefs.notifywith);
     StrPrintF(gAppErrStr, "%ld", Hash(birth.name1, birth.name2));
     StrCat(noteField, gAppErrStr);
     datebook.note = noteField;
@@ -691,7 +691,7 @@ static Int16 PerformNotifyDB(BirthDate birth, DateType when, Int8 age,
     return 0;
 }
 
-static Int16 PerformNotifyTD(BirthDate birth, DateType when, Int8 age,
+static Int16 PerformNotifyTD(HappyDays birth, DateType when, Int8 age,
                              Int16 *created, Int16 *touched)
 {
     Char noteField[256];      // (datebk3: 10, AN:14), HD id: 5
@@ -716,7 +716,7 @@ static Int16 PerformNotifyTD(BirthDate birth, DateType when, Int8 age,
     todo.dueDate = when;
     todo.priority = gPrefsR.TDNotifyPrefs.priority;
 
-    StrCopy(noteField, gPrefsR.BirthPrefs.notifywith);
+    StrCopy(noteField, gPrefsR.Prefs.notifywith);
     StrPrintF(gAppErrStr, "%ld", Hash(birth.name1, birth.name2));
     StrCat(noteField, gAppErrStr);
     todo.note = noteField;
@@ -785,8 +785,8 @@ static void NotifyDatebook(int mainDBIndex, DateType when, Int8 age,
                            Int16 *created, Int16 *touched)
 {
     MemHandle recordH = 0;
-    PackedBirthDate* rp;
-    BirthDate r;
+    PackedHappyDays* rp;
+    HappyDays r;
     RepeatInfoType repeatInfo;
     Int16 i;
     
@@ -795,12 +795,12 @@ static void NotifyDatebook(int mainDBIndex, DateType when, Int8 age,
     if (gPrefsR.DBNotifyPrefs.duration == 0) return;
 
     if ((recordH = DmQueryRecord(MainDB, mainDBIndex))) {
-        rp = (PackedBirthDate *) MemHandleLock(recordH);
+        rp = (PackedHappyDays *) MemHandleLock(recordH);
         /*
          * Build the unpacked structure for an AddressDB record.  It
          * is just a bunch of pointers into the rp structure.
          */
-        UnpackBirthdate(&r, rp);
+        UnpackHappyDays(&r, rp);
 
         if (r.flag.bits.solar) {
             repeatInfo.repeatType = repeatYearly;
@@ -877,16 +877,16 @@ static void NotifyToDo(int mainDBIndex, DateType when, Int8 age,
                        Int16 *created, Int16 *touched)
 {
     MemHandle recordH = 0;
-    PackedBirthDate* rp;
-    BirthDate r;
+    PackedHappyDays* rp;
+    HappyDays r;
     
     if ((recordH = DmQueryRecord(MainDB, mainDBIndex))) {
-        rp = (PackedBirthDate *) MemHandleLock(recordH);
+        rp = (PackedHappyDays *) MemHandleLock(recordH);
         /*
          * Build the unpacked structure for an AddressDB record.  It
          * is just a bunch of pointers into the rp structure.
          */
-        UnpackBirthdate(&r, rp);
+        UnpackHappyDays(&r, rp);
 
         if (r.flag.bits.solar) {
             PerformNotifyTD(r, when, age, created, touched);
@@ -1411,7 +1411,7 @@ static void UnloadCommonNotifyPrefs(FormPtr frm)
 }
 
 
-static Int16 CheckDatebookRecord(DateType when, BirthDate birth)
+static Int16 CheckDatebookRecord(DateType when, HappyDays birth)
 {
     UInt16 numAppoints = 0;
     MemHandle apptListH;
@@ -1448,7 +1448,7 @@ static Int16 CheckDatebookRecord(DateType when, BirthDate birth)
     return -1;
 }
 
-static Int16 CheckToDoRecord(DateType when, BirthDate birth)
+static Int16 CheckToDoRecord(DateType when, HappyDays birth)
 {
     UInt16 currIndex = 0;
     MemHandle recordH;
@@ -1494,12 +1494,12 @@ static void ChkNMakePrivateRecord(DmOpenRef db, Int16 index)
 
 // check if description has the information about name1 and name2
 //
-static Boolean IsSameRecord(Char* notefield, BirthDate birth)
+static Boolean IsSameRecord(Char* notefield, HappyDays birth)
 {
     Char *p;
     
-    if (notefield && (p = StrStr(notefield,gPrefsR.BirthPrefs.notifywith))) {
-        p += StrLen(gPrefsR.BirthPrefs.notifywith);
+    if (notefield && (p = StrStr(notefield,gPrefsR.Prefs.notifywith))) {
+        p += StrLen(gPrefsR.Prefs.notifywith);
 
         StrPrintF(gAppErrStr, "%ld", Hash(birth.name1,birth.name2));
         

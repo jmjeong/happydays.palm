@@ -1,5 +1,5 @@
 /*
-HappyDays - A Birthdate displayer for the PalmPilot
+HappyDays - A Birthday displayer for the PalmPilot
 Copyright (C) 1999-2001 JaeMok Jeong
 
 This program is free software; you can redistribute it and/or
@@ -26,17 +26,21 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // custom field used Birthdate in AddressBook
 //
-extern Int16 gBirthDateField;
+extern Int16 gHappyDaysField;
 
-void PackBirthdate(BirthDate *birthdate, void* recordP);
-void UnpackBirthdate(BirthDate *birthdate,
-                     const PackedBirthDate *packedBirthdate);
+void PackHappyDays(HappyDays *birthdate, void* recordP);
+void UnpackHappyDays(HappyDays *birthdate,
+                     const PackedHappyDays *packedHappyDays);
 
-UInt16 AddrGetBirthdate(DmOpenRef dbP, UInt16 AddrCategory, DateType start);
-Boolean AnalysisBirthDate(const char* birthdate,
-                          BirthdateFlag *flag,
+UInt16 AddrGetHappyDays(DmOpenRef dbP, UInt16 AddrCategory, DateType start);
+Boolean AnalysisHappyDays(const char* birthdate,
+                          HappyDaysFlag *flag,
                           Int16* year, Int16* month, Int16* day);
 
-Int16 UpdateBirthdateDB(DmOpenRef dbP, FormPtr frm);
+void UpdateHappyDaysDB(FormPtr frm);
+void  SetReadAddressDB();
+
+Boolean FindHappyDaysField();
+Boolean IsChangedAddressDB();
 
 #endif

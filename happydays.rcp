@@ -13,7 +13,6 @@ STRING ID SelectTimeString  "Select Time"
 STRING ID NoTimeString      "No Time"
 STRING ID ExportDoneString  "Export to Memo Pad is completed."
 STRING ID Sl2LnFormHelpString "long_sl2lnString"
-STRING ID DateCheckHelpString "long_checkDateString"
 
 STRING ID SunString     "SUN"
 STRING ID MonString     "MON" 
@@ -201,7 +200,7 @@ BEGIN
 	CHECKBOX "Scan note field" ID PrefFormScanNote
 		AT (10 PrevBottom+1 AUTO AUTO)
         
-    LABEL "Address auto scan" AUTOID AT (10 PrevBottom)
+    LABEL "Address Autoscan" AUTOID AT (10 PrevBottom)
     LIST "Always" "Ask" "Never"
 		ID PrefFormAutoRescan
 		AT (PREVRIGHT PREVTOP 50 AUTO) VISIBLEITEMS 3 NONUSABLE
@@ -421,12 +420,11 @@ BEGIN
     BUTTONS "OK"
 END
 
-ALERT ID DateCheck CONFIRMATION
-DEFAULTBUTTON 1
-HELPID DateCheckHelpString
+ALERT ID AddrRescanAlert CONFIRMATION
+DEFAULTBUTTON 0
 BEGIN
-    TITLE "Date Check"
-    MESSAGE "Are you sure this is the current date?\n\n^1\n\n"
+    TITLE "Address Rescan"
+    MESSAGE "AddressDB is changed. Do you want to rescan it?"
     BUTTONS "Yes" "No"
 END
 

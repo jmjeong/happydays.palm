@@ -1,5 +1,5 @@
 /*
-HappyDays - A Birthday displayer for the PalmPilot
+HappyDays - A HDday displayer for the PalmPilot
 Copyright (C) 1999-2001 JaeMok Jeong
 
 This program is free software; you can redistribute it and/or
@@ -25,40 +25,40 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "happydaysRsc.h"
 #include "calendar.h"
 
-void PackBirthdate(BirthDate *birthdate, void* recordP)
+void PackHappyDays(HappyDays *hd, void* recordP)
 {
     UInt16 offset = 0;
 
-    DmWrite(recordP, offset, (Char*)&birthdate->addrRecordNum,
-            sizeof(birthdate->addrRecordNum));
-    offset += sizeof(birthdate->addrRecordNum);
-    DmWrite(recordP, offset, (Char*)&birthdate->date,
-            sizeof(birthdate->date));
-    offset += sizeof(birthdate->date);
-    DmWrite(recordP, offset, (Char*)&birthdate->flag,
-            sizeof(birthdate->flag));
-    offset += sizeof(birthdate->flag);  // for corealign
+    DmWrite(recordP, offset, (Char*)&hd->addrRecordNum,
+            sizeof(hd->addrRecordNum));
+    offset += sizeof(hd->addrRecordNum);
+    DmWrite(recordP, offset, (Char*)&hd->date,
+            sizeof(hd->date));
+    offset += sizeof(hd->date);
+    DmWrite(recordP, offset, (Char*)&hd->flag,
+            sizeof(hd->flag));
+    offset += sizeof(hd->flag);  // for corealign
 
-    if (birthdate->name1) {
-        DmStrCopy(recordP, offset, (Char*)birthdate->name1);
-        offset += StrLen(birthdate->name1) +1;
+    if (hd->name1) {
+        DmStrCopy(recordP, offset, (Char*)hd->name1);
+        offset += StrLen(hd->name1) +1;
     }
     else {
         DmStrCopy(recordP, offset, "\0");
         offset += 1;
     }
-    if (birthdate->name2) {
-        DmStrCopy(recordP, offset, (Char*)birthdate->name2);
-        offset += StrLen(birthdate->name2) +1;
+    if (hd->name2) {
+        DmStrCopy(recordP, offset, (Char*)hd->name2);
+        offset += StrLen(hd->name2) +1;
     }
     else {
         DmStrCopy(recordP, offset,"\0");
         offset += 1;
     }
 
-    if (birthdate->custom) {
-        DmStrCopy(recordP, offset, (Char*)birthdate->custom);
-        offset += StrLen(birthdate->custom) +1;
+    if (hd->custom) {
+        DmStrCopy(recordP, offset, (Char*)hd->custom);
+        offset += StrLen(hd->custom) +1;
     }
     else {
         DmStrCopy(recordP, offset,"\0");
@@ -66,41 +66,41 @@ void PackBirthdate(BirthDate *birthdate, void* recordP)
     }
 }
 
-void UnpackBirthdate(BirthDate *birthdate,
-                            const PackedBirthDate *packedBirthdate)
+void UnpackHappyDays(HappyDays *hd,
+                            const PackedHappyDays *packedHappyDays)
 {
-    char *s = packedBirthdate->name;
+    char *s = packedHappyDays->name;
 
-    birthdate->addrRecordNum = packedBirthdate->addrRecordNum;
-    birthdate->date = packedBirthdate->date;
-    birthdate->flag = packedBirthdate->flag;
+    hd->addrRecordNum = packedHappyDays->addrRecordNum;
+    hd->date = packedHappyDays->date;
+    hd->flag = packedHappyDays->flag;
 
-    birthdate->name1 = s;
+    hd->name1 = s;
     s += StrLen(s) + 1;
-    birthdate->name2 = s;
+    hd->name2 = s;
     s += StrLen(s) + 1;
-    birthdate->custom = s;
+    hd->custom = s;
     s += StrLen(s) + 1;
 }
 
-static Int16 BirthPackedSize(BirthDate* birthdate)
+static Int16 HDPackedSize(HappyDays* hd)
 {
     Int16 size;
 
-    size = sizeof(PackedBirthDate) - sizeof(char);    // corect
-    if (birthdate->name1) size += StrLen(birthdate->name1) +1;
+    size = sizeof(PackedHappyDays) - sizeof(char);    // corect
+    if (hd->name1) size += StrLen(hd->name1) +1;
     else size += 1;     // '\0'
 
-    if (birthdate->name2) size += StrLen(birthdate->name2) +1;
+    if (hd->name2) size += StrLen(hd->name2) +1;
     else size += 1;     // '\0'
 
-    if (birthdate->custom) size+= StrLen(birthdate->custom) +1;
+    if (hd->custom) size+= StrLen(hd->custom) +1;
     else size+= 1;
 
     return size;
 }
 
-Int16 CompareBirthdateFunc(LineItemPtr p1, LineItemPtr p2, Int32 extra)
+Int16 CompareHappyDaysFunc(LineItemPtr p1, LineItemPtr p2, Int32 extra)
 {   
     return DateCompare(p1->date, p2->date)*extra;
 }
@@ -111,11 +111,10 @@ Int16 CompareAgeFunc(LineItemPtr p1, LineItemPtr p2, Int32 extra)
 	else return 0;
 }
 
-static Int16 CalculateAge(DateType converted, DateType birthdate,
-                          BirthdateFlag flag)
+static Int16 CalculateAge(DateType converted, DateType origin,
+                          HappyDaysFlag flag)
 {
     DateTimeType rtVal;
-    Int16 age;
     int dummy = 0;
     int ret;
     
@@ -133,18 +132,17 @@ static Int16 CalculateAge(DateType converted, DateType birthdate,
         converted.day = rtVal.day;
     }
     
-    return converted.year - birthdate.year;
-    return age;
+    return converted.year - origin.year;
 }
 
-UInt16 AddrGetBirthdate(DmOpenRef dbP, UInt16 AddrCategory, DateType start)
+UInt16 AddrGetHappyDays(DmOpenRef dbP, UInt16 AddrCategory, DateType start)
 {
     UInt16 totalItems;
     UInt16 recordNum = 0;
     MemHandle recordH = 0;
     LineItemPtr ptr;
-    PackedBirthDate* rp;
-    BirthDate r;
+    PackedHappyDays* rp;
+    HappyDays r;
     DateType converted;          
     UInt16 currindex = 0;
 	Int16 age;
@@ -168,13 +166,13 @@ UInt16 AddrGetBirthdate(DmOpenRef dbP, UInt16 AddrCategory, DateType start)
                 
                     ptr[recordNum].birthRecordNum = currindex;
 
-                    rp = (PackedBirthDate *) MemHandleLock(recordH);
+                    rp = (PackedHappyDays *) MemHandleLock(recordH);
                     /*
                      * Build the unpacked structure for an AddressDB
                      * record.  It is just a bunch of pointers into the rp
                      * structure.
                      */
-                    UnpackBirthdate(&r, rp);
+                    UnpackHappyDays(&r, rp);
 
                     // original r(in MainDB) not changed
                     //     local change for LineItemType
@@ -249,15 +247,15 @@ UInt16 AddrGetBirthdate(DmOpenRef dbP, UInt16 AddrCategory, DateType start)
             
             // sort the order if sort order is converted date
             //
-            if (gPrefsR.BirthPrefs.sort == 1) {      	// date sort
+            if (gPrefsR.Prefs.sort == 1) {      	// date sort
                 SysInsertionSort(ptr, totalItems, sizeof(LineItemType),
-                                 (_comparF *)CompareBirthdateFunc, 1L);
+                                 (_comparF *)CompareHappyDaysFunc, 1L);
             }
-			else if (gPrefsR.BirthPrefs.sort == 2) {  	// age sort
+			else if (gPrefsR.Prefs.sort == 2) {  	// age sort
                 SysInsertionSort(ptr, totalItems, sizeof(LineItemType),
                                  (_comparF *)CompareAgeFunc, 1L);
             }
-			else if (gPrefsR.BirthPrefs.sort == 3) {	// age sort(re)
+			else if (gPrefsR.Prefs.sort == 3) {	// age sort(re)
                 SysInsertionSort(ptr, totalItems, sizeof(LineItemType),
                                  (_comparF *)CompareAgeFunc, -1L);
             }
@@ -270,11 +268,11 @@ UInt16 AddrGetBirthdate(DmOpenRef dbP, UInt16 AddrCategory, DateType start)
 }
 
 
-Boolean AnalysisBirthDate(const char* birthdate,
-                          BirthdateFlag *flag,
+Boolean AnalysisHappyDays(const char* field,
+                          HappyDaysFlag *flag,
                           Int16* dYear, Int16* dMonth, Int16* dDay)
 {
-    Char * s = (Char *)birthdate;
+    Char * s = (Char *)field;
     Char * p;
     Char numOfDelimeter = 0;
     Int16 num[3], numIdx = 0;
@@ -392,7 +390,7 @@ Boolean AnalysisBirthDate(const char* birthdate,
     return true;
 }
 
-static void CleanupBirthdateCache(DmOpenRef dbP)
+static void CleanupHappyDaysCache(DmOpenRef dbP)
 {
     UInt16 currindex = 0;     
     MemHandle recordH = 0;
@@ -418,7 +416,7 @@ static void UnderscoreToSpace(Char *src)
     }
 }
 
-static void BirthFindKey(PackedBirthDate* r, char **key, Int16* whichKey)
+static void HDFindKey(PackedHappyDays* r, char **key, Int16* whichKey)
 {
     if (*whichKey == 1) {       // start
         if (r->name[0] == 0) {
@@ -445,8 +443,8 @@ static void BirthFindKey(PackedBirthDate* r, char **key, Int16* whichKey)
 
 // null fields are considered less than others
 //
-static Int16 BirthComparePackedRecords(PackedBirthDate *rec1,
-                                     PackedBirthDate *rec2,
+static Int16 HDComparePackedRecords(PackedHappyDays *rec1,
+                                     PackedHappyDays *rec2,
                                      Int16 unusedInt,
                                      SortRecordInfoPtr unused1,
                                      SortRecordInfoPtr unused2,
@@ -457,8 +455,8 @@ static Int16 BirthComparePackedRecords(PackedBirthDate *rec1,
     char *key1, *key2;
 
     do {
-        BirthFindKey(rec1, &key1, &whichKey1);
-        BirthFindKey(rec2, &key2, &whichKey2);
+        HDFindKey(rec1, &key1, &whichKey1);
+        HDFindKey(rec2, &key2, &whichKey2);
 
         if (!key1 || *key1 == 0) {
             if (!key2 || *key2 == 0) {
@@ -478,30 +476,30 @@ static Int16 BirthComparePackedRecords(PackedBirthDate *rec1,
     return result;
 }
 
-static UInt16 BirthFindSortPosition(DmOpenRef dbP, PackedBirthDate* newRecord)
+static UInt16 HDFindSortPosition(DmOpenRef dbP, PackedHappyDays* newRecord)
 {
     return DmFindSortPosition(dbP, (void*)newRecord, 0,
-                               (DmComparF *)BirthComparePackedRecords, 0);
+                               (DmComparF *)HDComparePackedRecords, 0);
 }
 
-static Int16 BirthNewRecord(DmOpenRef dbP, BirthDate *r, Int16 *index)
+static Int16 HDNewRecord(DmOpenRef dbP, HappyDays *r, Int16 *index)
 {
     MemHandle recordH;
-    PackedBirthDate* recordP;
+    PackedHappyDays* recordP;
     Int16 err;
     UInt16 newIndex;
 
     // 1) and 2) (make a new chunk with the correct size)
-    recordH = DmNewHandle(dbP, (Int16)BirthPackedSize(r));
+    recordH = DmNewHandle(dbP, (Int16)HDPackedSize(r));
     if (recordH == NULL)
         return dmErrMemError;
 
     // 3) Copy the data from the unpacked record to the packed one.
     recordP = MemHandleLock(recordH);
-    PackBirthdate(r, recordP);
+    PackHappyDays(r, recordP);
 
     // Get the index
-    newIndex = BirthFindSortPosition(dbP, recordP);
+    newIndex = HDFindSortPosition(dbP, recordP);
     MemPtrUnlock(recordP);
 
     // 4) attach in place
@@ -515,7 +513,7 @@ static Int16 BirthNewRecord(DmOpenRef dbP, BirthDate *r, Int16 *index)
 
                           
 static Int16 AnalOneRecord(UInt16 addrattr, Char* src,
-                  BirthDate* birthdate, Boolean *ignore)
+                  HappyDays* hd, Boolean *ignore)
 {
     Char* p;
     UInt16 index;
@@ -526,15 +524,15 @@ static Int16 AnalOneRecord(UInt16 addrattr, Char* src,
     if (*src == '*') {
         
         // this is multiple event
-        birthdate->flag.bits.multiple_event = true;
+        hd->flag.bits.multiple_event = true;
         if ((p = StrChr(src, ' '))) *p = 0;
         else goto ErrHandler;
     
         if ( *(src+1) != 0 ) {                    // if src have 'custom' tag
-            birthdate->custom = src+1;
+            hd->custom = src+1;
             UnderscoreToSpace(src+1);
         }
-		else birthdate->custom = 0;
+		else hd->custom = 0;
 
         src = p+1;
         while (*src == ' ' || *src == '\t') src++;     // skip white space
@@ -543,11 +541,11 @@ static Int16 AnalOneRecord(UInt16 addrattr, Char* src,
         else goto ErrHandler;
 
         if (*src == '.') {
-            birthdate->name1 = src+1;
-            birthdate->name2 = 0;
+            hd->name1 = src+1;
+            hd->name2 = 0;
         }
         else {
-            birthdate->name2 = src;
+            hd->name2 = src;
         }
         
         UnderscoreToSpace(src);
@@ -556,23 +554,23 @@ static Int16 AnalOneRecord(UInt16 addrattr, Char* src,
         while (*src == ' ' || *src == '\t') src++;     // skip white space
     }
     
-    if (!AnalysisBirthDate(src, &birthdate->flag,
+    if (!AnalysisHappyDays(src, &hd->flag,
                            &year, &month, &day)) goto ErrHandler;
 
     // convert into date format
     //
-    if (birthdate->flag.bits.year) {
+    if (hd->flag.bits.year) {
         if ((year < 1904) || (year > 2031) ) goto ErrHandler;
-        else birthdate->date.year = year - 1904; 
+        else hd->date.year = year - 1904; 
     }
-    else birthdate->date.year = 0;
+    else hd->date.year = 0;
         
-    birthdate->date.month = month;
-    birthdate->date.day = day;
+    hd->date.month = month;
+    hd->date.day = day;
 
     // maintain address book order(name order)
     //      list order is determined by sort
-    err = BirthNewRecord(MainDB, birthdate, &index);
+    err = HDNewRecord(MainDB, hd, &index);
     if (!err) {
         UInt16 attr;
         // set the category of the new record to the category
@@ -591,12 +589,12 @@ static Int16 AnalOneRecord(UInt16 addrattr, Char* src,
     if (*ignore) return 0;
                 
     switch (FrmCustomAlert(InvalidFormat,
-                           ((!birthdate->name2) ?
-                            ((!birthdate->name1) ? " " : birthdate->name1)
-                            : birthdate->name2),
+                           ((!hd->name2) ?
+                            ((!hd->name1) ? " " : hd->name1)
+                            : hd->name2),
                                " ", " ")) {
     case 0:                 // EDIT
-        if (!GotoAddress(birthdate->addrRecordNum)) return -1;
+        if (!GotoAddress(hd->addrRecordNum)) return -1;
     case 2:                 // Ignore all
         *ignore = true;
     case 1:                 // Ignore
@@ -604,169 +602,169 @@ static Int16 AnalOneRecord(UInt16 addrattr, Char* src,
     return 0;
 }
 
-Int16 UpdateBirthdateDB(DmOpenRef dbP, FormPtr frm)
+
+Boolean FindHappyDaysField()
 {
     AddrAppInfoPtr addrInfoPtr;
-    UInt16 currIndex = 0;
-    AddrPackedDBRecord *rp;
-    AddrDBRecordType r;
-    MemHandle recordH = 0;
     Int16 i;
 
-    gBirthDateField = -1;
-    // use for next version, will support Address+, ActionNames.. etc
-    // if (!FindAddressApp('addr', &AcardNo, &AdbID)) return -1;
+    gHappyDaysField = -1;
     
     if ((addrInfoPtr = (AddrAppInfoPtr)AppInfoGetPtr(AddressDB))) {
         for (i= firstRenameableLabel; i <= lastRenameableLabel; i++) {
             if (!StrCaselessCompare(addrInfoPtr->fieldLabels[i],
-                                    gPrefsR.BirthPrefs.custom)) {
-                gBirthDateField = i;
+                                    gPrefsR.Prefs.custom)) {
+                gHappyDaysField = i;
                 break;
             }
         }
         MemPtrUnlock(addrInfoPtr);
     }
-    if (gBirthDateField < 0) {
-        return -1;
+    if (gHappyDaysField < 0) {
+        return false;
     }
+    return true;
+}
 
-    if (!MainDB) return -1;
+Boolean IsChangedAddressDB()
+{
+    return !((MemCmp((char*) &gAdcdate, gPrefsR.adrcdate, 4) == 0) &&
+            (MemCmp((char*) &gAdmdate, gPrefsR.adrmdate, 4) == 0));
+}
 
-    // cache the birthdate DB for the performance
+void  SetReadAddressDB()
+{
+    MemMove(gPrefsR.adrcdate, (char *)&gAdcdate, 4);
+    MemMove(gPrefsR.adrmdate, (char *)&gAdmdate, 4);
+}
+
+void UpdateHappyDaysDB(FormPtr frm)
+{
+    UInt16 currIndex = 0;
+    AddrPackedDBRecord *rp;
+    AddrDBRecordType r;
+    MemHandle recordH = 0;
+
+    // create the happydays cache db
+    HappyDays   hd;
+    Boolean     ignore = false;         // ignore error record
+    Char*       hdField;
+    UInt16      addrattr;
+    Char        *p, *q, *end;
+
+    // display collecting information
     //
-    if ((MemCmp((char*) &gAdcdate, gPrefsR.adrcdate, 4) == 0) &&
-        (MemCmp((char*) &gAdmdate, gPrefsR.adrmdate, 4) == 0)) {
-        // if matched, use the original birthdate db
-        //
-    }
-    else {
-        // create the birthdate cache db
-        BirthDate   birthdate;
-        Boolean     ignore = false;         // ignore error record
-        Char*       birthdateField;
-        UInt16      addrattr;
-        Char        *p, *q, *end;
+    FrmDrawForm(frm);
 
-        // display collecting information
-        //
-        FrmDrawForm(frm);
-
-        // clean up old database
-        //
-        CleanupBirthdateCache(MainDB);
+    // clean up old database
+    //
+    CleanupHappyDaysCache(MainDB);
             
-        while (1) {
-            char *name1, *name2;
-            Int8 whichField;        // birthday field or note field?
+    while (1) {
+        char *name1, *name2;
+        Int8 whichField;        // birthday field or note field?
             
-            recordH = DmQueryNextInCategory(AddressDB, &currIndex,
-                                            dmAllCategories);
-            if (!recordH) break;
+        recordH = DmQueryNextInCategory(AddressDB, &currIndex,
+                                        dmAllCategories);
+        if (!recordH) break;
 
-            DmRecordInfo(AddressDB, currIndex, &addrattr, NULL, NULL);
-            addrattr &= dmRecAttrCategoryMask;      // get category info
+        DmRecordInfo(AddressDB, currIndex, &addrattr, NULL, NULL);
+        addrattr &= dmRecAttrCategoryMask;      // get category info
                 
-            rp = (AddrPackedDBRecord*)MemHandleLock(recordH);
-            /*
-             * Build the unpacked structure for an AddressDB record.  It
-             * is just a bunch of pointers into the rp structure.
-             */
-            AddrUnpack(rp, &r);
+        rp = (AddrPackedDBRecord*)MemHandleLock(recordH);
+        /*
+         * Build the unpacked structure for an AddressDB record.  It
+         * is just a bunch of pointers into the rp structure.
+         */
+        AddrUnpack(rp, &r);
 
-            if (!r.fields[gBirthDateField]
-                && !(gPrefsR.BirthPrefs.scannote && r.fields[note]
-                     && StrStr(r.fields[note], gPrefsR.BirthPrefs.notifywith) ) ) {
-                // not exist in birthdate field or note field
-                //
-                MemHandleUnlock(recordH);
-                currIndex++;
-                continue;
-            }
-			
-			MemSet(&birthdate, sizeof(birthdate), 0);
-            birthdate.addrRecordNum = currIndex;
-            if (DetermineRecordName(&r, gSortByCompany,
-                                    &birthdate.name1,
-                                    &birthdate.name2)) {
-                // name 1 has priority;
-                birthdate.flag.bits.priority_name1 = 1;
-            }
-
-            // save the temporary name
-            name1 = birthdate.name1;
-            name2 = birthdate.name2;
-
-            whichField = (r.fields[gBirthDateField]) ? gBirthDateField : note;
-
-            while (whichField >= 0) {
-
-                if (whichField == note) {
-                    p = StrStr(r.fields[note], gPrefsR.BirthPrefs.notifywith)
-                        + StrLen(gPrefsR.BirthPrefs.notifywith) + 1;
-
-					if ( StrLen(r.fields[note]) < (p - r.fields[note]) ) break;
-                }
-                else {
-                    p = r.fields[whichField];
-                }
-                
-                birthdateField =
-                    MemPtrNew(StrLen(r.fields[whichField]) - (p - r.fields[whichField])+1);
-
-                SysCopyStringResource(gAppErrStr, NotEnoughMemoryString);
-                ErrFatalDisplayIf(!birthdateField, gAppErrStr);
-            
-                p = StrCopy(birthdateField, p);
-
-				if (whichField == note && 
-					(end = StrStr(p, gPrefsR.BirthPrefs.notifywith))) {
-					// end delimeter
-					//
-					*end = 0;
-				}
-            
-                while ((q = StrChr(p, '\n'))) {
-                    // multiple event
-                    //
-
-                    *q = 0;
-                    if (AnalOneRecord(addrattr, p, &birthdate, &ignore)) return 0;
-                    p = q+1;
-
-                    // restore the saved name
-                    birthdate.name1 = name1;
-                    birthdate.name2 = name2;
-                
-                    // reset multiple flag
-                    birthdate.flag.bits.multiple_event = 0;
-
-                    while (*p == ' ' || *p == '\t' || *p == '\n')
-                        p++;     // skip white space
-                }
-                // last record
-                if (*p) {
-                    // check the null '\n'
-                    if (AnalOneRecord(addrattr, p, &birthdate, &ignore)) return 0;
-                }
-                
-                if (whichField == gBirthDateField       // next is note field
-                    && (gPrefsR.BirthPrefs.scannote    // scanNote & exists
-                        && r.fields[note]       
-                        && StrStr(r.fields[note], gPrefsR.BirthPrefs.notifywith)) ) {
-                    whichField = note;
-                }
-                else whichField = -1;
-
-                MemPtrFree(birthdateField);
-            }
+        if (!r.fields[gHappyDaysField]
+            && !(gPrefsR.Prefs.scannote && r.fields[note]
+                 && StrStr(r.fields[note], gPrefsR.Prefs.notifywith) ) ) {
+            // not exist in happydays field or note field
+            //
             MemHandleUnlock(recordH);
             currIndex++;
+            continue;
+        }
+			
+        MemSet(&hd, sizeof(hd), 0);
+        hd.addrRecordNum = currIndex;
+        if (DetermineRecordName(&r, gSortByCompany,
+                                &hd.name1,
+                                &hd.name2)) {
+            // name 1 has priority;
+            hd.flag.bits.priority_name1 = 1;
         }
 
-        MemMove(gPrefsR.adrcdate, (char *)&gAdcdate, 4);
-        MemMove(gPrefsR.adrmdate, (char *)&gAdmdate, 4);
+        // save the temporary name
+        name1 = hd.name1;
+        name2 = hd.name2;
+
+        whichField = (r.fields[gHappyDaysField]) ? gHappyDaysField : note;
+
+        while (whichField >= 0) {
+
+            if (whichField == note) {
+                p = StrStr(r.fields[note], gPrefsR.Prefs.notifywith)
+                    + StrLen(gPrefsR.Prefs.notifywith) + 1;
+
+                if ( StrLen(r.fields[note]) < (p - r.fields[note]) ) break;
+            }
+            else {
+                p = r.fields[whichField];
+            }
+                
+            hdField =
+                MemPtrNew(StrLen(r.fields[whichField]) - (p - r.fields[whichField])+1);
+
+            SysCopyStringResource(gAppErrStr, NotEnoughMemoryString);
+            ErrFatalDisplayIf(!hdField, gAppErrStr);
+            
+            p = StrCopy(hdField, p);
+
+            if (whichField == note && 
+                (end = StrStr(p, gPrefsR.Prefs.notifywith))) {
+                // end delimeter
+                //
+                *end = 0;
+            }
+            
+            while ((q = StrChr(p, '\n'))) {
+                // multiple event
+                //
+
+                *q = 0;
+                if (AnalOneRecord(addrattr, p, &hd, &ignore)) return;
+                p = q+1;
+
+                // restore the saved name
+                hd.name1 = name1;
+                hd.name2 = name2;
+                
+                // reset multiple flag
+                hd.flag.bits.multiple_event = 0;
+
+                while (*p == ' ' || *p == '\t' || *p == '\n')
+                    p++;     // skip white space
+            }
+            // last record
+            if (*p) {
+                // check the null '\n'
+                if (AnalOneRecord(addrattr, p, &hd, &ignore)) return;
+            }
+                
+            if (whichField == gHappyDaysField       // next is note field
+                && (gPrefsR.Prefs.scannote     // scanNote & exists
+                    && r.fields[note]       
+                    && StrStr(r.fields[note], gPrefsR.Prefs.notifywith)) ) {
+                whichField = note;
+            }
+            else whichField = -1;
+
+            MemPtrFree(hdField);
+        }
+        MemHandleUnlock(recordH);
+        currIndex++;
     }
-    
-    return 0;
 }
