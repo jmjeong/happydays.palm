@@ -379,9 +379,8 @@ UInt32 AddrGotoCreatorId[] = {
     'addr',         // Built-in Addressbook
     'adKr',         // Address Kr
     'CiAe',         // AddressBkR
-	'PopN',			// PopUp Names
-    'addr',         // Super Names
-    'addr'          // Teal Phone
+    'SNms',         // Super Names
+    'TlPh'          // Teal Phone
 };
 
 Int16 GotoAddress(Int16 index)
@@ -404,7 +403,7 @@ Int16 GotoAddress(Int16 index)
     
     
     if ((MemPtrSetOwner(theGotoPointer, 0) == 0) &&
-        (DmGetNextDatabaseByTypeCreator(true, &searchInfo, 'DATA',
+        (DmGetNextDatabaseByTypeCreator(true, &searchInfo, 0,
                                         addrID, true, &cardNo, &dbID)
          == 0)) {
 
@@ -420,16 +419,14 @@ Int16 GotoAddress(Int16 index)
 
         if ((DmGetNextDatabaseByTypeCreator
              (true, &searchInfo,
-              sysFileTApplication, AddressAppID,
-              true, &cardNo, &dbID) == 0)) {
+            sysFileTApplication, addrID, true, &cardNo, &dbID) == 0)) {
             SysUIAppSwitch(cardNo, dbID,
                            sysAppLaunchCmdGoTo,
                            (MemPtr) theGotoPointer);
             return 0;
         }
     }
-    else {
-        MemPtrFree(theGotoPointer);
-    }
+
+	MemPtrFree(theGotoPointer);
     return -1;
 }

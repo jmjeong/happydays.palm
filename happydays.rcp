@@ -201,15 +201,14 @@ BEGIN
     FIELD ID PrefFormNotifyWith AT (85 PrevTop 28 AUTO) UNDERLINED
             MAXCHARS 5
 
-    LABEL "Address:" AUTOID AT (10 PrevBottom)
+    LABEL "Address Book:" AUTOID AT (10 PrevBottom)
     LIST 	"Built-in" 
 			"Address.kr" 
 			"AddressBkR" 
-			"PopUp Names"
 			"Super Names" 
 			"TealPhone"
          ID PrefFormAddress
-         AT (PREVRIGHT+4 PREVTOP 80 AUTO) VISIBLEITEMS 6 NONUSABLE
+         AT (PREVRIGHT+4 PREVTOP 70 AUTO) VISIBLEITEMS 5 NONUSABLE
     POPUPTRIGGER "" ID PrefFormAddrTrigger
                  AT (PrevLeft PrevTop-1 40 13) LEFTANCHOR
     POPUPLIST ID PrefFormAddrTrigger PrefFormAddress
