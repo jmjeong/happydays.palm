@@ -88,6 +88,8 @@ BEGIN
 	"* Instead of system date...\n"\
 	"Control the interpretation of the AddressDB Birthday custom field. "\
 	"By default this is the same as the system date format preference.\n\n"\
+	"* Scan note field\n"\
+	"To read note field in Address Book, check this option.\n\n"\
     "* Emphasize Lunar Date\n"\
     "If checkbox is on, the dashed line is drawed beneath lunar date.\n\n"\
 	"* Notify format\n"\
@@ -627,7 +629,7 @@ NOFRAME
 SAVEBEHIND
 MENUID MainFormMenu
 BEGIN
-    TITLE "HappyDays List"
+    TITLE "HappyDays"
     TABLE ID MainFormTable AT (0 16 160 121) ROWS 11 COLUMNS 1
                 COLUMNWIDTHS 160
     BUTTON "Look up" ID MainFormLookup AT (1 BOTTOM@160-1 AUTO AUTO)
@@ -654,7 +656,8 @@ MENUID ViewFormMenu
 BEGIN
     TITLE "HappyDays View"
 
-	FIELD ID BirthdateCategory AT (82 0 74 AUTO) RIGHTALIGN NONEDITABLE FONT 0
+	FIELD ID BirthdateCategory AT (RIGHT@158 0 65 AUTO) RIGHTALIGN 
+		NONEDITABLE FONT 0
     FIELD ID BirthdateFirst AT (6 30 148 AUTO) NONEDITABLE FONT 2
     FIELD ID BirthdateSecond AT (PrevLeft PrevBottom+5 148 AUTO) NONEDITABLE
         FONT 2
@@ -736,7 +739,7 @@ BEGIN
     POPUPTRIGGER "" ID PrefFormDateTrigger AT (PREVLEFT PREVTOP-1 40 13) LEFTANCHOR
     POPUPLIST ID PrefFormDateTrigger PrefFormDateFmts
 
-	CHECKBOX "Scan from note field" ID PrefFormScanNote
+	CHECKBOX "Scan note field" ID PrefFormScanNote
 		AT (10 PrevBottom AUTO AUTO)
     CHECKBOX "Emphasize Lunar Date" ID PrefFormEmphasize 
 		AT (10 PrevBottom AUTO AUTO) 
@@ -746,7 +749,7 @@ BEGIN
 	    	"[First Last] E(1) Year" 
 			"Event - Last, First Year"
 			"Event - First Last Year"
-			"* First Last Year"
+			"First Last Year"
 		ID PrefFormNotifyFmts 
 			AT (20 PrevBottom 120 AUTO) VISIBLEITEMS 5 NONUSABLE
     POPUPTRIGGER "" ID PrefFormNotifyTrigger 
@@ -993,7 +996,7 @@ MODAL
 HELPID AboutHelpString
 BEGIN
     TITLE "HappyDays"
-    LABEL "HappyDays 1.21b2" AUTOID AT (Center@80 20) FONT 1
+    LABEL "HappyDays 1.21" AUTOID AT (Center@80 20) FONT 1
     LABEL "© 1999-2000, JaeMok Jeong"
         AUTOID AT (Center@80 PrevBottom+5) FONT 0
     LABEL "<jmjeong@oopsla.snu.ac.kr>" AUTOID AT (Center@80 PrevBottom)

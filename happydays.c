@@ -30,7 +30,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "util.h"
 
 #define frmRescanUpdateCode (frmRedrawUpdateCode + 1)
-#define frmReloadUpdateCode (frmRedrawUpdateCode + 2)
 
 // global variable
 //
@@ -602,13 +601,7 @@ static Boolean MainFormHandleEvent (EventPtr e)
             handled = 1;
 			break;
         }
-        else if (e->data.frmUpdate.updateCode == frmRedrawUpdateCode) {
-            // invoked by PrefFrom --> ignored
-			//
-            handled = 1;
-            break;
-        }
-        // frmReloadUpdateCode invoked by SpecialKeyDown
+        // frmRedrawUpdateCode invoked by SpecialKeyDown
         //
 		// else execute frmOpenEvent
 
@@ -857,9 +850,6 @@ static Boolean PrefFormHandleEvent(EventPtr e)
             // clear the memory
             ClearFieldText(PrefFormCustomField);
 
-            // may be bug gcc or emulator?
-            // it redraw twice.. so I delete updateform
-            // FrmUpdateForm(MainForm, frmRedrawUpdateCode);
 
             FrmReturnToForm(0);
             if (rescan)
@@ -871,7 +861,7 @@ static Boolean PrefFormHandleEvent(EventPtr e)
             break;
         case PrefFormCancel:
             
-            FrmUpdateForm(StartForm, frmRedrawUpdateCode);
+            // FrmUpdateForm(StartForm, frmRedrawUpdateCode);
             FrmReturnToForm(0);
 
             handled = true;
@@ -1492,7 +1482,7 @@ static Char* gNotifyFormatString[5] =
   "[+F] +e +y",     // [JaeMok Jeong] B 1970
   "+E - +L +y",     // Birthday - Jeong, JaeMok 1970
   "+E - +F +y",     // Birthday - JaeMok Jeong 1970
-  "* +F +y",        // * JaeMok Jeong 1970
+  "+F +y",        	// JaeMok Jeong 1970
 };
 
 //
@@ -1564,12 +1554,12 @@ static Char* NotifyDescString(DateType when, BirthDate birth)
                     }
 
                     if (birth.flag.bits.year) {
-                        DateToAsciiLong(birth.date.month, birth.date.day,
+                        DateToAscii(birth.date.month, birth.date.day,
                                         birth.date.year + 1904,
                                         gDispdfmts, gAppErrStr);
                     }
                     else {
-                        DateToAsciiLong(birth.date.month, birth.date.day, -1, gDispdfmts,
+                        DateToAscii(birth.date.month, birth.date.day, -1, gDispdfmts,
                                         gAppErrStr);
                     }
     
@@ -1584,8 +1574,10 @@ static Char* NotifyDescString(DateType when, BirthDate birth)
                             StrCopy(pDesc, gAppErrStr);
                         }
                     }
-                    else if (birth.flag.bits.solar && gPrefsR->DBNotifyPrefs.duration != 1) {
-                        StrPrintF(gAppErrStr, "%d", birth.date.year + 1904 );
+                    else if (birth.flag.bits.solar 
+								&& gPrefsR->DBNotifyPrefs.duration != 1) {
+                        StrPrintF(gAppErrStr, "%2d", 
+									(birth.date.year + 1904) % 100);
                         StrCopy(pDesc, gAppErrStr);
                     }
                     pDesc += StrLen(pDesc);
@@ -2092,10 +2084,10 @@ static Boolean DBNotifyFormHandleEvent(EventPtr e)
 
         case DateBookNotifyFormTime:
         {
-            TimeType startTime, endTime;
+            TimeType startTime, endTime, lastTime;
             Boolean untimed = false;
 
-            startTime = endTime = gPrefsR->DBNotifyPrefs.when;
+            startTime = endTime = lastTime = gPrefsR->DBNotifyPrefs.when;
             if (TimeToInt(startTime) == noTime) {
                 untimed = true;
                 // set dummy time
@@ -2108,11 +2100,14 @@ static Boolean DBNotifyFormHandleEvent(EventPtr e)
                 gPrefsR->DBNotifyPrefs.when = startTime;
                 TimeToAsciiLocal(gPrefsR->DBNotifyPrefs.when, gPreftfmts,
                                  gAppErrStr);
-                
-                CtlSetLabel(GetObjectPointer(frm, DateBookNotifyFormTime),
-                            gAppErrStr);
             }
+			else {
+				TimeToAsciiLocal(lastTime, gPreftfmts, gAppErrStr);
+			}
             
+			CtlSetLabel(GetObjectPointer(frm, DateBookNotifyFormTime),
+						gAppErrStr);
+
             handled = true;
             break;
         }
@@ -2970,14 +2965,14 @@ static Boolean SpecialKeyDown(EventPtr e)
         if (keyboardAlphaChr == chr) {
             gPrefsR->BirthPrefs.sort = 0;     // sort by name
 			SndPlaySystemSound(sndClick);
-            FrmUpdateForm(MainForm, frmReloadUpdateCode);
+            FrmUpdateForm(MainForm, frmRedrawUpdateCode);
             WritePrefsRec();
             return true;
         }
         else if (keyboardNumericChr == chr) {
             gPrefsR->BirthPrefs.sort = 1;     // sort by date
 			SndPlaySystemSound(sndClick);
-            FrmUpdateForm(MainForm, frmReloadUpdateCode);
+            FrmUpdateForm(MainForm, frmRedrawUpdateCode);
             WritePrefsRec();
             return true;
         }
