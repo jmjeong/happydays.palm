@@ -2547,19 +2547,17 @@ void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column,
         else if (r.flag.bits.year) {
             DateType solBirth;
             DateTimeType rtVal;
-            UInt8 ret;
             Int16 d_diff = 0, m_diff = 0, y_diff = 0;
             
             if (r.flag.bits.lunar || r.flag.bits.lunar_leap) {
-                ret = !lun2sol(r.date.year+1904,
-                               r.date.month,
-                               r.date.day,
-                               r.flag.bits.lunar_leap, &rtVal);
-                if (ret) {
-                    solBirth.year = rtVal.year - 1904;
-                    solBirth.month = rtVal.month;
-                    solBirth.day = rtVal.day;
-                }
+                lun2sol(r.date.year+1904,
+                        r.date.month,
+                        r.date.day,
+                        r.flag.bits.lunar_leap, &rtVal);
+                
+                solBirth.year = rtVal.year - 1904;
+                solBirth.month = rtVal.month;
+                solBirth.day = rtVal.day;
             }
             else solBirth = r.date;
             
@@ -2942,7 +2940,7 @@ static void ViewFormSilk()
 
     DateType converted;
 
-	if (gbVgaExists && !SilkWindowMaximized() || gSilkLibLoaded && GetSilkPos(hrSRefNum) == vskResizeMin ) {
+	if ((gbVgaExists && !SilkWindowMaximized())  || (gSilkLibLoaded && GetSilkPos(hrSRefNum) == vskResizeMin) ) {
 		ptr = MemHandleLock(gTableRowHandle);
 		converted = ptr[gMainTableHandleRow].date;
 		MemPtrUnlock(ptr);
@@ -3152,6 +3150,10 @@ static Boolean StartFormHandleEvent(EventPtr e)
 //
 //
 // $Log$
+// Revision 1.77  2004/11/21 15:51:18  jmjeong
+// Fix lunar mismatch(2006.1.1)
+// Enforce to check the wrong lunar input
+//
 // Revision 1.76  2004/05/07 03:43:36  jmjeong
 // Sony Clie Hires+ Support
 //

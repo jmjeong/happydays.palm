@@ -1,40 +1,31 @@
 TRANSLATION "ITALIAN"
 BEGIN
 	"long_notifySettingMoreString" = ""\
-	"Per il numero dell'icona dell'Action Names, consultare il suo manuale. L'icona del DateBk3 è "\
-	"letta dal Blocco note. Se non hai l'icona del DateBk3 immessa nel Blocco note, "\
-	"nulla verrà visualizzato.\n"
-
-    "long_customErrorString" = ""\
-    "'Compleanno' è il nome predefinito del campo personale. "\
-    "Per assegnare un nome predefinito diverso al campo personale,"\
-    " selezionare 'Preferenze'.\n\n"\
-    "IMPORTANTE: Hai bisogno di lanciare la tua Rubrica e selezionare 'Opzioni/"\
-    "Rinomina Campi Personali' per rinominare un campo personale come 'Compleanno'"\
-    " o in qualsiasi altro nome che hai assegnato come nome del campo personale nelle Preferenze di "\
-    "HappyDays.\n"
+        "Solo per utenti esperti\n\n"\
+        "Questa nota è usata per programmi di agende di terze parti "\
+        "come Action Names, DateBk3/4.\n\n"\
+        "E' possibile settare una icona, il font e altro usando questa nota.\n\n"\
+        "Per ulteriori informazioni, riferirsi al manuale dei programmi.\n"
 
     "long_aboutString" = ""\
     "'HappyDays' ti aiuterà a ricordare i compleanni e gli anniversari "\
     "dei tuoi amici e familiari, ma anche altri eventi.\n\n"\
-    "Consulta i file index.html e manual.html per informazioni dettagliate "\
-    "su come utilizzare HappyDays.\n\n"\
+    "Visita il sito http://jmjeong.com/?HappyDays per informazioni dettagliate "\
+    "su come usare HappyDays.\n\n"\
     "HappyDays è distribuito sotto i termini della GNU General "\
-    "Public License version 2.0.\n"
+    "Public License version 2.0.\n\n"\
+	"= Input Format\n\n"\
+	"[*[{EventType}]\\ws{Description}\\ws{Date}[[nth day list]]\n"
 
     "long_cleanupAlertString" = ""\
     "Le Notifiche inserite sono processate da HappyDays se hanno "\
 	"{HappyDays ID} nel loro campo Nota. "\ 	
     "Se utilizzi questo formato per i tuoi "\
-    "inserimenti, anche questo registro sarà eliminato da Ripulisci.\n"
+    "inserimenti, anche questo record sarà eliminato da Ripulisci.\n"
 
     "long_sl2lnString" = ""\
         "-) significa mese lunare normale\n"\
         "#) significa mese lunare bisestile"
-
-    "long_cantFindAddrString" = ""\
-    "Non è possible trovare il campo personale nella Rubrica: '%s'.\n"\
-    "Per favore rinominare un campo personale della tua Rubrica."
 
     "Select Time" = "Seleziona Orario"
     "No Time" = "Nessun Orario"
@@ -50,17 +41,16 @@ BEGIN
     "SAT"   = "SAB"
 
     "Not enough memory" = "Memoria Insufficiente"
-    "%d notify entry is created.\n" = "%d notifica creata.\n" 
-    "%d existing entry " = "%d notifica già esistente "
-    "is kept untouched." = "non modificata."
-    "is modified." = "modificata."
+    "%d notify entries have been created.\n" = "%d notifiche create.\n" 
+    "%d existing entries " = "%d notifiche già esistenti "
+    "are kept untouched." = "non modificate."
+    "have been modified." = "modificate."
 
     "Collecting Information..." = "Raccolta Informazioni..."
 
-    "HappyDays List" = "Lista HappyDays"
     "Look Up:" = "Cerca:"
 
-    "HappyDays View" = "Dettagli Evento"
+    "HappyDays View" = "HappyDays Vista"
     "Done"  = "Fatto"
     "DB" = "Agenda" 
     "TD" = "Impegni"
@@ -78,9 +68,9 @@ BEGIN
 
     "Options" = "Opzioni"
 	"Font..." = "Font..."
-    "Preferences" = "Preferenze..."
-	"Display Preferences" = "Opzioni di visualizz..."
-    "About HappyDays" = "Informazioni HappyDays"
+    "Preferences" = "Preferenze"
+	"Display Preferences" = "Opzioni visualizzazione"
+    "About HappyDays" = "Info su HappyDays"
 
     "Edit" = "Modifica"
     "Undo" = "Annulla"
@@ -113,6 +103,7 @@ BEGIN
     "Notify Format:" = "Formato di Notifica:"  
     "[Last, First] E(1) Year" = "[Cognome, Nome] E(1) Età"  
     "[First Last] E(1) Year" = "[Nome Cognome] E(1) Età"  
+        "[First] E(1) Year" = "[Nome] E(1) Età" 
     "Event - Last, First Year" = "Evento - Cognome, Nome Età"  
     "Event - First Last Year" = "Evento - Nome Cognome Età"  
     "First Last Year" = "Nome Cognome Età"  
@@ -122,7 +113,7 @@ BEGIN
 
 
 /* Display preferences */
-    "Emphasize Lunar Date" = "Utilizza Calendario Lunare"
+    "Emphasize Lunar Date" = "Enfatizza Calendario Lunare"
 
 
 /* About HappyDays */	
@@ -169,7 +160,7 @@ BEGIN
     "Notify warning" = "Avviso di notifica" 
 	"long_notifywarningString" = ""\
   		"^1: Sei sicuro di voler creare le notifiche dei "\
-		"^2 registri HappyDays?" 
+		"^2 record di HappyDays?" 
       
 /* Date Book Icon */
     "Date Book Icon" = "Icona Agenda"  
@@ -188,7 +179,6 @@ BEGIN
 
 
 
-    "HappyDays says" = "HappyDays dice"
     "HappyDays Export" = "Esporta HappyDays"
     "Would you like to export HappyDays List to Memo Pad?" = ""\
     	"Vorresti esportare la Lista HappyDays al Blocco note?" 
@@ -228,6 +218,10 @@ BEGIN
 	"Address Change" = "Indirizzi Modificati"
 	"AddressDB is changed. \nDo you want to rescan it?"= ""\
 		"La Rubrica è stata modificata. \nVoui riesaminarla?"
+
+        "Ignore record with prefix '!'" = "Ignora record con prefisso '!'"
+ 	"Datebook note" = "Nota per Agenda"
+ 	"Add the following note" = "Aggiungi la seguente nota"
 
 /* HappyDays view */
 	"Type:" = "Tipo:"

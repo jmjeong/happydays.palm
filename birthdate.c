@@ -423,6 +423,15 @@ Boolean AnalysisHappyDays(const char* field,
         else if (year > 31 && year <= 99) *dYear = year + 1900;     // 1900
         else if (year >= 1900) *dYear = year;
         else return false;
+
+        if (flag->bits.lunar || flag->bits.lunar_leap) {
+            DateTimeType rtVal;
+            UInt8 ret;
+            
+            ret = lun2sol(year, month, day, flag->bits.lunar_leap, &rtVal);
+
+            if (ret) return false;
+        }
     }
     *dMonth = month; *dDay = day;
 

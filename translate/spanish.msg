@@ -2,7 +2,7 @@ TRANSLATION "SPANISH"
 BEGIN
 	"long_notifySettingMoreString" = ""\
 	"Para usuarios avanzados sólamente\n\n"\
-	"Esta nota es usada por programas externos de reemplazo de la Agenda "\
+	"Esta nota es usada por programas externos que reemplazan la Agenda "\
 	"como Action Names, DateBk3/4.\n\n"\
 	"Usted puede asignar iconos, fuentes y más utilizando esta nota.\n\n"\
 	"Para más información, consulte sus manuales.\n"
@@ -13,7 +13,7 @@ BEGIN
     "Visite http://jmjeong.com/?HappyDays para información detallada "\
     "sobre cómo utilizar HappyDays\n\n"\
     "HappyDays es distribuído bajo los términos de la GNU General "\
-    "Public License versión 2.0.\n"\
+    "Public License version 2.0.\n\n"\
 	"= Input Format\n\n"\
 	"[*[{EventType}]\\ws{Description}\\ws{Date}[[nth day list]]\n"
 
@@ -69,7 +69,7 @@ BEGIN
     "Options" = "Opciones"
 	"Font..." = "Fuente..."
     "Preferences" = "Preferencias"
-	"Display Preferences" = "Pref. de presentación"
+	"Display Preferences" = "Opciones de presentación"
     "About HappyDays" = "Acerca de HappyDays"
 
     "Edit" = "Edición"
@@ -95,7 +95,7 @@ BEGIN
     "Y/M/D" = "A/M/D"  
     "Y.M.D" = "A.M.D"  
     "Y-M-D" = "A-M-D"  
-	"Address Autoscan" = "Recopilar inform."
+	"Address Autoscan" = "Recopilar datos"
 	"Always" = "Siempre"
 	"Ask" = "Preguntar"
 	"Never" = "Nunca"
@@ -173,8 +173,8 @@ BEGIN
     "HappyDays Cleanup" = "Limpiar HappyDays" 
 
     "long_removeConfirmString" = ""\
-    "Are you sure you want to remove all "\
-    "HappyDays notify entries?"
+    "Está seguro de que desea remover todas las "\
+    "entradas de recordatorio de HappyDays?"
 
     "HappyDays says" = "HappyDays dice"
 
@@ -190,7 +190,7 @@ BEGIN
 
 	"long_invalidformatString" = ""\
     	"El registro de Direcciones para\n[^1]\n contiene un evento no válido. "\
-		"¿Cómo desea manejarlo?" 
+		"¿Cómo desea procesarlo?" 
 
     "Ignore" = "Ignorar" 
     "Ignore all" = "Ignorar todos" 
@@ -211,8 +211,8 @@ BEGIN
     "%ld days left" = "%ld días faltantes"  
     "%ld days passed" = "%ld días pasados"  
 
-    "Processing" = "Procesando"  
-    "Processed : " = "Procesados : " 
+    "Processing" = "Processing"  
+    "Processed : " = "Processed : " 
 
 	"Address Change" = "Cambios en Direcciones"
 	"AddressDB is changed. \nDo you want to rescan it?"= ""\
