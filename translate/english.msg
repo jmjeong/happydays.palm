@@ -220,8 +220,8 @@ BEGIN
     "Date Book" = "Date Book"  
     "To Do" = "To Do"  
     "Scan note field" = "Scan note field"  
-    "%d day(s) left" = "%d day(s) left"  
-    "%d day(s) passed" = "%d day(s) passed"  
+    "%d days left" = "%d days left"  
+    "%d days passed" = "%d days passed"  
 
     "Processing" = "Processing"  
     "Processed : " = "Processed : " 

@@ -214,8 +214,8 @@ BEGIN
     "Days" = "일전"
 	"Date Book" = "일정관리"
 	"To Do" = "할 일"
-    "%d day(s) left" = "%d 일 남았습니다"
-    "%d day(s) passed" = "%d 일 지났습니다"
+    "%d days left" = "%d 일 남았습니다"
+    "%d days passed" = "%d 일 지났습니다"
 	
 	"Processing" = "진행중"
 	"Processed : " = "처리된것 : "
@@ -229,6 +229,6 @@ BEGIN
 	"Next Date:" = "다음 기념일:"
 	"Origin:" = "기념일:"
 	"Age:" = "연령:"
-	"UpTo Date:" = "남은 기간:"
-	"%dY %dM %dD (%d)" = "%d년 %d월 %d일 (총 %d일)"
+	"UpTo Date:" = "남은 일:"
+	"%dY %dM %dD (%d)" = "%d년 %d월 %d일째 (%d)"
 END
