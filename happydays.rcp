@@ -43,7 +43,7 @@ STRING ID BirthPassedString     "%d day(s) passed"
 
 STRING ID TypeStr				"Type:"
 STRING ID NextDateStr			"Next Date:"
-STRING ID SourceDateStr			"Source Date:"
+STRING ID SourceDateStr			"Origin:"
 STRING ID AgeStr				"Age:"
 STRING ID RemainedDayStr		"Remained:"
 STRING ID UpToNowStr			"Up To Now:"
@@ -485,17 +485,42 @@ END
 /////////////
 // Bitmaps //
 /////////////
-BitMapFamily ID ID_BitmapIcon
-	"HD_large.bmp" "HD_large.bmp" "" "HD_large_color.bmp"
+
+BITMAP ID ID_BitmapIcon+0x1000
+	"largeIconBW.bmp"
 	COMPRESS
-	TRANSPARENT 204 204 0
+
+ICON ID 2000
+	"largeIconBW.bmp"
+
+ICON ID 2001
+	"mediumIconBW.bmp"
+
+ICON ID 2002
+	"largeInvertedIconBW.bmp"
+
+
+BitMapFamily ID ID_BitmapIcon
+	"HD_large.bmp" 
+	""
+	"" 
+	"HD_large_color.bmp"
+	COMPRESS
+	TRANSPARENT 192 192 0
 
 ICONFAMILY 
-	"HD_large.bmp" "HD_large.bmp" "" "HD_large_color.bmp"
-	TRANSPARENT 204 204 0
+	"HD_large.bmp" 
+	""
+	"" 
+	"HD_large_color.bmp"
+	TRANSPARENT 192 192 0
+
 SMALLICONFAMILY
-	"HD_small.bmp" "HD_small.bmp" "" "HD_small_color.bmp"
-	TRANSPARENT 204 204 0
+	"HD_small.bmp" 
+	""
+	"" 
+	"HD_small_color.bmp"
+	TRANSPARENT 192 192 0
 
 APPLICATIONICONNAME 1000 "HappyDays"
 VERSION ID 1 "1.5"

@@ -1130,15 +1130,12 @@ static Boolean MenuHandler(FormPtr frm, EventPtr e)
 	}
 	case ViewFormMenuFont: {
 		FontID fontID;
-        TablePtr tableP = GetObjectPointer(frm, ViewFormTable);
 
 		fontID = FontSelect(gPrefsR.viewFont);
 
 		if (fontID != gPrefsR.viewFont) {
 			gPrefsR.viewFont = fontID;
-            
-            ViewFormLoadTable(frm, 0);
-			TblDrawTable(tableP);
+			FrmUpdateForm(MainForm, frmUpdateFontCode);
         }
 		handled = true;
 		break;
@@ -1265,9 +1262,6 @@ static void MainFormScroll(Int16 newValue, Int16 oldValue, Boolean force_redraw)
 	FormPtr 	frm = FrmGetActiveForm();
 
 	tableP = GetObjectPointer(frm, MainFormTable);
-	if (gCurrentSelection > 0) {
-		MainFormSelectTableItem(false, tableP, gCurrentSelection, 0);
-	}
 
 	if(oldValue != newValue) {
 		MainFormLoadTable(frm, newValue);
@@ -1286,8 +1280,6 @@ static void MainFormScrollLines(Int16 lines, Boolean force_redraw)
 
     barP = GetObjectPointer(frm, MainFormScrollBar);
     SclGetScrollBar(barP, &valueP, &minP, &maxP, &pageSizeP);
-
-    // TblUnhighlightSelection(GetObjectPointer(frm, MainFormTable));
 
     //scroll up
     if(lines < 0)
@@ -1323,9 +1315,10 @@ static void MainFormResize(FormPtr frmP, Boolean draw)
 	RectangleType r, erase_rect;
 
 	WinGetDisplayExtent(&x, &y);
-
 	FrmGetFormBounds(frmP, &r);
 
+    // calc y difference
+    //
 	y_diff = y - (r.topLeft.y + r.extent.y);
 
 	if (draw && (y_diff <0)) {
@@ -1362,7 +1355,6 @@ static void MainFormResize(FormPtr frmP, Boolean draw)
 
 		MainFormLoadTable(frmP, valueP);
 		FrmDrawForm(frmP);
-		
 		gCurrentSelection = -1;
 	}
 }
@@ -1483,23 +1475,17 @@ static void MainFormHandleSelect(FormPtr frm, Int16 row)
 
 	barP = GetObjectPointer(frm, MainFormScrollBar);
 	SclGetScrollBar(barP, &valueP, &minP, &maxP, &pageSizeP);
-	
-	if (gCurrentSelection>= 0) {
-		MainFormSelectTableItem(false, GetObjectPointer(frm, MainFormTable),
-                                gCurrentSelection, 0);
-	}
+
 	gCurrentSelection = row;
 	gMainTableHandleRow = gCurrentSelection + valueP;
 
 	FrmGotoForm(ViewForm);
-	MainFormSelectTableItem(true, GetObjectPointer(frm, MainFormTable),
-                            gCurrentSelection, 0);
 }
 
 static Boolean MainFormHandleEvent (EventPtr e)
 {
     Boolean handled = false;
-	Boolean resize = true;
+	Boolean bformModify = true;
 
     FormPtr frm = FrmGetFormPtr(MainForm);
 
@@ -1516,11 +1502,21 @@ static Boolean MainFormHandleEvent (EventPtr e)
         // frmRedrawUpdateCode invoked by SpecialKeyDown
         //
 		// else execute frmOpenEvent
-		resize = false;
+		bformModify = false;
+        gCurrentSelection = -1;
 
     case frmOpenEvent:
-		MainFormInit(frm, resize);
+		MainFormInit(frm, bformModify);
+
+        if (gCurrentSelection != -1) {
+
+        }
 		FrmDrawForm(frm);
+
+        if (gCurrentSelection != -1) {
+        }
+        
+            
         handled = true;
         break;
 
@@ -1665,6 +1661,14 @@ static Boolean MainFormHandleEvent (EventPtr e)
  		MainFormHandleSelect(frm, e->data.tblSelect.row);
 		break;
     }
+    case tblEnterEvent: 
+    {
+        if (gCurrentSelection != -1)
+            MainFormSelectTableItem(false, GetObjectPointer(frm, MainFormTable),
+                                    gCurrentSelection, 0);
+		break;
+    }
+
 	case frmGotoEvent: {
 		// recordNum has the selected position
 		//
@@ -2061,21 +2065,12 @@ static void ViewFormResize(FormPtr frmP, Boolean draw)
 	}
 }
 
-// IN : index - mainDB index
-//
-static void SetViewForm(Int16 index, DateType converted, Int8 age)
-{
-    return;
-}
-
 static void MainFormInitTable(FormPtr frm)
 {
     TablePtr 		tableP;
 	ScrollBarPtr 	barP;
 	Int16 			tblRows, row, row_height;
 	FontID			currFont;
-
-    gCurrentSelection = -1;
     
     tableP = GetObjectPointer(frm, MainFormTable);
 	tblRows = TblGetNumberOfRows(tableP); 
@@ -2117,6 +2112,7 @@ static void MainFormLoadTable(FormPtr frm, Int16 listOffset)
 
     for (row=0; row < tblRows; row++) {
 		TblSetRowHeight(tableP, row, row_height);
+        TblSetItemFont(tableP, row, 0, gPrefsR.listFont);
 	
 		running_total += row_height;
 		if (row < gMainTableTotals)
@@ -2140,18 +2136,22 @@ static void MainFormLoadTable(FormPtr frm, Int16 listOffset)
 	FntSetFont(currFont);
 }
 
-static void MainFormInit(FormPtr frm, Boolean resize)
+static void MainFormInit(FormPtr frm, Boolean bformModify)
 {
+    // table에 대한 기본 설정
+    //
     MainFormInitTable(frm);
     
 	// display starting date
 	if (gbVgaExists) {
 		VgaTableUseBaseFont(GetObjectPointer(frm, MainFormTable), 
 							!VgaIsVgaFont(gPrefsR.listFont));
-		if (resize) VgaFormModify(frm, vgaFormModify160To240);
+		if (bformModify) VgaFormModify(frm, vgaFormModify160To240);
 		MainFormResize(frm, false);
 	}
 
+    // 실제 읽어들일 데이터를 처리
+    //
 	MainFormLoadTable(frm, 0);
 
 	DisplayCategory(MainFormPopupTrigger, gPrefsR.addrCategory, false);
@@ -3444,39 +3444,6 @@ static Boolean DBNotifyFormMoreHandleEvent(EventPtr e)
     return handled;
 }
 
-static void RecordViewScroll(Int16 chr)
-{
-    FormPtr 	frm = FrmGetActiveForm();
-	TablePtr    tableP = GetObjectPointer(frm, ViewFormTable);
-
-    // Before processing the scroll, be sure that the command bar has
-    // been closed.
-    MenuEraseStatus (0);
-    
-    switch (chr) {
-    case vchrPageDown:
-        if (gMainTableHandleRow < gMainTableTotals-1) {
-            gMainTableHandleRow++;
-        
-            SndPlaySystemSound(sndInfo);
-
-            ViewFormLoadTable(frm, 0);
-			TblDrawTable(tableP);
-        }
-        break;
-    case vchrPageUp:
-        if (gMainTableHandleRow > 0 ) {
-            gMainTableHandleRow--;
-
-            SndPlaySystemSound(sndInfo);
-
-            ViewFormLoadTable(frm, 0);
-			TblDrawTable(tableP);
-        }
-        break;
-    }
-}
-
 static void ViewFormDrawRecord(MemPtr tableP, Int16 row, Int16 column, 
                                RectanglePtr bounds)
 {
@@ -3508,10 +3475,13 @@ static void ViewFormDrawRecord(MemPtr tableP, Int16 row, Int16 column,
     if ((recordH = DmQueryRecord(MainDB, index))) {
         Int16 x,y;
         Int16 width, length;
+        Int16 viewItem;
         
         x = bounds->topLeft.x;
         y = bounds->topLeft.y;
         width = bounds->extent.x;
+
+        viewItem = TblGetItemInt(tableP, row, column);
         
         currFont = FntSetFont(gPrefsR.viewFont);
 
@@ -3540,9 +3510,12 @@ static void ViewFormDrawRecord(MemPtr tableP, Int16 row, Int16 column,
         CategoryGetName(AddressDB, addrattr, gAppErrStr);
         SetFieldTextFromStr(ViewFormCategory, gAppErrStr);
 
-        switch (row) {
+        switch (viewItem) {
         case ViewName :
             if (column == 0) {
+                RectangleType rect;
+                TblGetBounds(tableP, &rect);
+                
                 ///////////////////////////////////
                 // Display name in large bold font
                 ///////////////////////////////////
@@ -3551,7 +3524,7 @@ static void ViewFormDrawRecord(MemPtr tableP, Int16 row, Int16 column,
                 }
                 else FntSetFont(largeBoldFont);
                 
-                DrawRecordName(r.name1, r.name2, bounds->extent.x, &x, y,
+                DrawRecordName(r.name1, r.name2, rect.extent.x, &x, y,
                                false,
                                r.flag.bits.priority_name1 || !gSortByCompany);
             }
@@ -3665,7 +3638,7 @@ static void ViewFormDrawRecord(MemPtr tableP, Int16 row, Int16 column,
         case ViewRemained:
         case ViewUpToNow:
             if (column == 0) {
-                if (row == ViewRemained) 
+                if (viewItem == ViewRemained) 
                     SysCopyStringResource(gAppErrStr, RemainedDayStr);
                 else
                     SysCopyStringResource(gAppErrStr, UpToNowStr);
@@ -3699,7 +3672,7 @@ static void ViewFormDrawRecord(MemPtr tableP, Int16 row, Int16 column,
                                        - DateToDays(solBirth));
 
                     gAppErrStr[0] = 0;
-                    if (row == ViewUpToNow && dateDiff > (Int16)0) {
+                    if (viewItem == ViewUpToNow && dateDiff > (Int16)0) {
                         StrPrintF(gAppErrStr, "%d", dateDiff);
                     }
                     else {
@@ -3727,6 +3700,29 @@ static void ViewFormDrawRecord(MemPtr tableP, Int16 row, Int16 column,
 		FntSetFont (currFont);
     }
 }
+static void ViewFormInitTable(FormPtr frm)
+{
+    TablePtr 		tableP;
+    Int16 			tblRows, row;
+    Int16			row_height;
+	FontID			currFont;
+
+    tableP = GetObjectPointer(frm, ViewFormTable);
+	tblRows = TblGetNumberOfRows(tableP); 
+
+	currFont = FntSetFont(gPrefsR.listFont);
+	row_height = FntLineHeight();
+
+    for (row=0; row < tblRows; row++) {
+		TblSetRowHeight(tableP, row, row_height);
+		TblSetItemStyle(tableP, row, 0, customTableItem);
+		TblSetItemStyle(tableP, row, 1, customTableItem);
+	}
+	TblSetCustomDrawProcedure(tableP, 0, ViewFormDrawRecord);
+	TblSetCustomDrawProcedure(tableP, 1, ViewFormDrawRecord);
+
+	FntSetFont(currFont);
+}
 
 static void ViewFormLoadTable(FormPtr frm, Int16 listOffset)
 {
@@ -3750,17 +3746,18 @@ static void ViewFormLoadTable(FormPtr frm, Int16 listOffset)
 	visibleRows = 0;
 
     for (row=0; row < tblRows; row++) {
-
-        if (row == ViewName)
+        if (row == ViewName) 
             TblSetRowHeight(tableP, row, row_height*2);
         else 
-            TblSetRowHeight(tableP, row, row_height+2);
+            TblSetRowHeight(tableP, row, row_height);
         
-		TblSetItemStyle(tableP, row, 0, customTableItem);
-		TblSetItemStyle(tableP, row, 1, customTableItem);
-
         TblSetItemInt(tableP, row, 0, tblItemIdx);
         TblSetItemInt(tableP, row, 1, tblItemIdx);
+
+        TblSetItemFont(tableP, row, 0, gPrefsR.listFont);
+        TblSetItemFont(tableP, row, 1, gPrefsR.listFont);
+
+        TblSetRowSelectable(tableP, row, false);
 
         if (tblItemIdx == ViewSrc && !gPrefsR.DispPrefs.dispextrainfo) {
             tblItemIdx += 2;
@@ -3780,19 +3777,17 @@ static void ViewFormLoadTable(FormPtr frm, Int16 listOffset)
 
 		TblMarkRowInvalid(tableP, row);
 	}
-	TblSetCustomDrawProcedure(tableP, 0, ViewFormDrawRecord);
-	TblSetCustomDrawProcedure(tableP, 1, ViewFormDrawRecord);
-
 	FntSetFont(currFont);
 }
 
-static void ViewFormInit(FormPtr frm, Boolean resize)
+static void ViewFormInit(FormPtr frm, Boolean bformModify)
 {
+    ViewFormInitTable(frm);
 	// display starting date
 	if (gbVgaExists) {
 		VgaTableUseBaseFont(GetObjectPointer(frm, ViewFormTable), 
 							!VgaIsVgaFont(gPrefsR.viewFont));
-		if (resize) VgaFormModify(frm, vgaFormModify160To240);
+		if (bformModify) VgaFormModify(frm, vgaFormModify160To240);
 		ViewFormResize(frm, false);
 	}
 
@@ -3802,13 +3797,14 @@ static void ViewFormInit(FormPtr frm, Boolean resize)
 static Boolean ViewFormHandleEvent(EventPtr e)
 {
     Boolean handled = false;
+    Boolean bformModify = true;
     FormPtr frm = FrmGetFormPtr(ViewForm);
 
     switch (e->eType) {
-    case frmOpenEvent: 
-    {
-        Boolean resize = true;
-        ViewFormInit(frm, resize);
+    case frmUpdateEvent:
+        bformModify = false;
+    case frmOpenEvent: {
+        ViewFormInit(frm, bformModify);
         FrmDrawForm(frm);
         
         handled = true;
@@ -3817,9 +3813,45 @@ static Boolean ViewFormHandleEvent(EventPtr e)
 	case keyDownEvent:
 	{
 		if (EvtKeydownIsVirtual(e)) {
-			RecordViewScroll(e->data.keyDown.chr);
-			handled = true;
+            TablePtr    tableP = GetObjectPointer(frm, ViewFormTable);
+
+            // Before processing the scroll, be sure that the command bar has
+            // been closed.
+            MenuEraseStatus (0);
+    
+            switch (e->data.keyDown.chr) {
+            case vchrPageDown:
+            case vchrPrevField:
+                if (gMainTableHandleRow < gMainTableTotals-1) {
+                    gMainTableHandleRow++;
+        
+                    SndPlaySystemSound(sndInfo);
+
+                    ViewFormLoadTable(frm, 0);
+                    TblDrawTable(tableP);
+
+                    handled = true;
+                }
+                break;
+            case vchrPageUp:    
+            case vchrNextField:
+                if (gMainTableHandleRow > 0 ) {
+                    gMainTableHandleRow--;
+
+                    SndPlaySystemSound(sndInfo);
+
+                    ViewFormLoadTable(frm, 0);
+                    TblDrawTable(tableP);
+                    handled = true;
+                }
+                break;
+            case chrEscape:
+            case chrCarriageReturn:
+                FrmGotoForm(MainForm);
+                handled = true;
+            }
 		}
+        break;
     }
 	case displayExtentChangedEvent:
 		ViewFormResize(FrmGetActiveForm(), true);
@@ -3835,7 +3867,6 @@ static Boolean ViewFormHandleEvent(EventPtr e)
         switch(e->data.ctlSelect.controlID) {
         case ViewFormDone:
             FrmGotoForm(MainForm);
-            HighlightAction(gMainTableHandleRow, false);
                 
             handled = true;
             break;
