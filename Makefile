@@ -11,24 +11,25 @@ OBJS = happydays.o lun2sol.o sol2lun.o address.o datebook.o util.o \
 
 CC = m68k-palmos-gcc
 
-#CFLAGS = -Wall -O2
-CFLAGS = -Wall -g -O2
+CFLAGS = -Wall -O2 -D$(LANG)
+#CFLAGS = -Wall -g -O2
 
 PILRC = pilrc
 OBJRES = m68k-palmos-obj-res
 NM = m68k-palmos-nm
 BUILDPRC = build-prc
 PILOTXFER = pilot-xfer
+LANG = ENGLISH
 
 all: en
 
 all-lang: en ko de
 
-en: alwaysres $(TARGET).prc
+en: alwaysmake $(TARGET).prc
 
-ko: alwaysres $(TARGET)-kt.prc $(TARGET)-km.prc
+ko: alwaysmake $(TARGET)-kt.prc $(TARGET)-km.prc
 
-de: alwaysres $(TARGET)-de.prc 
+de: alwaysmake $(TARGET)-de.prc 
 
 .S.o:
 	$(CC) $(TARGETFLAGS) -c $<
@@ -75,7 +76,8 @@ bin-de.res: $(TARGET).rcp $(TARGET).pbitm
 	$(PILRC) -L GERMAN $(TARGET).rcp .
 	touch bin.res
 
-alwaysres:
+alwaysmake:
+	touch happydays.c
 	rm -f bin.res
 
 $(TARGET): $(OBJS)
@@ -95,7 +97,7 @@ clean:
 	-rm -f *.[oa] $(TARGET) *.bin bin.res *.grc Makefile.bak
 
 veryclean: clean
-	-rm -f $(TARGET).prc pilot.ram pilot.scratch
+	-rm -f $(TARGET)*.prc pilot.ram pilot.scratch
 
 save:
 	zip $@ *.c Makefile *.rcp README COPYING *.h *.pbitm pilrc.diff

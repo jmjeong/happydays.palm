@@ -58,9 +58,17 @@ UInt PrefsRecIndex;
 struct sPrefsR *gPrefsR;
 struct sPrefsR DefaultPrefsR = {
     {  '0', '0', '0', '0', '1', 3, 1, {8, 0} },
+#ifdef GERMAN
     {  "Birthday", "HD:", '1', '0' },
+#else
+    {  "Geburtstag", "HD:", '1', '0' },
+#endif
     0,
+#ifdef GERMAN
+    "Alle", "\0\0\0", "\0\0\0"         /* addr create/modify date */
+#else
     "All", "\0\0\0", "\0\0\0"          /* addr create/modify date */
+#endif
 };
 
 // function declaration 
@@ -1698,6 +1706,9 @@ static Boolean NotifyFormHandleEvent(EventPtr e)
         }
         
         case NotifySettingFormCancel:
+            UnloadNotifyPrefsFields();
+            WritePrefsRec();
+
             FrmReturnToForm(0);
             handled = true;
             break;
