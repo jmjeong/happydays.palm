@@ -6,12 +6,12 @@ APPNAME = "HappyDays"
 APPID = "Jmje"
 
 FILES = lun2sol.c sol2lun.c address.c datebook.c util.c \
-		birthdate.c happydays.c memodb.c s2lconvert.c todo.c \
-		notify.c
-OBJS = lun2sol.o sol2lun.o address.o datebook.o util.o \
-		birthdate.o happydays.o memodb.o s2lconvert.o todo.o \
-		notify.o \
-		happydays-sections.o
+		birthdate.c happydays.c memodb.c s2lconvert.c \
+		todo.c notify.c
+OBJS = obj/lun2sol.o obj/sol2lun.o obj/address.o obj/datebook.o obj/util.o \
+		obj/birthdate.o obj/happydays.o obj/memodb.o obj/s2lconvert.o \
+		obj/todo.o obj/notify.o \
+		obj/happydays-sections.o
 
 CC = m68k-palmos-gcc
 
@@ -26,12 +26,17 @@ PILOTXFER = pilot-xfer
 ZIP = zip
 LANG = ENGLISH
 
+obj/%o : %.c
+	@echo "Compiling $<..." &&\
+	cd ./obj/ && $(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ ../$<
+
 all: en
-	ls -al happydays*.prc
+	ls -al prc/
 
 all-lang: en ko de th dutch fr sp cz catalan br chi
 
-en: $(TARGET).prc
+en: obj/$(TARGET).prc
+	cp obj/$(TARGET).prc prc
 
 ko: $(TARGET)-kt.prc $(TARGET)-km.prc
 	zip $(TARGET)-$(VERSION)-ko.zip $(TARGET)-kt.prc $(TARGET)-km.prc
@@ -70,13 +75,15 @@ br: $(TARGET)-br.prc
 	$(CC) $(CSFLAGS) $<
 
 happydays-sections.o: happydays-sections.s
-	$(CC) -c happydays-sections.s
+	@echo "Compiling happydays-sections.s..." && \
+	$(CC) -c happydays-sections.s -o obj/happydays-sections.o
 
 happydays-sections.s happydays-sections.ld : happydays.def
 	multigen happydays.def
 
-$(TARGET).prc: $(TARGET) bin.res
-	$(BUILDPRC) -o $(TARGET).prc happydays.def *.bin $(TARGET)
+obj/$(TARGET).prc: obj/$(TARGET) bin.res
+	@echo "Building program file ./obj/happydays.prc..." && \
+	$(BUILDPRC) -o obj/$(TARGET).prc happydays.def obj/*.bin obj/$(TARGET)
 
 $(TARGET)-en.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGET).grc pref0000.$(TARGET).grc rloc0000.$(TARGET).grc bin.res
 	$(BUILDPRC) $(TARGET).prc $(APPNAME) $(APPID) code0001.$(TARGET).grc code0000.$(TARGET).grc data0000.$(TARGET).grc *.bin pref0000.$(TARGET).grc rloc0000.$(TARGET).grc
@@ -128,9 +135,9 @@ pref0000.$(TARGET).grc: code0000.$(TARGET).grc
 
 rloc0000.$(TARGET).grc: code0000.$(TARGET).grc
 
-bin.res: $(TARGET)-en.rcp
-	rm -f *.bin
-	$(PILRC) -q -L ENGLISH $(TARGET)-en.rcp .
+bin.res: obj/$(TARGET)-en.rcp
+	@echo "Compiling resource happydays.rcp..." &&\
+	$(PILRC) -q -L ENGLISH obj/$(TARGET)-en.rcp obj
 
 bin-kt.res: $(TARGET)-ko.rcp
 	rm -f *.bin
@@ -180,8 +187,9 @@ bin-br.res: $(TARGET)-br.rcp
 	rm -f *.bin
 	$(PILRC) -L BRAZILIAN $(TARGET)-br.rcp .
 
-$(TARGET)-en.rcp: $(TARGET).rcp translate/english.msg translate/hdr.msg
-	cat translate/hdr.msg translate/english.msg $(TARGET).rcp > $(TARGET)-en.rcp
+obj/$(TARGET)-en.rcp: $(TARGET).rcp translate/english.msg translate/hdr.msg
+	cat translate/hdr.msg translate/english.msg $(TARGET).rcp \
+			> obj/$(TARGET)-en.rcp
 
 $(TARGET)-ko.rcp: $(TARGET).rcp korean.msg hdr.msg
 	cat hdr.msg korean.msg $(TARGET).rcp > $(TARGET)-ko.rcp
@@ -216,10 +224,10 @@ $(TARGET)-catalan.rcp: $(TARGET).rcp catalan.msg hdr.msg
 $(TARGET)-br.rcp: $(TARGET).rcp brazilian.msg hdr.msg
 	cat hdr.msg brazilian.msg $(TARGET).rcp > $(TARGET)-br.rcp
 
-$(TARGET): $(OBJS) happydays-sections.ld
-	$(CC) $(CFLAGS) $(OBJS) -o $(TARGET) $(LIBS) happydays-sections.ld
+obj/$(TARGET): $(OBJS) happydays-sections.ld
+	@echo "Linking..." && \
+	$(CC) $(CFLAGS) $(OBJS) -o obj/$(TARGET) happydays-sections.ld
 	m68k-palmos-objdump --section-headers happydays
-#	! $(NM) -u $(TARGET) | grep .
 
 send: $(TARGET).prc
 	$(PILOTXFER) -i $(TARGET).prc
@@ -231,7 +239,7 @@ tags:
 	etags $(FILES) *.h
 
 clean:
-	-rm -f *.[oa] $(TARGET) *.bin bin.res *.grc Makefile.bak
+	cd obj && -rm -f *
 
 veryclean: clean
 	-rm -f $(TARGET)*.prc pilot.ram pilot.scratch
