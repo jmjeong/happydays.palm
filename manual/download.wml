@@ -8,10 +8,10 @@ File Download
 </h2>
 <p>
 <a
-href="ftp://jmjeong.com/pub/happydays/happydays-2.1.zip">happydays-2.1.zip</a>
+href="ftp://jmjeong.com/pub/happydays/happydays-2.12.zip">happydays-2.12.zip</a>
 - English version and manual<br>
 <a
-href="ftp://jmjeong.com/pub/happydays/happydays-src-2.1.zip">happydays-src-2.1.zip</a>
+href="ftp://jmjeong.com/pub/happydays/happydays-src-2.12.zip">happydays-src-2.12.zip</a>
 - source file<br>
 
 </P>
@@ -30,7 +30,7 @@ To get the latest CVS sources do the following
 $ export CVSROOT=":pserver:cvs@coconut.snu.ac.kr:/export/cvsroot"
 $ cvs login
 ( password = anonymous )
-$ cvs -z3 checkout -rver_21 happydays
+$ cvs -z3 checkout -rver_212 happydays
 </pre>
 
 <p>
@@ -52,8 +52,8 @@ translate/english.msg file.)<p>
 
 HappyDays has been translated into the following languages:  <p>
 <ul>
-  <li> <a href="ftp://jmjeong.com/pub/happydays/happydays-2.1-ko.zip">
-  Korean</a>(2.1) - by Jaemok Jeong<br>
+  <li> <a href="ftp://jmjeong.com/pub/happydays/happydays-2.12-ko.zip">
+  Korean</a>(2.12) - by Jaemok Jeong<br>
 	  (happydays-k8.prc for 8x8 font,
 	  happydays-k11.prc for 11x11 font)
   <li> <a
@@ -134,6 +134,14 @@ Change log
 You want to see changes before HappyDays 2.0, look up the
 <a href="change_log.html">change_log.html</a> file.
 <p>
+
+<b>Happydays 2.12 version - 4/23/2002</b>
+<ul>
+<li> Fix memory leaks in Datebook Notify
+<li> Fix a compabibility issue on Palm OS 3.3
+<li> Change Datebook Notify - To show age in each record, Happydays makes individual entries rather than repeating entry, if 'repeat for' setting is more than 1
+<li> Add a general Note field in ToDo Notify
+</ul>
 
 <b>Happydays 2.1 version - 4/21/2002</b>
 <ul>
