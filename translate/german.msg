@@ -123,9 +123,6 @@ BEGIN
 /* Display preferences */
     "Emphasize Lunar Date" = "Lunardatum hervorheben"
 
-    "GPL free software" = "---NEW---"
-    "E-Mail & Web Page" = "---NEW---"
-
     "Translator" = "Übersetzung: Gunther Zagatta"
     "Translator's email" = "zagatta@web.de"
 

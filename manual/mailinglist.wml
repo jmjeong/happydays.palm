@@ -5,26 +5,36 @@
 <P>
 A HappyDays mailing list exists to provide a general discussion
 forum for users and developers.  The list is the main source for
-the latest news about HappyDays.</P>
+the latest news about HappyDays.
 
 <p>
-To subscribe to the mailing list, send mail to <a
-href="mailto:majordomo@coconut.snu.ac.kr">
-majordomo@coconut.snu.ac.kr</a> with the phrases "subscribe happydays"
-(without the quotes) as the message body.
+<form method=GET action="http://groups.yahoo.com/subscribe/happydays-palm">
+<table cellspacing=0 cellpadding=2 border=0 bgcolor=#FFFFCC>
+  <tr>
+    <td colspan=2 align=center>
+      <b>Subscribe to happydays-palm</b>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <input type=text name="user" value="enter email address" size=20>
+    </td>
+    <td>
+      <input type=image border=0 alt="Click here to join happydays-palm"
+       name="Click here to join happydays-palm"
+src="http://groups.yahoo.com/img/ui/join.gif">
+    </td>
+  </tr>
+  <tr align="center">
+    <td colspan="2">
+      Powered by <a href="http://groups.yahoo.com/">groups.yahoo.com</a>
+    </td>
+  </tr>
+</table>
+</form>
 
 <p>
-Mail sent to happydays@coconut.snu.ac.kr will be distributed to all
-subscribers.
-
 <p>
-The list is restricted to subscribers only.  Messages sent to the
-list by non-subscribers are manually screened before distribution;
-which may incur a significant delay before the message is actually
-seen be subscribers.  Any spam messages are happily redirected
-to /dev/null. 
-
-<p>
-The WWW archive of the mailing list is located at <a
+The <b>Old WWW archive</b> of the mailing list is located at <a
 href="http://coconut.snu.ac.kr/cgi-bin/wilma/happydays">Mailing Archive</a>.
 </P>
