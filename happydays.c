@@ -1885,10 +1885,6 @@ static void NotifyToDo(int mainDBIndex, DateType when,
     PackedBirthDate* rp;
     BirthDate r;
     
-    // if duration is equal to 0, no notify record is created
-    //
-    if (gPrefsR->DBNotifyPrefs.duration == 0) return;
-
     if ((recordH = DmQueryRecord(MainDB, mainDBIndex))) {
         rp = (PackedBirthDate *) MemHandleLock(recordH);
         /*
