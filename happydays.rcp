@@ -116,7 +116,7 @@ BEGIN
     PULLDOWN "Utilities"
     BEGIN
         MENUITEM "Date Book Notify"   	MainFormMenuNotifyDatebook  "D"
-        MENUITEM "Cleanup Date Book"     MainFormMenuCleanupDatebook "C"
+        MENUITEM "Cleanup Date Book"    MainFormMenuCleanupDatebook "C"
         MENUITEM "To Do Notify"   		MainFormMenuNotifyTodo		"T"
         MENUITEM "Cleanup To Do"       	MainFormMenuCleanupTodo 	"O"
         MENUITEM SEPARATOR
@@ -173,7 +173,8 @@ BEGIN
     LIST "M/D/Y" "D/M/Y" "D.M.Y" "D-M-Y" "Y/M/D" "Y.M.D" "Y-M-D" 
 		ID PrefFormDateFmts 
 		AT (PREVRIGHT+4 PREVTOP 40 AUTO) VISIBLEITEMS 7 NONUSABLE
-    POPUPTRIGGER "" ID PrefFormDateTrigger AT (PREVLEFT PREVTOP-1 40 13) LEFTANCHOR
+    POPUPTRIGGER "" ID PrefFormDateTrigger
+                 AT (PREVLEFT PREVTOP-1 40 13) LEFTANCHOR
     POPUPLIST ID PrefFormDateTrigger PrefFormDateFmts
 
 	CHECKBOX "Scan note field" ID PrefFormScanNote
@@ -181,7 +182,7 @@ BEGIN
     CHECKBOX "Emphasize Lunar Date" ID PrefFormEmphasize 
 		AT (10 PrevBottom AUTO AUTO) 
 
-	LABEL "Notify Format:" AUTOID AT (10 PrevBottom+5) 
+	LABEL "Notify Format:" AUTOID AT (10 PrevBottom+2) 
     LIST 	"[Last, First] E(1) Year" 
 	    	"[First Last] E(1) Year" 
 			"Event - Last, First Year"
@@ -193,13 +194,26 @@ BEGIN
 			AT (PREVLEFT PREVTOP-1 40 13) LEFTANCHOR
     POPUPLIST ID PrefFormNotifyTrigger PrefFormNotifyFmts
 
-    LABEL "Custom field:" AUTOID AT (10 PrevBottom+5) 
+    LABEL "Custom field:" AUTOID AT (10 PrevBottom+2) 
     FIELD ID PrefFormCustomField AT (85 PrevTop 50 AUTO) UNDERLINED
             MAXCHARS 12
-    LABEL "HappyDays ID:" AUTOID AT (10 PrevBottom+1) 
+    LABEL "HappyDays ID:" AUTOID AT (10 PrevBottom) 
     FIELD ID PrefFormNotifyWith AT (85 PrevTop 28 AUTO) UNDERLINED
             MAXCHARS 5
 
+    LABEL "Address:" AUTOID AT (10 PrevBottom)
+    LIST 	"Built-in" 
+			"Address.kr" 
+			"AddressBkR" 
+			"PopUp Names"
+			"Super Names" 
+			"TealPhone"
+         ID PrefFormAddress
+         AT (PREVRIGHT+4 PREVTOP 80 AUTO) VISIBLEITEMS 6 NONUSABLE
+    POPUPTRIGGER "" ID PrefFormAddrTrigger
+                 AT (PrevLeft PrevTop-1 40 13) LEFTANCHOR
+    POPUPLIST ID PrefFormAddrTrigger PrefFormAddress
+         
     BUTTON "OK" ID PrefFormOk AT (5 BOTTOM@149 40 AUTO)
     BUTTON "Cancel" ID PrefFormCancel AT (PrevRight+5 PrevTop 40 AUTO)
 	GRAFFITISTATEINDICATOR AT (PrevRight+5 PrevTop)
@@ -435,7 +449,7 @@ BEGIN
     TITLE "About HappyDays"
 
 	FORMBITMAP AT (6 18) BITMAP ID_BitmapIcon USABLE 
-    LABEL "HappyDays 1.42b" AUTOID AT (PrevRight+38 PrevTop) FONT 1
+    LABEL "HappyDays 1.43" AUTOID AT (PrevRight+38 PrevTop) FONT 1
     LABEL "GPL free software"
         AUTOID AT (PrevLeft PrevTop+ABOUT_LINE_SPACING) FONT 0
     LABEL "(c) 1999-2001 JaeMok Jeong"
@@ -478,4 +492,4 @@ SMALLICONFAMILY
 	TRANSPARENT 204 204 0
 
 APPLICATIONICONNAME 1000 "HappyDays"
-VERSION ID 1 "1.42"
+VERSION ID 1 "1.43"

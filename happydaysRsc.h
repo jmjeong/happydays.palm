@@ -72,6 +72,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define PrefFormNotifyFmts          1309
 #define PrefFormNotifyTrigger       1310
 #define PrefFormScanNote			1311
+#define PrefFormAddress             1312
+#define PrefFormAddrTrigger         1313
 
 #define DateBookNotifyForm          1400
 #define NotifyFormRecordAll  		1401

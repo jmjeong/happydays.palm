@@ -372,12 +372,25 @@ void DrawRecordName(
     *x += name2MaxWidth;
 }
 
+// address creator id
+// the order must be same as 'happydays.rcp' file.
+//
+UInt32 AddrGotoCreatorId[] = {
+    'addr',         // Built-in Addressbook
+    'adKr',         // Address Kr
+    'CiAe',         // AddressBkR
+	'PopN',			// PopUp Names
+    'addr',         // Super Names
+    'addr'          // Teal Phone
+};
+
 Int16 GotoAddress(Int16 index)
 {
     GoToParamsPtr theGotoPointer;
     DmSearchStateType searchInfo;
     UInt16 cardNo;
     LocalID dbID;
+    UInt32 addrID = AddrGotoCreatorId[(int)gPrefsR->BirthPrefs.addrapp];
 
     theGotoPointer = MemPtrNew(sizeof(GoToParamsType));
     if (!theGotoPointer) return -1;
@@ -388,9 +401,11 @@ Int16 GotoAddress(Int16 index)
        quit the next time through our event
        handler.
     */
+    
+    
     if ((MemPtrSetOwner(theGotoPointer, 0) == 0) &&
         (DmGetNextDatabaseByTypeCreator(true, &searchInfo, 'DATA',
-                                        AddressAppID, true, &cardNo, &dbID)
+                                        addrID, true, &cardNo, &dbID)
          == 0)) {
 
         // copy all the goto information into the

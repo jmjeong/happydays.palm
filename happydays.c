@@ -69,17 +69,19 @@ struct sPrefsR *gPrefsR;
 struct sPrefsR DefaultPrefsR = {
     PREFSVERSION,
     0, 0, 0,              // all/selected, keep/modified, private
-    {   1, 0, 9, 3, 1, {-1, -1}, "145" },
+    {   1, 0, 9, 3, 1, {-1, -1}, "145" },   // Datebook notify prefs
 #ifdef GERMAN
-    {  1, "Alle" },
-    {  "Geburtstag", "*HD:", 1, 1, 0, 0, 0, dfDMYWithDots },
+    {  1, "Alle" },                         // Todo notify prefs
+    {  "Geburtstag", "*HD:",                // Prefs
+       1, 1, 0, 0, 0, 0, dfDMYWithDots },   
 #else
-    {  1, "All" },
-    {  "Birthday", "*HD:", 1, 1, 0, 0, 0, dfMDYWithSlashes },
+    {  1, "All" },                          // Todo notify prefs
+    {  "Birthday", "*HD:",                  // Prefs
+       1, 1, 0, 0, 0, 0, dfMDYWithSlashes },   
 #endif
-    0,
+    0,                                      // hide secret record
 #ifdef GERMAN
-    "Alle", 
+    "Alle",                                 // Address category
 #else
     "All", 
 #endif
@@ -776,7 +778,7 @@ static Boolean MainFormHandleEvent (EventPtr e)
 static void LoadPrefsFields()
 {
     FormPtr frm;
-    ListPtr lstdate, lstnotify;
+    ListPtr lstdate, lstnotify, lstaddr;
 
     if ((frm = FrmGetFormPtr(PrefForm)) == 0) return;
     
@@ -791,6 +793,10 @@ static void LoadPrefsFields()
     LstSetSelection(lstnotify, gPrefsR->BirthPrefs.notifyformat);
     CtlSetLabel(GetObjectPointer(frm, PrefFormNotifyTrigger),
                 LstGetSelectionText(lstnotify, gPrefsR->BirthPrefs.notifyformat));
+    lstaddr = GetObjectPointer(frm,PrefFormAddress);
+    LstSetSelection(lstaddr, gPrefsR->BirthPrefs.addrapp);
+    CtlSetLabel(GetObjectPointer(frm,PrefFormAddrTrigger),
+                LstGetSelectionText(lstaddr,gPrefsR->BirthPrefs.addrapp));
                     
     SetFieldTextFromStr(PrefFormCustomField, gPrefsR->BirthPrefs.custom);
     SetFieldTextFromStr(PrefFormNotifyWith, gPrefsR->BirthPrefs.notifywith);
@@ -814,7 +820,7 @@ static Boolean UnloadPrefsFields()
 {
     FormPtr frm;
     ControlPtr ptr;
-    ListPtr lstdate, lstnotify;
+    ListPtr lstdate, lstnotify, lstaddr;
     Boolean newoverride;
     DateFormatType newdateformat;
     Boolean needrescan = 0;
@@ -864,7 +870,11 @@ static Boolean UnloadPrefsFields()
     // notify string
     lstnotify = GetObjectPointer(frm, PrefFormNotifyFmts);
     gPrefsR->BirthPrefs.notifyformat = LstGetSelection(lstnotify);
-        
+
+    // addr goto application id
+    lstaddr = GetObjectPointer(frm, PrefFormAddress);
+    gPrefsR->BirthPrefs.addrapp = LstGetSelection(lstaddr);
+    
     ptr = GetObjectPointer(frm, PrefFormEmphasize);
     gPrefsR->BirthPrefs.emphasize = CtlGetValue(ptr);
 
