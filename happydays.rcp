@@ -26,13 +26,13 @@ BEGIN
     "long_notifySettingString" = ""\
     "* Records\n"\
     "Tab 'all' if you'd like to "\
-    "make date book entries created for all of your events in this"\
+    "make notification entries created for all of your events in this"\
     " category."\
     "Tab 'selected' if only the currently selected record should be "\
     "taken into account.\n\n"\
     "* Existing\n"\
-    "Tap 'keep' if existing HappyDays entries in your "\
-    "datebook should be left untouched. Tap 'modify' if you'd like "\
+    "Tap 'keep' if existing HappyDays entries "\
+    "should be left untouched. Tap 'modify' if you'd like "\
     "these entries to be changed.\n\n"\
     "* Alarm\n"\
     "will set the alarm notification in your datebook entry. Set "\
@@ -45,7 +45,6 @@ BEGIN
     "means repeat for 5 years in lunar event for convenience.\n"
 
 	"long_notifySettingMoreString" = ""\
-	"If you want to hide HappyDays ID to note field, check an option. "\
 	"For AN Icon Number, consult Action Names manual. DateBk3Icon is "\
 	"read from MemoPad. If you don't have DateBk3 Icon entry in MemoPad, "\
 	"nothing is displayed.\n"
@@ -68,7 +67,7 @@ BEGIN
     " Last Name: Jeong\n"\
     " First name: JaeMok\n"\
     " ...\n"\
-    " Birthday: -)12/4/1970\n\n"\
+    " Birthday: -)12/4/70\n\n"\
     "Formats:\n"\
     " [-)|#)]Date\n"\
     " -) means lunar calendar\n"\
@@ -80,21 +79,23 @@ BEGIN
     "To set multiple entry, refer the manual.\n"
 
     "long_cleanupAlertString" = ""\
-    "Datebook entries are considered HappyDays if their format in "\
-    "description are "\
-    "'[NAME] {HappyDays ID} ...'. If you use this format in your own "\
+    "Notification entries are considered HappyDays if they have "\
+	"{HappyDays ID} in their memo. "\ 	
+    "If you use this format in your own "\
     "entries, this record might also be removed by CleanUp.\n"
 
     "long_prefFormString" = ""\
+	"* Instead of system date...\n"\
+	"Control the interpretation of the AddressDB Birthday custom field. "\
+	"By default this is the same as the system date format preference.\n\n"\
+    "* Emphasize Lunar Date\n"\
+    "If checkbox is on, the dashed line is drawed beneath lunar date.\n\n"\
+	"* Notify format\n"\
+	"The description format used for notification\n\n"\
     "* Custom field\n"\
     "The name of custom fields in Address Book used for INPUT\n\n"\
     "* HappyDays ID\n"\
-    "Used for Notify and Cleanup\n\n"\
-    "* Sort by\n"\
-    "Sort order of HappyDays List. Name is for the same order as "\
-    "Address Book\n\n"\
-    "* Emphasize Lunar\n"\
-    "If checkbox is on, the dashed line is drawed beneath lunar date.\n"
+    "Used for Notify and Cleanup\n"
 
     "long_removeConfirmString" = ""\
     "Are you sure you want to remove all "\
@@ -737,8 +738,8 @@ BEGIN
 		AT (10 PrevBottom AUTO AUTO) 
 
 	LABEL "Notify Format:" AUTOID AT (10 PrevBottom+5) 
-    LIST 	"[Last, First] *E1 Year" 
-	    	"[First Last] *E1 Year" 
+    LIST 	"[Last, First] E(1) Year" 
+	    	"[First Last] E(1) Year" 
 			"Event - Last, First Year"
 			"Event - First Last Year"
 			"* First Last Year"
@@ -869,17 +870,17 @@ BEGIN
     TITLE "DateBook Notify More"
 
     CHECKBOX "Icon Support" ID DateBookNotifyFormIcon 
-			at (10 20 AUTO AUTO) RIGHTANCHOR FONT 0 
+			at (10 25 AUTO AUTO) RIGHTANCHOR FONT 0 
     PUSHBUTTON "AN" ID DateBookNotifyFormAN AT (PrevRight+5
             PrevTop AUTO AUTO) LEFTANCHOR GROUP 1
     PUSHBUTTON "DateBk3" ID DateBookNotifyFormBk3 AT (PrevRight+1
             PrevTop AUTO AUTO) GROUP 1
 
-	LABEL "AN ICON Number: " ID DateBookNotifyANLabel AT (5 PrevBottom+10) 
+	LABEL "AN ICON Number:" ID DateBookNotifyANLabel AT (5 PrevBottom+5) 
 	FIELD ID DateBookNotifyANInput AT (PrevRight+5 PrevTop 30 AUTO) 
 		UNDERLINED MAXCHARS 3
 
-	LABEL "DateBk3 ICON" ID DateBookNotifyBk3Label AT (5 PrevBottom+2) 
+	LABEL "DateBk3 ICON:" ID DateBookNotifyBk3Label AT (5 PrevBottom+2) 
     TABLE ID DateBookNotifyBk3Table AT (7 PrevBottom 143 40) ROWS 4 
 		COLUMNS 13 COLUMNWIDTHS 10 10 10 10 10 10 10 10 10 10 10 10 10
 
@@ -991,7 +992,7 @@ MODAL
 HELPID AboutHelpString
 BEGIN
     TITLE "HappyDays"
-    LABEL "HappyDays 1.2b" AUTOID AT (Center@80 20) FONT 1
+    LABEL "HappyDays 1.2" AUTOID AT (Center@80 20) FONT 1
     LABEL "(c) 1999-2000, JaeMok Jeong"
         AUTOID AT (Center@80 PrevBottom+5) FONT 0
     LABEL "<jmjeong@oopsla.snu.ac.kr>" AUTOID AT (Center@80 PrevBottom)
@@ -1023,4 +1024,4 @@ APPLICATIONICONNAME 1000 "HappyDays"
 ICON "happydays.pbitm"
 SMALLICON "happydays-small.pbitm"
 
-VERSION 1 "1.2b"
+VERSION 1 "1.2"

@@ -20,6 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _HAPPYDATE_H_
 #define _HAPPYDATE_H_
 
+#define PREFSVERSION        10
+
 #define AppErrStrLen        256
 #define DEFAULT_DURATION    5
 #define MAINTABLEAGEFIELD   24
@@ -71,8 +73,10 @@ struct sBirthPrefs
     DateFormatType dateformat;  // if sysdateover is true
 };
 
+
 struct sPrefsR 
 {
+    char version;           // version number
     char records;			// all or selected
     char existing;			// keep or modify
     char private;
@@ -86,8 +90,8 @@ struct sPrefsR
     
     char addrCategory[33];
     char adrcdate[4], adrmdate[4];      // address book create/modify date
+    char memcdate[4], memmdate[4];      // memo create/modify date
 };
-
 
 typedef union 
 {

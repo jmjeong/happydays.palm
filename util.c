@@ -209,5 +209,5 @@ UInt32 Hash(Char* name1, Char* name2)
         h &= ~g;
     }
 
-    return h;
+    return h & 65213L;
 }

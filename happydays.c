@@ -38,9 +38,11 @@ MemHandle gTableRowHandle;
 
 Int16 gBirthDateField;
 Char gAppErrStr[AppErrStrLen];
-Char gDateBk3Icon[52][16];      // dateBk3 icon string
+Char gDateBk3Icon[52][8];      // dateBk3 icon string
+Boolean gDateBk3IconLoaded = false;     // datebk3 icon loaded
 Boolean gPrefsRdirty, gPrefsWeredirty;
-UInt32 gAdcdate, gAdmdate;       //  AddressBook create/modify time
+UInt32 gAdcdate, gAdmdate;      // AddressBook create/modify time
+UInt32 gMmcdate, gMmmdate;      // Memo create/modify time
 Boolean gSortByCompany=true;    // sort by company is set in AddressBook?
 UInt16 gAddrCategory;           // address book category
 UInt16 gToDoCategory;           // todo category
@@ -64,6 +66,7 @@ UInt16 PrefsRecIndex;
 
 struct sPrefsR *gPrefsR;
 struct sPrefsR DefaultPrefsR = {
+    PREFSVERSION,
     '0', '0', '0',              // all/selected, keep/modified, private
     {   '1', '0', 9, 3, 1, {-1, -1}, "145" },
 #ifdef GERMAN
@@ -75,10 +78,12 @@ struct sPrefsR DefaultPrefsR = {
 #endif
     0,
 #ifdef GERMAN
-    "Alle", "\0\0\0", "\0\0\0"         /* addr create/modify date */
+    "Alle", 
 #else
-    "All", "\0\0\0", "\0\0\0"          /* addr create/modify date */
+    "All", 
 #endif
+    "\0\0\0", "\0\0\0",         /* addr create/modify date */
+    "\0\0\0", "\0\0\0"          /* memo create/modify date */
 };
 
 // function declaration 
@@ -134,7 +139,25 @@ static void RereadBirthdateDB()
     gMainTableTotals = AddrGetBirthdate(MainDB, gAddrCategory);
 }
 
-static void HighlightMatchRow(DateTimeType inputDate)
+static void HighlightAction(int selected)
+{
+    FormPtr frm = FrmGetActiveForm();
+    TablePtr tableP = GetObjectPointer(frm, MainFormTable);
+
+	SndPlaySystemSound(sndClick);
+
+    if (gMainTableStart > selected
+        || selected >= (gMainTableStart + gMainTableRows) ) {
+        // if not exist in table view, redraw table
+        gMainTableStart = MAX(0, selected-5);
+        MainFormLoadTable(frm, true);
+    }
+    // highlight the selection
+    TblUnhighlightSelection(tableP);
+    TblSelectItem(tableP, (selected-gMainTableStart), 0);
+}
+
+static void HighlightMatchRowDate(DateTimeType inputDate)
 {
     LineItemPtr ptr;
     DateType dt;
@@ -159,18 +182,48 @@ static void HighlightMatchRow(DateTimeType inputDate)
         MemPtrUnlock(ptr);
     }
     if (selected >= 0) {        // matched one exists
-        FormPtr frm = FrmGetActiveForm();
-        TablePtr tableP = GetObjectPointer(frm, MainFormTable);
+        HighlightAction(selected);
+    }
+}
 
-        if (gMainTableStart > selected
-            || selected >= (gMainTableStart + gMainTableRows) ) {
-            // if not exist in table view, redraw table
-            gMainTableStart = MAX(0, selected-5);
-            MainFormLoadTable(frm, true);
+static void HighlightMatchRowName(Char first)
+{
+    LineItemPtr ptr;
+    Int16 selected = -1;
+    Int16 i;
+    MemHandle recordH = 0;
+    PackedBirthDate* rp;
+    BirthDate r;
+    Char p;
+
+    if (gMainTableTotals <= 0) return;
+
+    if ((ptr = MemHandleLock(gTableRowHandle))) {
+        for (i = 0; i < gMainTableTotals; i++) {
+            if ((recordH = DmQueryRecord(MainDB, ptr[i].birthRecordNum))) {
+                rp = (PackedBirthDate*) MemHandleLock(recordH);
+                UnpackBirthdate(&r,rp);
+
+                p = (r.name1[0]) ? r.name1[0] : r.name2[0];
+                // make capital letter
+                //
+                if (p >= 'a' && p <= 'z') {
+                    p -= 'a' - 'A';
+                }
+
+                if (p == first ) {
+                    selected = i;
+
+                    // trick.. exit the loop
+                    i = gMainTableTotals;
+                }
+                MemHandleUnlock(recordH);
+            }
         }
-        // highlight the selection
-        TblUnhighlightSelection(tableP);
-        TblSelectItem(tableP, (selected-gMainTableStart), 0);
+        MemPtrUnlock(ptr);
+    }
+    if (selected >= 0) {        // matched one exists
+        HighlightAction(selected);
     }
 }
 
@@ -193,11 +246,9 @@ static void DoDateSelect(Boolean popup)
         DateToAsciiLong(dt.month, dt.day, -1, gDispdfmts, dteStr);
         FldDrawField(SetFieldTextFromStr(MainFormField, dteStr));
     
-        SndPlaySystemSound(sndClick);
-
         // highlight table row matching the date
         //
-        HighlightMatchRow(dt);
+        HighlightMatchRowDate(dt);
     }
 }
 
@@ -809,7 +860,7 @@ static Boolean PrefFormHandleEvent(EventPtr e)
             break;
         case PrefFormCancel:
             
-            FrmUpdateForm(StartForm, 0);
+            FrmUpdateForm(StartForm, frmRedrawUpdateCode);
             FrmReturnToForm(0);
 
             handled = true;
@@ -1511,7 +1562,6 @@ static Char* NotifyDescString(DateType when, BirthDate birth)
                     }
     
                     StrCat(pDesc, gAppErrStr);
-                    StrCat(pDesc, " ");
                     pDesc += StrLen(pDesc);
                 }
                 if (birth.flag.bits.year) {
@@ -2150,7 +2200,7 @@ static int dec(char hex)
     else return 0;  
 }
 
-static Int16 convertWord(char first, char second)
+static Int8 convertWord(char first, char second)
 {
     return dec(first) * 16 + dec(second);
 }
@@ -2160,20 +2210,21 @@ static void DateBk3CustomDrawTable(MemPtr tableP, Int16 row, Int16 column,
 {
     Int16 x, y;
     Int8 drawItem = row * 13 + column;
-    Int16 drawFixel;
+    Int8 drawFixel;
     Int8 i, j;
     
     x = bounds->topLeft.x;
     y = bounds->topLeft.y;
 
     for (i = 0; i < 8; i++) {
-        drawFixel = convertWord(gDateBk3Icon[drawItem][i*2],
-                                gDateBk3Icon[drawItem][i*2+1]);
-        for (j=0; j < 8; j++) {
-            if (drawFixel & 1) {
-                WinDrawLine(x+8-j, y+i+1, x+8-j, y+i+1);
+        drawFixel = gDateBk3Icon[drawItem][i];
+        if (drawFixel) {        // if not 0
+            for (j=0; j < 8; j++) {
+                if (drawFixel & 1) {
+                    WinDrawLine(x+8-j, y+i+1, x+8-j, y+i+1);
+                }
+                drawFixel >>= 1;
             }
-            drawFixel >>= 1;
         }
     }
 }
@@ -2184,7 +2235,15 @@ static Boolean loadDatebk3Icon()
     MemHandle recordH = 0;
     Char* rp;       // memoPad record
     Boolean found = false;
-    Char *p=0, *q;
+    Char IconString[16];
+    Char *p=0;
+
+    if ((MemCmp((char*) &gMmcdate, gPrefsR->memcdate, 4) == 0) &&
+        (MemCmp((char*) &gMmmdate, gPrefsR->memmdate, 4) == 0)) {
+        // if matched, use the original datebk3 icon set
+        //
+        return gDateBk3IconLoaded;
+    }
 
     while (1) {
         recordH = DmQueryNextInCategory(MemoDB, &currIndex,
@@ -2194,7 +2253,7 @@ static Boolean loadDatebk3Icon()
         rp = (Char*)MemHandleLock(recordH);
         if (StrNCompare(rp, DATEBK3_MEMO_STRING,
                         StrLen(DATEBK3_MEMO_STRING)) == 0) {
-            p = StrChr(rp, '\n') + 1;
+            p = StrChr(rp, '\n');
             found = true;
             break;
         }
@@ -2203,20 +2262,25 @@ static Boolean loadDatebk3Icon()
         currIndex++;
     }
     if (found) {
-        Int8 i=0;
-        while ((q = StrChr(p, '\n'))) {
-            MemMove(gDateBk3Icon[i++], StrChr(p, '=')+1, 16);
-            p = q+1;
+        Int8 i=0, j;
+        
+        while ((p = StrChr(p+1, '=')) && i < 52) {
+            MemMove(IconString, p+1, 16);
+
+            for (j = 0; j < 8; j++) {
+                gDateBk3Icon[i][j] =
+                    convertWord(IconString[j*2], IconString[j*2+1]);
+            }
+            i++;
         }
-        MemMove(gDateBk3Icon[i++], StrChr(p, '=')+1, 16);
 
         for (; i < 52; i++) {
-            MemSet(gDateBk3Icon[i], 16, '0');
+            MemSet(gDateBk3Icon[i], 8, 0);
         }
         MemHandleUnlock(recordH);
     }
     
-    return found;
+    return (gDateBk3IconLoaded = found);
 }
 
 static Boolean DateBk3IconLoadTable(FormPtr frm, Boolean redraw)
@@ -2691,6 +2755,8 @@ static Int16 OpenDatabases(void)
         }
         else if ((creator == ToDoAppID) &&
                  (StrCaselessCompare(dbname, ToDoDBName) == 0)) {
+            gMmcdate = cdate;
+            gMmmdate = mdate;
             ToDoDB = DmOpenDatabase(cardNo, dbID, mode | dmModeReadWrite);
         }
         else if ((creator == MemoAppID)
@@ -2759,7 +2825,26 @@ static Int16 OpenDatabases(void)
     }
     
     PrefsRecIndex = 0;
-    if ((PrefsRecHandle = DmQueryRecord(PrefsDB, PrefsRecIndex)) == 0) {
+    if ((PrefsRecHandle = DmQueryRecord(PrefsDB, PrefsRecIndex)) != 0) {
+        // if prefs record already exist, so we will do a sanity check
+        //
+        if (MemHandleSize(PrefsRecHandle) >= sizeof(gPrefsR->version)) {
+            p = MemHandleLock(PrefsRecHandle);
+            if (*((char*)p) != (char) PREFSVERSION) {
+                MemPtrUnlock(p);
+                err = DmRemoveRecord(PrefsDB,PrefsRecIndex);
+                ErrFatalDisplayIf(err, SysErrString(err, gAppErrStr, AppErrStrLen));
+                PrefsRecHandle = 0;
+            }
+            else MemPtrUnlock(p);
+        }
+        else {
+            err = DmRemoveRecord(PrefsDB, PrefsRecIndex);
+            ErrFatalDisplayIf(err, SysErrString(err, gAppErrStr, AppErrStrLen));
+            PrefsRecHandle = 0;
+        }
+    }
+    if (PrefsRecHandle == 0) {
         /*
          * Create the preferences record if it doesn't exist and
          * preload it with default values.
@@ -2874,21 +2959,21 @@ static void StopApplication(void)
 static Boolean SpecialKeyDown(EventPtr e) 
 {
     Int16 chr;
-    // DateTimeType dt;
+    DateTimeType dt;
+    static Int16 push_chr = '0';
+    Int8 month;
 
     if (e->eType != keyDownEvent) return false;
 
 	// softkey only work on main screen
 	//
 	if (FrmGetActiveFormID() != MainForm) return false;
-		
-	// chr = e->data.keyDown.chr;
+
+    if (e->data.keyDown.modifiers & autoRepeatKeyMask) return false;
+    if (e->data.keyDown.modifiers & poweredOnKeyMask) return false;
+
+	chr = e->data.keyDown.chr;
     if (e->data.keyDown.modifiers & commandKeyMask) {
-    	chr = e->data.keyDown.chr;
-
-        if (e->data.keyDown.modifiers & autoRepeatKeyMask) return false;
-        if (e->data.keyDown.modifiers & poweredOnKeyMask) return false;
-
         if (keyboardAlphaChr == chr) {
             gPrefsR->BirthPrefs.sort = '0';     // sort by name
 			SndPlaySystemSound(sndClick);
@@ -2904,18 +2989,45 @@ static Boolean SpecialKeyDown(EventPtr e)
             return true;
         }
     }
-	/*
-      else if (chr >= '0' && chr <= '9') {
-      TimSecondsToDateTime(TimGetSeconds(), &dt);
-			
-      dt.month = chr - '0';
-      dt.day = 1;
+    else if (chr >= '0' && chr <= '9') {
+        // numeric character
+        //
+        if ( (push_chr == '1') && (chr >= '0' && chr <= '2')) {
+            month = 10 + (chr - '0');
+        }
+        else {
+            month = chr - '0';
+        }
+        if (month == 0) {
+            push_chr = chr;
+            return true;
+        }
 
-      HighlightMatchRow(dt);
+        TimSecondsToDateTime(TimGetSeconds(), &dt);
 
-      return true;
-      }
-	*/
+        if ( month < dt.month ) {
+            dt.year++;
+        }
+        dt.month = month;
+        dt.day = 1;
+
+        // save the original
+        push_chr = chr;
+        
+        HighlightMatchRowDate(dt);
+        return false;
+    }
+    else if ((chr >= 'A' && chr <= 'Z') || (chr >= 'a' && chr <= 'z')) {
+        // is alpha?
+        //
+
+        if (chr >= 'a') chr -=  'a' - 'A';      // make capital
+        HighlightMatchRowName(chr);
+    }
+    // else if ( chr == 0xA4 || (chr >= 0xA1 && chr <= 0xFE) ) {
+        // is korean letter?
+        //
+    //}
 	
     return false;
 }
