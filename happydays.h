@@ -31,6 +31,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define PrefsDBName         "HappyDaysPrefs-Jmje"
 #define DatebookAppID       'date'
 #define DatebookDBName      "DatebookDB"
+#define ToDoAppID           'todo'
+#define ToDoDBName          "ToDoDB"
 #define AddressAppID        'addr'
 #define AddressDBName       "AddressDB"
 #define MemoAppID           'memo'
@@ -41,10 +43,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 /* Notify Preferences */
 struct sNotifyPrefs 
 {
-    char records;
-    char existing;
+    char records;			// all or selected
+    char existing;			// keep or modify
     char private;
-	char hide_id;			// make HappyDays id in note field
     char alarm;             // alarm set?
     char icon;              // icon?
     char datebk3icon;       // datebook 3 icon
@@ -60,6 +61,7 @@ struct sBirthPrefs
     char notifywith[5+1];       // notify with (HD)
     char sort;                  // sorting order
     char emphasize;             // emphasize lunar
+    char notifyformat;          // notify format list
     Boolean sysdateover;        // override system date format
     DateFormatType dateformat;  // if sysdateover is true
 };
@@ -81,7 +83,8 @@ typedef union
 {
     struct      
     {
-        unsigned reserverd:11;
+        unsigned reserverd:10;
+        unsigned multiple_event:1;      // this is multiple event(for check)
         unsigned year:1;                // date contains year field
         unsigned priority_name1:1;      // name1 has priority?
         unsigned lunar_leap :1;         // lunar leap month?

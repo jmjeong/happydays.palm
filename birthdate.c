@@ -468,6 +468,9 @@ static Int16 AnalOneRecord(UInt16 addrattr, Char* src,
 
 	while (*src == ' ' || *src == '\t') src++;    // skip white space
     if (*src == '*') {
+        
+        // this is multiple event
+        birthdate->flag.bits.multiple_event = true;
         if ((p = StrChr(src, ' '))) *p = 0;
         else goto ErrHandler;
     
@@ -653,6 +656,9 @@ Int16 UpdateBirthdateDB(DmOpenRef dbP, FormPtr frm)
                 // restore the saved name
                 birthdate.name1 = name1;
                 birthdate.name2 = name2;
+                
+                // reset multiple flag
+                birthdate.flag.bits.multiple_event = 0;
 
                 while (*p == ' ' || *p == '\t' || *p == '\n')
                     p++;     // skip white space

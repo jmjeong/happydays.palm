@@ -5,14 +5,14 @@ APPNAME = "HappyDays"
 APPID = "Jmje"
 
 FILES = happydays.c lun2sol.c sol2lun.c address.c datebook.c util.c \
-		birthdate.c memodb.c
+		birthdate.c memodb.c s2lconvert.c todo.c
 OBJS = happydays.o lun2sol.o sol2lun.o address.o datebook.o util.o \
-		birthdate.o memodb.o
+		birthdate.o memodb.o s2lconvert.o todo.o
 
 CC = m68k-palmos-gcc
 
-CFLAGS = -Wall -O2 -D$(LANG)
-#CFLAGS = -Wall -g -O2
+#CFLAGS = -Wall -O2 -D$(LANG)
+CFLAGS = -Wall -g -O2
 
 PILRC = pilrc
 OBJRES = m68k-palmos-obj-res

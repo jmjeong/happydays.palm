@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "happydays.h"
 #include "happydaysRsc.h"
 #include "calendar.h"
+#include "s2lconvert.h"
 #include "util.h"
 
 #define frmRescanUpdateCode (frmRedrawUpdateCode + 1)
@@ -59,11 +60,11 @@ MemHandle PrefsRecHandle, PrefsRHandle;
 UInt16 PrefsRecIndex;
 struct sPrefsR *gPrefsR;
 struct sPrefsR DefaultPrefsR = {
-    {  '0', '0', '0', '1', '1', '0', 9, 3, -1, {-1, -1}, "145" },
+    {  '0', '0', '0', '1', '0', 9, 3, -1, {-1, -1}, "145" },
 #ifdef GERMAN
-    {  "Geburtstag", "HD:", '1', '1', 0, dfDMYWithDots },
+    {  "Geburtstag", "*HD:", '1', '1', 0, 0, dfDMYWithDots },
 #else
-    {  "Birthday", "HD:", '1', '1', 0, dfMDYWithSlashes },
+    {  "Birthday", "*HD:", '1', '1', 0, 0, dfMDYWithSlashes },
 #endif
     0,
 #ifdef GERMAN
@@ -86,6 +87,10 @@ DmOpenRef PrefsDB;
 //  accessing the built-in DatebookDB
 //
 DmOpenRef DatebookDB;
+
+//  accessing the built-in ToDoDB
+//
+DmOpenRef ToDoDB;
 
 // These are for accessing the built-in AddressDB
 //
@@ -197,21 +202,27 @@ static void DoDateSelect(Boolean popup)
     }
 }
 
-static Boolean IsHappyDateRecord(Char* description, Char* notefield)
+static Boolean IsHappyDaysRecord(Char* notefield)
 {
-    Char * p;
+    if (notefield && StrStr(notefield, gPrefsR->BirthPrefs.notifywith)) {
+        return true; 
+    }
+    return false;
+}
 
-    if ((p = StrChr(description, '[')) && (p = StrChr(p, ']'))) {
-        p++; p++;       // skip "] "
+// check if description has the information about name1 and name2
+//
+static Boolean IsSameRecord(Char* notefield, BirthDate birth)
+{
+    Char *p;
+    
+    if (notefield && (p = StrStr(notefield,gPrefsR->BirthPrefs.notifywith))) {
+        p += StrLen(gPrefsR->BirthPrefs.notifywith);
 
-        // if the record has the Notifywith phrases?
-        //      or in note field
-        if ((p && StrNCaselessCompare(p , gPrefsR->BirthPrefs.notifywith,
-                      StrLen(gPrefsR->BirthPrefs.notifywith))==0)
-            || (notefield && StrStr(notefield,
-                                    gPrefsR->BirthPrefs.notifywith))) {
-            return true;
-        }
+        StrPrintF(gAppErrStr, "%ld-%d",
+                  birth.addrRecordNum, Hash(birth.name1,birth.name2));
+        
+        if (StrCompare(gAppErrStr, p) ==0) return true;
     }
     return false;
 }
@@ -228,7 +239,7 @@ static int CleanupDatebook()
                                         dmAllCategories);
         if (!recordH) break;
         ApptGetRecord(DatebookDB, currIndex, &apptRecord, &recordH);
-        if (IsHappyDateRecord(apptRecord.description, apptRecord.note)) {
+        if (IsHappyDaysRecord(apptRecord.note)) {
             // if it is happydays record?
             //
             ret++;
@@ -381,7 +392,7 @@ static Boolean MenuHandler(FormPtr frm, EventPtr e)
         handled = true;
         break;
 
-    case MainFormMenuNotify:
+    case MainFormMenuNotifyDatebook:
         // if (FrmGetActiveFormID() == MainForm) {
         //    gPrefsR->NotifyPrefs.records = '3';
         // }
@@ -398,7 +409,7 @@ static Boolean MenuHandler(FormPtr frm, EventPtr e)
         handled = true;
         break;
 
-    case MainFormMenuCleanup:
+    case MainFormMenuCleanupDatebook:
         SysCopyStringResource(gAppErrStr, RemoveConfirmString);
         if (FrmCustomAlert(CleanupAlert, gAppErrStr, " ", " ") == 0) {
             int ret;
@@ -577,17 +588,22 @@ static Boolean MainFormHandleEvent (EventPtr e)
 static void LoadPrefsFields()
 {
     FormPtr frm;
-    ListPtr lst;
+    ListPtr lstdate, lstnotify;
 
     if ((frm = FrmGetFormPtr(PrefForm)) == 0) return;
     
     CtlSetValue(GetObjectPointer(frm, PrefFormOverrideSystemDate),
             gPrefsR->BirthPrefs.sysdateover);
-    lst = GetObjectPointer(frm, PrefFormDateFmts);
-    LstSetSelection(lst, gPrefsR->BirthPrefs.dateformat);
+    lstdate = GetObjectPointer(frm, PrefFormDateFmts);
+    LstSetSelection(lstdate, gPrefsR->BirthPrefs.dateformat);
     CtlSetLabel(GetObjectPointer(frm, PrefFormDateTrigger),
-            LstGetSelectionText(lst, gPrefsR->BirthPrefs.dateformat));
+                LstGetSelectionText(lstdate, gPrefsR->BirthPrefs.dateformat));
 
+    lstnotify = GetObjectPointer(frm, PrefFormNotifyFmts);
+    LstSetSelection(lstnotify, gPrefsR->BirthPrefs.notifyformat);
+    CtlSetLabel(GetObjectPointer(frm, PrefFormNotifyTrigger),
+                LstGetSelectionText(lstnotify, gPrefsR->BirthPrefs.notifyformat));
+                    
     SetFieldTextFromStr(PrefFormCustomField, gPrefsR->BirthPrefs.custom);
     SetFieldTextFromStr(PrefFormNotifyWith, gPrefsR->BirthPrefs.notifywith);
 
@@ -597,20 +613,13 @@ static void LoadPrefsFields()
     else {
         CtlSetValue(GetObjectPointer(frm, PrefFormEmphasize), 0);
     }
-
-    if (gPrefsR->BirthPrefs.sort == '0') {
-        CtlSetValue(GetObjectPointer(frm, PrefFormSortName), 1);
-    }
-    else {
-        CtlSetValue(GetObjectPointer(frm, PrefFormSortDate), 1);
-    }
 }
 
 static Boolean UnloadPrefsFields()
 {
     FormPtr frm;
     ControlPtr ptr;
-    ListPtr lst;
+    ListPtr lstdate, lstnotify;
     Boolean newoverride;
     DateFormatType newdateformat;
     Boolean needrescan = 0;
@@ -636,8 +645,8 @@ static Boolean UnloadPrefsFields()
     // of the address book database. This occurs if
     ptr = GetObjectPointer(frm, PrefFormOverrideSystemDate);
     newoverride = CtlGetValue(ptr);
-    lst = GetObjectPointer(frm, PrefFormDateFmts);
-    newdateformat = LstGetSelection(lst);
+    lstdate = GetObjectPointer(frm, PrefFormDateFmts);
+    newdateformat = LstGetSelection(lstdate);
     if (newoverride)
     {
         if (newdateformat != gPrefdfmts)
@@ -657,10 +666,10 @@ static Boolean UnloadPrefsFields()
     gPrefsR->BirthPrefs.sysdateover = newoverride;
     gPrefsR->BirthPrefs.dateformat = newdateformat;
 
-    ptr = GetObjectPointer(frm, PrefFormSortDate);
-    if (CtlGetValue(ptr)) gPrefsR->BirthPrefs.sort = '1';
-    else gPrefsR->BirthPrefs.sort = '0';
-
+    // notify string
+    lstnotify = GetObjectPointer(frm, PrefFormNotifyFmts);
+    gPrefsR->BirthPrefs.notifyformat = LstGetSelection(lstnotify);
+        
     ptr = GetObjectPointer(frm, PrefFormEmphasize);
     if (CtlGetValue(ptr)) gPrefsR->BirthPrefs.emphasize = '1';
     else gPrefsR->BirthPrefs.emphasize = '0';
@@ -700,8 +709,8 @@ static Boolean PrefFormHandleEvent(EventPtr e)
             FrmReturnToForm(0);
             if (rescan)
                 FrmUpdateForm(MainForm, frmRescanUpdateCode);
-			else 
-				FrmUpdateForm(MainForm, frmRedrawUpdateCode);
+			//  else 
+			//      FrmUpdateForm(MainForm, frmRedrawUpdateCode);
 
             handled = true;
             break;
@@ -730,209 +739,6 @@ static Boolean PrefFormHandleEvent(EventPtr e)
     return handled;
 }
 
-static Boolean TextMenuHandleEvent(UInt16 menuID, UInt16 objectID)
-{
-    FormPtr   form = FrmGetActiveForm();
-    FieldPtr  field = GetObjectPointer(form, objectID);
-
-    if (!field) return false;
-
-    switch (menuID) {
-    case TextMenuUndo:
-        FldUndo(field);
-        return true;
-    case TextMenuCut:
-        FldCut(field);
-        return true;
-    case TextMenuCopy:
-        FldCopy(field);
-        return true;
-    case TextMenuPaste:
-        FldPaste(field);
-        return true;
-    case TextMenuSAll:
-        FldSetSelection(field, 0, FldGetTextLength (field));
-        return true;
-    case TextMenuKBoard:
-        SysKeyboardDialog(kbdDefault);
-        return true;
-
-    case TextMenuGHelp:
-        SysGraffitiReferenceDialog(referenceDefault);
-        return true;
-    }
-
-    return false;
-}
-
-static Boolean Sl2LnFormHandleEvent(EventPtr e)
-{
-    Boolean handled = false;
-    DateType dt = {0, 0};
-    FormPtr frm = FrmGetFormPtr(Sl2LnForm);
-
-    switch (e->eType) {
-    case frmOpenEvent:
-        DateSecondsToDate(TimGetSeconds(), &dt);
-
-        DateToAsciiLong(dt.month, dt.day, dt.year + 1904,
-                        gDispdfmts, gAppErrStr);
-
-        SetFieldTextFromStr(Sl2LnFormInput, gAppErrStr);
-
-        FrmDrawForm(frm);
-        handled = true;
-        break;
-
-    case ctlSelectEvent:
-        switch(e->data.ctlSelect.controlID) {
-        case Sl2LnFormConvert:
-        {
-            DateTimeType rtVal;
-            BirthdateFlag dummy;
-            Int16 year, month, day;
-            Char* input;
-            int ret = false;
-
-            input = FldGetTextPtr(GetObjectPointer(frm, Sl2LnFormInput));
-            if ((ret = AnalysisBirthDate(input, &dummy,
-                                         &year, &month, &day))) {
-                int leapyes = 0;
-
-                ret = !sol2lun(year, month, day, &rtVal,
-                               &leapyes);
-                if (ret) {
-                    if (leapyes) {
-                        StrCopy(gAppErrStr, "#)");
-                    }
-                    else {
-                        StrCopy(gAppErrStr, "-)");
-                    }
-                    DateToAsciiLong(rtVal.month, rtVal.day, rtVal.year,
-                                    gDispdfmts, &gAppErrStr[2]);
-                          
-                    FldDrawField(SetFieldTextFromStr(Sl2LnFormResult,
-                                                     gAppErrStr));
-                }
-
-            }
-            if (!ret) {
-                FldDrawField(ClearFieldText(Sl2LnFormResult));
-                SysCopyStringResource(gAppErrStr, InvalidDateString);
-                FrmCustomAlert(ErrorAlert, gAppErrStr, " ", " ");
-            }
-
-            handled = true;
-            break;
-        }
-
-        case Sl2LnFormOk:
-            FrmReturnToForm(0);
-
-            handled = true;
-            break;
-            
-        default:
-            break;
-                
-        }
-        break;
-
-    case menuEvent:
-        handled = TextMenuHandleEvent(e->data.menu.itemID, Sl2LnFormInput);
-        break;
-
-    default:
-        break;
-    }
-
-    return handled;
-}
-
-static Boolean Ln2SlFormHandleEvent(EventPtr e)
-{
-    Boolean handled = false;
-    DateType dt = {0, 0};
-    FormPtr frm = FrmGetFormPtr(Ln2SlForm);
-
-    switch (e->eType) {
-    case frmOpenEvent:
-        DateSecondsToDate(TimGetSeconds(), &dt);
-        DateToAsciiLong(dt.month, dt.day, dt.year + 1904,
-                        gDispdfmts, gAppErrStr);
-        SetFieldTextFromStr(Ln2SlFormInput, gAppErrStr);
-
-        FrmDrawForm(frm);
-        handled = true;
-        break;
-
-    case ctlSelectEvent:
-        switch(e->data.ctlSelect.controlID) {
-        case Ln2SlFormOk:
-            FrmReturnToForm(0);
-
-            handled = true;
-            break;
-
-        case Ln2SlFormConvert:
-        {
-            DateTimeType rtVal;
-            BirthdateFlag dummy;
-            Int16 year, month, day;
-            Char* input;
-            int ret;
-            
-            input = FldGetTextPtr(GetObjectPointer(frm, Ln2SlFormInput));
-
-            if ((ret = AnalysisBirthDate(input, &dummy,
-                                         &year, &month, &day))) {
-                int leapyes
-                    = CtlGetValue(GetObjectPointer(frm, Ln2SlFormInputLeap));
-
-                ret = !lun2sol(year, month, day, leapyes, &rtVal);
-                if (ret) {
-                    Char temp[15];
-                    SysCopyStringResource(temp,
-                                          DayOfWeek(rtVal.month, rtVal.day,
-                                                    rtVal.year) + SunString);
-
-                    DateToAsciiLong(rtVal.month, rtVal.day, rtVal.year,
-                                    gDispdfmts, gAppErrStr);
-                    StrNCat(gAppErrStr, " [", AppErrStrLen);
-                    StrNCat(gAppErrStr, temp, AppErrStrLen);
-                    StrNCat(gAppErrStr, "]", AppErrStrLen);
-
-                    FldDrawField(SetFieldTextFromStr(Ln2SlFormResult,
-                                                     gAppErrStr));
-                }
-            }
-            
-            if (!ret) {
-                FldDrawField(ClearFieldText(Ln2SlFormResult));
-                SysCopyStringResource(gAppErrStr, InvalidDateString);
-                FrmCustomAlert(ErrorAlert, gAppErrStr, " ", " ");
-            }
-            
-            handled = true;
-            break;
-        }
-        
-        default:
-            break;
-                
-        }
-        break;
-
-    case menuEvent:
-        handled = TextMenuHandleEvent(e->data.menu.itemID, Ln2SlFormInput);
-        break;
-
-    default:
-        break;
-    }
-
-    return handled;
-}
 
 void SelectCategoryPopup(DmOpenRef dbP)
 {
@@ -1368,30 +1174,8 @@ static void UnloadNotifyPrefsFields()
     // NotifySettingFormTime is set by handler
 }
 
-// check if description has the information about name1 and name2
-//
-static Boolean IsSameName(const char* desc,
-                          const char* name1, const char* name2)
-{
-    Int16 name1Len, name2Len, secondPos;
 
-    name1Len = (name1) ? StrLen(name1) : 0;
-    name2Len = (name2) ? StrLen(name2) : 0;
-    secondPos = (name1 && name2) ? (name1Len+2) : 0;
-
-    // check the first name
-    if (name1[0] && StrNCompare(desc+1, name1, name1Len) != 0)
-        return false;
-    if (name1[0] && name2[0] && StrNCompare(desc+ 1+ name1Len,", ", 2) != 0)
-        return false;
-    if (name2[0] && StrNCompare(desc + 1+ secondPos, name2, name2Len) !=0)
-        return false;
-
-    return true;
-}
-
-static Int16 CheckDatebookRecord(DateType when,
-                               const char* name1, const char*name2)
+static Int16 CheckDatebookRecord(DateType when, BirthDate birth)
 {
     UInt16 numAppoints = 0;
     MemHandle apptListH;
@@ -1412,9 +1196,7 @@ static Int16 CheckDatebookRecord(DateType when,
             // if matched one is exists, return recordNum;
             //
             if (recordH) {
-                if (IsHappyDateRecord(dbRecord.description, dbRecord.note)
-                    && IsSameName(dbRecord.description, name1,name2) )
-                {
+                if (IsSameRecord(dbRecord.note, birth)) {
                     recordNum = apptList[i].recordNum;
                     
                     MemHandleUnlock(recordH);
@@ -1455,6 +1237,125 @@ static Char* DateBk3IconString()
     return bk3Icon;
 }
 
+static Char* gNotifyFormatString[4] =
+{ "[+L] +e +y",     // [Jeong, JaeMok] B 1970
+  "[+F] +e +y",     // [JaeMok Jeong] B 1970
+  "+E - +L +y",     // Birthday - Jeong, JaeMok 1970
+  "+E - +F +y"      // Birthday - JaeMok Jeong 1970
+};
+
+//
+// Memory is alloced, after calling this routine, user must free the memory
+//
+static Char* NotifyDescString(DateType when, BirthDate birth)
+{
+    Char* description, *pDesc;
+    Char* pfmtString;
+    Int16 age = 0;
+    
+    // make the description
+    description = pDesc = MemPtrNew(1024);
+    SysCopyStringResource(gAppErrStr, NotEnoughMemoryString);
+    ErrFatalDisplayIf(!description, gAppErrStr);
+
+    // boundary check must be inserted
+    //
+    pfmtString = gNotifyFormatString[(int)gPrefsR->BirthPrefs.notifyformat];
+    while (*pfmtString) {
+        if (*pfmtString == '+') {
+            switch (*(pfmtString+1)) {
+            case 'L':       // LastName, FirstName
+                StrCopy(pDesc, birth.name1);
+                if (birth.name2 && birth.name2[0]) {
+                    if (birth.name1 && birth.name1[0])
+                        StrCat(pDesc, ", ");
+                    StrCat(pDesc, birth.name2);
+                }
+
+                pDesc += StrLen(pDesc);
+                break;
+
+            case 'F':       // FirstName LastName
+                StrCopy(pDesc, birth.name2);
+                
+                if (birth.name1 && birth.name1[0]) {
+                    if (birth.name2 && birth.name2[0])
+                        StrCat(pDesc, " ");
+                    StrCat(pDesc, birth.name1);
+                }
+
+                pDesc += StrLen(pDesc);
+                break;
+                
+            case 'e':       // Event Type (like 'B')
+                // set event type
+                *pDesc++ = EventTypeString(birth)[0];
+                
+                break;
+
+            case 'E':       // Event Type (like 'Birthday')
+                if (!birth.custom[0]) {
+                    StrCopy(pDesc, gPrefsR->BirthPrefs.custom);
+                }
+                else {
+                    StrCopy(pDesc, birth.custom);
+                }
+                pDesc += StrLen(pDesc);
+                break;
+
+            case 'y':       // Year and age
+                if (birth.flag.bits.lunar || birth.flag.bits.lunar_leap) {
+                    if (birth.flag.bits.lunar) {
+                        StrCopy(pDesc, "-)");
+                    }
+                    else if (birth.flag.bits.lunar_leap) {
+                        StrCopy(pDesc, "#)");
+                    }
+
+                    if (birth.flag.bits.year) {
+                        DateToAsciiLong(birth.date.month, birth.date.day,
+                                        birth.date.year + 1904,
+                                        gDispdfmts, gAppErrStr);
+                    }
+                    else {
+                        DateToAsciiLong(birth.date.month, birth.date.day, -1, gDispdfmts,
+                                        gAppErrStr);
+                    }
+    
+                    StrCat(pDesc, gAppErrStr);
+                    StrCat(pDesc, " ");
+                    pDesc += StrLen(pDesc);
+                }
+                if (birth.flag.bits.year) {
+                    if (!birth.flag.bits.solar || gPrefsR->NotifyPrefs.duration ==1) {
+                        age = CalculateAge(when, birth.date, birth.flag);
+                        if (age >= 0) {
+                            StrPrintF(gAppErrStr, " (%d)", age);
+                            StrCopy(pDesc, gAppErrStr);
+                        }
+                    }
+                    else if (birth.flag.bits.solar && gPrefsR->NotifyPrefs.duration != 1) {
+                        StrPrintF(gAppErrStr, "%d", birth.date.year + 1904 );
+                        StrCopy(pDesc, gAppErrStr);
+                    }
+                    pDesc += StrLen(pDesc);
+                }
+                break;
+
+            default:
+            }
+
+            pfmtString += 2;    // advance +char;
+        }
+        else {
+            *pDesc++ = *pfmtString++;
+        }
+    }
+    *pDesc = 0;
+    
+    return description;
+}
+    
 static Int16 PerformNotify(BirthDate birth, DateType when,
                          RepeatInfoType* repeatInfoPtr,
                          Int16 *created, Int16 *touched)
@@ -1462,11 +1363,18 @@ static Int16 PerformNotify(BirthDate birth, DateType when,
     ApptDBRecordType datebook;
     ApptDateTimeType dbwhen;
     AlarmInfoType dbalarm;
-    Int16 age = 0;
     Char* description = 0;
-    Int16 index;
+    Int16 existIndex;
     ApptDBRecordFlags changedFields;
-    static Char noteField[20];      // (datebk3: 10, AN:14), HD id: 5
+    static Char noteField[256];      // (datebk3: 10, AN:14), HD id: 5
+
+    // for the performance, check this first 
+    if ( ((existIndex = CheckDatebookRecord(when, birth)) >= 0)
+         && gPrefsR->NotifyPrefs.existing == '0') {    // exist and keep the record
+        (*touched)++;
+        
+        return 0;
+    }
 
     /* Zero the memory */
     MemSet(&datebook, sizeof(ApptDBRecordType), 0);
@@ -1514,88 +1422,25 @@ static Int16 PerformNotify(BirthDate birth, DateType when,
 	}
     else noteField[0] = 0;
 
-    if (gPrefsR->NotifyPrefs.hide_id == '1') {
-        StrCat(noteField, gPrefsR->BirthPrefs.notifywith);
-    }
-    
-    if (noteField[0]) {
-        datebook.note = noteField;
-    }
-    else {
-        datebook.note = NULL;
-    }
+    StrCat(noteField, gPrefsR->BirthPrefs.notifywith);
+    StrPrintF(gAppErrStr, "%ld-%d", birth.addrRecordNum, Hash(birth.name1, birth.name2));
+    StrCat(noteField, gAppErrStr);
+    datebook.note = noteField;
 
     // make the description
         
-    description = MemPtrNew(1024);
-    SysCopyStringResource(gAppErrStr, NotEnoughMemoryString);
-    ErrFatalDisplayIf(!description, gAppErrStr);
-        
-    StrCopy(description, "[");
-
-    // make description
-    StrNCat(description, birth.name1, 1024);
-    if (birth.name2 && birth.name2[0]) {
-        if (birth.name1 && birth.name1[0])
-            StrNCat(description, ", ", 1024);
-        StrNCat(description, birth.name2, 1024);
-    }
-    StrNCat(description, "] ", 1024);
-
-    if (gPrefsR->NotifyPrefs.hide_id == '0') {
-        StrNCat(description, gPrefsR->BirthPrefs.notifywith, 1024);
-    }
-    
-    // set event type
-    StrNCat(description, EventTypeString(birth), 1024);
-    StrNCat(description, " ", 1024);
-    
-    if (birth.flag.bits.lunar || birth.flag.bits.lunar_leap) {
-        
-        if (birth.flag.bits.lunar) {
-            StrNCat(description, "-)", 1024);
-        }
-        else if (birth.flag.bits.lunar_leap) {
-            StrNCopy(description, "#)", 1024);
-        }
-
-        if (birth.flag.bits.year) {
-            DateToAsciiLong(birth.date.month, birth.date.day,
-                            birth.date.year + 1904,
-                            gDispdfmts, gAppErrStr);
-        }
-        else {
-            DateToAsciiLong(birth.date.month, birth.date.day, -1, gDispdfmts,
-                            gAppErrStr);
-        }
-    
-        StrNCat(description, gAppErrStr, 1024);
-        StrNCat(description, " ", 1024);
-    }
-    if (birth.flag.bits.year) {
-		if (!birth.flag.bits.solar || gPrefsR->NotifyPrefs.duration ==1) {
-        	age = CalculateAge(when, birth.date, birth.flag);
-        	if (age >= 0) {
-           		StrPrintF(gAppErrStr, " (%d)", age);
-            	StrNCat(description, gAppErrStr, 1024);
-        	}
-		}
-		else if (birth.flag.bits.solar && gPrefsR->NotifyPrefs.duration != 1) {
-			StrPrintF(gAppErrStr, "%d", birth.date.year + 1904 );
-			StrNCat(description, gAppErrStr, 1024);
-		}
-    }
-
+    description = NotifyDescString(when, birth);
     datebook.description = description;
 
-    if ((index = CheckDatebookRecord(when, birth.name1, birth.name2)) < 0) {
+    if (existIndex < 0) {            // there is no same record
+        //
         // if not exists
         // write the new record (be sure to fill index)
         //
-        ApptNewRecord(DatebookDB, &datebook, &index);
+        ApptNewRecord(DatebookDB, &datebook, &existIndex);
         // if private is set, make the record private
         //
-        ChkNMakePrivateRecord(index);
+        ChkNMakePrivateRecord(existIndex);
         (*created)++;
     }
     else {                                      // if exists
@@ -1610,11 +1455,11 @@ static Int16 PerformNotify(BirthDate birth, DateType when,
             changedFields.alarm = 1;
 			changedFields.note = 1;
 
-            ApptChangeRecord(DatebookDB, &index, &datebook,
+            ApptChangeRecord(DatebookDB, &existIndex, &datebook,
                              changedFields);
             // if private is set, make the record private
             //
-            ChkNMakePrivateRecord(index);
+            ChkNMakePrivateRecord(existIndex);
         }
         (*touched)++;
     }
@@ -1712,6 +1557,13 @@ static void NotifyDatebook(int mainDBIndex, DateType when,
     }
 }
 
+Boolean NotifyPrgCallBack(PrgCallbackDataPtr cbP)
+{
+    cbP->textP = cbP->message;
+    cbP->textP = "123123123";
+    return true;
+}
+
 static Boolean NotifyFormHandleEvent(EventPtr e)
 {
     Boolean handled = false;
@@ -1749,6 +1601,7 @@ static Boolean NotifyFormHandleEvent(EventPtr e)
                 
                     if (FrmCustomAlert(NotifyWarning, gAppErrStr, " ", " ")
                         == 0) {             // user select OK button
+
                         for (i=0; i < gMainTableTotals; i++) {
                             if (ptr[i].date.year != INVALID_CONV_DATE) {
                                 NotifyDatebook(ptr[i].birthRecordNum,
@@ -1757,6 +1610,11 @@ static Boolean NotifyFormHandleEvent(EventPtr e)
                             }
                         }
                     }
+                    else {
+                        MemPtrUnlock(ptr);
+                        goto Exit_Notify_All;
+                    }
+                    
                 }
                 else {                                      // selected
                     if (ptr[gMainTableHandleRow].date.year
@@ -1793,7 +1651,8 @@ static Boolean NotifyFormHandleEvent(EventPtr e)
                 FrmCustomAlert(ErrorAlert, info, " ", " ");
 
                 MemPtrFree(info);
-            } 
+            }
+        Exit_Notify_All:                
             FrmReturnToForm(0);
 
             handled = true;
@@ -2021,12 +1880,12 @@ static Boolean LoadNotifyPrefsFieldsMore(void)
 
     if ((frm = FrmGetFormPtr(NotifySettingMoreForm)) == 0) return false;
 
-    if (gPrefsR->NotifyPrefs.hide_id == '1') {
+/*    if (gPrefsR->NotifyPrefs.hide_id == '1') {
         CtlSetValue(GetObjectPointer(frm, NotifySettingFormHide), 1);
     }
     else {
         CtlSetValue(GetObjectPointer(frm, NotifySettingFormHide), 0);
-	}
+        } */
 
     if (gPrefsR->NotifyPrefs.icon == '0') {
         CtlSetValue(GetObjectPointer(frm, NotifySettingFormIcon), 0);
@@ -2064,10 +1923,13 @@ static void UnloadNotifyPrefsFieldsMore()
         if (CtlGetValue(ptr)) gPrefsR->NotifyPrefs.icon = '1';
         else gPrefsR->NotifyPrefs.icon = '2';
     }
-    ptr = GetObjectPointer(frm, NotifySettingFormHide);
+    // ptr = GetObjectPointer(frm, NotifySettingFormHide);
+
+    /*
     if (CtlGetValue(ptr)) gPrefsR->NotifyPrefs.hide_id = '1';
     else gPrefsR->NotifyPrefs.hide_id = '0';
-
+    */
+    
     if (FldDirty(GetObjectPointer(frm, NotifySettingANInput))) {
         if (FldGetTextPtr(GetObjectPointer(frm, NotifySettingANInput))) {
             StrNCopy(gPrefsR->NotifyPrefs.an_icon,
@@ -2404,7 +2266,8 @@ static Int16 OpenDatabases(void)
      */
     while ((DmGetNextDatabaseByTypeCreator(newSearch, &searchInfo, 'DATA',
                 NULL, false, &cardNo, &dbID) == 0) &&
-           (!DatebookDB || !AddressDB || !MemoDB || !MainDB || !PrefsDB)) {
+           (!DatebookDB || !ToDoDB || !AddressDB
+            || !MemoDB || !MainDB || !PrefsDB)) {
         if (DmDatabaseInfo(cardNo, dbID, dbname, NULL, NULL, &cdate, &mdate,
                            NULL, NULL, &appInfoID, NULL, NULL, &creator))
             break;
@@ -2413,10 +2276,15 @@ static Int16 OpenDatabases(void)
             DatebookDB = DmOpenDatabase(cardNo, dbID, mode |
                                         dmModeReadWrite);
         }
+        else if ((creator == ToDoAppID) &&
+                 (StrCaselessCompare(dbname, ToDoDBName) == 0)) {
+            ToDoDB = DmOpenDatabase(cardNo, dbID, mode | dmModeReadWrite);
+        }
         else if ((creator == MemoAppID)
             && (StrCaselessCompare(dbname, MemoDBName) == 0)) {
             MemoDB = DmOpenDatabase(cardNo, dbID, mode | dmModeReadWrite);
-        } else if ((creator == AddressAppID) &&
+        }
+        else if ((creator == AddressAppID) &&
                    (StrCaselessCompare(dbname, AddressDBName) == 0)) {
             gAdcdate = cdate;
             gAdmdate = mdate;
@@ -2512,7 +2380,7 @@ static Int16 OpenDatabases(void)
     /*
      * Check if the other databases opened correctly.  Abort if not.
      */
-    if (!DatebookDB || !AddressDB || !MemoDB) return EDBCREATE;
+    if (!DatebookDB || !ToDoDB || !AddressDB || !MemoDB) return EDBCREATE;
 
     return 0;
 }
@@ -2521,6 +2389,7 @@ void CloseDatabases(void)
 {
     if (DatebookDB) DmCloseDatabase(DatebookDB);
     if (AddressDB) DmCloseDatabase(AddressDB);
+    if (ToDoDB) DmCloseDatabase(ToDoDB);
     if (MemoDB) DmCloseDatabase(MemoDB);
     if (MainDB) DmCloseDatabase(MainDB);
 
@@ -2542,6 +2411,8 @@ void CloseDatabases(void)
 static UInt16 StartApplication(void)
 {
     Int8 err;
+//    UInt32 romVersion;
+
     PrefsRHandle = 0;
     gTableRowHandle = 0;
     
@@ -2551,6 +2422,13 @@ static UInt16 StartApplication(void)
     }
     gPrefsR = MemHandleLock(PrefsRHandle);
 
+//    romVersion = 0;
+//    err = FtrGet(sysFtrCreator, sysFtrNumROMVersion, &romVersion);
+//    if (romVersion >= 0x03003000) {
+//        gIsOS3_0 = true;
+//    }
+//    else gIsOS3_0 = false;
+    
     if ((err = OpenDatabases()) < 0) {
         if (!DatebookDB) {
             /*
@@ -2602,12 +2480,14 @@ static Boolean SpecialKeyDown(EventPtr e)
             gPrefsR->BirthPrefs.sort = '0';     // sort by name
 			SndPlaySystemSound(sndClick);
             FrmUpdateForm(MainForm, frmRedrawUpdateCode);
+            WritePrefsRec();
             return true;
         }
         else if (keyboardNumericChr == chr) {
             gPrefsR->BirthPrefs.sort = '1';     // sort by date
 			SndPlaySystemSound(sndClick);
             FrmUpdateForm(MainForm, frmRedrawUpdateCode);
+            WritePrefsRec();
             return true;
         }
     }
@@ -2637,10 +2517,12 @@ static void EventLoop(void)
         EvtGetEvent(&e, evtWaitForever);
 
         if (SpecialKeyDown(&e)) continue;
-        if (! SysHandleEvent (&e))
-            if (! MenuHandleEvent (NULL, &e, &err))
-                if (! ApplicationHandleEvent (&e))
-                    FrmDispatchEvent (&e);
+        
+        if (SysHandleEvent(&e)) continue;
+        if (MenuHandleEvent (NULL, &e, &err)) continue;
+        
+        if (! ApplicationHandleEvent (&e))
+            FrmDispatchEvent (&e);
     } while (e.eType != appStopEvent && !gProgramExit);
 }
 

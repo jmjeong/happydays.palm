@@ -186,3 +186,18 @@ MemPtr AppInfoGetPtr(DmOpenRef dbP)
         return MemLocalIDToLockedPtr(appInfoID, cardNo);
 }   
 
+
+UInt16 Hash(Char* name1, Char* name2)
+{
+    UInt16 hashVal = 0;
+
+    while (*name1) {
+        hashVal += *name1++ * 13;
+    }
+
+    while (*name2) {
+        hashVal += *name2++ * 13;
+    }
+
+    return hashVal;
+}

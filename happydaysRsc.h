@@ -32,11 +32,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define SelectDateString            1099
 
 #define MainFormMenu		        1110
-#define	MainFormMenuNotify	        1111
-#define	MainFormMenuCleanup	        1112
+#define	MainFormMenuNotifyDatebook	1111
+#define	MainFormMenuCleanupDatebook	1112
 #define MainFormMenuExport          1113
 #define MainFormMenuSl2Ln           1114
 #define MainFormMenuLn2Sl           1115
+#define MainFormMenuNotifyTodo      1116
+#define	MainFormMenuCleanupTodo	    1117
 #define	MainFormMenuPref	        1120
 #define	MainFormMenuAbout	        1121
 
@@ -61,12 +63,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define PrefFormEmphasize           1302
 #define PrefFormOk					1303
 #define PrefFormCancel				1304
-#define PrefFormSortDate            1305
-#define PrefFormSortName            1306
-#define PrefFormNotifyWith          1307
-#define PrefFormOverrideSystemDate  1308
-#define PrefFormDateFmts            1309
-#define PrefFormDateTrigger         1310
+#define PrefFormNotifyWith          1305
+#define PrefFormOverrideSystemDate  1306
+#define PrefFormDateFmts            1307
+#define PrefFormDateTrigger         1308
+#define PrefFormNotifyFmts          1309
+#define PrefFormNotifyTrigger       1310
 
 #define NotifySettingForm           1400
 #define NotifySettingFormRecordAll  1401
@@ -80,9 +82,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define NotifySettingFormOk         1420
 #define NotifySettingFormCancel     1421
 #define NotifySettingFormDuration   1422
-#define NotifySettingFormHide    	1423
-#define NotifySettingFormMore    	1424
-#define NotifySettingFormLabelDays	1425
+#define NotifySettingFormMore    	1423
+#define NotifySettingFormLabelDays	1424
 
 #define NotifySettingMoreForm		1450
 #define NotifySettingMoreFormOk		1451

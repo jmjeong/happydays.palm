@@ -28,6 +28,7 @@ extern FieldPtr SetFieldTextFromStr(UInt16 fieldID, Char * strP);
 extern FieldPtr ClearFieldText(UInt16 fieldID);
 extern Char * DateToAsciiLong(UInt8 months, UInt8 days, Int16 year,
                             DateFormatType dateFormat, Char * pstring);
+extern UInt16 Hash(Char* name1, Char* name2);
 
 extern MemPtr AppInfoGetPtr(DmOpenRef dbP);
 
