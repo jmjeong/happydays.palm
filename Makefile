@@ -36,10 +36,11 @@ all: en
 all-lang: en ko de th dutch fr sp cz catalan br chi
 
 en: obj/$(TARGET).prc
-	cp obj/$(TARGET).prc prc
+	mv obj/$(TARGET).prc prc
 
-ko: $(TARGET)-kt.prc $(TARGET)-km.prc
-	zip $(TARGET)-$(VERSION)-ko.zip $(TARGET)-kt.prc $(TARGET)-km.prc
+ko: obj/$(TARGET)-k8.prc obj/$(TARGET)-k11.prc
+	mv obj/$(TARGET)-k8.prc obj/$(TARGET)-k11.prc prc
+	zip $(TARGET)-$(VERSION)-ko.zip prc/$(TARGET)-k8.prc prc/$(TARGET)-k11.prc
 
 de: $(TARGET)-de.prc 
 	zip $(TARGET)-$(VERSION)-de.zip $(TARGET)-de.prc
@@ -82,15 +83,20 @@ obj/happydays-sections.s obj/happydays-sections.ld : happydays.def
 	@echo "Making multi-section info files..." && \
 	cd obj && multigen ../happydays.def
 
-obj/$(TARGET).prc: obj/$(TARGET) bin.res
+obj/$(TARGET).prc: obj/$(TARGET) obj/bin.res
 	@echo "Building program file ./obj/happydays.prc..." && \
 	$(BUILDPRC) -o obj/$(TARGET).prc happydays.def obj/*.bin obj/$(TARGET)
 
+obj/$(TARGET)-k8.prc: obj/$(TARGET) obj/bin-k8.res
+	@echo "Building program file ./obj/happydays-k8.prc..." && \
+	$(BUILDPRC) -o obj/$(TARGET)-k8.prc happydays.def obj/*.bin obj/$(TARGET)
+
+obj/$(TARGET)-k11.prc: obj/$(TARGET) obj/bin-k11.res
+	@echo "Building program file ./obj/happydays-k11.prc..." && \
+	$(BUILDPRC) -o obj/$(TARGET)-k11.prc happydays.def obj/*.bin obj/$(TARGET)
+
 $(TARGET)-en.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGET).grc pref0000.$(TARGET).grc rloc0000.$(TARGET).grc bin.res
 	$(BUILDPRC) $(TARGET).prc $(APPNAME) $(APPID) code0001.$(TARGET).grc code0000.$(TARGET).grc data0000.$(TARGET).grc *.bin pref0000.$(TARGET).grc rloc0000.$(TARGET).grc
-
-$(TARGET)-kt.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGET).grc pref0000.$(TARGET).grc rloc0000.$(TARGET).grc bin-kt.res
-	$(BUILDPRC) $(TARGET)-kt.prc $(APPNAME) $(APPID) code0001.$(TARGET).grc code0000.$(TARGET).grc data0000.$(TARGET).grc *.bin pref0000.$(TARGET).grc rloc0000.$(TARGET).grc
 
 $(TARGET)-km.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGET).grc pref0000.$(TARGET).grc rloc0000.$(TARGET).grc bin-km.res
 	$(BUILDPRC) $(TARGET)-km.prc $(APPNAME) $(APPID) code0001.$(TARGET).grc code0000.$(TARGET).grc data0000.$(TARGET).grc *.bin pref0000.$(TARGET).grc rloc0000.$(TARGET).grc
@@ -125,28 +131,21 @@ $(TARGET)-catalan.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(
 $(TARGET)-br.prc: code0000.$(TARGET).grc code0001.$(TARGET).grc data0000.$(TARGET).grc pref0000.$(TARGET).grc rloc0000.$(TARGET).grc bin-br.res
 	$(BUILDPRC) $(TARGET)-br.prc $(APPNAME) $(APPID) code0001.$(TARGET).grc code0000.$(TARGET).grc data0000.$(TARGET).grc *.bin pref0000.$(TARGET).grc rloc0000.$(TARGET).grc
 
-code0000.$(TARGET).grc: $(TARGET)
-	$(OBJRES) $(TARGET)
 
-code0001.$(TARGET).grc: code0000.$(TARGET).grc
-
-data0000.$(TARGET).grc: code0000.$(TARGET).grc
-
-pref0000.$(TARGET).grc: code0000.$(TARGET).grc
-
-rloc0000.$(TARGET).grc: code0000.$(TARGET).grc
-
-bin.res: obj/$(TARGET)-en.rcp
+obj/bin.res: obj/$(TARGET)-en.rcp
 	@echo "Compiling resource happydays.rcp..." &&\
+	(cd obj && rm -f *.bin ) && \
 	$(PILRC) -q -L ENGLISH obj/$(TARGET)-en.rcp obj
 
-bin-kt.res: $(TARGET)-ko.rcp
-	rm -f *.bin
-	$(PILRC) -L KOREAN -Fkt $(TARGET)-ko.rcp .
+obj/bin-k8.res: obj/$(TARGET)-ko.rcp
+	@echo "Compiling resource happydays-ko.rcp..." &&\
+	(cd obj && rm -f *.bin ) && \
+	$(PILRC) -q -L KOREAN -Fkt obj/$(TARGET)-ko.rcp obj
 
-bin-km.res: $(TARGET)-ko.rcp
-	rm -f *.bin
-	$(PILRC) -L KOREAN -Fkm $(TARGET)-ko.rcp .
+obj/bin-k11.res: obj/$(TARGET)-ko.rcp
+	@echo "Compiling resource happydays-ko.rcp..." &&\
+	(cd obj && rm -f *.bin ) && \
+	$(PILRC) -q -L KOREAN -FKm obj/$(TARGET)-ko.rcp obj
 
 bin-de.res: $(TARGET)-de.rcp
 	rm -f *.bin
@@ -193,8 +192,10 @@ obj/$(TARGET)-en.rcp: $(TARGET).rcp translate/english.msg translate/hdr.msg
 	cat translate/hdr.msg translate/english.msg $(TARGET).rcp \
 			> obj/$(TARGET)-en.rcp
 
-$(TARGET)-ko.rcp: $(TARGET).rcp korean.msg hdr.msg
-	cat hdr.msg korean.msg $(TARGET).rcp > $(TARGET)-ko.rcp
+obj/$(TARGET)-ko.rcp: $(TARGET).rcp translate/korean.msg translate/hdr.msg
+	@echo "Generating happydays-ko.rcp file..." && \
+	cat translate/hdr.msg translate/korean.msg $(TARGET).rcp \
+			> obj/$(TARGET)-ko.rcp
 
 $(TARGET)-de.rcp: $(TARGET).rcp german.msg hdr.msg
 	cat hdr.msg german.msg $(TARGET).rcp > $(TARGET)-de.rcp

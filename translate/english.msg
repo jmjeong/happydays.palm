@@ -93,7 +93,6 @@ BEGIN
 
 
 /* Font... */
-	"Select Font" = "Select Font"
 
 /* preferences screen */
     "Custom field:" = "Custom field:"
@@ -227,9 +226,16 @@ BEGIN
     "Processing" = "Processing"  
     "Processed : " = "Processed : " 
 
+	"Address Change" = "Address Rescan"
+	"AddressDB is changed. \nDo you want to rescan it?"= ""\
+		"Address DB is changed. \nDo you want to rescan it?"
 
-	"Address Rescan" = "Address Rescan"
-	"AddressDB is changed. Do you want to rescan it?"= ""\
-		"Address DB is changed. Do you want to rescan it?"
+/* HappyDays view */
+	"Type:" = "Type:"
+	"Next Date:" = "Next Date:"
+	"Origin:" = "Origin:"
+	"Age:" = "Age:"
+	"UpTo Date:" = "UpTo Date:"
+	"%dY %dM %dD (%d)" = "%dY %dM %dD (%d)"
 END
 

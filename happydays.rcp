@@ -33,6 +33,7 @@ STRING ID ExportHeaderString 	"HappyDays Export List"
 STRING ID ViewNotExistString	"(not exist in this year)"
 STRING ID DateBookFirstAlertString  "Please run Date Book once first."
 STRING ID DateBookNotifyDaysString "Days"
+STRING ID AgeFormatString		"%dY %dM %dD (%d)"
 
 STRING ID DateBookString		"Date Book"
 STRING ID ToDoString			"To Do"
@@ -422,8 +423,8 @@ END
 ALERT ID AddrRescanAlert CONFIRMATION
 DEFAULTBUTTON 0
 BEGIN
-    TITLE "Address Rescan"
-    MESSAGE "AddressDB is changed. Do you want to rescan it?"
+    TITLE "Address Change"
+    MESSAGE "AddressDB is changed. \nDo you want to rescan it?"
     BUTTONS "Yes" "No"
 END
 

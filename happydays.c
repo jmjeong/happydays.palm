@@ -2119,7 +2119,7 @@ static void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column,
     HappyDays r;
 	Int16 dateDiff;
 	DateType current;
-	char displayStr[25];
+	char displayStr[55];
     char tempStr[25];
 
     Int16 x,y;
@@ -2292,17 +2292,18 @@ static void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column,
                 }
                 y_diff += current.year - solBirth.year;
                     
-                StrPrintF(gAppErrStr, "%dY %dM %dD (%d)",
+        		SysCopyStringResource(gAppErrStr, AgeFormatString);
+                StrPrintF(displayStr, gAppErrStr,
                           y_diff, m_diff, d_diff, dateDiff);
             }
-            else StrCopy(gAppErrStr, "-");
+            else StrCopy(displayStr, "-");
         }
         else {
-            StrCopy(gAppErrStr, "-");
+            StrCopy(displayStr, "-");
         }
-        length = StrLen(gAppErrStr);
-        FntCharsInWidth(gAppErrStr, &width, &length, &ignored);
-        WinDrawChars(gAppErrStr, length, x, y);
+        length = StrLen(displayStr);
+        FntCharsInWidth(displayStr, &width, &length, &ignored);
+        WinDrawChars(displayStr, length, x, y);
     }
     break;
     case ViewRemained:

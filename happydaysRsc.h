@@ -192,6 +192,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define SourceDateStr				1938
 #define AgeStr						1939
 #define RemainedDayStr				1940
+#define AgeFormatString				1941
 
 #define ExportAlert                 1990
 #define AddrRescanAlert             1991
