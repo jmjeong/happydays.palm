@@ -67,14 +67,14 @@ UInt16 PrefsRecIndex;
 struct sPrefsR *gPrefsR;
 struct sPrefsR DefaultPrefsR = {
     PREFSVERSION,
-    '0', '0', '0',              // all/selected, keep/modified, private
-    {   '1', '0', 9, 3, 1, {-1, -1}, "145" },
+    0, 0, 0,              // all/selected, keep/modified, private
+    {   1, 0, 9, 3, 1, {-1, -1}, "145" },
 #ifdef GERMAN
-    {  '1', '0', "Alle" },
-    {  "Geburtstag", "*HD:", '1', '1', 0, 0, dfDMYWithDots },
+    {  1, "Alle" },
+    {  "Geburtstag", "*HD:", 1, 1, 0, 0, 0, dfDMYWithDots },
 #else
-    {  '1', '0', "All" },
-    {  "Birthday", "*HD:", '1', '1', 0, 0, dfMDYWithSlashes },
+    {  1, "All" },
+    {  "Birthday", "*HD:", 1, 1, 0, 0, 0, dfMDYWithSlashes },
 #endif
     0,
 #ifdef GERMAN
@@ -479,7 +479,7 @@ static Boolean MenuHandler(FormPtr frm, EventPtr e)
 
         // Select Records to all and select is invalid
         //
-        gPrefsR->records = '3';
+        gPrefsR->records = 3;
         
         FrmPopupForm(DateBookNotifyForm);
 
@@ -508,7 +508,7 @@ static Boolean MenuHandler(FormPtr frm, EventPtr e)
     case MainFormMenuNotifyTodo:
         // Select Records to all and select is invalid
         //
-        gPrefsR->records = '3';
+        gPrefsR->records = 3;
         
         FrmPopupForm(ToDoNotifyForm);
 
@@ -751,12 +751,19 @@ static void LoadPrefsFields()
     SetFieldTextFromStr(PrefFormCustomField, gPrefsR->BirthPrefs.custom);
     SetFieldTextFromStr(PrefFormNotifyWith, gPrefsR->BirthPrefs.notifywith);
 
-    if (gPrefsR->BirthPrefs.emphasize == '1') {
+    if (gPrefsR->BirthPrefs.emphasize == 1) {
         CtlSetValue(GetObjectPointer(frm, PrefFormEmphasize), 1);
     }
     else {
         CtlSetValue(GetObjectPointer(frm, PrefFormEmphasize), 0);
     }
+    if (gPrefsR->BirthPrefs.scannote == 1) {
+        CtlSetValue(GetObjectPointer(frm, PrefFormScanNote), 1);
+    }
+    else {
+        CtlSetValue(GetObjectPointer(frm, PrefFormScanNote), 0);
+    }
+
 }
 
 static Boolean UnloadPrefsFields()
@@ -815,8 +822,13 @@ static Boolean UnloadPrefsFields()
     gPrefsR->BirthPrefs.notifyformat = LstGetSelection(lstnotify);
         
     ptr = GetObjectPointer(frm, PrefFormEmphasize);
-    if (CtlGetValue(ptr)) gPrefsR->BirthPrefs.emphasize = '1';
-    else gPrefsR->BirthPrefs.emphasize = '0';
+    gPrefsR->BirthPrefs.emphasize = CtlGetValue(ptr);
+
+    ptr = GetObjectPointer(frm, PrefFormScanNote);
+    if (CtlGetValue(ptr) != gPrefsR->BirthPrefs.scannote ) {
+        needrescan = 1;
+    }
+    gPrefsR->BirthPrefs.scannote = CtlGetValue(ptr);
 
     return needrescan;
 }
@@ -1012,7 +1024,7 @@ static void MainFormDrawRecord(MemPtr tableP, Int16 row, Int16 column,
 					 bounds->topLeft.x + bounds->extent.x -
 					 MAINTABLEAGEFIELD - width, y);
 
-        if (gPrefsR->BirthPrefs.emphasize == '1'
+        if (gPrefsR->BirthPrefs.emphasize 
             && drawRecord.date.year != INVALID_CONV_DATE
             && (r.flag.bits.lunar || r.flag.bits.lunar_leap)) {
             // draw gray line
@@ -1217,24 +1229,24 @@ static void TimeToAsciiLocal(TimeType when, TimeFormatType timeFormat,
 
 static void LoadCommonPrefsFields(FormPtr frm)
 {
-    if (gPrefsR->records == '0') {
+    if (gPrefsR->records == 0) {
         CtlSetValue(GetObjectPointer(frm, NotifyFormRecordAll), 1);
     }
-    else if (gPrefsR->records == '1') {
+    else if (gPrefsR->records == 1) {
         CtlSetValue(GetObjectPointer(frm, NotifyFormRecordSlct), 1);
     }
     else {          //  '3' means that All is selected and slct is unusable
         CtlSetValue(GetObjectPointer(frm, NotifyFormRecordAll), 1);
         CtlSetUsable(GetObjectPointer(frm, NotifyFormRecordSlct), false);
     }
-    if (gPrefsR->existing == '0') {
+    if (gPrefsR->existing == 0) {
         CtlSetValue(GetObjectPointer(frm, NotifyFormEntryKeep), 1);
     }
     else {
         CtlSetValue(GetObjectPointer(frm, NotifyFormEntryModify), 1);
     }
 
-    if (gPrefsR->private == '1') {
+    if (gPrefsR->private == 1) {
         CtlSetValue(GetObjectPointer(frm, NotifyFormPrivate), 1);
     }
     else {
@@ -1248,16 +1260,13 @@ static void UnloadCommonNotifyPrefs(FormPtr frm)
     ControlPtr ptr;
     
     ptr = GetObjectPointer(frm, NotifyFormRecordAll);
-    if (CtlGetValue(ptr)) gPrefsR->records = '0';
-    else gPrefsR->records = '1';
+    gPrefsR->records = !CtlGetValue(ptr);
 
     ptr = GetObjectPointer(frm, NotifyFormEntryKeep);
-    if (CtlGetValue(ptr)) gPrefsR->existing = '0';
-    else gPrefsR->existing = '1';
+    gPrefsR->existing = !CtlGetValue(ptr);
 
     ptr = GetObjectPointer(frm, NotifyFormPrivate);
-    if ( CtlGetValue(ptr) ) gPrefsR->private = '1';
-    else gPrefsR->private = '0';
+    gPrefsR->private = CtlGetValue(ptr);
 
     return;
 }
@@ -1270,7 +1279,7 @@ static void LoadDBNotifyPrefsFields(void)
 
     LoadCommonPrefsFields(frm);  // all/selected, keep/modify, private
     
-    if (gPrefsR->DBNotifyPrefs.alarm == '1') {
+    if (gPrefsR->DBNotifyPrefs.alarm == 1) {
         CtlSetValue(GetObjectPointer(frm, DateBookNotifyFormAlarm), 1);
 
         FrmShowObject(frm, 
@@ -1305,8 +1314,7 @@ static void UnloadDBNotifyPrefsFields()
     UnloadCommonNotifyPrefs(frm);       // all/selected, keey/modify, private
 
     ptr = GetObjectPointer(frm, DateBookNotifyFormAlarm);
-    if ( CtlGetValue(ptr) ) gPrefsR->DBNotifyPrefs.alarm = '1';
-    else gPrefsR->DBNotifyPrefs.alarm = '0';
+    gPrefsR->DBNotifyPrefs.alarm = CtlGetValue(ptr);
 
     if (FldDirty(GetObjectPointer(frm, DateBookNotifyFormBefore))) {
         gPrefsR->DBNotifyPrefs.notifybefore =
@@ -1333,19 +1341,19 @@ static void LoadTDNotifyPrefsFields(void)
     LoadCommonPrefsFields(frm);  // all/selected, keep/modify, private
 
     switch (gPrefsR->TDNotifyPrefs.priority) {
-    case '1':
+    case 1:
         CtlSetValue(GetObjectPointer(frm, ToDoNotifyPri1), 1);
         break;
-    case '2':
+    case 2:
         CtlSetValue(GetObjectPointer(frm, ToDoNotifyPri2), 1);
         break;
-    case '3':
+    case 3:
         CtlSetValue(GetObjectPointer(frm, ToDoNotifyPri3), 1);
         break;
-    case '4':
+    case 4:
         CtlSetValue(GetObjectPointer(frm, ToDoNotifyPri4), 1);
         break;
-    case '5':
+    case 5:
         CtlSetValue(GetObjectPointer(frm, ToDoNotifyPri5), 1);
         break;
     default:
@@ -1370,15 +1378,15 @@ static void UnloadTDNotifyPrefsFields()
     UnloadCommonNotifyPrefs(frm);       // all/selected, keey/modify, private
 
     if ( CtlGetValue(GetObjectPointer(frm, ToDoNotifyPri1)) )
-        gPrefsR->TDNotifyPrefs.priority = '1';
+        gPrefsR->TDNotifyPrefs.priority = 1;
     else if ( CtlGetValue(GetObjectPointer(frm, ToDoNotifyPri2)) )
-        gPrefsR->TDNotifyPrefs.priority = '2';
+        gPrefsR->TDNotifyPrefs.priority = 2;
     else if ( CtlGetValue(GetObjectPointer(frm, ToDoNotifyPri3)) )
-        gPrefsR->TDNotifyPrefs.priority = '3';
+        gPrefsR->TDNotifyPrefs.priority = 3;
     else if ( CtlGetValue(GetObjectPointer(frm, ToDoNotifyPri4)) )
-        gPrefsR->TDNotifyPrefs.priority = '4';
+        gPrefsR->TDNotifyPrefs.priority = 4;
     else
-        gPrefsR->TDNotifyPrefs.priority = '5';
+        gPrefsR->TDNotifyPrefs.priority = 5;
     
     // ToDo Category is set by handler
 }
@@ -1457,7 +1465,7 @@ static void ChkNMakePrivateRecord(DmOpenRef db, Int16 index)
     Int16 attributes;
     // if private is set, make the record private
     //
-    if (gPrefsR->private == '1') {
+    if (gPrefsR->private == 1) {
         DmRecordInfo(db, index, &attributes,
                      NULL,NULL);
         attributes |= dmRecAttrSecret;
@@ -1608,7 +1616,7 @@ static Int16 PerformNotifyDB(BirthDate birth, DateType when,
 
     // for the performance, check this first 
     if ( ((existIndex = CheckDatebookRecord(when, birth)) >= 0)
-         && gPrefsR->existing == '0') {    // exist and keep the record
+         && !gPrefsR->existing ) {    // exist and keep the record
         (*touched)++;
         
         return 0;
@@ -1629,7 +1637,7 @@ static Int16 PerformNotifyDB(BirthDate birth, DateType when,
 
     // if alarm checkbox is set, set alarm
     //
-    if (gPrefsR->DBNotifyPrefs.alarm == '1' &&
+    if (gPrefsR->DBNotifyPrefs.alarm &&
         gPrefsR->DBNotifyPrefs.notifybefore >= 0) {
         dbalarm.advanceUnit = aauDays;
         dbalarm.advance = gPrefsR->DBNotifyPrefs.notifybefore;
@@ -1650,12 +1658,12 @@ static Int16 PerformNotifyDB(BirthDate birth, DateType when,
 
 	// if datebook is datebk3 or AN, set icon
 	//
-    if (gPrefsR->DBNotifyPrefs.icon == '1') {     // AN
+    if (gPrefsR->DBNotifyPrefs.icon == 1) {     // AN
         StrCopy(noteField, "ICON: ");
         StrCat(noteField, gPrefsR->DBNotifyPrefs.an_icon);
         StrCat(noteField, "\n#AN\n");
     }
-	else if (gPrefsR->DBNotifyPrefs.icon == '2') {
+	else if (gPrefsR->DBNotifyPrefs.icon == 2) {
         StrCopy(noteField, DateBk3IconString());
 	}
     else noteField[0] = 0;
@@ -1683,7 +1691,7 @@ static Int16 PerformNotifyDB(BirthDate birth, DateType when,
         (*created)++;
     }
     else {                                      // if exists
-        if (gPrefsR->existing == '0') {
+        if (gPrefsR->existing == 0) {
             // keep the record
         }
         else {
@@ -1719,7 +1727,7 @@ static Int16 PerformNotifyTD(BirthDate birth, DateType when,
 
     // for the performance, check this first 
     if ( ((existIndex = CheckToDoRecord(when, birth)) >= 0)
-         && gPrefsR->existing == '0') {    // exist and keep the record
+         && gPrefsR->existing == 0) {    // exist and keep the record
         (*touched)++;
         
         return 0;
@@ -1731,7 +1739,7 @@ static Int16 PerformNotifyTD(BirthDate birth, DateType when,
     // set the date 
     //
     todo.dueDate = when;
-    todo.priority = gPrefsR->TDNotifyPrefs.priority - '0';
+    todo.priority = gPrefsR->TDNotifyPrefs.priority;
 
     StrCopy(noteField, gPrefsR->BirthPrefs.notifywith);
     StrPrintF(gAppErrStr, "%ld-%ld", birth.addrRecordNum,
@@ -1759,7 +1767,7 @@ static Int16 PerformNotifyTD(BirthDate birth, DateType when,
         (*created)++;
     }
     else {                                      // if exists
-        if (gPrefsR->existing == '0') {
+        if (gPrefsR->existing == 0) {
             // keep the record
         }
         else {
@@ -1930,7 +1938,7 @@ static void NotifyAction(UInt32 whatAlert,
 
     if (gMainTableTotals >0) {
         ptr = MemHandleLock(gTableRowHandle);
-        if (gPrefsR->records == '0') {  // all
+        if (gPrefsR->records == 0) {  // all
             if (whatAlert == DateBookNotifyForm) {
                 SysCopyStringResource(gAppErrStr, DateBookString);
             }
@@ -1993,7 +2001,7 @@ static void NotifyAction(UInt32 whatAlert,
         StrPrintF(gAppErrStr, temp, touched);
         StrNCat(info, gAppErrStr, 255);
 
-        if (gPrefsR->existing == '0') {  // keep
+        if (gPrefsR->existing == 0) {  // keep
             SysCopyStringResource(temp, UntouchedString);
             StrNCat(info, temp, 255);
         }
@@ -2341,14 +2349,7 @@ static Boolean LoadDBNotifyPrefsFieldsMore(void)
 
     if ((frm = FrmGetFormPtr(DateBookNotifyMoreForm)) == 0) return false;
 
-/*    if (gPrefsR->DBNotifyPrefs.hide_id == '1') {
-      CtlSetValue(GetObjectPointer(frm, DateBookNotifyFormHide), 1);
-      }
-      else {
-      CtlSetValue(GetObjectPointer(frm, DateBookNotifyFormHide), 0);
-      } */
-
-    if (gPrefsR->DBNotifyPrefs.icon == '0') {
+    if (gPrefsR->DBNotifyPrefs.icon == 0) {
         CtlSetValue(GetObjectPointer(frm, DateBookNotifyFormIcon), 0);
         HideIconStuff();
     }
@@ -2356,7 +2357,7 @@ static Boolean LoadDBNotifyPrefsFieldsMore(void)
         CtlSetValue(GetObjectPointer(frm, DateBookNotifyFormIcon), 1);
     }
     
-    if (gPrefsR->DBNotifyPrefs.icon == '1') {     // AN selected
+    if (gPrefsR->DBNotifyPrefs.icon == 1) {     // AN selected
         CtlSetValue(GetObjectPointer(frm, DateBookNotifyFormAN), 1);
     }
     else {                                      // Datebk3 Icon selected 
@@ -2378,18 +2379,12 @@ static void UnloadDBNotifyPrefsFieldsMore()
     if ((frm = FrmGetFormPtr(DateBookNotifyMoreForm)) == 0) return;
     
     ptr = GetObjectPointer(frm, DateBookNotifyFormIcon);
-    if (!CtlGetValue(ptr)) gPrefsR->DBNotifyPrefs.icon = '0';
+    if (!CtlGetValue(ptr)) gPrefsR->DBNotifyPrefs.icon = 0;
     else {
         ptr = GetObjectPointer(frm, DateBookNotifyFormAN);
-        if (CtlGetValue(ptr)) gPrefsR->DBNotifyPrefs.icon = '1';
-        else gPrefsR->DBNotifyPrefs.icon = '2';
+        if (CtlGetValue(ptr)) gPrefsR->DBNotifyPrefs.icon = 1;
+        else gPrefsR->DBNotifyPrefs.icon = 2;
     }
-    // ptr = GetObjectPointer(frm, DateBookNotifyFormHide);
-
-    /*
-      if (CtlGetValue(ptr)) gPrefsR->DBNotifyPrefs.hide_id = '1';
-      else gPrefsR->DBNotifyPrefs.hide_id = '0';
-    */
     
     if (FldDirty(GetObjectPointer(frm, DateBookNotifyANInput))) {
         if (FldGetTextPtr(GetObjectPointer(frm, DateBookNotifyANInput))) {
@@ -2510,7 +2505,7 @@ static Boolean BirthdateFormHandleEvent(EventPtr e)
         case BirthdateNotifyDB:
             //  Notify event into the datebook entry
             //
-            gPrefsR->records = '1';
+            gPrefsR->records = 1;
             FrmPopupForm(DateBookNotifyForm);
 
             handled = true;
@@ -2519,7 +2514,7 @@ static Boolean BirthdateFormHandleEvent(EventPtr e)
         case BirthdateNotifyTD:
             //  Notify event into the datebook entry
             //
-            gPrefsR->records = '1';
+            gPrefsR->records = 1;
             FrmPopupForm(ToDoNotifyForm);
 
             handled = true;
@@ -2971,14 +2966,14 @@ static Boolean SpecialKeyDown(EventPtr e)
 	chr = e->data.keyDown.chr;
     if (e->data.keyDown.modifiers & commandKeyMask) {
         if (keyboardAlphaChr == chr) {
-            gPrefsR->BirthPrefs.sort = '0';     // sort by name
+            gPrefsR->BirthPrefs.sort = 0;     // sort by name
 			SndPlaySystemSound(sndClick);
             FrmUpdateForm(MainForm, frmReloadUpdateCode);
             WritePrefsRec();
             return true;
         }
         else if (keyboardNumericChr == chr) {
-            gPrefsR->BirthPrefs.sort = '1';     // sort by date
+            gPrefsR->BirthPrefs.sort = 1;     // sort by date
 			SndPlaySystemSound(sndClick);
             FrmUpdateForm(MainForm, frmReloadUpdateCode);
             WritePrefsRec();

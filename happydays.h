@@ -20,7 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _HAPPYDATE_H_
 #define _HAPPYDATE_H_
 
-#define PREFSVERSION        10
+#define PREFSVERSION        11
 
 #define AppErrStrLen        256
 #define DEFAULT_DURATION    5
@@ -58,7 +58,6 @@ struct sDBNotifyPrefs
 struct sTDNotifyPrefs 
 {
     char priority;			// priority of TODO
-    char private;
     char todoCategory[33];
 };
 
@@ -69,6 +68,7 @@ struct sBirthPrefs
     char sort;                  // sorting order
     char emphasize;             // emphasize lunar
     char notifyformat;          // notify format list
+    char scannote;              // scan from notes?
     Boolean sysdateover;        // override system date format
     DateFormatType dateformat;  // if sysdateover is true
 };

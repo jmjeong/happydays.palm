@@ -635,7 +635,7 @@ BEGIN
             NONEDITABLE MAXCHARS 5
     BUTTON "Today" ID MainFormToday AT (PrevRight+2 PrevTop AUTO AUTO)
     POPUPTRIGGER "" ID MainFormPopupTrigger
-            AT ( RIGHT@159 0 AUTO AUTO ) RIGHTANCHOR 
+            AT ( RIGHT@160 0 AUTO AUTO ) RIGHTANCHOR 
     LIST "" ID MainFormAddrCategories AT (PREVLEFT PREVTOP 70 AUTO)
             NONUSABLE
     POPUPLIST ID MainFormPopupTrigger MainFormAddrCategories
@@ -688,7 +688,8 @@ BEGIN
 
     PULLDOWN "Options"
     BEGIN
-        MENUITEM "Preferences"              MainFormMenuPref    "P"
+        MENUITEM "Preferences"              MainFormMenuPref    "R"
+        MENUITEM SEPARATOR
         MENUITEM "About HappyDays"          MainFormMenuAbout   "A"
     END
 END
@@ -722,6 +723,7 @@ FORM ID PrefForm AT (2 2 156 156)
 FRAME
 MODAL
 USABLE
+DEFAULTBTNID PrefFormCancel
 HELPID PrefFormHelpString
 BEGIN
     TITLE "HappyDays Preferences"
@@ -734,6 +736,8 @@ BEGIN
     POPUPTRIGGER "" ID PrefFormDateTrigger AT (PREVLEFT PREVTOP-1 40 13) LEFTANCHOR
     POPUPLIST ID PrefFormDateTrigger PrefFormDateFmts
 
+	CHECKBOX "Scan from note field" ID PrefFormScanNote
+		AT (10 PrevBottom AUTO AUTO)
     CHECKBOX "Emphasize Lunar Date" ID PrefFormEmphasize 
 		AT (10 PrevBottom AUTO AUTO) 
 
@@ -755,14 +759,6 @@ BEGIN
     LABEL "HappyDays ID:" AUTOID AT (10 PrevBottom+1) 
     FIELD ID PrefFormNotifyWith AT (85 PrevTop 28 AUTO) UNDERLINED
             MAXCHARS 5
-
-/*
-    LABEL "Sort by:" AUTOID AT (10 PrevBottom+1) 
-    PUSHBUTTON "Name" ID PrefFormSortName 
-			AT (85 PrevTop AUTO AUTO) LEFTANCHOR GROUP 1
-    PUSHBUTTON "Date" ID PrefFormSortDate 
-			AT (PrevRight+1 PrevTop AUTO AUTO) GROUP 1
-*/
 
     BUTTON "OK" ID PrefFormOk AT (5 BOTTOM@149 40 AUTO)
     BUTTON "Cancel" ID PrefFormCancel AT (PrevRight+5 PrevTop 40 AUTO)
@@ -820,6 +816,7 @@ FORM ID DateBookNotifyForm AT (2 18 156 140)
 FRAME
 MODAL
 USABLE
+DEFAULTBTNID DateBookNotifyFormCancel
 HELPID  DateBookNotifyHelpString
 BEGIN
     TITLE "DateBook Notify"
@@ -892,6 +889,7 @@ FORM ID ToDoNotifyForm AT (1 28 156 130)
 FRAME
 MODAL
 USABLE
+DEFAULTBTNID ToDoNotifyFormCancel
 BEGIN
 	TITLE "ToDo Notify"
 
@@ -942,6 +940,7 @@ BEGIN
 END
 
 ALERT ID ExportAlert CONFIRMATION
+DEFAULTBUTTON 1
 BEGIN
     TITLE "HappyDays Export"
     MESSAGE 
@@ -959,6 +958,7 @@ END
 
 ALERT ID CleanupAlert CONFIRMATION
 HELPID CleanupAlertHelpString
+DEFAULTBUTTON 1
 BEGIN
     TITLE "HappyDays Cleanup"
     MESSAGE "^1: ^2"
@@ -966,6 +966,7 @@ BEGIN
 END
 
 ALERT ID NotifyWarning CONFIRMATION
+DEFAULTBUTTON 1
 BEGIN
     TITLE "Notify warning"
     MESSAGE "^1: Are you sure you want to create notify entries for ^2 HappyDays records?"
@@ -992,8 +993,8 @@ MODAL
 HELPID AboutHelpString
 BEGIN
     TITLE "HappyDays"
-    LABEL "HappyDays 1.2" AUTOID AT (Center@80 20) FONT 1
-    LABEL "(c) 1999-2000, JaeMok Jeong"
+    LABEL "HappyDays 1.21b" AUTOID AT (Center@80 20) FONT 1
+    LABEL "© 1999-2000, JaeMok Jeong"
         AUTOID AT (Center@80 PrevBottom+5) FONT 0
     LABEL "<jmjeong@oopsla.snu.ac.kr>" AUTOID AT (Center@80 PrevBottom)
         Font 0
@@ -1024,4 +1025,4 @@ APPLICATIONICONNAME 1000 "HappyDays"
 ICON "happydays.pbitm"
 SMALLICON "happydays-small.pbitm"
 
-VERSION 1 "1.2"
+VERSION 1 "1.21"

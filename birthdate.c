@@ -201,7 +201,7 @@ UInt16 AddrGetBirthdate(DmOpenRef dbP, UInt16 AddrCategory)
             
             // sort the order if sort order is converted date
             //
-            if (gPrefsR->BirthPrefs.sort == '1') {      // date sort
+            if (gPrefsR->BirthPrefs.sort == 1) {      // date sort
                 SysInsertionSort(ptr, totalItems, sizeof(LineItemType),
                                  (_comparF *)CompareBirthdateFunc, 0L);
             }
@@ -602,12 +602,13 @@ Int16 UpdateBirthdateDB(DmOpenRef dbP, FormPtr frm)
             
         while (1) {
             char *name1, *name2;
+            Int8 whichField;        // birthday field or note field?
+            
             recordH = DmQueryNextInCategory(AddressDB, &currIndex,
                                             dmAllCategories);
             if (!recordH) break;
 
-            DmRecordInfo(AddressDB, currIndex, &addrattr, NULL,
-                         NULL);
+            DmRecordInfo(AddressDB, currIndex, &addrattr, NULL, NULL);
             addrattr &= dmRecAttrCategoryMask;      // get category info
                 
             rp = (AddrPackedDBRecord*)MemHandleLock(recordH);
@@ -617,8 +618,11 @@ Int16 UpdateBirthdateDB(DmOpenRef dbP, FormPtr frm)
              */
             AddrUnpack(rp, &r);
 
-            if (!r.fields[gBirthDateField]) {
-                                // not exist in birthdate field;
+            if (!r.fields[gBirthDateField]
+                && !(gPrefsR->BirthPrefs.scannote && r.fields[note]
+                     && StrStr(r.fields[note], gPrefsR->BirthPrefs.notifywith) ) ) {
+                // not exist in birthdate field or note field
+                //
                 MemHandleUnlock(recordH);
                 currIndex++;
                 continue;
@@ -636,39 +640,62 @@ Int16 UpdateBirthdateDB(DmOpenRef dbP, FormPtr frm)
             // save the temporary name
             name1 = birthdate.name1;
             name2 = birthdate.name2;
-            
-            p = birthdateField =
-                MemPtrNew(StrLen(r.fields[gBirthDateField])+1);
 
-            SysCopyStringResource(gAppErrStr, NotEnoughMemoryString);
-            ErrFatalDisplayIf(!birthdateField, gAppErrStr);
-            
-            StrCopy(birthdateField, r.fields[gBirthDateField]);
-            
-            while ((q = StrChr(p, '\n'))) {
-                // multiple event
-                //
+            whichField = (r.fields[gBirthDateField]) ? gBirthDateField : note;
 
-                *q = 0;
-                if (AnalOneRecord(addrattr, p, &birthdate, &ignore)) return 0;
-                p = q+1;
+            while (whichField >= 0) {
 
-                // restore the saved name
-                birthdate.name1 = name1;
-                birthdate.name2 = name2;
+                if (whichField == note) {
+                    p = StrStr(r.fields[note], gPrefsR->BirthPrefs.notifywith)
+                        + StrLen(gPrefsR->BirthPrefs.notifywith)+1;
+                }
+                else {
+                    p = r.fields[whichField];
+                }
                 
-                // reset multiple flag
-                birthdate.flag.bits.multiple_event = 0;
+                birthdateField =
+                    MemPtrNew(StrLen(r.fields[whichField]) - (p - r.fields[whichField])+1);
 
-                while (*p == ' ' || *p == '\t' || *p == '\n')
-                    p++;     // skip white space
+                SysCopyStringResource(gAppErrStr, NotEnoughMemoryString);
+                ErrFatalDisplayIf(!birthdateField, gAppErrStr);
+            
+                p = StrCopy(birthdateField, p);
+            
+                while ((q = StrChr(p, '\n'))) {
+                    // multiple event
+                    //
+
+                    *q = 0;
+                    if (AnalOneRecord(addrattr, p, &birthdate, &ignore)) return 0;
+                    p = q+1;
+
+                    // restore the saved name
+                    birthdate.name1 = name1;
+                    birthdate.name2 = name2;
+                
+                    // reset multiple flag
+                    birthdate.flag.bits.multiple_event = 0;
+
+                    while (*p == ' ' || *p == '\t' || *p == '\n')
+                        p++;     // skip white space
+                }
+                // last record
+                if (*p) {
+                    // check the null '\n'
+                    if (AnalOneRecord(addrattr, p, &birthdate, &ignore)) return 0;
+                }
+                
+                if (whichField == gBirthDateField       // next is note field
+                    && (gPrefsR->BirthPrefs.scannote    // scanNote & exists
+                        && r.fields[note]       
+                        && StrStr(r.fields[note], gPrefsR->BirthPrefs.notifywith)) ) {
+                    whichField = note;
+                }
+                else whichField = -1;
+
+                MemPtrFree(birthdateField);
             }
-            // last record
-            if (AnalOneRecord(addrattr, p, &birthdate, &ignore)) return 0;
-                
             MemHandleUnlock(recordH);
-            MemPtrFree(birthdateField);
-            
             currIndex++;
         }
 
