@@ -33,8 +33,9 @@ $ cvs login
 $ cvs -z3 checkout -rver_204 happydays
 </pre>
 
-<br>
+<p>
 For more info on CVS see <a href="http://www.cyclic.com">Cyclic</a>.
+<p>
 
 <h2>
 Localizations
@@ -44,22 +45,25 @@ Localizations
 If you would like to translate HappyDays into your favorite language, please
 <a href="mailto:happydays@jmjeong.com">mail me</a> and let me know.  
 To translate HappyDays into your favorite languge, you need to copy 'translate/english.msg' file into xxx.msg and edit xxx.msg file. Translate the right part(
-i.e. the phase after '=') into your favorite language. See the sample <a href="local/english.msg">english.msg</a> file.(it is just sample file. If you want to do the localization, download the source file and refer translate/english.msg file.<br>
+i.e. the phase after '=') into your favorite language. See the sample <a
+href="local/english.msg">english.msg</a> file.(It is just sample file. If you
+want to do the localization, download the source file and refer
+translate/english.msg file.)<p>
 
-HappyDays has been translated into the following languages:  <br>
+HappyDays has been translated into the following languages:  <p>
 <ul>
   <li> <a href="ftp://jmjeong.com/pub/happydays/happydays-2.04-ko.zip">
   Korean</a>(2.04) - by Jaemok Jeong<br>
 	  (happydays-k8.prc for 8x8 font,
 	  happydays-k11.prc for 11x11 font)
   <li> <a
-      href="ftp://jmjeong.com/pub/happydays/happydays-1.45-de.zip">
-			German</a>(1.45)
+      href="ftp://jmjeong.com/pub/happydays/happydays-2.04b1-de.zip">
+			German</a>(2.04 beta release 1)
       - by  Gunther Zagatta
 			(<a href="mailto:zagatta@web.de">zagatta@web.de</a>)
   <li><a
-      href="ftp://jmjeong.com/pub/happydays/happydays-1.45-ch.zip">
-			Chinese</a>(1.45)
+      href="ftp://jmjeong.com/pub/happydays/happydays-2.04b1-ch.zip">
+			Chinese</a>(2.04 beta release 1)
       - by Daitau Aaron(<a
 		href="mailto:daitau@hotmail.com">daitau@hotmail.com</a>)<br>
 		(happydays-chi-gb5.prc for GB Encoding, happydays-chi-big5.prc for
@@ -71,8 +75,8 @@ HappyDays has been translated into the following languages:  <br>
       href="mailto:kteotrakool@hotmail.com">kteotrakool@hotmail.com</a>)<br>
       Requires Thai Language Hack (ThaiPOS or ThaiHack)
   <li><a
-  	  href="ftp://jmjeong.com/pub/happydays/happydays-2.04-sp.zip">
-			Spanish</a>(2.04 beta release)
+  	  href="ftp://jmjeong.com/pub/happydays/happydays-2.04b2-sp.zip">
+			Spanish</a>(2.04 beta release 2)
 	  - by Juan Fernando Calderón
 			(<a href="mailto:jfcalderon@usa.net">jfcalderon@usa.net</a>)
   <li><a

@@ -58,7 +58,6 @@ chi: ENGLISH obj/$(TARGET)-chi-big5.prc obj/$(TARGET)-chi-gb.prc
 de: GERMAN obj/$(TARGET)-de.prc 
 	zip $(TARGET)-$(VERSION)-de.zip obj/$(TARGET)-de.prc
 
-
 th: $(TARGET)-th.prc
 	zip $(TARGET)-$(VERSION)-th.zip $(TARGET)-th.prc
 
@@ -276,6 +275,9 @@ veryclean: clean
 html: 
 	@echo "Generating html file" && \
 	cd manual && wmk
+
+prc/$(TARGET).prc: obj/$(TARGET).prc
+	mv obj/$(TARGET).prc prc
 
 zip: prc/$(TARGET).prc html
 	-@echo "Making distribution file(happydays-$(VERSION).zip) ..." &&\
