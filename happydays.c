@@ -806,7 +806,7 @@ static void HighlightAction(int selected, Boolean sound)
       TblDrawTable(tableP);
   }
   gMainTableHandleRow = selected;
-  MainTableSelectItem(tableP, selected, true);
+  MainTableSelectItem(tableP, gMainTableHandleRow - gMainTableStart, true);
 }
 
 static void HighlightMatchRowDate(DateTimeType inputDate)
@@ -2251,7 +2251,7 @@ static void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column,
                 if ( gPrefsR.DispPrefs.zodiac ) {
                     // make zordiac display
                     SysCopyStringResource(tempStr, MouseString
-                                          + (r.date.year+8+1904)%12);
+                                          + (r.date.year+9+1904)%12);
                     StrNCat(gAppErrStr, " [", AppErrStrLen);
                     StrNCat(gAppErrStr, tempStr, AppErrStrLen);
                     StrNCat(gAppErrStr, "]", AppErrStrLen);

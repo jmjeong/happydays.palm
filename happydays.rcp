@@ -58,7 +58,7 @@ STRING ID HorseString           "Horse"
 STRING ID SheepString           "Sheep"
 STRING ID MonkeyString          "Monkey"
 STRING ID CockString            "Cock"
-STRING ID DogString             "Doc"
+STRING ID DogString             "Dog"
 STRING ID PigString             "Pig"
 
 FORM StartForm AT (0 0 160 160)
@@ -200,7 +200,7 @@ BEGIN
     TITLE "Preferences"
 
     LABEL "Custom field:" AUTOID AT (10 20)
-    FIELD ID PrefFormCustomField AT (PrevRight PrevTop 50 AUTO) UNDERLINED
+    FIELD ID PrefFormCustomField AT (PrevRight+3 PrevTop 50 AUTO) UNDERLINED
             MAXCHARS 12
 
     CHECKBOX "Instead of system date format" ID PrefFormOverrideSystemDate 
