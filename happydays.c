@@ -439,6 +439,7 @@ static void PerformExport(Char * memo, int mainDBIndex, DateType when)
 static Boolean MenuHandler(FormPtr frm, EventPtr e)
 {
     Boolean handled = false;
+	static Char tmpString[25];
 
     MenuEraseStatus(NULL);
 
@@ -486,19 +487,17 @@ static Boolean MenuHandler(FormPtr frm, EventPtr e)
 
     case MainFormMenuCleanupDatebook: 
     {
-        Char tmp[25];
-
-        SysCopyStringResource(tmp, DateBookString);
+        SysCopyStringResource(tmpString, DateBookString);
 
         SysCopyStringResource(gAppErrStr, RemoveConfirmString);
-        if (FrmCustomAlert(CleanupAlert, tmp, gAppErrStr, " ") == 0) {
+        if (FrmCustomAlert(CleanupAlert, tmpString, gAppErrStr, " ") == 0) {
             int ret;
             
             // do clean up processing
             ret = CleanupFromDB(DatebookDB);
             StrPrintF(gAppErrStr, "%d", ret);
 
-            FrmCustomAlert(CleanupDone, tmp, gAppErrStr, " ");
+            FrmCustomAlert(CleanupDone, tmpString, gAppErrStr, " ");
         }
         handled = true;
         break;
@@ -515,19 +514,17 @@ static Boolean MenuHandler(FormPtr frm, EventPtr e)
         
     case MainFormMenuCleanupTodo: 
     {
-        Char tmp[25];
-
-        SysCopyStringResource(tmp, ToDoString);
+        SysCopyStringResource(tmpString, ToDoString);
 
         SysCopyStringResource(gAppErrStr, RemoveConfirmString);
-        if (FrmCustomAlert(CleanupAlert, tmp, gAppErrStr, " ") == 0) {
+        if (FrmCustomAlert(CleanupAlert, tmpString, gAppErrStr, " ") == 0) {
             int ret;
             
             // do clean up processing
             ret = CleanupFromTD(ToDoDB);
             StrPrintF(gAppErrStr, "%d", ret);
 
-            FrmCustomAlert(CleanupDone, tmp, gAppErrStr, " ");
+            FrmCustomAlert(CleanupDone, tmpString, gAppErrStr, " ");
         }
         
         handled = true;
@@ -847,10 +844,6 @@ static Boolean PrefFormHandleEvent(EventPtr e)
             rescan = UnloadPrefsFields();
             WritePrefsRec();
             
-            // clear the memory
-            ClearFieldText(PrefFormCustomField);
-
-
             FrmReturnToForm(0);
             if (rescan)
                 FrmUpdateForm(MainForm, frmRescanUpdateCode);
@@ -2034,13 +2027,8 @@ static Boolean DBNotifyFormHandleEvent(EventPtr e)
         switch(e->data.ctlSelect.controlID) {
         case DateBookNotifyFormOk: 
         {
-            
             UnloadDBNotifyPrefsFields();
             WritePrefsRec();
-            
-            // clear memory
-            //
-            ClearFieldText(DateBookNotifyFormBefore);
 
             NotifyAction(DateBookNotifyForm, NotifyDatebook);
             FrmReturnToForm(0);

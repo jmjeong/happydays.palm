@@ -87,10 +87,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define DateBookNotifyFormLabelDays	1424
 
 #define DateBookNotifyMoreForm		1450
-#define DateBookNotifyMoreFormOk		1451
+#define DateBookNotifyMoreFormOk	1451
 #define DateBookNotifyFormIcon		1453
 #define DateBookNotifyFormBk3		1454
-#define DateBookNotifyFormAN			1455
+#define DateBookNotifyFormAN		1455
 #define DateBookNotifyBk3Table		1456
 #define DateBookNotifyBk3Label		1457
 #define DateBookNotifyANLabel		1458
