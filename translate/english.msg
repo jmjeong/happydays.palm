@@ -201,7 +201,7 @@ BEGIN
     "Invalid event format" = "Invalid event format" 
 
 	"long_invalidformatString" = ""\
-    	"The address record for ^1\n contains an invalid event. "\
+    	"The address record for\n[^1]\n contains an invalid event. "\
 		"How would you like to handle it?" 
 
     "Ignore" = "Ignore" 

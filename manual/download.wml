@@ -8,10 +8,10 @@ File Download
 </h2>
 <p>
 <a
-href="ftp://jmjeong.com/pub/happydays/happydays-2.0.zip">happydays-2.0.zip</a>
+href="ftp://jmjeong.com/pub/happydays/happydays-2.01.zip">happydays-2.01.zip</a>
 - English version and a brief manual<br>
 <a
-href="ftp://jmjeong.com/pub/happydays/happydays-src-2.0.zip">happydays-src-2.0.zip</a>
+href="ftp://jmjeong.com/pub/happydays/happydays-src-2.0.zip">happydays-src-2.01.zip</a>
 - source file<br>
 
 </P>
@@ -20,8 +20,8 @@ href="ftp://jmjeong.com/pub/happydays/">here</a>.
 
 <p>
 Before you install the new version, you <b>*should*</b> uninstall the old
-version due to HappyDaysDB name change. Or there remains the old database
-after installing the new version. </p>
+version(1.x version) due to HappyDaysDB name change. 
+Or there remains the old database after installing the new version. </p>
 
 <p>
 To get the latest CVS sources do the following
@@ -30,7 +30,7 @@ To get the latest CVS sources do the following
 $ export CVSROOT=":pserver:cvs@coconut.snu.ac.kr:/export/cvsroot"
 $ cvs login
 ( password = anonymous )
-$ cvs -z3 checkout -rver_20 happydays
+$ cvs -z3 checkout -rver_201 happydays
 </pre>
 
 <br>
@@ -52,10 +52,12 @@ Localizations
 If you would like to translate HappyDays into your favorite language, please
 <a href="mailto:happydays@jmjeong.com">mail me</a> and let me know.  
 HappyDays has been translated into the following languages:  <br>
+To translate HappyDays into your favorite languge, you need to copy 'translate/english.msg' file into xxx.msg and edit xxx.msg file. Translate the right part(
+i.e. the phase after '=') into your favorite language. See the sample <a href="local/english.msg">english.msg</a> file.<br>
 
 <ul>
-  <li> <a href="ftp://jmjeong.com/pub/happydays/happydays-2.0-ko.zip">
-  Korean</a>(2.0) - by Jaemok Jeong<br>
+  <li> <a href="ftp://jmjeong.com/pub/happydays/happydays-2.01-ko.zip">
+  Korean</a>(2.01) - by Jaemok Jeong<br>
 	  (happydays-k8.prc for 8x8 font,
 	  happydays-k11.prc for 11x11 font)
   <li> <a
@@ -98,9 +100,13 @@ You want to see changes before HappyDays 2.0, look up the
 <a href="change_log.html">change_log.html</a> file.
 <p>
 
+<b>HappyDays 2.01 version - 6/22/2001</b>
+<ul>
+	<li> Fix a bug in date difference calculation
+</ul>
+
 <b>HappyDays 2.0 version - 6/20/2001</b>
 <UL>
-
   <li>Full support for Handera 330 with 240 x 320 screen resolution with
         virtual graffiti area, while running properly on the "normal"
         Palm-powered devices with 160x160 screen.

@@ -1531,11 +1531,11 @@ static Boolean UnloadPrefsFields()
     ListPtr lstdate, lstnotify, lstaddr;
     Boolean newoverride;
     DateFormatType newdateformat;
-    Boolean needrescan = 0;
+    Boolean needrescan = false;
     
     if ((frm = FrmGetFormPtr(PrefForm)) == 0) return needrescan;
     if (FldDirty(GetObjectPointer(frm, PrefFormCustomField))) {
-        needrescan = 1;
+        needrescan = true;
         if (FldGetTextPtr(GetObjectPointer(frm, PrefFormCustomField))) {
             StrNCopy(gPrefsR.Prefs.custom,
                      FldGetTextPtr(GetObjectPointer(frm,
@@ -1561,7 +1561,7 @@ static Boolean UnloadPrefsFields()
     {
         if (newdateformat != gPrefdfmts)
         {
-            needrescan = 1;
+            needrescan = true;
             gPrefdfmts = newdateformat;
         }
     }
@@ -1569,7 +1569,7 @@ static Boolean UnloadPrefsFields()
     {
         if (gPrefsR.Prefs.sysdateover && gPrefdfmts != gSystemdfmts)
         {
-            needrescan = 1;
+            needrescan = true;
             gPrefdfmts = gSystemdfmts;    // revert to system date format
         }
     }
@@ -1591,7 +1591,7 @@ static Boolean UnloadPrefsFields()
     
     ptr = GetObjectPointer(frm, PrefFormScanNote);
     if (CtlGetValue(ptr) != gPrefsR.Prefs.scannote ) {
-        needrescan = 1;
+        needrescan = true;
     }
     gPrefsR.Prefs.scannote = CtlGetValue(ptr);
 
@@ -2284,7 +2284,7 @@ static void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column,
                 }
                         
                 if (current.month + m_diff  < solBirth.month) {
-                    m_diff = 12 + current.month - solBirth.month;
+                    m_diff += 12 + current.month - solBirth.month;
                     y_diff--;
                 }
                 else {
