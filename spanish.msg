@@ -1,6 +1,6 @@
 TRANSLATION "SPANISH"
 BEGIN
-    "Translator" = "Versión en Español: Fernando Calderón"
+    "Translator" = "Versión Española: Juan Fernando Calderón"
     "Translator's email" = "jfcalderon@usa.net"
 
     "long_notifySettingString" = ""\
@@ -10,21 +10,21 @@ BEGIN
       "Selecione \"Marcado\" para notificar solamente el registo "\
       "actual.\n\n"\
       "* Existente\n"\
-      "Seleccione \"dejar\" si no desea alterar las notificaciones existentes. "\
-      "Seleccione \"cambiar\" para modificar estas entradas.\n\n"\
+      "Seleccione \"Dejar\" si no desea alterar las notificaciones existentes. "\
+      "Seleccione \"Cambiar\" para modificar las notificaciones.\n\n"\
       "* Alarma\n"\
       "Para colocar la hora de alarma en la notificación. Indique "\
       "el número de días de anticipación para la notificación.\n\n"\
       "* Hora\n"\
-      "Hora del evento\n\n"\
+      "Hora del evento.\n\n"\
       "* Repetir\n"\
       "Establece el intervalo de la notificación. "\
       "Utilice -1 para repetir siempre en eventos solares y "\
       "repetir por 5 años en eventos lunares.\n\n"
 
 	"long_notifySettingMoreString" = ""\
-      "Para el Número de Icono de Action Names consulte su manual. "\
-      "Los iconos de DateBk3 son leidos del bloc de notas. "\
+      "Para el número de icono de Action Names consulte su manual. "\
+      "Los iconos de DateBk3 son leídos del bloc de notas. "\
       "Si no existe la entrada de DateBk3 en el bloc de notas no se muestra información.\n"
 
     "long_customErrorString" = ""\
@@ -56,24 +56,24 @@ BEGIN
 
     "long_cleanupAlertString" = ""\
     "Las notificaciones se consideran HappyDays si tienen "\
-	"{HappyDays ID} en el campo Nota. "\ 	
+	"{Ident. HappyDays} en el campo Nota. "\ 	
     "Si usa este formato en sus propias entradas, "\
     "este registro puede ser eliminado por la Limpieza.\n"
 
     "long_prefFormString" = ""\
-	"* En lugar de fecha del sistema...\n"\
+	"* Formato de fecha alternativo\n"\
 	"Controla la interpretación del campo personalizado de Nacimiento. "\
 	"Si se omite, es el mismo que las preferencias de fecha del sistema.\n\n"\
 	"* Buscar en Notas\n"\
-	"Para buscar en el campo de notas, seleccione esta opción.\n\n"\
-      "* Enfatizar Fecha Lunar \n"\
+	"Seleccione esta opción para buscar en el campo de notas.\n\n"\
+      "* Preferir Calendario Lunar \n"\
       "Si se selecciona, la linea punteada se dibuja junto a la fecha lunar.\n\n"\
 	"* Formato de Notificación\n"\
-	"La descripción del formato usado para la notificación\n\n"\
-      "* Campo personalizado\n"\
-      "El nombre del campo personalizado utilizado para los datos\n\n"\
-      "* HappyDays ID\n"\
-      "Utilizado para notficación y limpieza\n"
+	"La descripción del formato usado para la notificación.\n\n"\
+      "* Campo pers:\n"\
+      "El nombre del campo personalizado utilizado para los datos.\n\n"\
+      "* Ident. HappyDays\n"\
+      "Identificador utilizado para notificación y limpieza.\n"
 
     "long_removeConfirmString" = ""\
     "¿Desea eliminar todas las notificaciones "\
@@ -101,8 +101,8 @@ BEGIN
     "SAT"   = "SAB"
 
     "Not enough memory" = "Memoria Insuficiente"
-    "%d notify entry is created.\n" = "%d notificación creada.\n"
-    "%d existing entry " = "%d notificación existente "
+    "%d notify entry is created.\n" = "%d notificación(es) creada(s).\n"
+    "%d existing entry " = "%d notificación "
     "is kept untouched." = "sin modificar."
     "is modified." = "modificada."
 
@@ -119,13 +119,15 @@ BEGIN
     "TD" = "Tareas"
     "Goto" = "Ir a"
 
-    "DateBook Notify" = "Notificar en Agenda"
-    "Cleanup Datebook"  = "Limpiar Agenda"
+    "Utilities" = "Utilerias"
+    "Date Book Notify" = "Notificar en Agenda"
+    "Cleanup Date Book"  = "Limpiar Agenda"
     "To Do Notify" = "Notificar en Tareas"
     "Cleanup To Do"  = "Limpiar Tareas"
     "Export to Memo Pad" = "Exportar a Bloc de notas"
     "Solar to Lunar" = "Solar -> Lunar"
     "Lunar to Solar" = "Lunar -> Solar"
+
     "Options" = "Opciones"
     "Preferences" = "Preferencias"
     "About HappyDays" = "Acerca de HappyDays"
@@ -139,9 +141,9 @@ BEGIN
     "Keyboard" = "Teclado"
     "Graffiti" = "Ayuda de Graffiti"
 
-    "HappyDays Preferences" = "Preferencias de HappyDays"
+    "HappyDays Preferences" = "Preferencias HappyDays"
     "Custom field:" = "Campo pers:"
-    "HappyDays ID:" = "Identif. HappyDays:"
+    "HappyDays ID:" = "Ident. HappyDays:"
     "Emphasize Lunar Date" = "Preferir Calendario Lunar"
 
     "OK" = "Hecho"
@@ -163,8 +165,8 @@ BEGIN
       "all" = "Todos"
       "selected" = "Marcado"
     "Existing:" = "Existente:"
-      "keep" = "dejar"
-      "modify" = "cambiar"
+      "keep" = "Dejar"
+      "modify" = "Cambiar"
     "Priority:" = "Prioridad:"
 	"Category:" = "Categoría:"
     "Private:" = "Confidencial:"
@@ -213,7 +215,7 @@ BEGIN
     "(not exist in this year)" = "(no existe en este año)"
     "Please run Date Book once first." = "Por favor selecione la Agenda primero."
     
-    "Instead of system date format" = "Utilizar el siguiente formato de fecha"
+    "Instead of system date format" = "Formato de fecha alternativo"
     "Use" = "Usar"
     "M/D/Y" = "M/D/A"
     "D/M/Y" = "D/M/A"
@@ -226,9 +228,9 @@ BEGIN
     "DateBook Icon" = "Icono de Agenda"  
       "Icon Support" = "Soporte de Iconos"
       "AN" = "AN"  
-      "DateBk3" = "DateBk3"  
-      "AN ICON Number:" = "Número Icono AN:"
-      "DateBk3 ICON:" = "Icono DateBk3:"
+      "DateBk3" = "DBk3"  
+      "AN Icon Number:" = "Número Icono AN:"
+      "DateBk3 Icon:" = "Icono DateBk3:"
 
     "Days" = "Días"
 	"Datebook" = "Agenda"
@@ -244,6 +246,7 @@ BEGIN
 	"First Last Year" = "Nombre Apellido Año"
 
     
-    "Processing" = "Procesando"
+      "Processing" = "Procesando"
 	"Processed : " = "Procesado : "	
+
 END
