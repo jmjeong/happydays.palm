@@ -24,7 +24,6 @@ NM = m68k-palmos-nm
 BUILDPRC = build-prc
 PILOTXFER = pilot-xfer
 ZIP = zip
-LANG = ENGLISH
 
 obj/%.o : %.c
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $<
@@ -423,9 +422,9 @@ prc/$(TARGET).prc: obj/$(TARGET).prc
 	mv obj/$(TARGET).prc prc
 
 src:
-	cvs co palm/happydays && cd palm && \
-		zip -r ../happydays-src-$(VERSION).zip happydays && \
-		cd .. && \rm -rf palm
+	(svn export svn://$(SVNHOST)/happydays/trunk /tmp/happydays-src && \
+	cd /tmp && zip -r happydays-src-$(VERSION).zip happydays-src && rm -rf /tmp/happydays-src) && \
+	mv /tmp/happydays-src-$(VERSION).zip . 
 
 zip: prc/$(TARGET).prc 
 	-@echo "Making distribution file(happydays-$(VERSION).zip) ..." &&\
