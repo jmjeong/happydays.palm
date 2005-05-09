@@ -422,9 +422,8 @@ prc/$(TARGET).prc: obj/$(TARGET).prc
 	mv obj/$(TARGET).prc prc
 
 src:
-	(svn export svn://$(SVNHOST)/happydays/trunk /tmp/happydays-src && \
-	cd /tmp && zip -r happydays-src-$(VERSION).zip happydays-src && rm -rf /tmp/happydays-src) && \
-	mv /tmp/happydays-src-$(VERSION).zip . 
+	svn export svn://$(SVNHOST)/happydays/trunk happydays-src && \
+	zip -r happydays-src-$(VERSION).zip happydays-src && rm -rf /tmp/happydays-src
 
 zip: prc/$(TARGET).prc 
 	-@echo "Making distribution file(happydays-$(VERSION).zip) ..." &&\
