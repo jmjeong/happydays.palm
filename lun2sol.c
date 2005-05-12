@@ -49,7 +49,6 @@ int lun2sol(int lyear, int lmonth, int lday, int leapyes,
     {
         for(i = 1; i <= 12; i++) if(convertIndex[lyear-1881][i-1] > 2 ) j++;
         if(lday > convertIndex[lyear-1881][j]+28) {
-			FrmAlert(ErrorAlert);
 			return -1;
 		}
     }

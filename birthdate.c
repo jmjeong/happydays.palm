@@ -395,7 +395,7 @@ Boolean AnalysisHappyDays(const char* field,
         break;
     case dfYMDWithSlashes:       // 95/12/31
     case dfYMDWithDots:          // 95.12.31
-    case dfYMDWithDashes:       // 95-12-31
+    case dfYMDWithDashes:        // 95-12-31
         day = num[numIdx--];
         month = num[numIdx--];
 
@@ -403,9 +403,8 @@ Boolean AnalysisHappyDays(const char* field,
             year = num[numIdx];
         }
         break;
-    
     case dfMDYWithSlashes:       // 12/31/95
-    default: 
+    default:
         if (numOfDelimeter == 2) {
             year = num[numIdx--];
         }
@@ -429,9 +428,9 @@ Boolean AnalysisHappyDays(const char* field,
             DateTimeType rtVal;
             int ret;
             
-            ret = lun2sol(*dYear, month, day, flag->bits.lunar_leap, &rtVal);
+            ret = lun2sol(year, month, day, flag->bits.lunar_leap, &rtVal);
 
-            if (ret) {
+            if (!ret) {
 				return false;
 			}
         }
