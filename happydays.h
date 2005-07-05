@@ -20,12 +20,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _HAPPYDATE_H_
 #define _HAPPYDATE_H_
 
-
 #define AppErrStrLen        256
 #define DEFAULT_DURATION    5
 
 #define HDAppID           	'Jmje'
-#define HDAppVer        	20
+#define HDAppVer        	25
 
 #define MainDBType          'DATA'
 #define MainDBName          "HappyDaysDB"
@@ -43,47 +42,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define HappydaysEventNoteTitle "= HappyDays Notes"
 
-/* DateBook Notify Preferences */
-struct sDBNotifyPrefs 
-{
-    char alarm;             // alarm set?
-    int  notifybefore;      // prenotify duration
-    int  duration;          // interval of notified records
-    TimeType when;          // no-time
-    UInt16 apptCategory;
-    char usenote;           // icon?
-    char note[135];          // note field
-};
-
-/* ToDo Notify Preferences */
-struct sTDNotifyPrefs 
-{
-    char priority;			// priority of TODO
-    UInt16 todoCategory;
-	char usenote;			// use note?
-	char note[135];			// note field
-};
-
-struct sPrefs 
-{
-    char custom[12+1];          // addr label length
-    char notifywith[5+1];       // notify with (HD)
-    char sort;                  // sortbing order
-    char notifyformat;          // notify format list
-    char autoscan;              // Automatic scan of address
-	char ignoreexclamation;		// ignore the record with prefix '!'
-    char scannote;              // scan from notes?
-    char addrapp;               // address appid(used for GOTO operation)
-    Boolean sysdateover;        // override system date format
-    DateFormatType dateformat;  // if sysdateover is true
-};
-
-struct sDispPrefs
-{
-    char emphasize;             // emphasize lunar
-//    char extrainfo;             // display extra day information
-};
-
 struct sPrefsR 
 {
     char version;           // version number
@@ -91,10 +49,36 @@ struct sPrefsR
     char existing;			// keep or modify(0: keep, 1: modify)
     char private;			// (0: public, 1: private)
 
-    struct sDBNotifyPrefs DBNotifyPrefs;
-    struct sTDNotifyPrefs TDNotifyPrefs;
-    struct sPrefs         Prefs;
-    struct sDispPrefs     DispPrefs;
+    // Datebook Prefs
+    char alarm;             // alarm set?
+    int  notifybefore;      // prenotify duration
+    int  duration;          // interval of notified records
+    TimeType when;          // no-time
+    UInt16 apptCategory;
+    char dusenote;           // icon?
+    char dnote[135];          // note field
+
+    // Todo Prefs
+    char priority;			// priority of TODO
+    UInt16 todoCategory;
+	char tusenote;			// use note?
+	char tnote[135];			// note field
+
+    // Prefs
+    char custom[12+1];          // addr label length
+    char notifywith[5+1];       // notify with (HD)
+    char sort;                  // sortbing order
+    char notifyformat;          // notify format list
+    char notifyformatstring[40];// actual string
+    char autoscan;              // Automatic scan of address
+	char ignoreexclamation;		// ignore the record with prefix '!'
+    char scannote;              // scan from notes?
+    char addrapp;               // address appid(used for GOTO operation)
+    Boolean sysdateover;        // override system date format
+    DateFormatType dateformat;  // if sysdateover is true
+
+    // Display Prefs
+    char emphasize;             // emphasize lunar
 
     // HideSecretRecord in system global preference
     Boolean gHideSecretRecord;

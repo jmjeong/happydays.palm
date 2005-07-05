@@ -1,229 +1,176 @@
-/*
-HappyDays - A Birthdate displayer for the PalmPilot
-Copyright (C) 1999-2001 JaeMok Jeong
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-*/
-
-#define StartForm                   999
-
-#define MainForm 			        1000
-#define MainFormStart	            1001
-#define MainFormTable               1002
-#define MainFormPopupTrigger        1003
-#define MainFormAddrCategories      1004
-#define MainFormScrollBar           1005
-#define MainFormName				1006
-#define MainFormDate				1007
-#define MainFormAge					1008
-#define MainFormLookUp				1009
-
-#define SelectDateString            1099
-
-#define MainMenu		            1110
-#define	MainMenuNotifyDatebook	    1111
-#define	MainMenuCleanupDatebook	    1112
-#define MainMenuExport              1113
-#define MainMenuSl2Ln               1114
-#define MainMenuLn2Sl               1115
-#define MainMenuNotifyTodo          1116
-#define	MainMenuCleanupTodo	        1117
-#define	MainMenuPref	            1120
-#define	MainMenuAbout	            1121
-#define	MainMenuFont	            1122
-#define	MainMenuRescanAddr          1123
-
-#define	MainMenuDispPref	        1130
-
-#define ViewMenu                    1151
-
-#define TextMenu                    1180
-#define TextMenuUndo                1181
-#define TextMenuCut                 1182
-#define TextMenuCopy                1183
-#define TextMenuPaste               1184
-#define TextMenuSAll                1185
-#define TextMenuKBoard              1186
-#define TextMenuGHelp               1187
-
-#define AboutForm			        1200
-#define AboutHelpString             1201
-#define AboutFormOk                 1202
-#define AboutFormHelp               1203
-
-#define PrefForm                    1300
-#define PrefFormCustomField         1301
-#define PrefFormOk					1303
-#define PrefFormCancel				1304
-#define PrefFormOverrideSystemDate  1306
-#define PrefFormDateFmts            1307
-#define PrefFormDateTrigger         1308
-#define PrefFormNotifyFmts          1309
-#define PrefFormNotifyTrigger       1310
-#define PrefFormScanNote			1311
-#define PrefFormAddress             1312
-#define PrefFormAddrTrigger         1313
-#define PrefFormRescanTrigger       1314
-#define PrefFormAutoRescan          1315
-#define PrefFormIgnorePrefix        1316
-
-#define DispPrefForm                1350
-#define DispPrefOk                  1351
-#define DispPrefCancel              1352
-#define DispPrefEmphasize           1353
-#define DispPrefExtraInfo           1354
-
-#define DateBookNotifyForm          1400
-#define NotifyFormRecordAll  		1401
-#define NotifyFormRecordSlct 		1402
-#define NotifyFormEntryKeep  		1403
-#define NotifyFormEntryModify  		1404
-#define NotifyFormPrivate    	 	1406
-#define DateBookNotifyFormBefore    1407
-#define DateBookNotifyFormAlarm     1408
-#define DateBookNotifyFormTime      1409
-#define DateBookNotifyFormOk        1420
-#define DateBookNotifyFormCancel    1421
-#define DateBookNotifyFormDuration  1422
-#define DateBookNotifyFormMore    	1423
-#define DateBookNotifyFormLabelDays	1424
-#define DateBookPopupTrigger		1425
-#define DateBookNotifyCategory		1426
-
-#define NotifyStringForm		    1450
-#define NotifyStringFormOk	        1451
-#define DBNoteCheckBox				1452
-#define DBNoteField					1453
-#define DBNoteScrollBar				1454
-
-#define NotifyStringHelpString      1499
-
-#define Sl2LnForm                   1500
-#define Sl2LnFormInput              1501
-#define Sl2LnFormResult             1504
-#define Sl2LnFormOk                 1505
-#define Sl2LnFormConvert            1506
-
-#define Ln2SlForm                   1550
-#define Ln2SlFormInput              1551
-#define Ln2SlFormInputLeap          1554
-#define Ln2SlFormResult             1555
-#define Ln2SlFormOk                 1556
-#define Ln2SlFormConvert            1557
-
-#define ViewForm               		1600
-#define ViewFormDone                1601
-#define ViewFormNotifyDB            1602
-#define ViewFormNotifyTD            1603
-#define ViewFormGoto                1604
-#define ViewFormTable               1605
-#define ViewFormCategory            1609
-#define ViewFormName                1610
-
-#define BirthLeftString				1698
-#define BirthPassedString			1699
-
-#define ToDoNotifyForm              1700
-#define ToDoNotifyPri1              1701
-#define ToDoNotifyPri2              1702
-#define ToDoNotifyPri3              1703
-#define ToDoNotifyPri4              1704
-#define ToDoNotifyPri5              1705
-#define ToDoNotifyCategory          1706
-#define ToDoPopupTrigger            1707
-#define ToDoNotifyFormOk            1708
-#define ToDoNotifyFormCancel        1709
-#define ToDoNotifyFormMore    	    1710
-
-#define ProgressForm                1800
-#define ProgressFormField           1801
-
-#define ErrorAlert                  1900
-#define CleanupAlert                1901
-#define InvalidFormat               1902
-
-#define CustomErrorHelpString       1904
-#define NotifyWarning               1905
-#define CleanupAlertHelpString      1906
-#define CleanupDone                 1907
-#define RemoveConfirmString         1908
-#define InvalidDateString           1909
-#define SunString                   1910
-#define MonString	 	            1911
-#define TueString 	                1912
-#define WedString 	                1913
-#define ThuString 	                1914
-#define FriString 	                1915
-#define SatString 	                1916
-
-#define Sl2LnFormHelpString         1917
-#define NotEnoughMemoryString       1918
-#define NotifyCreateString          1919
-#define ExistingEntryString         1920
-#define UntouchedString             1921
-#define ModifiedString              1922
-#define SelectTimeString            1924
-#define NoTimeString                1925
-#define ExportDoneString            1926
-
-#define ExportHeaderString			1929
-#define ViewNotExistString			1930
-#define DateBookFirstAlertString	1931
-#define DateBookNotifyDaysString	1932
-#define DateBookString				1933
-#define ToDoString					1934
-#define FindHeaderString			1935	
-#define TypeStr						1936
-#define NextDateStr					1937
-#define SourceDateStr				1938
-#define AgeStr						1939
-#define RemainedDayStr				1940
-#define AgeFormatString				1941
-#define DBNoteString                1942
-#define TDNoteString                1943
-#define BioRhythmStr				1944
-#define BioString					1945
-#define ToDoFirstAlertString	    1946
-#define NthFormatString             1947
-#define NthListFormatString         1948
-
-#define JanString					1950		
-#define FebString					1951	
-#define MarString					1952
-#define AprString					1953
-#define MayString					1954
-#define JunString					1955
-#define JulString					1956	
-#define AugString					1957
-#define SepString					1958
-#define OctString					1959
-#define NovString					1960
-#define DecString					1961
-
-#define WeekInitialString 			1965
-
-#define ExportAlert                 1990
-#define AddrRescanAlert             1991
-
-#define EditCategoryString          1992
-
-#define ID_BitmapIcon				2000
-
-#define ABOUT_LINE_SPACING			12
-#define ABOUT_LINE_SPACING2			18
-
-#define MAXSLOT						30
-#define VISIBLESLOT					11
-#define FULLWIDTH					151
+/* pilrc generated file.  Do not edit!*/
+#define ProgressFormField 5215
+#define ProgressForm 5213
+#define AboutFormHelp 5212
+#define AboutFormOk 5211
+#define ID_BitmapIcon 5202
+#define AboutForm 5201
+#define CleanupDone 5200
+#define InvalidFormat 5199
+#define NotifyWarning 5198
+#define CleanupAlert 5197
+#define ExportAlert 5196
+#define AddrRescanAlert 5195
+#define ErrorAlert 5194
+#define ToDoNotifyFormMore 5193
+#define ToDoNotifyFormOk 5192
+#define ToDoNotifyCategory 5190
+#define ToDoPopupTrigger 5189
+#define ToDoNotifyPri5 5187
+#define ToDoNotifyPri4 5186
+#define ToDoNotifyPri3 5185
+#define ToDoNotifyPri2 5184
+#define ToDoNotifyPri1 5183
+#define ToDoNotifyFormCancel 5179
+#define ToDoNotifyForm 5178
+#define NotifyStringFormOk 5177
+#define DBNoteScrollBar 5176
+#define DBNoteField 5175
+#define DBNoteCheckBox 5174
+#define NotifyStringForm 5173
+#define DateBookNotifyFormMore 5172
+#define DateBookNotifyFormOk 5171
+#define DateBookNotifyFormDuration 5169
+#define DateBookNotifyFormTime 5167
+#define DateBookNotifyFormLabelDays 5165
+#define DateBookNotifyFormBefore 5164
+#define DateBookNotifyFormAlarm 5163
+#define NotifyFormPrivate 5161
+#define DateBookNotifyCategory 5159
+#define DateBookPopupTrigger 5158
+#define NotifyFormEntryModify 5156
+#define NotifyFormEntryKeep 5155
+#define NotifyFormRecordSlct 5153
+#define NotifyFormRecordAll 5152
+#define DateBookNotifyFormCancel 5150
+#define DateBookNotifyForm 5149
+#define Ln2SlFormOk 5148
+#define Ln2SlFormConvert 5147
+#define Ln2SlFormResult 5146
+#define Ln2SlFormInputLeap 5143
+#define Ln2SlFormInput 5142
+#define Ln2SlForm 5140
+#define Sl2LnFormOk 5139
+#define Sl2LnFormConvert 5138
+#define Sl2LnFormResult 5137
+#define Sl2LnFormInput 5134
+#define Sl2LnForm 5132
+#define PrefFormOk 5131
+#define PrefFormAddrTrigger 5130
+#define PrefFormAddress 5129
+#define PrefFormNotifyField 5127
+#define PrefFormNotifyTrigger 5125
+#define PrefFormNotifyFmts 5124
+#define PrefFormRescanTrigger 5122
+#define PrefFormAutoRescan 5121
+#define PrefFormIgnorePrefix 5119
+#define PrefFormScanNote 5118
+#define PrefFormDateTrigger 5117
+#define PrefFormDateFmts 5116
+#define PrefFormOverrideSystemDate 5114
+#define PrefFormCustomField 5113
+#define PrefFormCancel 5111
+#define PrefForm 5110
+#define DispPrefOk 5109
+#define DispPrefEmphasize 5108
+#define DispPrefCancel 5107
+#define DispPrefForm 5106
+#define TextMenuGHelp 5105
+#define TextMenuKBoard 5104
+#define TextMenuSAll 5102
+#define TextMenuPaste 5101
+#define TextMenuCopy 5100
+#define TextMenuCut 5099
+#define TextMenuUndo 5098
+#define TextMenu 5097
+#define MainMenuAbout 5096
+#define MainMenuDispPref 5094
+#define MainMenuPref 5093
+#define MainMenuFont 5092
+#define MainMenuRescanAddr 5091
+#define MainMenuLn2Sl 5089
+#define MainMenuSl2Ln 5088
+#define MainMenuExport 5086
+#define MainMenuCleanupTodo 5084
+#define MainMenuNotifyTodo 5083
+#define MainMenuCleanupDatebook 5082
+#define MainMenuNotifyDatebook 5081
+#define ViewFormGoto 5080
+#define ViewFormNotifyTD 5079
+#define ViewFormNotifyDB 5078
+#define ViewFormDone 5077
+#define ViewFormTable 5076
+#define ViewFormName 5075
+#define ViewFormCategory 5074
+#define ViewMenu 5073
+#define ViewForm 5072
+#define MainFormAddrCategories 5071
+#define MainFormPopupTrigger 5070
+#define MainFormAge 5069
+#define MainFormDate 5068
+#define MainFormName 5067
+#define MainFormStart 5066
+#define MainFormLookUp 5065
+#define MainFormScrollBar 5064
+#define MainFormTable 5063
+#define MainMenu 5062
+#define MainForm 5061
+#define StartForm 5059
+#define EditCategoryString 5058
+#define TDNoteString 5057
+#define DBNoteString 5056
+#define FindHeaderString 5055
+#define RemainedDayStr 5054
+#define AgeStr 5053
+#define SourceDateStr 5052
+#define NextDateStr 5051
+#define TypeStr 5050
+#define BirthPassedString 5049
+#define BirthLeftString 5048
+#define ToDoString 5047
+#define DateBookString 5046
+#define NthListFormatString 5045
+#define NthFormatString 5044
+#define AgeFormatString 5043
+#define DateBookNotifyDaysString 5042
+#define ToDoFirstAlertString 5041
+#define DateBookFirstAlertString 5040
+#define ViewNotExistString 5039
+#define ExportHeaderString 5038
+#define ModifiedString 5037
+#define UntouchedString 5036
+#define ExistingEntryString 5035
+#define NotifyCreateString 5034
+#define NotEnoughMemoryString 5033
+#define DecString 5032
+#define NovString 5031
+#define OctString 5030
+#define SepString 5029
+#define AugString 5028
+#define JulString 5027
+#define JunString 5026
+#define MayString 5025
+#define AprString 5024
+#define MarString 5023
+#define FebString 5022
+#define JanString 5021
+#define WeekInitialString 5020
+#define SatString 5019
+#define FriString 5018
+#define ThuString 5017
+#define WedString 5016
+#define TueString 5015
+#define MonString 5014
+#define SunString 5013
+#define PrefFormHelpString 5012
+#define Sl2LnFormHelpString 5011
+#define ExportDoneString 5010
+#define NoTimeString 5009
+#define SelectTimeString 5008
+#define InvalidDateString 5007
+#define RemoveConfirmString 5006
+#define CleanupAlertHelpString 5005
+#define AboutHelpString 5004
+#define CustomErrorHelpString 5003
+#define SelectDateString 5002
+#define NotifyStringHelpString 5001

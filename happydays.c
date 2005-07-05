@@ -1,6 +1,6 @@
 /*
 HappyDays - A Birthday displayer for the PalmPilot
-Copyright (C) 1999-2004 JaeMok Jeong
+Copyright (C) 1999-2005 JaeMok Jeong
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -24,11 +24,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "address.h"
 #include "memodb.h"
-
+#include "lunar.h"
 #include "birthdate.h"
 #include "happydays.h"
 #include "happydaysRsc.h"
-#include "calendar.h"
 #include "s2lconvert.h"
 #include "util.h"
 #include "notify.h"
@@ -142,30 +141,16 @@ void DrawSilkMonth(int mon, int year, int day, int x, int y) SECT1;
 DmOpenRef MainDB;
  
 ////////////////////////////////////////////////////////////////////
-//  accessing the built-in DatebookDB
+//  accessing the built-in DB
 ////////////////////////////////////////////////////////////////////
 
 DmOpenRef DatebookDB;
-
-////////////////////////////////////////////////////////////////////
-//  accessing the built-in ToDoDB
-////////////////////////////////////////////////////////////////////
-
 DmOpenRef ToDoDB;
-
-////////////////////////////////////////////////////////////////////
-// These are for accessing the built-in AddressDB
-////////////////////////////////////////////////////////////////////
-
 DmOpenRef AddressDB;
-
-
-////////////////////////////////////////////////////////////////////
-// These are for accessing the built-in MemoDB
-////////////////////////////////////////////////////////////////////
-
 DmOpenRef MemoDB;
 
+UInt16    lunarRefNum;
+UInt32    lunarClientText;
 
 /* Main entry point; it is unlikely you will need to change this except to
    handle other launch command codes */
@@ -357,13 +342,19 @@ static Err NR70GraffitiHandleEvent(SysNotifyParamType *notifyParamsP)
 /* Get preferences, open (or create) app database */
 static UInt16 StartApplication(void)
 {
-	UInt32 version;
-	Int16  err;
-    UInt32      val;
+	UInt32  version;
+	Err     err;
+    UInt32  val;
 	SonySysFtrSysInfoP sonySysFtrSysInfoP;
 	UInt16  refNum;
 
     gTableRowHandle = 0;
+
+    err = lunar_OpenLibrary(&lunarRefNum, &lunarClientText);
+    if (err != errNone) {
+        FrmCustomAlert(ErrorAlert, "Please install lunarlib.prc", " ", " ");
+        return 1;
+    }
 
 	if (_TRGVGAFeaturePresent(&version)) gbVgaExists = true;
 	else gbVgaExists = false;
@@ -497,6 +488,8 @@ static void StopApplication(void)
     FrmCloseAllForms();
     CloseDatabases();
     freememories();
+
+    lunar_CloseLibrary(lunarRefNum, lunarClientText);
 }
 
 
@@ -786,41 +779,42 @@ static void ReadPrefsRec(void)
         gPrefsR.version = HDAppVer;
         gPrefsR.records = gPrefsR.existing = gPrefsR.private = 0;
 
- 
-        gPrefsR.DBNotifyPrefs.alarm = 1;
-        gPrefsR.DBNotifyPrefs.usenote = 0;
-        gPrefsR.DBNotifyPrefs.notifybefore = 3;
-        gPrefsR.DBNotifyPrefs.duration = 1;
-        *((int*)&gPrefsR.DBNotifyPrefs.when) = noTime;
-        gPrefsR.DBNotifyPrefs.apptCategory = 0;
-        gPrefsR.DBNotifyPrefs.note[0] = 0;
+        gPrefsR.alarm = 1;
+        gPrefsR.notifybefore = 3;
+        gPrefsR.duration = 1;
+        *((int*)&gPrefsR.when) = noTime;
+        gPrefsR.apptCategory = 0;
+        gPrefsR.dusenote = 0;
+        gPrefsR.dnote[0] = 0;
 
-        gPrefsR.TDNotifyPrefs.priority = 1;
-        gPrefsR.TDNotifyPrefs.todoCategory = 0;
-        gPrefsR.TDNotifyPrefs.usenote = 0;
-        gPrefsR.TDNotifyPrefs.note[0] = 0;
+        gPrefsR.priority = 1;
+        gPrefsR.todoCategory = 0;
+        gPrefsR.tusenote = 0;
+        gPrefsR.tnote[0] = 0;
 
-        StrCopy( gPrefsR.Prefs.notifywith, "*HD:");
-        gPrefsR.Prefs.sort = 1;
-        gPrefsR.Prefs.notifyformat = 1;
-        gPrefsR.Prefs.autoscan = 0;
-        gPrefsR.Prefs.ignoreexclamation = 1;
-        gPrefsR.Prefs.scannote = 0;
-        gPrefsR.Prefs.addrapp = 0;
-        gPrefsR.Prefs.sysdateover = false;
-        gPrefsR.Prefs.dateformat = dfMDYWithSlashes;
+        StrCopy( gPrefsR.notifywith, "*HD:");
+        gPrefsR.sort = 1;
+        gPrefsR.notifyformat = 1;
+        StrCopy( gPrefsR.notifyformatstring, "[+F] +e +y" );
+
+        gPrefsR.autoscan = 0;
+        gPrefsR.ignoreexclamation = 1;
+        gPrefsR.scannote = 0;
+        gPrefsR.addrapp = 0;
+        gPrefsR.sysdateover = false;
+        gPrefsR.dateformat = dfMDYWithSlashes;
  
 #if defined(GERMAN)
-        StrCopy( gPrefsR.Prefs.custom, "Geburtstag");
-        gPrefsR.Prefs.dateformat = dfDMYWithDots; 
+        StrCopy( gPrefsR.custom, "Geburtstag");
+        gPrefsR.dateformat = dfDMYWithDots; 
 #elif defined(PORTUGUESE_BR)
-        StrCopy( gPrefsR.Prefs.custom, "Aniversario");
+        StrCopy( gPrefsR.custom, "Aniversario");
 #elif defined(ITALIAN)
-        StrCopy( gPrefsR.Prefs.custom, "Compleanno");
+        StrCopy( gPrefsR.custom, "Compleanno");
 #else
-        StrCopy( gPrefsR.Prefs.custom, "Birthday");
+        StrCopy( gPrefsR.custom, "Birthday");
 #endif
-        gPrefsR.DispPrefs.emphasize = 1;
+        gPrefsR.emphasize = 1;
 
         gPrefsR.gHideSecretRecord = 0;
         StrCopy(gPrefsR.addrCategory, "All");
@@ -832,7 +826,7 @@ static void ReadPrefsRec(void)
         gPrefsR.eventNoteExists = false;
     }
 
-    if (gPrefsR.Prefs.sysdateover) gPrefdfmts = gPrefsR.Prefs.dateformat;
+    if (gPrefsR.sysdateover) gPrefdfmts = gPrefsR.dateformat;
 }
 
 static void WritePrefsRec(void)
@@ -849,6 +843,7 @@ static Int16 OpenDatabases(void)
     LocalID dbID, appInfoID;
     UInt32 cdate, mdate;
     AddrAppInfoPtr appInfoPtr;
+    DmOpenRef compDBRef;
     char ForDateBookCategoryCheck[dmCategoryLength];
 
     /*
@@ -859,12 +854,30 @@ static Int16 OpenDatabases(void)
     AddressDB = 0;
     MemoDB = 0;
 
+   compDBRef = DmOpenDatabaseByTypeCreator('aexo', 'pdmE', dmModeReadOnly);
+    if (!compDBRef) {
+        isNewPIMS = false;
+    }
+    else {
+        DmCloseDatabase(compDBRef);
+        isNewPIMS = true;
+    }
+
     /* Determine if secret records should be shown. */
     PrefGetPreferences(&sysPrefs);
     if (!sysPrefs.hideSecretRecords) mode |= dmModeShowSecret;
 
     gSystemdfmts = gPrefdfmts = sysPrefs.dateFormat;// save global date format
     gPreftfmts = sysPrefs.timeFormat;               // save global time format
+
+    if (!isNewPIMS) {
+        int ret = OpenOldPIMDatabases(mode);
+        if (ret < 0) return ret;
+    }
+    else {
+        int ret = OpenNewPIMDatabases(mode);
+        if (ret < 0) return ret;
+    }
     
     DatebookDB = DmOpenDatabaseByTypeCreator('DATA', DatebookAppID,
                                              mode | dmModeReadWrite);
@@ -1235,8 +1248,8 @@ Boolean MenuHandler(FormPtr frm, EventPtr e)
     case MainMenuRescanAddr:
         MemSet(&gPrefsR.adrmdate, 4, 0);  	    // force a re-scan
 
-        if (gPrefsR.Prefs.autoscan == 2) {      // trick (force rescan)
-            gPrefsR.Prefs.autoscan = 3;         //    process Never
+        if (gPrefsR.autoscan == 2) {      // trick (force rescan)
+            gPrefsR.autoscan = 3;         //    process Never
         }
     
         FrmGotoForm(StartForm);
@@ -1636,8 +1649,8 @@ static Boolean MainFormHandleEvent (EventPtr e)
 		case MainFormName:
 		{
 			Boolean change = true;
-			if (gPrefsR.Prefs.sort == 0) change = false;
-			else gPrefsR.Prefs.sort = 0;	// sort by name
+			if (gPrefsR.sort == 0) change = false;
+			else gPrefsR.sort = 0;	// sort by name
 
 			if (change) {
 				FrmUpdateForm(MainForm, frmRedrawUpdateCode);
@@ -1649,8 +1662,8 @@ static Boolean MainFormHandleEvent (EventPtr e)
 		case MainFormDate:
 		{
 			Boolean change = true;
-			if (gPrefsR.Prefs.sort == 1) change = false;
-			else gPrefsR.Prefs.sort = 1; 	// sort by date
+			if (gPrefsR.sort == 1) change = false;
+			else gPrefsR.sort = 1; 	// sort by date
 
 			if (change) {
 				FrmUpdateForm(MainForm, frmRedrawUpdateCode);
@@ -1663,9 +1676,9 @@ static Boolean MainFormHandleEvent (EventPtr e)
 		{
 			Boolean change = true;
 
-			if (gPrefsR.Prefs.sort == 2) 
-				gPrefsR.Prefs.sort = 3;  	// sort by age(re)
-			else gPrefsR.Prefs.sort = 2; 	// sort by age
+			if (gPrefsR.sort == 2) 
+				gPrefsR.sort = 3;  	// sort by age(re)
+			else gPrefsR.sort = 2; 	// sort by age
 
 			if (change) {
 				FrmUpdateForm(MainForm, frmRedrawUpdateCode);
@@ -1760,36 +1773,37 @@ static void LoadPrefsFields()
     if ((frm = FrmGetFormPtr(PrefForm)) == 0) return;
     
     CtlSetValue(GetObjectPointer(frm, PrefFormOverrideSystemDate),
-                gPrefsR.Prefs.sysdateover);
+                gPrefsR.sysdateover);
 
     lstdate = GetObjectPointer(frm, PrefFormDateFmts);
-    LstSetSelection(lstdate, gPrefsR.Prefs.dateformat);
+    LstSetSelection(lstdate, gPrefsR.dateformat);
     CtlSetLabel(GetObjectPointer(frm, PrefFormDateTrigger),
-                LstGetSelectionText(lstdate, gPrefsR.Prefs.dateformat));
+                LstGetSelectionText(lstdate, gPrefsR.dateformat));
 
     lstauto = GetObjectPointer(frm, PrefFormAutoRescan);
-    LstSetSelection(lstauto, gPrefsR.Prefs.autoscan);
+    LstSetSelection(lstauto, gPrefsR.autoscan);
     CtlSetLabel(GetObjectPointer(frm, PrefFormRescanTrigger),
-                LstGetSelectionText(lstauto, gPrefsR.Prefs.autoscan));
+                LstGetSelectionText(lstauto, gPrefsR.autoscan));
 
     lstnotify = GetObjectPointer(frm, PrefFormNotifyFmts);
-    LstSetSelection(lstnotify, gPrefsR.Prefs.notifyformat);
+    LstSetSelection(lstnotify, gPrefsR.notifyformat);
     CtlSetLabel(GetObjectPointer(frm, PrefFormNotifyTrigger),
-                LstGetSelectionText(lstnotify, gPrefsR.Prefs.notifyformat));
+                LstGetSelectionText(lstnotify, gPrefsR.notifyformat));
+    SetFieldTextFromStr(PrefFormNotifyField, gPrefsR.notifyformatstring);
     
     lstaddr = GetObjectPointer(frm,PrefFormAddress);
-    LstSetSelection(lstaddr, gPrefsR.Prefs.addrapp);
+    LstSetSelection(lstaddr, gPrefsR.addrapp);
     CtlSetLabel(GetObjectPointer(frm,PrefFormAddrTrigger),
-                LstGetSelectionText(lstaddr,gPrefsR.Prefs.addrapp));
+                LstGetSelectionText(lstaddr,gPrefsR.addrapp));
                     
-    SetFieldTextFromStr(PrefFormCustomField, gPrefsR.Prefs.custom);
+    SetFieldTextFromStr(PrefFormCustomField, gPrefsR.custom);
 /*
     SetFieldTextFromStr(PrefFormNotifyWith, gPrefsR.Prefs.notifywith);
 */
     CtlSetValue(GetObjectPointer(frm, PrefFormScanNote), 
-		gPrefsR.Prefs.scannote);
+		gPrefsR.scannote);
     CtlSetValue(GetObjectPointer(frm, PrefFormIgnorePrefix), 
-		gPrefsR.Prefs.ignoreexclamation);
+		gPrefsR.ignoreexclamation);
 
 }
 
@@ -1806,7 +1820,7 @@ static Boolean UnloadPrefsFields()
     if (FldDirty(GetObjectPointer(frm, PrefFormCustomField))) {
         needrescan = true;
         if (FldGetTextPtr(GetObjectPointer(frm, PrefFormCustomField))) {
-            StrNCopy(gPrefsR.Prefs.custom,
+            StrNCopy(gPrefsR.custom,
                      FldGetTextPtr(GetObjectPointer(frm,
                                                     PrefFormCustomField)), 12);
         }
@@ -1836,39 +1850,47 @@ static Boolean UnloadPrefsFields()
     }
     else
     {
-        if (gPrefsR.Prefs.sysdateover && gPrefdfmts != gSystemdfmts)
+        if (gPrefsR.sysdateover && gPrefdfmts != gSystemdfmts)
         {
             needrescan = true;
             gPrefdfmts = gSystemdfmts;    // revert to system date format
         }
     }
-    gPrefsR.Prefs.sysdateover = newoverride;
-    gPrefsR.Prefs.dateformat = newdateformat;
+    gPrefsR.sysdateover = newoverride;
+    gPrefsR.dateformat = newdateformat;
 
     // notify string
     lstnotify = GetObjectPointer(frm, PrefFormNotifyFmts);
-    gPrefsR.Prefs.notifyformat = LstGetSelection(lstnotify);
+    gPrefsR.notifyformat = LstGetSelection(lstnotify);
+
+    if (FldDirty(GetObjectPointer(frm, PrefFormNotifyField))) {
+        if (FldGetTextPtr(GetObjectPointer(frm, PrefFormNotifyField))) {
+            StrNCopy(gPrefsR.notifyformatstring,
+                     FldGetTextPtr(GetObjectPointer(frm,
+                                                    PrefFormNotifyField)), 49);
+        }
+    }
 
     // automatic scan of Address
     lstaddr = GetObjectPointer(frm, PrefFormAutoRescan);
-    gPrefsR.Prefs.autoscan = LstGetSelection(lstaddr);
+    gPrefsR.autoscan = LstGetSelection(lstaddr);
 
 
     // addr goto application id
     lstaddr = GetObjectPointer(frm, PrefFormAddress);
-    gPrefsR.Prefs.addrapp = LstGetSelection(lstaddr);
+    gPrefsR.addrapp = LstGetSelection(lstaddr);
     
     ptr = GetObjectPointer(frm, PrefFormScanNote);
-    if (CtlGetValue(ptr) != gPrefsR.Prefs.scannote ) {
+    if (CtlGetValue(ptr) != gPrefsR.scannote ) {
         needrescan = true;
     }
-    gPrefsR.Prefs.scannote = CtlGetValue(ptr);
+    gPrefsR.scannote = CtlGetValue(ptr);
 
     ptr = GetObjectPointer(frm, PrefFormIgnorePrefix);
-    if (CtlGetValue(ptr) != gPrefsR.Prefs.ignoreexclamation ) {
+    if (CtlGetValue(ptr) != gPrefsR.ignoreexclamation ) {
         needrescan = true;
     }
-    gPrefsR.Prefs.ignoreexclamation = CtlGetValue(ptr);
+    gPrefsR.ignoreexclamation = CtlGetValue(ptr);
 
     return needrescan;
 }
@@ -1879,12 +1901,7 @@ static void LoadDispPrefsFields()
     
     if ((frm = FrmGetFormPtr(DispPrefForm)) == 0) return;
 
-    if (gPrefsR.DispPrefs.emphasize == 1) {
-        CtlSetValue(GetObjectPointer(frm, DispPrefEmphasize), 1);
-    }
-	else {
-        CtlSetValue(GetObjectPointer(frm, DispPrefEmphasize), 0);
-	}
+    CtlSetValue(GetObjectPointer(frm, DispPrefEmphasize), gPrefsR.emphasize);
 }
 
 static Boolean UnloadDispPrefsFields()
@@ -1896,10 +1913,10 @@ static Boolean UnloadDispPrefsFields()
     if ((frm = FrmGetFormPtr(DispPrefForm)) == 0) return redraw;
 
     ptr = GetObjectPointer(frm, DispPrefEmphasize);
-    if (gPrefsR.DispPrefs.emphasize != CtlGetValue(ptr)) {
+    if (gPrefsR.emphasize != CtlGetValue(ptr)) {
         redraw = 1;
     }
-    gPrefsR.DispPrefs.emphasize = CtlGetValue(ptr);
+    gPrefsR.emphasize = CtlGetValue(ptr);
     
     return redraw;
 }
@@ -1996,6 +2013,12 @@ static Boolean PrefFormHandleEvent(EventPtr e)
             handled = true;
             break;
 
+        case PrefFormNotifyFmts:
+
+            
+            handled = false;
+            break;
+            
         default:
             break;
         }
@@ -2135,7 +2158,7 @@ void MainFormDrawRecord(MemPtr tableP, Int16 row, Int16 column, RectanglePtr bou
 					 bounds->topLeft.x + bounds->extent.x 
                      - width - (categoryWidth - width)/2, y);
 
-        if (gPrefsR.DispPrefs.emphasize 
+        if (gPrefsR.emphasize 
             && drawRecord.date.year != INVALID_CONV_DATE
             && (r.flag.bits.lunar || r.flag.bits.lunar_leap)) {
             // draw gray line
@@ -2308,10 +2331,10 @@ static void MainFormInit(FormPtr frm, Boolean bformModify)
 					gStartDate.year+1904, gPrefdfmts, gLookupDate);
 	CtlSetLabel(GetObjectPointer(frm, MainFormStart), gLookupDate);
 
-    if (gPrefsR.Prefs.sort == 0) {
+    if (gPrefsR.sort == 0) {
         CtlSetValue(GetObjectPointer(frm, MainFormName), 1);
     }
-    else if (gPrefsR.Prefs.sort == 1) {
+    else if (gPrefsR.sort == 1) {
         CtlSetValue(GetObjectPointer(frm, MainFormDate), 1);
     }
     else {
@@ -2449,13 +2472,10 @@ void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column,
         ///////////////////////////////////
         // Display the Type of Anniversary
         ///////////////////////////////////
-        char* p;
+        char* p = r.custom;
                 
         if (!r.custom[0]) {         // custom does not exist
-            p = gPrefsR.Prefs.custom;
-        }
-        else {
-            p = r.custom;
+            p = gPrefsR.custom;
         }
         length = StrLen(p);
         FntCharsInWidth(p, &width, &length, &ignored);
@@ -2545,18 +2565,19 @@ void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column,
         }
         else if (r.flag.bits.year) {
             DateType solBirth;
-            DateTimeType rtVal;
+            int syear, smonth, sday;
             Int16 d_diff = 0, m_diff = 0, y_diff = 0;
             
             if (r.flag.bits.lunar || r.flag.bits.lunar_leap) {
-                lun2sol(r.date.year+1904,
+                lunarL2S(lunarRefNum, r.date.year+1904,
                         r.date.month,
                         r.date.day,
-                        r.flag.bits.lunar_leap, &rtVal);
+                        r.flag.bits.lunar_leap, &syear, &smonth, &sday);
+
                 
-                solBirth.year = rtVal.year - 1904;
-                solBirth.month = rtVal.month;
-                solBirth.day = rtVal.day;
+                solBirth.year = syear - 1904;
+                solBirth.month = smonth;
+                solBirth.day = sday;
             }
             else solBirth = r.date;
             
@@ -3107,7 +3128,7 @@ static Boolean StartFormHandleEvent(EventPtr e)
         rescan = false;
             
         if (IsChangedAddressDB()) {
-            switch (gPrefsR.Prefs.autoscan) {
+            switch (gPrefsR.autoscan) {
             case 0: // always
                 rescan = true;
                 break;
@@ -3126,7 +3147,7 @@ static Boolean StartFormHandleEvent(EventPtr e)
             case 3:
                 rescan = true;      // trick, force rescan
                     
-                gPrefsR.Prefs.autoscan = 2;
+                gPrefsR.autoscan = 2;
                 break;
             }
             if (rescan) {

@@ -255,4 +255,12 @@ BEGIN
 
     "Processing" =  "柳青吝"
     "Processed : " =  "贸府等巴 : "
+
+    "long_prefString" = "Notify format\n"\
+        "+L = Last, First\n"\
+        "+F = First Last\n"\
+        "+f = First\n"\
+        "+e = Event Type(1)\n"\
+        "+E = Event Type(f)\n"\
+        "+y = Year age\n"
 END

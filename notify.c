@@ -105,7 +105,7 @@ Char* EventTypeString(HappyDays r)
 	static char tmpString[4];
     
     if (!r.custom[0]) {
-        tmpString[0] = gPrefsR.Prefs.custom[0];
+        tmpString[0] = gPrefsR.custom[0];
     }
     else tmpString[0] = r.custom[0];
     tmpString[1] = 0;
@@ -258,7 +258,7 @@ static Int16 FindEventNoteInfo(HappyDays birth)
     if (!gPrefsR.eventNoteExists) return -1;
 
     if (!birth.custom[0]) {
-        eventString = gPrefsR.Prefs.custom;
+        eventString = gPrefsR.custom;
     }
     else {
         eventString = birth.custom;
@@ -366,7 +366,7 @@ Boolean ToDoFormHandleEvent(EventPtr e)
 
         case ToDoPopupTrigger: 
         {
-            TDSelectCategory(&gPrefsR.TDNotifyPrefs.todoCategory);
+            TDSelectCategory(&gPrefsR.todoCategory);
             
             handled = true;
             break;
@@ -418,8 +418,8 @@ Boolean DBNotifyFormHandleEvent(EventPtr e)
 
             NotifyAction(DateBookNotifyForm, NotifyDatebook);
             // reschedule alarm
-            if (gPrefsR.DBNotifyPrefs.alarm &&
-                gPrefsR.DBNotifyPrefs.notifybefore >= 0) {
+            if (gPrefsR.alarm &&
+                gPrefsR.notifybefore >= 0) {
                 RescheduleAlarms(DatebookDB);
             }
     
@@ -447,7 +447,7 @@ Boolean DBNotifyFormHandleEvent(EventPtr e)
 
         case DateBookPopupTrigger: 
         {
-            DBSelectCategory(&gPrefsR.DBNotifyPrefs.apptCategory);
+            DBSelectCategory(&gPrefsR.apptCategory);
             
             handled = true;
             break;
@@ -478,7 +478,7 @@ Boolean DBNotifyFormHandleEvent(EventPtr e)
             TimeType startTime, endTime, lastTime;
             Boolean untimed = false;
 
-            startTime = endTime = lastTime = gPrefsR.DBNotifyPrefs.when;
+            startTime = endTime = lastTime = gPrefsR.when;
             if (TimeToInt(startTime) == noTime) {
                 untimed = true;
                 // set dummy time
@@ -488,8 +488,8 @@ Boolean DBNotifyFormHandleEvent(EventPtr e)
             
             SysCopyStringResource(gAppErrStr, SelectTimeString);
             if (SelectTimeV33(&startTime, &endTime, untimed, gAppErrStr,8)) {
-                gPrefsR.DBNotifyPrefs.when = startTime;
-                TimeToAsciiLocal(gPrefsR.DBNotifyPrefs.when, gPreftfmts,
+                gPrefsR.when = startTime;
+                TimeToAsciiLocal(gPrefsR.when, gPreftfmts,
                                  gAppErrStr);
             }
 			else {
@@ -669,7 +669,7 @@ Boolean NotifyStringFormHandleEvent(EventPtr e)
 
 static Boolean IsHappyDaysRecord(Char* notefield)
 {
-    if (notefield && StrStr(notefield, gPrefsR.Prefs.notifywith)) {
+    if (notefield && StrStr(notefield, gPrefsR.notifywith)) {
         return true; 
     }
     return false;
@@ -708,7 +708,7 @@ static Char* NotifyDescString(DateType when, HappyDays birth,
 
     // boundary check must be inserted
     //
-    pfmtString = gNotifyFormatString[(int)gPrefsR.Prefs.notifyformat];
+    pfmtString = gNotifyFormatString[(int)gPrefsR.notifyformat];
     while (*pfmtString) {
         if (*pfmtString == '+') {
             switch (*(pfmtString+1)) {
@@ -748,7 +748,7 @@ static Char* NotifyDescString(DateType when, HappyDays birth,
 
             case 'E':       // Event Type (like 'Birthday')
                 if (!birth.custom[0]) {
-                    StrCopy(pDesc, gPrefsR.Prefs.custom);
+                    StrCopy(pDesc, gPrefsR.custom);
                 }
                 else {
                     StrCopy(pDesc, birth.custom);
@@ -780,14 +780,14 @@ static Char* NotifyDescString(DateType when, HappyDays birth,
                 }
                 if (birth.flag.bits.year && !birth.flag.bits.nthdays) {
                     if (!birth.flag.bits.solar 
-                        || gPrefsR.DBNotifyPrefs.duration != -1 || todo) {
+                        || gPrefsR.duration != -1 || todo) {
                         if (age >= 0) {
                             StrPrintF(gAppErrStr, " (%d)", age);
                             StrCopy(pDesc, gAppErrStr);
                         }
                     }
                     else if (birth.flag.bits.solar 
-                             && gPrefsR.DBNotifyPrefs.duration == -1) {
+                             && gPrefsR.duration == -1) {
                         StrPrintF(gAppErrStr, "%d", birth.date.year + 1904 );
                         StrCopy(pDesc, gAppErrStr);
                     }
@@ -852,15 +852,15 @@ static Int16 PerformNotifyDB(HappyDays birth, DateType when, Int8 age,
     // set the date and time
     //
     dbwhen.date = when;
-    dbwhen.startTime = gPrefsR.DBNotifyPrefs.when;
-    dbwhen.endTime = gPrefsR.DBNotifyPrefs.when;
+    dbwhen.startTime = gPrefsR.when;
+    dbwhen.endTime = gPrefsR.when;
 
     // if alarm checkbox is set, set alarm
     //
-    if (gPrefsR.DBNotifyPrefs.alarm &&
-        gPrefsR.DBNotifyPrefs.notifybefore >= 0) {
+    if (gPrefsR.alarm &&
+        gPrefsR.notifybefore >= 0) {
         dbalarm.advanceUnit = aauDays;
-        dbalarm.advance = gPrefsR.DBNotifyPrefs.notifybefore;
+        dbalarm.advance = gPrefsR.notifybefore;
         datebook.alarm = &dbalarm;
     }
     else {
@@ -878,8 +878,8 @@ static Int16 PerformNotifyDB(HappyDays birth, DateType when, Int8 age,
 
 	// General note field edit
 	//
-    if (gPrefsR.DBNotifyPrefs.usenote) {     
-        StrCopy(noteField, gPrefsR.DBNotifyPrefs.note);
+    if (gPrefsR.dusenote) {     
+        StrCopy(noteField, gPrefsR.dnote);
         StrCat(noteField, "\n");
     }
     else if ((idx = FindEventNoteInfo(birth)) >= 0) {
@@ -887,7 +887,7 @@ static Int16 PerformNotifyDB(HappyDays birth, DateType when, Int8 age,
     }
     else noteField[0] = 0;
 
-    StrCat(noteField, gPrefsR.Prefs.notifywith);
+    StrCat(noteField, gPrefsR.notifywith);
     StrPrintF(gAppErrStr, "%ld", Hash(birth.name1, birth.name2));
     StrCat(noteField, gAppErrStr);
     datebook.note = noteField;
@@ -906,7 +906,7 @@ static Int16 PerformNotifyDB(HappyDays birth, DateType when, Int8 age,
         // if private is set, make the record private
         //
         ChkNMakePrivateRecord(DatebookDB, existIndex);
-        SetCategory(DatebookDB, existIndex, gPrefsR.DBNotifyPrefs.apptCategory);
+        SetCategory(DatebookDB, existIndex, gPrefsR.apptCategory);
         (*created)++;
     }
     else {                                      // if exists
@@ -926,7 +926,7 @@ static Int16 PerformNotifyDB(HappyDays birth, DateType when, Int8 age,
             // if private is set, make the record private
             //
             ChkNMakePrivateRecord(DatebookDB, existIndex);
-            SetCategory(DatebookDB, existIndex, gPrefsR.DBNotifyPrefs.apptCategory);
+            SetCategory(DatebookDB, existIndex, gPrefsR.apptCategory);
             (*touched)++;
         }
     }
@@ -960,12 +960,12 @@ static Int16 PerformNotifyTD(HappyDays birth, DateType when, Int8 age,
     // set the date 
     //
     todo.dueDate = when;
-    todo.priority = gPrefsR.TDNotifyPrefs.priority;
+    todo.priority = gPrefsR.priority;
 
     // General note field edit
 	//
-    if (gPrefsR.TDNotifyPrefs.usenote) {
-        StrCopy(noteField, gPrefsR.TDNotifyPrefs.note);
+    if (gPrefsR.tusenote) {
+        StrCopy(noteField, gPrefsR.tnote);
         StrCat(noteField, "\n");
     }
     else if ((idx = FindEventNoteInfo(birth)) >= 0) {
@@ -973,7 +973,7 @@ static Int16 PerformNotifyTD(HappyDays birth, DateType when, Int8 age,
     }
     else noteField[0] = 0;
 
-    StrCat(noteField, gPrefsR.Prefs.notifywith);
+    StrCat(noteField, gPrefsR.notifywith);
     StrPrintF(gAppErrStr, "%ld", Hash(birth.name1, birth.name2));
     StrCat(noteField, gAppErrStr);
     todo.note = noteField;
@@ -988,7 +988,7 @@ static Int16 PerformNotifyTD(HappyDays birth, DateType when, Int8 age,
         // if not exists
         // write the new record (be sure to fill index)
         //
-        ToDoNewRecord(ToDoDB, &todo, gPrefsR.TDNotifyPrefs.todoCategory, (UInt16*)&existIndex);
+        ToDoNewRecord(ToDoDB, &todo, gPrefsR.todoCategory, (UInt16*)&existIndex);
         // if private is set, make the record private
         //
         ChkNMakePrivateRecord(ToDoDB, existIndex);
@@ -1008,7 +1008,7 @@ static Int16 PerformNotifyTD(HappyDays birth, DateType when, Int8 age,
             DmMoveRecord(ToDoDB, existIndex, DmNumRecords(ToDoDB));
             
             // make new record
-            ToDoNewRecord(ToDoDB, &todo, gPrefsR.TDNotifyPrefs.todoCategory, (UInt16*)&existIndex);
+            ToDoNewRecord(ToDoDB, &todo, gPrefsR.todoCategory, (UInt16*)&existIndex);
             // if private is set, make the record private
             //
             ChkNMakePrivateRecord(ToDoDB, existIndex);
@@ -1045,7 +1045,7 @@ static void NotifyDatebook(int mainDBIndex, DateType when, Int8 age,
     
     // if duration is equal to 0, no notify record is created
     //
-    if (gPrefsR.DBNotifyPrefs.duration == 0) return;
+    if (gPrefsR.duration == 0) return;
 
     if ((recordH = DmQueryRecord(MainDB, mainDBIndex))) {
         rp = (PackedHappyDays *) MemHandleLock(recordH);
@@ -1065,7 +1065,7 @@ static void NotifyDatebook(int mainDBIndex, DateType when, Int8 age,
             repeatInfo.repeatStartOfWeek = 0;
 
             /*
-            if (gPrefsR.DBNotifyPrefs.duration > 1) {
+            if (gPrefsR.duration > 1) {
                 UInt16 end_year;
 
                 repeatInfo.repeatEndDate = when;
@@ -1073,7 +1073,7 @@ static void NotifyDatebook(int mainDBIndex, DateType when, Int8 age,
                 //
                 //  'when' is the current year. 
                 //
-                end_year = when.year + gPrefsR.DBNotifyPrefs.duration -1;
+                end_year = when.year + gPrefsR.duration -1;
 
                 if (end_year > 2031 - 1904) {
                     repeatInfo.repeatEndDate.year = 2031-1904;
@@ -1091,7 +1091,7 @@ static void NotifyDatebook(int mainDBIndex, DateType when, Int8 age,
                 PerformNotifyDB(r, when, age, &repeatInfo, created, touched);
             }
             */
-            if (gPrefsR.DBNotifyPrefs.duration == -1) {
+            if (gPrefsR.duration == -1) {
                 // if duration > 1, 'when' is the birthdate;
                 if (r.flag.bits.year) when = r.date;
 
@@ -1103,7 +1103,7 @@ static void NotifyDatebook(int mainDBIndex, DateType when, Int8 age,
                 PerformNotifyDB(r, when, age, &repeatInfo, created, touched);
             }
             else {
-                int duration = gPrefsR.DBNotifyPrefs.duration;
+                int duration = gPrefsR.duration;
                 DateType converted = when;
 
                 for (i = 0; i < duration; i++) {
@@ -1122,7 +1122,7 @@ static void NotifyDatebook(int mainDBIndex, DateType when, Int8 age,
         else if (r.flag.bits.lunar || r.flag.bits.lunar_leap) {
             // if lunar date, make each entry
             //
-            int duration = gPrefsR.DBNotifyPrefs.duration;
+            int duration = gPrefsR.duration;
             DateType current, converted;
             
             // for the convenience, -1 means 5 year in lunar calendar.
@@ -1324,25 +1324,25 @@ static void LoadDBNotifyPrefsFieldsMore(void)
     if ((frm = FrmGetFormPtr(NotifyStringForm)) == 0) return;
 
     if (whichString == DBSetting) {
-        CtlSetValue(GetObjectPointer(frm, DBNoteCheckBox), gPrefsR.DBNotifyPrefs.usenote);
+        CtlSetValue(GetObjectPointer(frm, DBNoteCheckBox), gPrefsR.dusenote);
 
-        if (gPrefsR.DBNotifyPrefs.usenote == 0) {
+        if (gPrefsR.dusenote == 0) {
             HideNoteStuff();
         }
     
         SetFieldTextFromStr(DBNoteField,
-                            gPrefsR.DBNotifyPrefs.note);
+                            gPrefsR.dnote);
         SysCopyStringResource(gAppErrStr, DBNoteString);
         FrmSetTitle(frm, gAppErrStr);
     }
     else {
-        CtlSetValue(GetObjectPointer(frm, DBNoteCheckBox), gPrefsR.TDNotifyPrefs.usenote);
+        CtlSetValue(GetObjectPointer(frm, DBNoteCheckBox), gPrefsR.tusenote);
 
-        if (gPrefsR.TDNotifyPrefs.usenote == 0) {
+        if (gPrefsR.tusenote == 0) {
             HideNoteStuff();
         }
         SetFieldTextFromStr(DBNoteField,
-                            gPrefsR.TDNotifyPrefs.note);
+                            gPrefsR.tnote);
         
         SysCopyStringResource(gAppErrStr, TDNoteString);
         FrmSetTitle(frm, gAppErrStr);
@@ -1361,21 +1361,21 @@ static void UnloadDBNotifyPrefsFieldsMore()
     ptr = GetObjectPointer(frm, DBNoteCheckBox);
 
     if (whichString == DBSetting) {
-        gPrefsR.DBNotifyPrefs.usenote = CtlGetValue(ptr);
+        gPrefsR.dusenote = CtlGetValue(ptr);
         
         if (FldDirty(GetObjectPointer(frm, DBNoteField))) {
             if (FldGetTextPtr(GetObjectPointer(frm, DBNoteField))) {
-                StrCopy(gPrefsR.DBNotifyPrefs.note,
+                StrCopy(gPrefsR.dnote,
                         FldGetTextPtr(GetObjectPointer(frm, DBNoteField)));
             }
         }
     }
     else {
-        gPrefsR.TDNotifyPrefs.usenote = CtlGetValue(ptr);
+        gPrefsR.tusenote = CtlGetValue(ptr);
         
         if (FldDirty(GetObjectPointer(frm, DBNoteField))) {
             if (FldGetTextPtr(GetObjectPointer(frm, DBNoteField))) {
-                StrCopy(gPrefsR.TDNotifyPrefs.note,
+                StrCopy(gPrefsR.tnote,
                         FldGetTextPtr(GetObjectPointer(frm, DBNoteField)));
             }
         }
@@ -1392,7 +1392,7 @@ static void LoadDBNotifyPrefsFields(void)
 
     LoadCommonPrefsFields(frm);  // all/selected, keep/modify, private
     
-    if (gPrefsR.DBNotifyPrefs.alarm == 1) {
+    if (gPrefsR.alarm == 1) {
         CtlSetValue(GetObjectPointer(frm, DateBookNotifyFormAlarm), 1);
 
         FrmShowObject(frm, 
@@ -1409,18 +1409,18 @@ static void LoadDBNotifyPrefsFields(void)
     }
     
     SetFieldTextFromStr(DateBookNotifyFormBefore,
-                        StrIToA(gAppErrStr, gPrefsR.DBNotifyPrefs.notifybefore));
+                        StrIToA(gAppErrStr, gPrefsR.notifybefore));
     SetFieldTextFromStr(DateBookNotifyFormDuration,
-                        StrIToA(gAppErrStr, gPrefsR.DBNotifyPrefs.duration));
+                        StrIToA(gAppErrStr, gPrefsR.duration));
     
-    TimeToAsciiLocal(gPrefsR.DBNotifyPrefs.when, gPreftfmts, gAppErrStr);
+    TimeToAsciiLocal(gPrefsR.when, gPreftfmts, gAppErrStr);
     CtlSetLabel(GetObjectPointer(frm, DateBookNotifyFormTime), gAppErrStr);
 
 	// Set the label of the category trigger.
 	ctl = GetObjectPointer (FrmGetActiveForm(), DateBookPopupTrigger);
 	label = (Char *)CtlGetLabel (ctl);
 	
-	CategoryGetName (DatebookDB, gPrefsR.DBNotifyPrefs.apptCategory, label);
+	CategoryGetName (DatebookDB, gPrefsR.apptCategory, label);
 	CategorySetTriggerLabel(ctl, label);
 }
 
@@ -1434,16 +1434,16 @@ static void UnloadDBNotifyPrefsFields()
     UnloadCommonNotifyPrefs(frm);       // all/selected, keey/modify, private
 
     ptr = GetObjectPointer(frm, DateBookNotifyFormAlarm);
-    gPrefsR.DBNotifyPrefs.alarm = CtlGetValue(ptr);
+    gPrefsR.alarm = CtlGetValue(ptr);
 
     if (FldDirty(GetObjectPointer(frm, DateBookNotifyFormBefore))) {
-        gPrefsR.DBNotifyPrefs.notifybefore =
+        gPrefsR.notifybefore =
             (int) StrAToI(FldGetTextPtr(
                 GetObjectPointer(frm, DateBookNotifyFormBefore)));
     }
     // notification duration
     if (FldDirty(GetObjectPointer(frm, DateBookNotifyFormDuration))) {
-        gPrefsR.DBNotifyPrefs.duration =
+        gPrefsR.duration =
             (int) StrAToI(FldGetTextPtr(
                 GetObjectPointer(frm, DateBookNotifyFormDuration)));
     }
@@ -1462,7 +1462,7 @@ static void LoadTDNotifyPrefsFields(void)
 
     LoadCommonPrefsFields(frm);  // all/selected, keep/modify, private
 
-    switch (gPrefsR.TDNotifyPrefs.priority) {
+    switch (gPrefsR.priority) {
     case 1:
         CtlSetValue(GetObjectPointer(frm, ToDoNotifyPri1), 1);
         break;
@@ -1485,7 +1485,7 @@ static void LoadTDNotifyPrefsFields(void)
 	ctl = GetObjectPointer (FrmGetActiveForm(), ToDoPopupTrigger);
 	label = (Char *)CtlGetLabel (ctl);
 	
-	CategoryGetName (ToDoDB, gPrefsR.TDNotifyPrefs.todoCategory, label);
+	CategoryGetName (ToDoDB, gPrefsR.todoCategory, label);
 	CategorySetTriggerLabel(ctl, label);
 }
 
@@ -1497,15 +1497,15 @@ static void UnloadTDNotifyPrefsFields()
     UnloadCommonNotifyPrefs(frm);       // all/selected, keey/modify, private
 
     if ( CtlGetValue(GetObjectPointer(frm, ToDoNotifyPri1)) )
-        gPrefsR.TDNotifyPrefs.priority = 1;
+        gPrefsR.priority = 1;
     else if ( CtlGetValue(GetObjectPointer(frm, ToDoNotifyPri2)) )
-        gPrefsR.TDNotifyPrefs.priority = 2;
+        gPrefsR.priority = 2;
     else if ( CtlGetValue(GetObjectPointer(frm, ToDoNotifyPri3)) )
-        gPrefsR.TDNotifyPrefs.priority = 3;
+        gPrefsR.priority = 3;
     else if ( CtlGetValue(GetObjectPointer(frm, ToDoNotifyPri4)) )
-        gPrefsR.TDNotifyPrefs.priority = 4;
+        gPrefsR.priority = 4;
     else
-        gPrefsR.TDNotifyPrefs.priority = 5;
+        gPrefsR.priority = 5;
     
     // ToDo Category is set by handler
 }
@@ -1649,8 +1649,8 @@ static Boolean IsSameRecord(Char* notefield, HappyDays birth)
 {
     Char *p;
     
-    if (notefield && (p = StrStr(notefield,gPrefsR.Prefs.notifywith))) {
-        p += StrLen(gPrefsR.Prefs.notifywith);
+    if (notefield && (p = StrStr(notefield,gPrefsR.notifywith))) {
+        p += StrLen(gPrefsR.notifywith);
 
         StrPrintF(gAppErrStr, "%ld", Hash(birth.name1,birth.name2));
         

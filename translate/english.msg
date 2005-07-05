@@ -111,6 +111,13 @@ BEGIN
 	"Address Book:" = "Address Book:"
 	"Built-in" = "Built-in"
 
+    "long_prefString" = "Notify format\n"\
+        "+L = Last, First\n"\
+        "+F = First Last\n"\
+        "+f = First\n"\
+        "+e = Event Type(1)\n"\
+        "+E = Event Type(f)\n"\
+        "+y = Year age\n"
 
 /* Display preferences */
     "Emphasize Lunar Date" = "Emphasize Lunar Date"

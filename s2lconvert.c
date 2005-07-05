@@ -22,11 +22,22 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "happydays.h"
 #include "happydaysRsc.h"
-#include "calendar.h"
+#include "lunar.h"
 #include "birthdate.h"
 #include "util.h"
 
 extern Boolean gbVgaExists;
+extern UInt16    lunarRefNum;
+
+Boolean Ln2SlFormHandleEvent(EventPtr e);
+Boolean Sl2LnFormHandleEvent(EventPtr e);
+
+static void DisplayInvalidDateErrorString(UInt16 id)
+{
+    FldDrawField(ClearFieldText(Ln2SlFormResult));
+    SysCopyStringResource(gAppErrStr, InvalidDateString);
+    FrmCustomAlert(ErrorAlert, gAppErrStr, " ", " ");
+}
 
 Boolean Ln2SlFormHandleEvent(EventPtr e)
 {
@@ -58,7 +69,6 @@ Boolean Ln2SlFormHandleEvent(EventPtr e)
 
         case Ln2SlFormConvert:
         {
-            DateTimeType rtVal;
             HappyDaysFlag dummy;
             Int16 year, month, day;
             Char* input;
@@ -68,31 +78,26 @@ Boolean Ln2SlFormHandleEvent(EventPtr e)
 
             if ((ret = AnalysisHappyDays(input, &dummy,
                                          &year, &month, &day))) {
+                int syear, smonth, sday;
                 int leapyes
                     = CtlGetValue(GetObjectPointer(frm, Ln2SlFormInputLeap));
 
-                ret = !lun2sol(year, month, day, leapyes, &rtVal);
-                if (ret) {
+                ret = lunarL2S(lunarRefNum, year, month, day, leapyes, &syear, &smonth, &sday);
+                if (ret == errNone) {
                     Char temp[15];
-                    SysCopyStringResource(temp,
-                                          DayOfWeek(rtVal.month, rtVal.day,
-                                                    rtVal.year) + SunString);
+                    SysCopyStringResource(temp, DayOfWeek(smonth, sday, syear) + SunString);
 
-                    DateToAsciiLong(rtVal.month, rtVal.day, rtVal.year,
-                                    gPrefdfmts, gAppErrStr);
+                    DateToAsciiLong(smonth, sday, syear, gPrefdfmts, gAppErrStr);
                     StrNCat(gAppErrStr, " [", AppErrStrLen);
                     StrNCat(gAppErrStr, temp, AppErrStrLen);
                     StrNCat(gAppErrStr, "]", AppErrStrLen);
 
-                    FldDrawField(SetFieldTextFromStr(Ln2SlFormResult,
-                                                     gAppErrStr));
+                    FldDrawField(SetFieldTextFromStr(Ln2SlFormResult, gAppErrStr));
                 }
+                else DisplayInvalidDateErrorString(Ln2SlFormResult);
             }
-            
-            if (!ret) {
-                FldDrawField(ClearFieldText(Ln2SlFormResult));
-                SysCopyStringResource(gAppErrStr, InvalidDateString);
-                FrmCustomAlert(ErrorAlert, gAppErrStr, " ", " ");
+            else {
+                DisplayInvalidDateErrorString(Ln2SlFormResult);
             }
             
             handled = true;
@@ -142,9 +147,9 @@ Boolean Sl2LnFormHandleEvent(EventPtr e)
         switch(e->data.ctlSelect.controlID) {
         case Sl2LnFormConvert:
         {
-            DateTimeType rtVal;
             HappyDaysFlag dummy;
             Int16 year, month, day;
+            int lyear, lmonth, lday;
             Char* input;
             int ret = false;
 
@@ -153,28 +158,23 @@ Boolean Sl2LnFormHandleEvent(EventPtr e)
                                          &year, &month, &day))) {
                 int leapyes = 0;
 
-                ret = !sol2lun(year, month, day, &rtVal,
-                               &leapyes);
-                if (ret) {
+                ret = lunarS2L(lunarRefNum, year, month, day, &lyear, &lmonth, &lday, &leapyes);
+                if (ret == errNone) {
                     if (leapyes) {
                         StrCopy(gAppErrStr, "#)");
                     }
                     else {
                         StrCopy(gAppErrStr, "-)");
                     }
-                    DateToAsciiLong(rtVal.month, rtVal.day, rtVal.year,
-                                    gPrefdfmts, &gAppErrStr[2]);
+                    DateToAsciiLong(lmonth, lday, lyear, gPrefdfmts, &gAppErrStr[2]);
                           
                     FldDrawField(SetFieldTextFromStr(Sl2LnFormResult,
                                                      gAppErrStr));
                 }
+                else DisplayInvalidDateErrorString(Sl2LnFormResult);
 
             }
-            if (!ret) {
-                FldDrawField(ClearFieldText(Sl2LnFormResult));
-                SysCopyStringResource(gAppErrStr, InvalidDateString);
-                FrmCustomAlert(ErrorAlert, gAppErrStr, " ", " ");
-            }
+            else DisplayInvalidDateErrorString(Sl2LnFormResult);
 
             handled = true;
             break;

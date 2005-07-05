@@ -1,4 +1,12 @@
+RESETAUTOID 5000
 HEX "sKst" ID 1000 0x00 0x00 0x00 0x00
+
+#define ABOUT_LINE_SPACING			12
+#define ABOUT_LINE_SPACING2			18
+
+#define MAXSLOT						30
+#define VISIBLESLOT					11
+#define FULLWIDTH					151
 
 STRING ID NotifyStringHelpString "long_notifySettingMoreString"
 STRING ID SelectDateString  "HappyDays"
@@ -12,6 +20,7 @@ STRING ID SelectTimeString  "Select Time"
 STRING ID NoTimeString      "No Time"
 STRING ID ExportDoneString  "Export to Memo Pad is completed."
 STRING ID Sl2LnFormHelpString "long_sl2lnString"
+STRING ID PrefFormHelpString  "long_prefString"
 
 STRING ID SunString     "SUN"
 STRING ID MonString     "MON" 
@@ -105,7 +114,6 @@ BEGIN
     LIST "" ID MainFormAddrCategories AT (PREVLEFT PREVTOP 70 AUTO)
             NONUSABLE
     POPUPLIST ID MainFormPopupTrigger MainFormAddrCategories
-
 END
 
 FORM ViewForm AT (0 0 160 160)
@@ -203,6 +211,7 @@ FORM ID PrefForm AT (2 2 156 156)
 FRAME
 MODAL
 USABLE
+HELPID PrefFormHelpString
 DEFAULTBTNID PrefFormCancel
 BEGIN
     TITLE "Preferences"
@@ -235,17 +244,20 @@ BEGIN
     POPUPLIST ID PrefFormRescanTrigger PrefFormAutoRescan
         
 	LABEL "Notify Format:" AUTOID AT (10 PrevBottom+1) 
-    LIST 	"[Last, First] E(1) Year" 
-	    	"[First Last] E(1) Year" 
-	    	"[First] E(1) Year" 
-			"Event - Last, First Year"
-			"Event - First Last Year"
-			"First Last Year"
-		ID PrefFormNotifyFmts 
-			AT (20 PrevBottom 120 AUTO) VISIBLEITEMS 6 NONUSABLE
+    LIST 	"[+L] +e +y" 
+	    	"[+F] +e +y" 
+	    	"[+f] +e +y" 
+			"+E - +L +y"
+			"+E - +F +y"
+			"+F +y"
+            "Custom"
+    ID PrefFormNotifyFmts 
+			AT (PrevRight PrevTop 60 AUTO) VISIBLEITEMS 7 NONUSABLE
     POPUPTRIGGER "" ID PrefFormNotifyTrigger 
 			AT (PREVLEFT PREVTOP-1 40 13) LEFTANCHOR
     POPUPLIST ID PrefFormNotifyTrigger PrefFormNotifyFmts
+    LABEL "= " AUTOID AT (25 PrevBottom)
+    FIELD ID PrefFormNotifyField AT (PrevRight+3 PrevTop 100 AUTO) UNDERLINED MAXCHARS 40
 
     LABEL "Address Book:" AUTOID AT (10 PrevBottom+3)
     LIST 	"Built-in" 
@@ -506,7 +518,7 @@ BEGIN
     TITLE "About HappyDays"
 
 	FORMBITMAP AT (6 18) BITMAP ID_BitmapIcon USABLE 
-    LABEL "HappyDays 2.37" AUTOID AT (PrevRight+38 PrevTop) FONT 1
+    LABEL "HappyDays 2.40" AUTOID AT (PrevRight+38 PrevTop) FONT 1
     LABEL "GPL free software"
         AUTOID AT (PrevLeft PrevTop+ABOUT_LINE_SPACING) FONT 0
     LABEL "(c) 1999-2004 Jaemok Jeong"
@@ -576,4 +588,4 @@ SMALLICONFAMILY
 	TRANSPARENT 192 192 0
 
 APPLICATIONICONNAME 1000 "HappyDays"
-VERSION ID 1 "2.37"
+VERSION ID 1 "2.40"

@@ -23,9 +23,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "happydays.h"
 #include "address.h"
 #include "happydaysRsc.h"
-#include "calendar.h"
+#include "lunar.h"
 
 extern Boolean gbVgaExists;
+extern UInt16    lunarRefNum;
 
 void PackHappyDays(HappyDays *hd, void* recordP)
 {
@@ -124,22 +125,22 @@ static Int16 CompareAgeFunc(LineItemPtr p1, LineItemPtr p2, Int32 extra)
 static Int16 CalculateAge(DateType converted, DateType origin,
                           HappyDaysFlag flag)
 {
-    DateTimeType rtVal;
     int dummy = 0;
     int ret;
+    int lyear, lmonth, lday;
     
     if (flag.bits.lunar_leap || flag.bits.lunar) {
         // lunar birthdate
         //          change to lunar date
         //
         // converted solar is again converted into lunar day for calculation
-        ret = sol2lun(converted.year + 1904, converted.month, converted.day,
-                      &rtVal, &dummy);
-        if (ret) return -1;     // error
+        ret = lunarS2L(lunarRefNum, converted.year + 1904, converted.month, converted.day,
+                      &lyear, &lmonth, &lday, &dummy);
+        if (ret != errNone) return -1;     // error
 
-        converted.year = rtVal.year - 1904;
-        converted.month = rtVal.month;
-        converted.day = rtVal.day;
+        converted.year = lyear - 1904;
+        converted.month = lmonth;
+        converted.day = lday;
     }
     
     return converted.year - origin.year;
@@ -190,12 +191,12 @@ UInt16 AddrGetHappyDays(DmOpenRef dbP, UInt16 AddrCategory, DateType start)
 					converted = r.date;
 
                     if (r.flag.bits.nthdays) {
-                        DateTimeType rtVal;
+                        int syear, smonth, sday;
 
                         if (r.flag.bits.lunar || r.flag.bits.lunar_leap) {
-                            if  (lun2sol(converted.year + firstYear,
-                                         converted.month, converted.day,
-                                         r.flag.bits.lunar_leap, &rtVal)) {
+                            if  (lunarL2S(lunarRefNum, converted.year + firstYear,
+                                          converted.month, converted.day,
+                                          r.flag.bits.lunar_leap, &syear, &smonth, &sday) != errNone) {
                                 MemHandleUnlock(recordH);
                                 currindex++;
                                 recordNum--;
@@ -203,9 +204,9 @@ UInt16 AddrGetHappyDays(DmOpenRef dbP, UInt16 AddrCategory, DateType start)
 
                                 continue;
                             }
-                            converted.day = rtVal.day;
-                            converted.month = rtVal.month;
-                            converted.year = rtVal.year - firstYear;
+                            converted.day = sday;
+                            converted.month = smonth;
+                            converted.year = syear - firstYear;
                         }
                         DateAdjust(&converted, r.nth);
 
@@ -288,15 +289,15 @@ UInt16 AddrGetHappyDays(DmOpenRef dbP, UInt16 AddrCategory, DateType start)
             
             // sort the order if sort order is converted date
             //
-            if (gPrefsR.Prefs.sort == 1) {      	// date sort
+            if (gPrefsR.sort == 1) {      	// date sort
                 SysInsertionSort(ptr, totalItems, sizeof(LineItemType),
                                  (_comparF *)CompareHappyDaysFunc, 1L);
             }
-			else if (gPrefsR.Prefs.sort == 3) {  	// age sort
+			else if (gPrefsR.sort == 3) {  	// age sort
                 SysInsertionSort(ptr, totalItems, sizeof(LineItemType),
                                  (_comparF *)CompareAgeFunc, 1L);
             }
-			else if (gPrefsR.Prefs.sort == 2) {	    // age sort(re)
+			else if (gPrefsR.sort == 2) {	    // age sort(re)
                 SysInsertionSort(ptr, totalItems, sizeof(LineItemType),
                                  (_comparF *)CompareAgeFunc, -1L);
             }
@@ -425,11 +426,11 @@ Boolean AnalysisHappyDays(const char* field,
         else return false;
 
         if (flag->bits.lunar || flag->bits.lunar_leap) {
-            DateTimeType rtVal;
-            int ret;
+            int syear, smonth, sday; 
+            Err err;
             
-            ret = lun2sol(*dYear, month, day, flag->bits.lunar_leap, &rtVal);
-            if (ret) {
+            err = lunarL2S(lunarRefNum, *dYear, month, day, flag->bits.lunar_leap, &syear, &smonth, &sday);
+            if (err != errNone) {
 				return false;
 			}
         }
@@ -575,7 +576,7 @@ static Int16 AnalOneRecord(UInt16 addrattr, Char* src,
 
     // ignore record with exclamation mark
     if (*src == '!') {
-        if (gPrefsR.Prefs.ignoreexclamation) return 0;
+        if (gPrefsR.ignoreexclamation) return 0;
         else src++;
     }
 
@@ -717,7 +718,7 @@ Boolean FindHappyDaysField()
     if ((addrInfoPtr = (AddrAppInfoPtr)AppInfoGetPtr(AddressDB))) {
         for (i= firstRenameableLabel; i <= lastRenameableLabel; i++) {
             if (!StrCaselessCompare(addrInfoPtr->fieldLabels[i],
-                                    gPrefsR.Prefs.custom)) {
+                                    gPrefsR.custom)) {
                 gHappyDaysField = i;
                 break;
             }
@@ -851,8 +852,8 @@ Boolean UpdateHappyDaysDB(FormPtr frm)
         AddrUnpack(rp, &r);
 
         if ((gHappyDaysField <= 0 || !r.fields[gHappyDaysField])
-            && !(gPrefsR.Prefs.scannote && r.fields[note]
-                 && StrStr(r.fields[note], gPrefsR.Prefs.notifywith) ) ) {
+            && !(gPrefsR.scannote && r.fields[note]
+                 && StrStr(r.fields[note], gPrefsR.notifywith) ) ) {
             // not exist in happydays field or note field
             //
             MemHandleUnlock(recordH);
@@ -880,8 +881,8 @@ Boolean UpdateHappyDaysDB(FormPtr frm)
         while (whichField >= 0) {
 
             if (whichField == note) {
-                p = StrStr(r.fields[note], gPrefsR.Prefs.notifywith)
-                    + StrLen(gPrefsR.Prefs.notifywith) + 1;
+                p = StrStr(r.fields[note], gPrefsR.notifywith)
+                    + StrLen(gPrefsR.notifywith) + 1;
 
                 if ( StrLen(r.fields[note]) < (p - r.fields[note]) ) break;
             }
@@ -898,7 +899,7 @@ Boolean UpdateHappyDaysDB(FormPtr frm)
             p = StrCopy(hdField, p);
 
             if (whichField == note && 
-                (end = StrStr(p, gPrefsR.Prefs.notifywith))) {
+                (end = StrStr(p, gPrefsR.notifywith))) {
                 // end delimeter
                 //
                 *end = 0;
@@ -931,9 +932,9 @@ Boolean UpdateHappyDaysDB(FormPtr frm)
             }
                 
             if (whichField == gHappyDaysField  // next is note field
-                && (gPrefsR.Prefs.scannote     // scanNote & exists
+                && (gPrefsR.scannote     // scanNote & exists
                     && r.fields[note]       
-                    && StrStr(r.fields[note], gPrefsR.Prefs.notifywith)) ) {
+                    && StrStr(r.fields[note], gPrefsR.notifywith)) ) {
                 whichField = note;
             }
             else whichField = -1;

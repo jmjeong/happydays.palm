@@ -1,14 +1,14 @@
 ## Makefile for HappyDays application
 
-VERSION = 2.37
+VERSION = 2.40
 TARGET = happydays
 APPNAME = "HappyDays"
 APPID = "Jmje"
 
-FILES = lun2sol.c sol2lun.c address.c datebook.c util.c \
+FILES = lunar.c address.c datebook.c util.c \
 		birthdate.c happydays.c memodb.c s2lconvert.c \
 		todo.c notify.c datealarm.c
-OBJS = obj/lun2sol.o obj/sol2lun.o obj/address.o obj/datebook.o obj/util.o \
+OBJS = obj/lunar.o obj/address.o obj/datebook.o obj/util.o \
 		obj/birthdate.o obj/happydays.o obj/memodb.o obj/s2lconvert.o \
 		obj/todo.o obj/notify.o obj/datealarm.o \
 		obj/happydays-sections.o
@@ -34,18 +34,27 @@ all: en
 
 all-lang: en it tur ko sp chi de br nor cz fr ru
 
-PORTUGUESE_BR:
+happydaysRsc.h: happydays.rcp
+	cp /dev/null happydaysRsc.h
+	touch happydaysRsc.rcp
+	$(PILRC) -allowBadSize -I bitmap -q -H happydaysRsc.h happydays.rcp
+
+tag:
+	-find . -type f -iname "*.[ch]" | tee cscope.files | xargs etags
+	-cscope -R -b
+
+PORTUGUESE_BR: happydaysRsc.h
 	$(CC) -c -DPORTUGUESE_BR $(CFLAGS) $(CPPFLAGS) \
 			-o obj/happydays.o happydays.c
 
-ITALIAN:
+ITALIAN: happydaysRsc.h
 	$(CC) -c -DITALIAN $(CFLAGS) $(CPPFLAGS) \
 			-o obj/happydays.o happydays.c
 
-GERMAN:
+GERMAN: happydaysRsc.h
 	$(CC) -c -DGERMAN $(CFLAGS) $(CPPFLAGS) -o obj/happydays.o happydays.c
 
-ENGLISH:
+ENGLISH: happydaysRsc.h
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o obj/happydays.o happydays.c
 
 en: ENGLISH obj/$(TARGET).prc
@@ -423,7 +432,7 @@ prc/$(TARGET).prc: obj/$(TARGET).prc
 
 src:
 	svn export svn://$(SVNHOST)/happydays/trunk happydays-src && \
-	zip -r happydays-src-$(VERSION).zip happydays-src && rm -rf /tmp/happydays-src
+	zip -r happydays-src-$(VERSION).zip happydays-src && rm -rf happydays-src
 
 zip: prc/$(TARGET).prc 
 	-@echo "Making distribution file(happydays-$(VERSION).zip) ..." &&\

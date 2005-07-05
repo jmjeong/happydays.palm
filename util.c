@@ -21,8 +21,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <SonyCLIE.h>
 #include "util.h"
 #include "happydaysRsc.h"
-#include "calendar.h"
+#include "lunar.h"
 
+extern UInt16 lunarRefNum;
 
 /***********************************************************************
  * FUNCTION:    ResizeSilk
@@ -234,7 +235,7 @@ FieldPtr ClearFieldText(UInt16 fieldID)
 Boolean FindNearLunar(DateType *dt, DateType base, Boolean leapyes)
 {
     int lunyear, lunmonth, lunday;
-    DateTimeType rtVal;
+    int syear, smonth, sday;
     Int16 i;
 
     lunmonth = dt->month; lunday = dt->day;
@@ -242,10 +243,12 @@ Boolean FindNearLunar(DateType *dt, DateType base, Boolean leapyes)
     for (i = -1; i < 5; i++) {
         lunyear = base.year + 1904 + i;
 
-        if  (lun2sol(lunyear, lunmonth, lunday, leapyes, &rtVal)) continue;
+        if  (lunarL2S(lunarRefNum, lunyear, lunmonth, lunday, leapyes, &syear, &smonth, &sday) != errNone) 
+			continue;
         
-        dt->year = rtVal.year - 1904;
-        dt->month = rtVal.month; dt->day = rtVal.day;
+        dt->year = syear - 1904;
+        dt->month = smonth;
+        dt->day = sday;
 
         if (DateCompare(base, *dt) <= 0) return true;
     }

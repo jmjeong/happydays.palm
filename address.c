@@ -391,7 +391,7 @@ Int16 GotoAddress(Int16 index)
     DmSearchStateType searchInfo;
     UInt16 cardNo;
     LocalID dbID;
-    UInt32 addrID = AddrGotoCreatorId[(int)gPrefsR.Prefs.addrapp];
+    UInt32 addrID = AddrGotoCreatorId[(int)gPrefsR.addrapp];
 
     theGotoPointer = MemPtrNew(sizeof(GoToParamsType));
     if (!theGotoPointer) return -1;
