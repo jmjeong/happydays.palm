@@ -114,10 +114,12 @@ BEGIN
     "long_prefString" = "Notify format\n"\
         "+L = Last, First\n"\
         "+F = First Last\n"\
-        "+f = First\n"\
+        "+l = LastName\n"\
+        "+f = FirstName\n"\
         "+e = Event Type(1)\n"\
         "+E = Event Type(f)\n"\
-        "+y = Year age\n"
+        "+y = Year age\n"\
+        "++ = +\n"
 
 /* Display preferences */
     "Emphasize Lunar Date" = "Emphasize Lunar Date"

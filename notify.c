@@ -675,7 +675,7 @@ static Boolean IsHappyDaysRecord(Char* notefield)
     return false;
 }
 
-static Char* gNotifyFormatString[6] =
+Char* gNotifyFormatString[6] =
 { "[+L] +e +y",     // [Jeong, JaeMok] B 1970
   "[+F] +e +y",     // [JaeMok Jeong] B 1970
   "[+f] +e +y",     // [JaeMok] B 1970
@@ -708,7 +708,8 @@ static Char* NotifyDescString(DateType when, HappyDays birth,
 
     // boundary check must be inserted
     //
-    pfmtString = gNotifyFormatString[(int)gPrefsR.notifyformat];
+    // pfmtString = gNotifyFormatString[(int)gPrefsR.notifyformat];
+    pfmtString = gPrefsR.notifyformatstring;
     while (*pfmtString) {
         if (*pfmtString == '+') {
             switch (*(pfmtString+1)) {
@@ -734,6 +735,11 @@ static Char* NotifyDescString(DateType when, HappyDays birth,
 
                 pDesc += StrLen(pDesc);
                 break;
+            case 'l':       // LastName
+                StrCopy(pDesc, birth.name1);
+                pDesc += StrLen(pDesc);
+                break;
+                
             case 'f':       // FirstName
                 StrCopy(pDesc, birth.name2);
 
@@ -796,6 +802,8 @@ static Char* NotifyDescString(DateType when, HappyDays birth,
                 break;
 
             default:
+                // Copy the rest
+                *pDesc++ = *(pfmtString+1);
             	break;
             }
 

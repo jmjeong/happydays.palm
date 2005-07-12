@@ -243,16 +243,16 @@ BEGIN
                  AT (PREVLEFT PREVTOP-1 50 AUTO) LEFTANCHOR
     POPUPLIST ID PrefFormRescanTrigger PrefFormAutoRescan
         
-	LABEL "Notify Format:" AUTOID AT (10 PrevBottom+1) 
-    LIST 	"[+L] +e +y" 
-	    	"[+F] +e +y" 
-	    	"[+f] +e +y" 
-			"+E - +L +y"
-			"+E - +F +y"
-			"+F +y"
+	LABEL "Noti Fmt:" AUTOID AT (10 PrevBottom+1) 
+    LIST 	"[Last, First] E(1) Year"
+	    	"[First Last] E(1) Year"
+	    	"[First] E(1) Year"
+			"Event - Last, First Year"
+			"Event - First Last Year"
+			"First Last Year"
             "Custom"
     ID PrefFormNotifyFmts 
-			AT (PrevRight PrevTop 60 AUTO) VISIBLEITEMS 7 NONUSABLE
+			AT (PrevRight PrevTop 100 AUTO) VISIBLEITEMS 7 NONUSABLE
     POPUPTRIGGER "" ID PrefFormNotifyTrigger 
 			AT (PREVLEFT PREVTOP-1 40 13) LEFTANCHOR
     POPUPLIST ID PrefFormNotifyTrigger PrefFormNotifyFmts

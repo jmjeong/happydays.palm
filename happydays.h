@@ -29,14 +29,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define MainDBType          'DATA'
 #define MainDBName          "HappyDaysDB"
 #define MainAppID           'Jmje'
+
 #define DatebookAppID       'date'
-#define DatebookDBName      "DatebookDB"
 #define ToDoAppID           'todo'
-#define ToDoDBName          "ToDoDB"
 #define AddressAppID        'addr'
-#define AddressDBName       "AddressDB"
 #define MemoAppID           'memo'
-#define MemoDBName          "MemoDB"
+
+#define NewDatebookAppID    'PAdd'
+#define NewAddrAppID        'PDat'
+#define NewTaskAppID        'PTod'
+#define NewMemoAppID        'PMem'
 
 #define DATEBK3_MEMO_STRING "DATEBK3\n"       // datebk3 icon in memo list
 
@@ -162,6 +164,10 @@ extern Boolean gPrefsRdirty;
 extern Boolean gSortByCompany;
 extern DmOpenRef MainDB;
 extern DmOpenRef AddressDB;
+extern DmOpenRef DatebookDB;
+extern DmOpenRef ToDoDB;
+extern DmOpenRef MemoDB;
+
 extern UInt32 gDbcdate, gDbmdate, gAdcdate, gAdmdate;
 extern DateFormatType gPrefdfmts;  // global date format for Birthday field
 extern DateFormatType gDispdfmts;  // global date format for display

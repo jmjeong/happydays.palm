@@ -1,20 +1,20 @@
 /*
-HappyDays - A Birthday displayer for the PalmPilot
-Copyright (C) 1999-2005 JaeMok Jeong
+  HappyDays - A Birthday displayer for the PalmPilot
+  Copyright (C) 1999-2005 JaeMok Jeong
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 #include <PalmOS.h>
@@ -70,6 +70,7 @@ Boolean     gSonyClie = false;
 Boolean     gSilkLibLoaded;
 
 Boolean     gProgramExit = false;   // Program exit control(set by Startform)
+Boolean     isNewPIMS;
 
 ////////////////////////////////////////////////////////////////////
 // Prefs stuff 
@@ -130,9 +131,10 @@ Boolean MenuHandler(FormPtr frm, EventPtr e) SECT1;
 void MainFormScroll(Int16 newValue, Int16 oldValue, Boolean force_redraw) SECT1;
 void MainFormScrollLines(Int16 lines, Boolean force_redraw) SECT1;
 void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column, 
-                              RectanglePtr bounds) SECT1;
+                       RectanglePtr bounds) SECT1;
 void DrawTiny(int size,int x,int y,int n) SECT1;
 void DrawSilkMonth(int mon, int year, int day, int x, int y) SECT1;
+Int16 OpenPIMDatabases(UInt32 dbid, UInt32 adid, UInt32 tdid, UInt32 mmid, UInt16 mode) SECT1;
 
 ////////////////////////////////////////////////////////////////////
 // private database for HappyDays
@@ -225,7 +227,7 @@ static Int16 GetNumOfEventNoteInfo(Char *rp)
     while ( (q = StrChr(p, '\n')) )
     {
         if (*(q+1) == '*') {
-             p = q+1;
+            p = q+1;
             num++;
         }
         else p++;
@@ -350,6 +352,20 @@ static UInt16 StartApplication(void)
 
     gTableRowHandle = 0;
 
+    if (OpenDatabases() < 0) {
+/*         if (!DatebookDB) { */
+/*             /\* */
+/*              * BTW make sure there is " " (single space) in unused ^1 ^2 ^3 */
+/*              * entries or PalmOS <= 2 will blow up. */
+/*              *\/ */
+
+/*             SysCopyStringResource(gAppErrStr, DateBookFirstAlertString); */
+/*             FrmCustomAlert(ErrorAlert, gAppErrStr, " ", " "); */
+/*         } */
+
+        return 1;
+    }
+    
     err = lunar_OpenLibrary(&lunarRefNum, &lunarClientText);
     if (err != errNone) {
         FrmCustomAlert(ErrorAlert, "Please install lunarlib.prc", " ", " ");
@@ -415,20 +431,6 @@ static UInt16 StartApplication(void)
     // set current date to  the starting date
 	DateSecondsToDate(TimGetSeconds(), &gStartDate);
     
-    if ((err = OpenDatabases()) < 0) {
-/*         if (!DatebookDB) { */
-/*             /\* */
-/*              * BTW make sure there is " " (single space) in unused ^1 ^2 ^3 */
-/*              * entries or PalmOS <= 2 will blow up. */
-/*              *\/ */
-
-/*             SysCopyStringResource(gAppErrStr, DateBookFirstAlertString); */
-/*             FrmCustomAlert(ErrorAlert, gAppErrStr, " ", " "); */
-/*         } */
-
-        freememories();
-        return 1;
-    }
     GetEventNoteInfo();
 
     if (gSilkLibLoaded) {
@@ -438,8 +440,8 @@ static UInt16 StartApplication(void)
 	
     	SysCurAppDatabase (&ProgramcardNo, &ProgramdbID); 
         err = SysNotifyRegister(ProgramcardNo, ProgramdbID,
-                                  sysNotifyDisplayChangeEvent, NR70GraffitiHandleEvent, 
-                                  sysNotifyNormalPriority, NULL);
+                                sysNotifyDisplayChangeEvent, NR70GraffitiHandleEvent, 
+                                sysNotifyNormalPriority, NULL);
         ErrFatalDisplayIf( ( err != errNone ), "can't register" );
     }
     
@@ -460,22 +462,22 @@ static void StopApplication(void)
 
         error = SysNotifyUnregister(ProgramcardNo, ProgramdbID,
                                     sysNotifyDisplayChangeEvent, sysNotifyNormalPriority);
-         ErrFatalDisplayIf( ( error != errNone ), "can't unregister" );
+        ErrFatalDisplayIf( ( error != errNone ), "can't unregister" );
         
-         if (VskGetAPIVersion(hrSRefNum) < 2) {
-             // old devices didn't restore the silkscreen automatically
-             // for applications that don't support silkscreen resizing;
-             // therefore, we need to restore the silkscreen explicitly
-             (void) ResizeSilk(hrSRefNum, vskResizeMax);
-         }
+        if (VskGetAPIVersion(hrSRefNum) < 2) {
+            // old devices didn't restore the silkscreen automatically
+            // for applications that don't support silkscreen resizing;
+            // therefore, we need to restore the silkscreen explicitly
+            (void) ResizeSilk(hrSRefNum, vskResizeMax);
+        }
 
-         // disable silkscreen resizing before we quit
-         (void) EnableSilkResize(hrSRefNum, vskResizeDisable);
+        // disable silkscreen resizing before we quit
+        (void) EnableSilkResize(hrSRefNum, vskResizeDisable);
 
-         if (VskGetAPIVersion(hrSRefNum) < 2) {
-             SilkLibClose(hrSRefNum);
-         }
-         else VskClose(hrSRefNum); // same as SilkLibClose
+        if (VskGetAPIVersion(hrSRefNum) < 2) {
+            SilkLibClose(hrSRefNum);
+        }
+        else VskClose(hrSRefNum); // same as SilkLibClose
     }
 
     if (gSonyClie) {
@@ -834,15 +836,11 @@ static void WritePrefsRec(void)
     PrefSetAppPreferences(HDAppID, 0, HDAppVer, (void*)&gPrefsR, 
                           sizeof(gPrefsR), true);
 }
-    
+
 static Int16 OpenDatabases(void)
 {
     SystemPreferencesType sysPrefs;
     UInt16 mode = 0;
-    UInt16 cardNo;
-    LocalID dbID, appInfoID;
-    UInt32 cdate, mdate;
-    AddrAppInfoPtr appInfoPtr;
     DmOpenRef compDBRef;
     char ForDateBookCategoryCheck[dmCategoryLength];
 
@@ -854,7 +852,7 @@ static Int16 OpenDatabases(void)
     AddressDB = 0;
     MemoDB = 0;
 
-   compDBRef = DmOpenDatabaseByTypeCreator('aexo', 'pdmE', dmModeReadOnly);
+    compDBRef = DmOpenDatabaseByTypeCreator('aexo', 'pdmE', dmModeReadOnly);
     if (!compDBRef) {
         isNewPIMS = false;
     }
@@ -871,66 +869,15 @@ static Int16 OpenDatabases(void)
     gPreftfmts = sysPrefs.timeFormat;               // save global time format
 
     if (!isNewPIMS) {
-        int ret = OpenOldPIMDatabases(mode);
+        int ret = OpenPIMDatabases(DatebookAppID, AddressAppID, ToDoAppID, MemoAppID, mode);
         if (ret < 0) return ret;
     }
     else {
-        int ret = OpenNewPIMDatabases(mode);
-        if (ret < 0) return ret;
-    }
-    
-    DatebookDB = DmOpenDatabaseByTypeCreator('DATA', DatebookAppID,
-                                             mode | dmModeReadWrite);
-    if (!DatebookDB) {
-            /*
-             * BTW make sure there is " " (single space) in unused ^1 ^2 ^3
-             * entries or PalmOS <= 2 will blow up.
-             */
-
-        SysCopyStringResource(gAppErrStr, DateBookFirstAlertString);
-        FrmCustomAlert(ErrorAlert, gAppErrStr, " ", " ");
-        return -1;
+          int ret = OpenPIMDatabases(NewDatebookAppID, NewAddrAppID, NewTaskAppID, NewMemoAppID, mode);
+          if (ret < 0) return ret;
     }
 
-    ToDoDB = DmOpenDatabaseByTypeCreator('DATA', ToDoAppID,
-                                         mode | dmModeReadWrite);
-    if (!ToDoDB) {
-        SysCopyStringResource(gAppErrStr, ToDoFirstAlertString);
-        FrmCustomAlert(ErrorAlert, gAppErrStr, " ", " ");
-        return -1;
-    }
-
-    AddressDB = DmOpenDatabaseByTypeCreator('DATA', AddressAppID,
-                                            mode | dmModeReadOnly);
-    ErrFatalDisplayIf(!AddressDB, "AddressDB not exist");
-
-    DmOpenDatabaseInfo(AddressDB, &dbID, NULL,  NULL, &cardNo, NULL);
-    if (!DmDatabaseInfo(cardNo, dbID, NULL , NULL, NULL, &cdate, &mdate,
-                        NULL, NULL, &appInfoID, NULL, NULL, NULL)) {
-        gAdcdate = cdate;
-        gAdmdate = mdate;
-        /*
-         * We want to get the sort order for the address book.  This
-         * controls how to display the birthday list.
-         */
-        if (appInfoID) {
-            if ((appInfoPtr = (AddrAppInfoPtr)
-                 MemLocalIDToLockedPtr(appInfoID, cardNo))) {
-                gSortByCompany = appInfoPtr->misc.sortByCompany;
-                MemPtrUnlock(appInfoPtr);
-            }
-        }
-
-    }
-    else return -1;
-    
-
-    MemoDB = DmOpenDatabaseByTypeCreator('DATA', MemoAppID,
-                                         mode | dmModeReadWrite);
-    ErrFatalDisplayIf(!AddressDB, "MemoDB not exist");
-
-    MainDB = DmOpenDatabaseByTypeCreator('DATA', MainAppID,
-                                         mode | dmModeReadWrite);
+    MainDB = DmOpenDatabaseByTypeCreator('DATA', MainAppID, mode | dmModeReadWrite);
     if (!MainDB){
         //
         // Create our database if it doesn't exist yet
@@ -1073,25 +1020,25 @@ static void RereadHappyDaysDB(DateType start)
 
 static void HighlightAction(int selected, Boolean sound)
 {
-  FormPtr frm = FrmGetActiveForm();
-  TablePtr tableP = GetObjectPointer(frm, MainFormTable);
+    FormPtr frm = FrmGetActiveForm();
+    TablePtr tableP = GetObjectPointer(frm, MainFormTable);
 
-  if (sound) SndPlaySystemSound(sndClick);
+    if (sound) SndPlaySystemSound(sndClick);
 
-  if (gMainTableHandleRow >= 0) {
-      // unhighlight the selection
-      MainTableSelectItem(tableP, gMainTableHandleRow - gMainTableStart, false);
-  }
+    if (gMainTableHandleRow >= 0) {
+        // unhighlight the selection
+        MainTableSelectItem(tableP, gMainTableHandleRow - gMainTableStart, false);
+    }
 
-  if (gMainTableStart > selected
-      || selected >= (gMainTableStart + gMainTablePageSize) ) {
-      // if not exist in table view, redraw table
-      gMainTableStart = MAX(0, selected-4);
-      MainFormLoadTable(frm, gMainTableStart);
-      TblDrawTable(tableP);
-  }
-  gMainTableHandleRow = selected;
-  MainTableSelectItem(tableP, gMainTableHandleRow - gMainTableStart, true);
+    if (gMainTableStart > selected
+        || selected >= (gMainTableStart + gMainTablePageSize) ) {
+        // if not exist in table view, redraw table
+        gMainTableStart = MAX(0, selected-4);
+        MainFormLoadTable(frm, gMainTableStart);
+        TblDrawTable(tableP);
+    }
+    gMainTableHandleRow = selected;
+    MainTableSelectItem(tableP, gMainTableHandleRow - gMainTableStart, true);
 }
 
 static void HighlightMatchRowDate(DateTimeType inputDate)
@@ -1532,7 +1479,7 @@ static void HandleNextKey(void)
         }
     }
 	MainTableSelectItem(GetObjectPointer(frm, MainFormTable),
-                            gMainTableHandleRow - gMainTableStart, true);
+                        gMainTableHandleRow - gMainTableStart, true);
 }
 
 
@@ -1743,7 +1690,7 @@ static Boolean MainFormHandleEvent (EventPtr e)
         if (gMainTableHandleRow >= 0) {
             // unhighlight
             MainTableSelectItem(GetObjectPointer(frm, MainFormTable),
-                                    gMainTableHandleRow-gMainTableStart, false);
+                                gMainTableHandleRow-gMainTableStart, false);
         }
 		break;
     }
@@ -1798,12 +1745,12 @@ static void LoadPrefsFields()
                     
     SetFieldTextFromStr(PrefFormCustomField, gPrefsR.custom);
 /*
-    SetFieldTextFromStr(PrefFormNotifyWith, gPrefsR.Prefs.notifywith);
+  SetFieldTextFromStr(PrefFormNotifyWith, gPrefsR.Prefs.notifywith);
 */
     CtlSetValue(GetObjectPointer(frm, PrefFormScanNote), 
-		gPrefsR.scannote);
+                gPrefsR.scannote);
     CtlSetValue(GetObjectPointer(frm, PrefFormIgnorePrefix), 
-		gPrefsR.ignoreexclamation);
+                gPrefsR.ignoreexclamation);
 
 }
 
@@ -1826,13 +1773,13 @@ static Boolean UnloadPrefsFields()
         }
     }
 /*    
-    if (FldDirty(GetObjectPointer(frm, PrefFormNotifyWith))) {
-        if (FldGetTextPtr(GetObjectPointer(frm, PrefFormNotifyWith))) {
-            StrNCopy(gPrefsR.Prefs.notifywith,
-                     FldGetTextPtr(GetObjectPointer(frm,
-                                                    PrefFormNotifyWith)), 5);
-        }
-    }
+      if (FldDirty(GetObjectPointer(frm, PrefFormNotifyWith))) {
+      if (FldGetTextPtr(GetObjectPointer(frm, PrefFormNotifyWith))) {
+      StrNCopy(gPrefsR.Prefs.notifywith,
+      FldGetTextPtr(GetObjectPointer(frm,
+      PrefFormNotifyWith)), 5);
+      }
+      }
 */
     // If effective date format has changed, we need to signal for a re-scan
     // of the address book database. This occurs if
@@ -1866,8 +1813,7 @@ static Boolean UnloadPrefsFields()
     if (FldDirty(GetObjectPointer(frm, PrefFormNotifyField))) {
         if (FldGetTextPtr(GetObjectPointer(frm, PrefFormNotifyField))) {
             StrNCopy(gPrefsR.notifyformatstring,
-                     FldGetTextPtr(GetObjectPointer(frm,
-                                                    PrefFormNotifyField)), 49);
+                     FldGetTextPtr(GetObjectPointer(frm, PrefFormNotifyField)), 39);
         }
     }
 
@@ -2013,17 +1959,44 @@ static Boolean PrefFormHandleEvent(EventPtr e)
             handled = true;
             break;
 
-        case PrefFormNotifyFmts:
-
+        case PrefFormNotifyTrigger: {
+            extern Char* gNotifyFormatString[];
             
-            handled = false;
+            ListPtr lst = GetObjectPointer(FrmGetActiveForm(), PrefFormNotifyFmts);
+            FieldPtr fld = GetObjectPointer(FrmGetActiveForm(), PrefFormNotifyField);
+            
+            Int16 selection = LstPopupList(lst);
+            if (selection >= 0) {
+                gPrefsR.notifyformat = selection;
+                CtlSetLabel(GetObjectPointer(FrmGetActiveForm(), PrefFormNotifyTrigger),
+                            LstGetSelectionText(lst, selection));
+            }
+            if (selection >= 0 && selection < 6) {      // 6 : Custom
+                SetFieldTextFromStr(PrefFormNotifyField, gNotifyFormatString[selection]);
+                FldDrawField(fld);
+            }
+            handled = true;
+            
             break;
+        }
             
         default:
             break;
         }
         break;
 
+    case fldEnterEvent:
+    case keyDownEvent:
+    {
+        if (gPrefsR.notifyformat != 6) {
+            ListPtr lst = GetObjectPointer(FrmGetActiveForm(), PrefFormNotifyFmts);
+
+            gPrefsR.notifyformat = 6;       // custom
+            CtlSetLabel(GetObjectPointer(FrmGetActiveForm(), PrefFormNotifyTrigger), LstGetSelectionText(lst, 6));
+        }
+
+        break;
+    }
     case menuEvent:
         MenuEraseStatus(NULL);
         break;
@@ -2414,7 +2387,7 @@ static void ViewTableDrawHdr(MemPtr tableP, Int16 row, Int16 column,
 }
 
 void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column, 
-                              RectanglePtr bounds)
+                       RectanglePtr bounds)
 {
     FontID currFont;
     
@@ -2570,9 +2543,9 @@ void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column,
             
             if (r.flag.bits.lunar || r.flag.bits.lunar_leap) {
                 lunarL2S(lunarRefNum, r.date.year+1904,
-                        r.date.month,
-                        r.date.day,
-                        r.flag.bits.lunar_leap, &syear, &smonth, &sday);
+                         r.date.month,
+                         r.date.day,
+                         r.flag.bits.lunar_leap, &syear, &smonth, &sday);
 
                 
                 solBirth.year = syear - 1904;
@@ -2641,30 +2614,30 @@ void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column,
     }
     break;
 /*    
-	case ViewBioRhythm:
-	{
-		Int16 phys, emot, intel;
+      case ViewBioRhythm:
+      {
+      Int16 phys, emot, intel;
 
-        dateDiff = (Int32)DateToDays(converted) - (Int32)DateToDays(current);
+      dateDiff = (Int32)DateToDays(converted) - (Int32)DateToDays(current);
 
-        if (dateDiff >= (Int32)0) {
-			phys = (dateDiff+12) % 23;
-			emot = (dateDiff+14) % 28;
-			intel = (dateDiff+17) % 33;
+      if (dateDiff >= (Int32)0) {
+      phys = (dateDiff+12) % 23;
+      emot = (dateDiff+14) % 28;
+      intel = (dateDiff+17) % 33;
 
-            SysCopyStringResource(displayStr, BioString);
-            StrPrintF(gAppErrStr, displayStr,
-			(phys<12 ? "+" : (phys>12 ? "-" : "C" )),
-			(emot<14 ? "+" : (emot>14 ? "-" : "C" )),
-			(intel<17 ? "+" : (phys>17 ? "-" : "C" )));
+      SysCopyStringResource(displayStr, BioString);
+      StrPrintF(gAppErrStr, displayStr,
+      (phys<12 ? "+" : (phys>12 ? "-" : "C" )),
+      (emot<14 ? "+" : (emot>14 ? "-" : "C" )),
+      (intel<17 ? "+" : (phys>17 ? "-" : "C" )));
 
-			length = StrLen(gAppErrStr);
-			FntCharsInWidth(gAppErrStr, &width, &length, &ignored);
-			WinDrawChars(gAppErrStr, length, x, y);
-        }
+      length = StrLen(gAppErrStr);
+      FntCharsInWidth(gAppErrStr, &width, &length, &ignored);
+      WinDrawChars(gAppErrStr, length, x, y);
+      }
             
-	}
-	break;
+      }
+      break;
 */    
     }
     MemHandleUnlock(recordH);
@@ -2822,42 +2795,42 @@ static void ViewFormInit(FormPtr frm, Boolean bformModify)
 
 void DrawTiny(int size,int x,int y,int n) 
 {
-  int a,b,c;
+    int a,b,c;
 
-  if (size==1)
-  {
-    a=4;
-    b=3;
-    c=6;
-  } else
-  {
-    a=2;
-    b=2;
-    c=4;
-  }
+    if (size==1)
+    {
+        a=4;
+        b=3;
+        c=6;
+    } else
+    {
+        a=2;
+        b=2;
+        c=4;
+    }
 
 
-  if (n & 1)
-    WinDrawLine(x,y,x+a,y);
-  if (n & 2)
-    WinDrawLine(x,y,x,y+b);
-  if (n & 4)
-    WinDrawLine(x+a,y,x+a,y+b);
-  if (n & 8)
-    WinDrawLine(x,y+b,x+a,y+b);
-  if (n & 16)
-    WinDrawLine(x,y+b,x,y+c);
-  if (n & 32)
-    WinDrawLine(x+a,y+b,x+a,y+c);
-  if (n & 64)
-    WinDrawLine(x,y+c,x+a,y+c);
+    if (n & 1)
+        WinDrawLine(x,y,x+a,y);
+    if (n & 2)
+        WinDrawLine(x,y,x,y+b);
+    if (n & 4)
+        WinDrawLine(x+a,y,x+a,y+b);
+    if (n & 8)
+        WinDrawLine(x,y+b,x+a,y+b);
+    if (n & 16)
+        WinDrawLine(x,y+b,x,y+c);
+    if (n & 32)
+        WinDrawLine(x+a,y+b,x+a,y+c);
+    if (n & 64)
+        WinDrawLine(x,y+c,x+a,y+c);
 }
 
 static void TinyNumber(int size,int x,int y,int num) 
 {
-  const int numbers[10] = {119,36,93,109,46,107,123,37,127,111};
-  //if ((num >=0) && (num<=9))
-  DrawTiny(size,x,y,numbers[num ]);
+    const int numbers[10] = {119,36,93,109,46,107,123,37,127,111};
+    //if ((num >=0) && (num<=9))
+    DrawTiny(size,x,y,numbers[num ]);
 }
 
 void DrawSilkMonth(int mon, int year, int day, int x, int y) 
