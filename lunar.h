@@ -1,13 +1,11 @@
 /*
  * lunar.h
  *
- * public header for shared library
+ * public header for LunarLib shared library
  *
- * This wizard-generated code is based on code adapted from the
- * SampleLib project distributed as part of the Palm OS SDK 4.0,
+ * Copyright (c) Jaemok Jeong 2005
+ * You can use this file and library for free.
  *
- * Copyright (c) 1994-1999 Palm, Inc. or its subsidiaries.
- * All rights reserved.
  */
 
 #ifndef LUNAR_H_

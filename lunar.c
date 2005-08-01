@@ -1,3 +1,10 @@
+/*
+ * lunar.c
+ *
+ * Copyright (c) Jaemok Jeong 2005
+ * You can use this file and library for free.
+ *
+ */
 #include "lunar.h"
 
 /*
