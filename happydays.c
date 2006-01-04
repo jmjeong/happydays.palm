@@ -113,6 +113,8 @@ static Boolean DispPrefFormHandleEvent(EventPtr e) SECT1;
 static Boolean ViewFormHandleEvent(EventPtr e) SECT1;
 static Boolean MainFormHandleEvent(EventPtr e) SECT1;
 static Err NR70GraffitiHandleEvent(SysNotifyParamType * /* notifyParamsP */);
+Int16 OpenPIMDatabases(UInt32 dbid, UInt32 adid, UInt32 tdid, UInt32 mmid, UInt16 mode);
+
 
 static void HighlightMatchRowDate(DateTimeType inputDate) SECT1;
 static void HighlightMatchRowName(Char first) SECT1;
@@ -134,7 +136,6 @@ void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column,
                        RectanglePtr bounds) SECT1;
 void DrawTiny(int size,int x,int y,int n) SECT1;
 void DrawSilkMonth(int mon, int year, int day, int x, int y) SECT1;
-Int16 OpenPIMDatabases(UInt32 dbid, UInt32 adid, UInt32 tdid, UInt32 mmid, UInt16 mode) SECT1;
 
 ////////////////////////////////////////////////////////////////////
 // private database for HappyDays

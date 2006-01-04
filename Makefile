@@ -7,11 +7,13 @@ APPID = "Jmje"
 
 FILES = lunar.c address.c datebook.c util.c \
 		birthdate.c happydays.c memodb.c s2lconvert.c \
-		todo.c notify.c datealarm.c pimdb.c
-OBJS = obj/lunar.o obj/address.o obj/datebook.o obj/util.o \
+		todo.c notify.c datealarm.c pimdb.c \
+		newaddress.c
+OBJS =  obj/lunar.o obj/address.o obj/datebook.o obj/util.o \
 		obj/birthdate.o obj/happydays.o obj/memodb.o obj/s2lconvert.o \
 		obj/todo.o obj/notify.o obj/datealarm.o \
-		obj/happydays-sections.o obj/pimdb.o
+		obj/happydays-sections.o obj/pimdb.o \
+		obj/newaddress.o
 
 CC = m68k-palmos-gcc
 
