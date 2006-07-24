@@ -1,6 +1,6 @@
 /*
-  HappyDays - A Birthday displayer for the PalmPilot
-  Copyright (C) 1999-2005 JaeMok Jeong
+  HappyDays - A Birthday displayer for the Palm
+  Copyright (C) 1999-2006 JaeMok Jeong
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -673,7 +673,7 @@ static void Search(FindParamsPtr findParams)
          	// Have we run out of records?
          	if (! recordH) break;
          
-         	// Search each of the fields of the birthdate
+         	// Search each of the fields of the birthday
       
          	UnpackHappyDays(&hd, MemHandleLock(recordH));
          

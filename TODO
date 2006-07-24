@@ -1,29 +1,26 @@
 -*- mode:outline -*-
 
-* Automatic scan of Address(done)
-  Always/Ask/Never
+* On-going
+** Add option to ignore 'Global Find'
+** Support the New PIMS
 
-* 'Are you sure this is the current date?.. Mon Jun 18, 2001' (error)
+* Considering
+** Display preferences(modified)
+*** Emphasize lunar date
+*** Display additional event info(origin screen)
+*** Display sexseasonary info
+** Support 'last Sunday of September'
+
+
+* Plan(done)
+** Fix selection code(done)
+** Automatic scan of Address(done)
+  Always/Ask/Never
+** Add 'Reread Address' menu after preference menu(done)
+** 'Are you sure this is the current date?.. Mon Jun 18, 2001' (error)
   As HappyDays algorithms use the current date for various date
    calculation, incorrect data value would mislead it.
+** consider lunar date in age calculation routine(done)
+** Replace the start form into 'progress widget'(consider)
+** Write the detailed manual with screenshot(done)
 
-* Add 'Reread Address' menu after preference menu(done)
-
-* Display preferences(modified)
-** Emphasize lunar date
-** Display additional event info(origin screen)
-** Display sexseasonary info
-
-* Fix selection code(done)
-
-* Refine the code(on going)
-
-* consider lunar date in age calculation routine(done)
-
-* Replace the start form into 'progress widget'(consider)
-
-* Write the detailed manual with screenshot(done)
-
-* Support 'last Sunday of September' code 
-
-* Support Datebk4 feature 
