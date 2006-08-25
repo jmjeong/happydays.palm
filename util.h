@@ -48,12 +48,4 @@ Err ResizeSilk(UInt16 silkRefNum, UInt16 size) SECT1;
 Err EnableSilkResize(UInt16 silkRefNum, UInt16 state) SECT1;
 UInt16 GetSilkPos(UInt16 silkRefNum) SECT1;
 
-
-
-// Extract the bit at position index from bitfield.  0 is the high bit.
-#define BitAtPosition(pos)                ((UInt32)1 << (pos))
-#define GetBitMacro(bitfield, index)      ((bitfield) & BitAtPosition(index))
-#define SetBitMacro(bitfield, index)      ((bitfield) |= BitAtPosition(index))
-#define RemoveBitMacro(bitfield, index)   ((bitfield) &= ~BitAtPosition(index))
-
 #endif

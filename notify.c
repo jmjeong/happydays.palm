@@ -1,20 +1,20 @@
 /*
-HappyDays - A Birthday displayer for the PalmPilot
-Copyright (C) 1999-2001 JaeMok Jeong
+  HappyDays - A Birthday displayer for the PalmPilot
+  Copyright (C) 1999-2001 JaeMok Jeong
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 #include <PalmOS.h>
@@ -24,7 +24,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "happydaysRsc.h"
 #include "datebook.h"
 #include "address.h"
-#include "todo.h"
 #include "util.h"
 
 ////////////////////////////////////////////////////////////////////
@@ -45,6 +44,7 @@ extern DateType gStartDate;			// staring date of birthday listing
 
 extern Int16 gNumOfEventNote;
 extern EventNoteInfo *gEventNoteInfo;
+extern Boolean gIsNewPIMS;
 
 UInt16 gToDoCategory;               // todo category
 
@@ -63,41 +63,44 @@ static WhichString whichString;     // 1 = DB, 2 = ToDo
 extern Boolean TextMenuHandleEvent(UInt16 menuID, UInt16 objectID);
 extern void RescheduleAlarms (DmOpenRef dbP);
 
-static Boolean IsHappyDaysRecord(Char* notefield);
-static void LoadTDNotifyPrefsFields(void);
-static void UnloadTDNotifyPrefsFields();
+static void LoadTDNotifyPrefsFields(void) SECT2;
+static void UnloadTDNotifyPrefsFields() SECT2;
 static void NotifyAction(UInt32 whatAlert,
                          void (*func)(int mainDBIndex, DateType when,
 							 	      Int8 age,	Int16 *created, 
-									  Int16 *touched));
+									  Int16 *touched)) SECT2;
 static void NotifyToDo(int mainDBIndex, DateType when, Int8 age,
-                       Int16 *created, Int16 *touched);
+                       Int16 *created, Int16 *touched) SECT2;
 
-static void LoadDBNotifyPrefsFields(void);
-static void UnloadDBNotifyPrefsFields();
+static void LoadDBNotifyPrefsFields(void) SECT2;
+static void UnloadDBNotifyPrefsFields() SECT2;
 static void NotifyDatebook(int mainDBIndex, DateType when, Int8 age,
-                           Int16 *created, Int16 *touched);
+                           Int16 *created, Int16 *touched) SECT2;
 static void TimeToAsciiLocal(TimeType when, TimeFormatType timeFormat,
-                             Char * pString);
-static void LoadDBNotifyPrefsFieldsMore(void);
-static void UnloadDBNotifyPrefsFieldsMore();
-static void ShowNoteStuff();
-static void HideNoteStuff();
-static Int16 CheckDatebookRecord(DateType when, HappyDays birth);
-static void ChkNMakePrivateRecord(DmOpenRef db, Int16 index);
-static Int16 CheckToDoRecord(DateType when, HappyDays birth);
-static void LoadCommonPrefsFields(FormPtr frm);
-static void UnloadCommonNotifyPrefs(FormPtr frm);
-static Boolean IsSameRecord(Char* notefield, HappyDays birth);
+                             Char * pString) SECT2;
+static void LoadDBNotifyPrefsFieldsMore(void) SECT2;
+static void UnloadDBNotifyPrefsFieldsMore() SECT2;
+static void ShowNoteStuff() SECT2;
+static void HideNoteStuff() SECT2;
+static Int16 CheckDatebookRecord(DateType when, HappyDays birth) SECT2;
+static void LoadCommonPrefsFields(FormPtr frm) SECT2;
+static void UnloadCommonNotifyPrefs(FormPtr frm) SECT2;
 
-Char* EventTypeString(HappyDays r);
-int CleanupFromTD(DmOpenRef db);
-int CleanupFromDB(DmOpenRef db);
-void PerformExport(Char * memo, int mainDBIndex, DateType when);
-Boolean DBNotifyFormHandleEvent(EventPtr e);
-Boolean NotifyStringFormHandleEvent(EventPtr e);
-Boolean ToDoFormHandleEvent(EventPtr e);
-
+void ChkNMakePrivateRecord(DmOpenRef db, Int16 index) SECT2;
+Char* EventTypeString(HappyDays r) SECT2;
+int CleanupFromDB(DmOpenRef db) SECT2;
+void PerformExport(Char * memo, int mainDBIndex, DateType when) SECT2;
+Boolean DBNotifyFormHandleEvent(EventPtr e) SECT2;
+Boolean NotifyStringFormHandleEvent(EventPtr e) SECT2;
+Boolean ToDoFormHandleEvent(EventPtr e) SECT2;
+Int16 ActualPerformNotifyTD(HappyDays birth, DateType when, Int8 age,
+                            Int16 *created, Int16 *touched, Int16 existIndex) SECT2;
+Int16 NewActualPerformNotifyTD(HappyDays birth, DateType when, Int8 age,
+                               Int16 *created, Int16 *touched, Int16 existIndex) SECT2;
+Int16 CheckToDoRecord(DateType when, HappyDays birth) SECT2;
+Int16 NewCheckToDoRecord(DateType when, HappyDays birth) SECT2;
+Boolean IsHappyDaysRecord(Char* notefield) SECT2;
+Boolean IsSameRecord(Char* notefield, HappyDays birth) SECT2;
 
 // temporary return value;
 Char* EventTypeString(HappyDays r)
@@ -173,7 +176,7 @@ void PerformExport(Char * memo, int mainDBIndex, DateType when)
                                           gAppErrStr), 4096);
         }
         else {
-           StrNCat(memo, DateToAsciiLong(when.month, when.day,
+            StrNCat(memo, DateToAsciiLong(when.month, when.day,
                                           -1, gPrefdfmts,
                                           gAppErrStr), 4096);
         }
@@ -185,38 +188,6 @@ void PerformExport(Char * memo, int mainDBIndex, DateType when)
     }
 }
 
-int CleanupFromTD(DmOpenRef db)
-{
-    UInt16 currIndex = 0;
-    MemHandle recordH;
-    ToDoDBRecordPtr toDoRec;
-    Char *note;
-    int ret = 0;
-    
-    while (1) {
-        recordH = DmQueryNextInCategory(db, &currIndex, dmAllCategories);
-        if (!recordH) break;
-
-        toDoRec = MemHandleLock(recordH);
-        note = GetToDoNotePtr(toDoRec);
-        
-        if (IsHappyDaysRecord(note)) {
-            // if it is happydays record?
-            //
-            ret++;
-            // remove the record
-            DmDeleteRecord(db, currIndex);
-            // deleted records are stored at the end of the database
-            //
-            DmMoveRecord(db, currIndex, DmNumRecords(ToDoDB));
-        }
-        else {
-            MemHandleUnlock(recordH);
-            currIndex++;
-        }
-    }
-    return ret;
-}
 
 int CleanupFromDB(DmOpenRef db)
 {
@@ -248,7 +219,7 @@ int CleanupFromDB(DmOpenRef db)
     return ret;
 }
 
-static Int16 FindEventNoteInfo(HappyDays birth)
+Int16 FindEventNoteInfo(HappyDays birth)
 {
     MemHandle recordH = 0;
     char *eventString;
@@ -279,7 +250,7 @@ static Int16 FindEventNoteInfo(HappyDays birth)
     return -1;
 }
 
-static void LoadEventNoteString(char *p, Int16 idx, Int16 maxString)
+void LoadEventNoteString(char *p, Int16 idx, Int16 maxString)
 {
     char *rp;
     Int16 len;
@@ -529,7 +500,7 @@ static void FieldUpdateScrollBar (FieldPtr fld, ScrollBarPtr bar)
 	FldGetScrollValues (fld, &scrollPos, &textHeight,  &fieldHeight);
 
 	if (textHeight > fieldHeight)
-		{
+    {
 		// On occasion, such as after deleting a multi-line selection of text,
 		// the display might be the last few lines of a field followed by some
 		// blank lines.  To keep the current position in place and allow the user
@@ -538,7 +509,7 @@ static void FieldUpdateScrollBar (FieldPtr fld, ScrollBarPtr bar)
 		// may be greater than maxValue, get pinned to maxvalue in SclSetScrollBar
 		// resulting in the scroll bar and the display being out of sync.
 		maxValue = (textHeight - fieldHeight) + FldGetNumberOfBlankLines (fld);
-		}
+    }
 	else if (scrollPos)
 		maxValue = scrollPos;
 	else
@@ -667,7 +638,7 @@ Boolean NotifyStringFormHandleEvent(EventPtr e)
     return handled;
 }
 
-static Boolean IsHappyDaysRecord(Char* notefield)
+Boolean IsHappyDaysRecord(Char* notefield)
 {
     if (notefield && StrStr(notefield, gPrefsR.notifywith)) {
         return true; 
@@ -687,7 +658,7 @@ Char* gNotifyFormatString[6] =
 //
 // Memory is allocated, after calling this routine, user must free the memory
 //
-static Char* NotifyDescString(DateType when, HappyDays birth, 
+Char* NotifyDescString(DateType when, HappyDays birth, 
 							  Int8 age, Boolean todo)
 {
     Char* description, *pDesc;
@@ -947,84 +918,21 @@ static Int16 PerformNotifyDB(HappyDays birth, DateType when, Int8 age,
 static Int16 PerformNotifyTD(HappyDays birth, DateType when, Int8 age,
                              Int16 *created, Int16 *touched)
 {
-    Char noteField[255+1];  // (datebk3: 10, AN:14), HD id: 5
-    ToDoItemType todo;
-    Char* description = 0;
-    Int16 idx;  
-    
     Int16 existIndex;
 
     // for the performance, check this first 
     if ( ((existIndex = CheckToDoRecord(when, birth)) >= 0)
          && !gPrefsR.existing ) {    // exists and keep the record
         (*touched)++;
-        
         return 0;
     }
 
-    /* Zero the memory */
-    MemSet(&todo, sizeof(ToDoItemType), 0);
-
-    // set the date 
-    //
-    todo.dueDate = when;
-    todo.priority = gPrefsR.priority;
-
-    // General note field edit
-	//
-    if (gPrefsR.tusenote) {
-        StrCopy(noteField, gPrefsR.tnote);
-        StrCat(noteField, "\n");
+    if (!gIsNewPIMS) {
+        ActualPerformNotifyTD(birth, when, age, created, touched, existIndex);
     }
-    else if ((idx = FindEventNoteInfo(birth)) >= 0) {
-        LoadEventNoteString(noteField, idx, 256);
+    else {
+        NewActualPerformNotifyTD(birth, when, age, created, touched, existIndex);
     }
-    else noteField[0] = 0;
-
-    StrCat(noteField, gPrefsR.notifywith);
-    StrPrintF(gAppErrStr, "%ld", Hash(birth.name1, birth.name2));
-    StrCat(noteField, gAppErrStr);
-    todo.note = noteField;
-
-    // make the description
-        
-    description = NotifyDescString(when, birth, age, true);		// todo = true
-    todo.description = description;
-
-    if (existIndex < 0) {            // there is no same record
-        //
-        // if not exists
-        // write the new record (be sure to fill index)
-        //
-        ToDoNewRecord(ToDoDB, &todo, gPrefsR.todoCategory, (UInt16*)&existIndex);
-        // if private is set, make the record private
-        //
-        ChkNMakePrivateRecord(ToDoDB, existIndex);
-        (*created)++;
-    }
-    else {                                      // if exists
-        if (gPrefsR.existing == 0) {
-            // keep the record
-        }
-        else {
-            // modify
-
-            // remove the record
-            DmDeleteRecord(ToDoDB, existIndex);
-            // deleted records are stored at the end of the database
-            //
-            DmMoveRecord(ToDoDB, existIndex, DmNumRecords(ToDoDB));
-            
-            // make new record
-            ToDoNewRecord(ToDoDB, &todo, gPrefsR.todoCategory, (UInt16*)&existIndex);
-            // if private is set, make the record private
-            //
-            ChkNMakePrivateRecord(ToDoDB, existIndex);
-            (*touched)++;
-        }
-    }
-
-    if (description) MemPtrFree(description);
     return 0;
 }
 
@@ -1073,31 +981,31 @@ static void NotifyDatebook(int mainDBIndex, DateType when, Int8 age,
             repeatInfo.repeatStartOfWeek = 0;
 
             /*
-            if (gPrefsR.duration > 1) {
-                UInt16 end_year;
+              if (gPrefsR.duration > 1) {
+              UInt16 end_year;
 
-                repeatInfo.repeatEndDate = when;
-                // if end year is more than 2031, adjust it.
-                //
-                //  'when' is the current year. 
-                //
-                end_year = when.year + gPrefsR.duration -1;
+              repeatInfo.repeatEndDate = when;
+              // if end year is more than 2031, adjust it.
+              //
+              //  'when' is the current year. 
+              //
+              end_year = when.year + gPrefsR.duration -1;
 
-                if (end_year > 2031 - 1904) {
-                    repeatInfo.repeatEndDate.year = 2031-1904;
-                }
-				else {
-					repeatInfo.repeatEndDate.year = end_year;
-				}
-                // if duration > 1, 'when' is the birthdate;
-                //     change when.year into original birthday.
-                if (r.flag.bits.year) when = r.date;
-				// Because Palm Desktop doesn't support events before 1970.
-				//
-                AdjustDesktopCompatible(&when);
+              if (end_year > 2031 - 1904) {
+              repeatInfo.repeatEndDate.year = 2031-1904;
+              }
+              else {
+              repeatInfo.repeatEndDate.year = end_year;
+              }
+              // if duration > 1, 'when' is the birthdate;
+              //     change when.year into original birthday.
+              if (r.flag.bits.year) when = r.date;
+              // Because Palm Desktop doesn't support events before 1970.
+              //
+              AdjustDesktopCompatible(&when);
                 
-                PerformNotifyDB(r, when, age, &repeatInfo, created, touched);
-            }
+              PerformNotifyDB(r, when, age, &repeatInfo, created, touched);
+              }
             */
             if (gPrefsR.duration == -1) {
                 // if duration > 1, 'when' is the birthdate;
@@ -1175,10 +1083,7 @@ static void NotifyToDo(int mainDBIndex, DateType when, Int8 age,
          */
         UnpackHappyDays(&r, rp);
 
-        if (r.flag.bits.nthdays) {
-            PerformNotifyTD(r, when, age, created, touched);
-        }
-        else if (r.flag.bits.solar) {
+        if (r.flag.bits.nthdays || r.flag.bits.solar) {
             PerformNotifyTD(r, when, age, created, touched);
         }
         else if (r.flag.bits.lunar || r.flag.bits.lunar_leap) {
@@ -1300,7 +1205,7 @@ static void NotifyAction(UInt32 whatAlert,
 
         MemPtrFree(info);
     }
- Exit_Notify_All:
+Exit_Notify_All:
 
     return;
 }
@@ -1447,13 +1352,13 @@ static void UnloadDBNotifyPrefsFields()
     if (FldDirty(GetObjectPointer(frm, DateBookNotifyFormBefore))) {
         gPrefsR.notifybefore =
             (int) StrAToI(FldGetTextPtr(
-                GetObjectPointer(frm, DateBookNotifyFormBefore)));
+                              GetObjectPointer(frm, DateBookNotifyFormBefore)));
     }
     // notification duration
     if (FldDirty(GetObjectPointer(frm, DateBookNotifyFormDuration))) {
         gPrefsR.duration =
             (int) StrAToI(FldGetTextPtr(
-                GetObjectPointer(frm, DateBookNotifyFormDuration)));
+                              GetObjectPointer(frm, DateBookNotifyFormDuration)));
     }
     
     // DateBookNotifyFormTime is set by handler
@@ -1608,38 +1513,9 @@ static Int16 CheckDatebookRecord(DateType when, HappyDays birth)
     return -1;
 }
 
-static Int16 CheckToDoRecord(DateType when, HappyDays birth)
-{
-    UInt16 currIndex = 0;
-    MemHandle recordH;
-    ToDoDBRecordPtr toDoRec;
-    Char *note;
-    
-    while (1) {
-        recordH = DmQueryNextInCategory(ToDoDB, &currIndex,
-                                        dmAllCategories);
-        if (!recordH) break;
-
-        toDoRec = MemHandleLock(recordH);
-        note = GetToDoNotePtr(toDoRec);
-        
-        if ((DateToInt(when) == DateToInt(toDoRec->dueDate))
-            && IsSameRecord(note, birth)) {
-            MemHandleUnlock(recordH);
-
-            return currIndex;
-        }
-        else {
-            MemHandleUnlock(recordH);
-            currIndex++;
-        }
-    }
-    return -1;
-}
-
 // check global notify preference, and make datebookDB entry private
 //
-static void ChkNMakePrivateRecord(DmOpenRef db, Int16 index)
+void ChkNMakePrivateRecord(DmOpenRef db, Int16 index)
 {
     UInt16 attributes;
     // if private is set, make the record private
@@ -1653,7 +1529,7 @@ static void ChkNMakePrivateRecord(DmOpenRef db, Int16 index)
 
 // check if description has the information about name1 and name2
 //
-static Boolean IsSameRecord(Char* notefield, HappyDays birth)
+Boolean IsSameRecord(Char* notefield, HappyDays birth)
 {
     Char *p;
     

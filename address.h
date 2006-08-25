@@ -23,10 +23,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "section.h"
 #include "birthdate.h"
 
-#define shortenedFieldString              "\205"
-#define shortenedFieldLength              1
-#define fieldSeparatorString              ", "
-#define fieldSeparatorLength              2
 #define spaceBetweenNamesAndPhoneNumbers  4
 #define addrLabelLength                   16
 #define addrNumFields                     19
@@ -208,18 +204,5 @@ typedef AddrAppInfoType * AddrAppInfoPtr;
 /*
  * Function prototypes
  */
-extern void AddrUnpack(AddrPackedDBRecord *src, AddrDBRecordPtr dest);
-extern Int16 GotoAddress(Int16 index);
-extern Boolean DetermineRecordName(AddrDBRecordPtr recordP, 
-                           Boolean sortByCompany,
-                           Char **name1,
-                           Char **name2);
-
-// called from Find function(must be in main section)
-extern void DrawRecordName(char* name1, char* name2,
-                           UInt16 nameExtent, Int16 *x, Int16 y,
-                           Boolean center, Boolean priorityIsName1);
-
-extern char *UnnamedRecordStringPtr;
 
 #endif __ADDRESS_H__

@@ -31,6 +31,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "happydays.h"
 #include "happydaysRsc.h"
 
+extern Int16 FindEventNoteInfo(HappyDays birth);
+extern void LoadEventNoteString(char *p, Int16 idx, Int16 maxString);
+extern Char* NotifyDescString(DateType when, HappyDays birth, 
+							  Int8 age, Boolean todo);
+extern void ChkNMakePrivateRecord(DmOpenRef db, Int16 index);
+extern Boolean IsSameRecord(Char* notefield, HappyDays birth);
+extern Boolean IsHappyDaysRecord(Char* notefield);
+
+Int16 CheckToDoRecord(DateType when, HappyDays birth);
+
 /***********************************************************************
  *
  * FUNCTION:    GetToDoNotePtr
@@ -423,3 +433,138 @@ Err ToDoNewRecord(DmOpenRef dbP, ToDoItemPtr item, UInt16 category, UInt16 *inde
     return err;
 }
 
+Int16 ActualPerformNotifyTD(HappyDays birth, DateType when, Int8 age,
+                            Int16 *created, Int16 *touched, Int16 existIndex)
+{
+    Char noteField[255+1];  // (datebk3: 10, AN:14), HD id: 5
+    ToDoItemType todo;
+    Char* description = 0;
+    Int16 idx;  
+
+    /* Zero the memory */
+    MemSet(&todo, sizeof(ToDoItemType), 0);
+
+    // set the date 
+    //
+    todo.dueDate = when;
+    todo.priority = gPrefsR.priority;
+
+    // General note field edit
+	//
+    if (gPrefsR.tusenote) {
+        StrCopy(noteField, gPrefsR.tnote);
+        StrCat(noteField, "\n");
+    }
+    else if ((idx = FindEventNoteInfo(birth)) >= 0) {
+        LoadEventNoteString(noteField, idx, 256);
+    }
+    else noteField[0] = 0;
+
+    StrCat(noteField, gPrefsR.notifywith);
+    StrPrintF(gAppErrStr, "%ld", Hash(birth.name1, birth.name2));
+    StrCat(noteField, gAppErrStr);
+    todo.note = noteField;
+
+    // make the description
+        
+    description = NotifyDescString(when, birth, age, true);		// todo = true
+    todo.description = description;
+
+    if (existIndex < 0) {            // there is no same record
+        //
+        // if not exists
+        // write the new record (be sure to fill index)
+        //
+        ToDoNewRecord(ToDoDB, &todo, gPrefsR.todoCategory, (UInt16*)&existIndex);
+        // if private is set, make the record private
+        //
+        ChkNMakePrivateRecord(ToDoDB, existIndex);
+        (*created)++;
+    }
+    else {                                      // if exists
+        if (gPrefsR.existing == 0) {
+            // keep the record
+        }
+        else {
+            // modify
+
+            // remove the record
+            DmDeleteRecord(ToDoDB, existIndex);
+            // deleted records are stored at the end of the database
+            //
+            DmMoveRecord(ToDoDB, existIndex, DmNumRecords(ToDoDB));
+            
+            // make new record
+            ToDoNewRecord(ToDoDB, &todo, gPrefsR.todoCategory, (UInt16*)&existIndex);
+            // if private is set, make the record private
+            //
+            ChkNMakePrivateRecord(ToDoDB, existIndex);
+            (*touched)++;
+        }
+    }
+
+    if (description) MemPtrFree(description);
+    return 0;
+}
+
+Int16 CheckToDoRecord(DateType when, HappyDays birth)
+{
+    UInt16 currIndex = 0;
+    MemHandle recordH;
+    ToDoDBRecordPtr toDoRec;
+    Char *note;
+    
+    while (1) {
+        recordH = DmQueryNextInCategory(ToDoDB, &currIndex,
+                                        dmAllCategories);
+        if (!recordH) break;
+
+        toDoRec = MemHandleLock(recordH);
+        note = GetToDoNotePtr(toDoRec);
+        
+        if ((DateToInt(when) == DateToInt(toDoRec->dueDate))
+            && IsSameRecord(note, birth)) {
+            MemHandleUnlock(recordH);
+
+            return currIndex;
+        }
+        else {
+            MemHandleUnlock(recordH);
+            currIndex++;
+        }
+    }
+    return -1;
+}
+
+int CleanupFromTD(DmOpenRef db)
+{
+    UInt16 currIndex = 0;
+    MemHandle recordH;
+    ToDoDBRecordPtr toDoRec;
+    Char *note;
+    int ret = 0;
+    
+    while (1) {
+        recordH = DmQueryNextInCategory(db, &currIndex, dmAllCategories);
+        if (!recordH) break;
+
+        toDoRec = MemHandleLock(recordH);
+        note = GetToDoNotePtr(toDoRec);
+        
+        if (IsHappyDaysRecord(note)) {
+            // if it is happydays record?
+            //
+            ret++;
+            // remove the record
+            DmDeleteRecord(db, currIndex);
+            // deleted records are stored at the end of the database
+            //
+            DmMoveRecord(db, currIndex, DmNumRecords(ToDoDB));
+        }
+        else {
+            MemHandleUnlock(recordH);
+            currIndex++;
+        }
+    }
+    return ret;
+}

@@ -122,51 +122,97 @@ static Int16 TimeCompare (TimeType t1, TimeType t2) {
 
 /************************************************************
  *
+ *  FUNCTION: ApptGetRepeatInfo
+ *
+ *  DESCRIPTION: Fills in the ApptDBRecord structure
+ *
+ *  PARAMETERS: database record
+ *
+ *  RETURNS: the record unpacked
+ *
+ *  CREATED: 4/28/03
+ *
+ *  BY: Peter Epstein
+ *
+ *************************************************************/
+ RepeatInfoPtr ApptGetRepeatInfo(ApptPackedDBRecordPtr src)
+{
+	ApptDBRecordFlags	flags;
+	char *p;
+
+	
+	flags = src->flags;
+	p = &src->firstField;
+
+	if (flags.alarm) 
+		p += sizeof (AlarmInfoType);
+
+	if (flags.repeat)
+		return (RepeatInfoType *) p;
+	else
+		return NULL;
+}
+
+
+/************************************************************
+ *
  *  FUNCTION:    ApptComparePackedRecords
  *
  *  DESCRIPTION: Compare two packed records.
  *
  *  PARAMETERS:  r1    - database record 1
- *               r2    - database record 2
+ *				     r2    - database record 2
  *               extra - extra data, not used in the function
  *
  *  RETURNS:    -1 if record one is less
- *                 1 if record two is less
+ *		           1 if record two is less
  *
  *  CREATED: 1/14/95 
  *
  *  BY: Roger Flores
  *
- *  COMMENTS:   Compare the two records key by key until
- *  there is a difference.  Return -1 if r1 is less or 1 if r2
- *  is less.  A zero is never returned because if two records
- *  seem identical then their unique IDs are compared!
+ *	COMMENTS:	Compare the two records key by key until
+ *	there is a difference.  Return -1 if r1 is less or 1 if r2
+ *	is less.  A zero is never returned because if two records
+ *	seem identical then their unique IDs are compared!
  *
- *************************************************************/
-static Int16
-ApptComparePackedRecords (ApptPackedDBRecordPtr r1,
-                          ApptPackedDBRecordPtr r2, Int16 extra,
-                          SortRecordInfoPtr info1,
-                          SortRecordInfoPtr info2, MemHandle appInfoH)
+ *************************************************************/ 
+static Int16 ApptComparePackedRecords (ApptPackedDBRecordPtr r1, 
+	ApptPackedDBRecordPtr r2, Int16 extra, SortRecordInfoPtr info1, 
+	SortRecordInfoPtr info2, MemHandle appInfoH)
 {
-    Int16 result;
+	Int16 result;
 
-    if ((r1->flags.repeat) || (r2->flags.repeat)) {
-        if ((r1->flags.repeat) && (r2->flags.repeat))
-            result = 0;
-        else if (r1->flags.repeat)
-            result = -1;
-        else
-            result = 1;
-    }
-    else {
-        result = DateCompare (r1->when.date, r2->when.date);
-        if (result == 0) {
-            result = TimeCompare (r1->when.startTime, r2->when.startTime);
-        }
-    }
-    return result;
+	if ((r1->flags.repeat) || (r2->flags.repeat))
+		{
+		if ((r1->flags.repeat) && (r2->flags.repeat))
+			{
+			// In the past, two repeating events were considered equal. Now we sort them
+			// by their end date in order to more efficiently iterate over the repeating
+			// events on a given date or date range. First step is to find the repeat
+			// info in each of the records so we can compare their end dates.
+			// No end date is represented as -1, which will sort last, as desired.
+			result = DateCompare (ApptGetRepeatInfo(r1)->repeatEndDate, ApptGetRepeatInfo(r2)->repeatEndDate);
+			if (result == 0)
+				// Two events than end on the same date are sorted by their start time.
+				// We don't in fact rely on this, but might in the future.
+				result = TimeCompare (r1->when.startTime, r2->when.startTime);
+			}
+		else if (r1->flags.repeat)
+			result = -1;
+		else
+			result = 1;
+		}
+
+	else
+		{
+		result = DateCompare (r1->when.date, r2->when.date);
+		if (result == 0)
+			result = TimeCompare (r1->when.startTime, r2->when.startTime);
+		}
+	return result;
 }
+
 
 /************************************************************
  *

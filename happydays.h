@@ -35,8 +35,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define AddressAppID        'addr'
 #define MemoAppID           'memo'
 
-#define NewDatebookAppID    'PAdd'
-#define NewAddrAppID        'PDat'
+#define NewDatebookAppID    'PDat'
+#define NewAddrAppID        'PAdd'
 #define NewTaskAppID        'PTod'
 #define NewMemoAppID        'PMem'
 

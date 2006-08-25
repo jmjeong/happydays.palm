@@ -32,6 +32,7 @@
 #include "util.h"
 #include "notify.h"
 #include "section.h"
+#include "addresscommon.h"
 
 #define frmRescanUpdateCode (frmRedrawUpdateCode + 1)
 #define frmUpdateFontCode (frmRedrawUpdateCode + 2)
@@ -70,7 +71,7 @@ Boolean     gSonyClie = false;
 Boolean     gSilkLibLoaded;
 
 Boolean     gProgramExit = false;   // Program exit control(set by Startform)
-Boolean     isNewPIMS;
+Boolean     gIsNewPIMS;
 
 ////////////////////////////////////////////////////////////////////
 // Prefs stuff 
@@ -87,33 +88,47 @@ enum ViewFormType { ViewType = 0,
                     ViewSpace
 };
 
+extern Boolean NewUpdateHappyDaysDB(FormPtr frm);
+extern Boolean NewFindHappyDaysField();
+extern int CleanupFromTD(DmOpenRef db);
+extern int NewCleanupFromTD(DmOpenRef db);
+
 ////////////////////////////////////////////////////////////////////
 // function declaration 
 ////////////////////////////////////////////////////////////////////
-static UInt16 StartApplication(void);
 static void EventLoop(void);
+static UInt16 StartApplication(void);
 static void StopApplication(void);
+
 static void Search(FindParamsPtr findParams);
+static void DrawSearchLine(HappyDays hd, RectangleType r);
+
 static void GoToItem (GoToParamsPtr goToParams, Boolean launchingApp);
 static Boolean ApplicationHandleEvent(EventPtr e);
-static Boolean SpecialKeyDown(EventPtr e);
-static Int16 OpenDatabases(void);
-static void freememories(void);
-static void CloseDatabases(void);
-static void MainFormReadDB();
-static int CalcPageSize(FormPtr frm);
 
-static void ViewFormLoadTable(FormPtr frm);
-static void ViewFormResize(FormPtr frmP, Boolean draw);
-static void ViewFormSilk();
+static void GetEventNoteInfo(); 
+static Int16 GetNumOfEventNoteInfo(Char *rp);
+static void ProcessEventNoteInfo(EventNoteInfo* eventNoteInfo, Char* rp, Int16 num);
+static Boolean SpecialKeyDown(EventPtr e);
+
+static Err NR70GraffitiHandleEvent(SysNotifyParamType * /* notifyParamsP */) SECT1;
+
+static Int16 OpenDatabases(void) SECT2;
+static void freememories(void) SECT2;
+static void CloseDatabases(void) SECT2;
+static void MainFormReadDB() SECT2;
+static int CalcPageSize(FormPtr frm) SECT2;
+
+static void ViewFormLoadTable(FormPtr frm) SECT2;
+static void ViewFormResize(FormPtr frmP, Boolean draw) SECT2;
+static void ViewFormSilk() SECT2;
 
 static Boolean StartFormHandleEvent(EventPtr e) SECT1;
 static Boolean PrefFormHandleEvent(EventPtr e) SECT1;
 static Boolean DispPrefFormHandleEvent(EventPtr e) SECT1;
 static Boolean ViewFormHandleEvent(EventPtr e) SECT1;
 static Boolean MainFormHandleEvent(EventPtr e) SECT1;
-static Err NR70GraffitiHandleEvent(SysNotifyParamType * /* notifyParamsP */);
-Int16 OpenPIMDatabases(UInt32 dbid, UInt32 adid, UInt32 tdid, UInt32 mmid, UInt16 mode);
+Int16 OpenPIMDatabases(UInt32 dbid, UInt32 adid, UInt32 tdid, UInt32 mmid, UInt16 mode) SECT1;
 
 
 static void HighlightMatchRowDate(DateTimeType inputDate) SECT1;
@@ -217,129 +232,6 @@ static void EventLoop(void)
         if (! ApplicationHandleEvent (&e))
             FrmDispatchEvent (&e);
     } while (e.eType != appStopEvent && !gProgramExit);
-}
-
-static Int16 GetNumOfEventNoteInfo(Char *rp)
-{
-    char* p = rp;
-    char *q;
-    Int16 num = 0;
-
-    while ( (q = StrChr(p, '\n')) )
-    {
-        if (*(q+1) == '*') {
-            p = q+1;
-            num++;
-        }
-        else p++;
-    }
-     
-    return num;
-}
-
-static void ProcessEventNoteInfo(EventNoteInfo* eventNoteInfo, Char* rp, Int16 num)
-{
-    char *p = rp;
-    char *q;
-    Int16 i = 0;
-    Int16 len;
-
-    while (*p++ != '*' && *p)
-        ;
-
-    for (i = 0; i < num; i++) 
-    {
-        if (!*p) break;
-
-        while (*p && (*p == ' ' || *p == '\n'))
-            p++;
-
-        q = p;
-
-        while (*p && *p++ != '\n')
-            ;
-
-        len = (p - q) - 1;
-        if (len > 20) len = 20;
-            
-        StrNCopy(eventNoteInfo[i].name, q, len);
-        eventNoteInfo[i].name [len] = 0;
-
-        eventNoteInfo[i].start = p - rp;
-
-        while (*p && *p != '*')
-            p++;
-
-        eventNoteInfo[i].len = (p - rp) - eventNoteInfo[i].start;
-        if (*p == '*') {
-        	eventNoteInfo[i].len--;
-        	p++;
-        }
-    }
-    gNumOfEventNote = i;
-}
-
-static void GetEventNoteInfo()
-{
-    MemHandle recordH = 0;
-    UInt16  currindex = 0;
-    char*   rp;
-    Boolean found = false;
-
-    gEventNoteInfo = 0;
-
-    if (gPrefsR.eventNoteExists) {
-        if ((recordH = DmQueryRecord(MemoDB, gPrefsR.eventNoteIndex)) != NULL) {
-            rp = (char *) MemHandleLock(recordH);
-            if (StrNCaselessCompare(rp, HappydaysEventNoteTitle, StrLen(HappydaysEventNoteTitle)) == 0) {
-                gNumOfEventNote = GetNumOfEventNoteInfo(rp);
-                if (gNumOfEventNote > 0) {
-                    gEventNoteInfo = MemPtrNew(sizeof(EventNoteInfo) * gNumOfEventNote);
-
-                    ProcessEventNoteInfo(gEventNoteInfo, rp, gNumOfEventNote);
-                }
-
-                MemHandleUnlock(recordH);
-                return;
-            }
-            MemHandleUnlock(recordH);
-        }
-    }
-    
-    while ((recordH = DmQueryNextInCategory(MemoDB,
-                                            &currindex, dmAllCategories)) ) {
-        rp = (char *) MemHandleLock(recordH);
-        if (StrNCaselessCompare(rp, HappydaysEventNoteTitle, StrLen(HappydaysEventNoteTitle)) == 0) {
-            gNumOfEventNote = GetNumOfEventNoteInfo(rp);
-
-            if (gNumOfEventNote > 0) {
-                gEventNoteInfo = MemPtrNew(sizeof(EventNoteInfo) * gNumOfEventNote);
-
-                ProcessEventNoteInfo(gEventNoteInfo, rp, gNumOfEventNote);
-            }
-
-            gPrefsR.eventNoteIndex = currindex;
-            found = true;
-            MemHandleUnlock(recordH);
-            break;
-        }
-
-        MemHandleUnlock(recordH);
-        currindex++;
-    }
-    gPrefsR.eventNoteExists = found;
-}
-
-static Err NR70GraffitiHandleEvent(SysNotifyParamType *notifyParamsP)
-{
-    if (gFormID == MainForm) {
-        MainFormResize(FrmGetActiveForm(), true);
-    }
-    else if (gFormID == ViewForm) {
-        ViewFormResize(FrmGetActiveForm(), true);
-        ViewFormSilk();
-    }
-    return errNone;
 }
 
 /* Get preferences, open (or create) app database */
@@ -495,118 +387,6 @@ static void StopApplication(void)
     lunar_CloseLibrary(lunarRefNum, lunarClientText);
 }
 
-
-/***********************************************************************
- *
- * FUNCTION:    GoToItem
- *
- * DESCRIPTION: This routine is a entry point of this application.
- *              It is generally call as the result of hiting of 
- *              "Go to" button in the text search dialog.
- *
- * PARAMETERS:    recordNum - 
- ***********************************************************************/
-static void GoToItem (GoToParamsPtr goToParams, Boolean launchingApp)
-{
-   	UInt16 recordNum;
-   	EventType event;
-	LineItemPtr ptr;
-	Int16 selected = -1;
-	Int16 i;
-
-   	recordNum = goToParams->recordNum;
-
-  	// If the application is already running, close all the open forms.  If
-   	// the current record is blank, then it will be deleted, so we'll 
-   	// the record's unique id to find the record index again, after all 
-   	// the forms are closed.
-   	if (! launchingApp) {
-		UInt32 uniqueID;
-		DmRecordInfo (MainDB, recordNum, NULL, &uniqueID, NULL);
-      	FrmCloseAllForms ();
-      	DmFindRecordByID (MainDB, uniqueID, &recordNum);
-   	}
-
-	// initialize category
-	//
-	StrCopy(gPrefsR.addrCategory, "All");
-
-	MainFormReadDB();
-
-
-	// find the inital gMainTableStart 
-	// 
-	if (gMainTableTotals <= 0) return;
-	if ((ptr = MemHandleLock(gTableRowHandle))) {
-		for (i = 0; i < gMainTableTotals; i++) {
-			if (ptr[i].birthRecordNum == recordNum) {
-				selected = i;
-				break;
-			}
-		}
-		MemPtrUnlock(ptr);
-	}
-
-	// gMainTableStart = MAX(0, selected-4);
-	FrmGotoForm(MainForm);
-   	MemSet (&event, sizeof(EventType), 0);
-
-   	// Send an event to goto a form and select the matching text.
-   	event.eType = frmGotoEvent;
-   	event.data.frmGoto.formID = MainForm;
-	// trick selected number is returned by recordNum
-   	event.data.frmGoto.recordNum = selected;
-   	event.data.frmGoto.matchPos = goToParams->matchPos;
-   	event.data.frmGoto.matchLen = goToParams->searchStrLen;
-   	event.data.frmGoto.matchFieldNum = goToParams->matchFieldNum;
-   	EvtAddEventToQueue (&event);
-}
-
-static void DrawSearchLine(HappyDays hd, RectangleType r)
-{
-	DrawRecordName(hd.name1, hd.name2, 
-                   r.extent.x, &r.topLeft.x, 
-                   r.topLeft.y, false,
-                   hd.flag.bits.priority_name1);
-	return;
-
-	/*
-	 *  display original birthday field
-	 *  (bug!!! must handle gPrefdfmts variable, 
-	 *  Find function must not use the global variable)
-	 *
-     Int16 width, length;
-     Boolean ignored = true;
-     // Char displayStr[255];
-     Int16 x = r.topLeft.x;
-
-     if (hd.flag.bits.lunar) {
-     StrCopy(displayStr, "-)");
-     }
-     else if (hd.flag.bits.lunar_leap) {
-     StrCopy(displayStr, "#)");
-     }
-     else displayStr[0] = 0;
-
-     if (hd.flag.bits.year) {
-     DateToAsciiLong(hd.date.month, hd.date.day, 
-     hd.date.year + 1904,
-     gPrefdfmts, displayStr + StrLen(displayStr));
-     }
-     else {
-     DateToAsciiLong(hd.date.month, hd.date.day, -1, 
-     gPrefdfmts, displayStr + StrLen(displayStr));
-     }
-
-     width = 60;
-     length = StrLen(displayStr);
-     FntCharsInWidth(displayStr, &width, &length, &ignored);
-     WinDrawChars(displayStr, length,
-     r.topLeft.x + r.extent.x - width, 
-     r.topLeft.y);
-	*/
-}
-
 static void Search(FindParamsPtr findParams)
 {
    	UInt16         	pos;
@@ -705,6 +485,117 @@ static void Search(FindParamsPtr findParams)
    	DmCloseDatabase(dbP);   
 } 
 
+static void DrawSearchLine(HappyDays hd, RectangleType r)
+{
+	DrawRecordName(hd.name1, hd.name2, 
+                   r.extent.x, &r.topLeft.x, 
+                   r.topLeft.y, false,
+                   hd.flag.bits.priority_name1);
+	return;
+
+	/*
+	 *  display original birthday field
+	 *  (bug!!! must handle gPrefdfmts variable, 
+	 *  Find function must not use the global variable)
+	 *
+     Int16 width, length;
+     Boolean ignored = true;
+     // Char displayStr[255];
+     Int16 x = r.topLeft.x;
+
+     if (hd.flag.bits.lunar) {
+     StrCopy(displayStr, "-)");
+     }
+     else if (hd.flag.bits.lunar_leap) {
+     StrCopy(displayStr, "#)");
+     }
+     else displayStr[0] = 0;
+
+     if (hd.flag.bits.year) {
+     DateToAsciiLong(hd.date.month, hd.date.day, 
+     hd.date.year + 1904,
+     gPrefdfmts, displayStr + StrLen(displayStr));
+     }
+     else {
+     DateToAsciiLong(hd.date.month, hd.date.day, -1, 
+     gPrefdfmts, displayStr + StrLen(displayStr));
+     }
+
+     width = 60;
+     length = StrLen(displayStr);
+     FntCharsInWidth(displayStr, &width, &length, &ignored);
+     WinDrawChars(displayStr, length,
+     r.topLeft.x + r.extent.x - width, 
+     r.topLeft.y);
+	*/
+}
+
+/***********************************************************************
+ *
+ * FUNCTION:    GoToItem
+ *
+ * DESCRIPTION: This routine is a entry point of this application.
+ *              It is generally call as the result of hiting of 
+ *              "Go to" button in the text search dialog.
+ *
+ * PARAMETERS:    recordNum - 
+ ***********************************************************************/
+static void GoToItem (GoToParamsPtr goToParams, Boolean launchingApp)
+{
+   	UInt16 recordNum;
+   	EventType event;
+	LineItemPtr ptr;
+	Int16 selected = -1;
+	Int16 i;
+
+   	recordNum = goToParams->recordNum;
+
+  	// If the application is already running, close all the open forms.  If
+   	// the current record is blank, then it will be deleted, so we'll 
+   	// the record's unique id to find the record index again, after all 
+   	// the forms are closed.
+   	if (! launchingApp) {
+		UInt32 uniqueID;
+		DmRecordInfo (MainDB, recordNum, NULL, &uniqueID, NULL);
+      	FrmCloseAllForms ();
+      	DmFindRecordByID (MainDB, uniqueID, &recordNum);
+   	}
+
+	// initialize category
+	//
+	StrCopy(gPrefsR.addrCategory, "All");
+
+	MainFormReadDB();
+
+
+	// find the inital gMainTableStart 
+	// 
+	if (gMainTableTotals <= 0) return;
+	if ((ptr = MemHandleLock(gTableRowHandle))) {
+		for (i = 0; i < gMainTableTotals; i++) {
+			if (ptr[i].birthRecordNum == recordNum) {
+				selected = i;
+				break;
+			}
+		}
+		MemPtrUnlock(ptr);
+	}
+
+	// gMainTableStart = MAX(0, selected-4);
+	FrmGotoForm(MainForm);
+   	MemSet (&event, sizeof(EventType), 0);
+
+   	// Send an event to goto a form and select the matching text.
+   	event.eType = frmGotoEvent;
+   	event.data.frmGoto.formID = MainForm;
+	// trick selected number is returned by recordNum
+   	event.data.frmGoto.recordNum = selected;
+   	event.data.frmGoto.matchPos = goToParams->matchPos;
+   	event.data.frmGoto.matchLen = goToParams->searchStrLen;
+   	event.data.frmGoto.matchFieldNum = goToParams->matchFieldNum;
+   	EvtAddEventToQueue (&event);
+}
+
 static Boolean ApplicationHandleEvent(EventPtr e)
 {
     FormPtr frm;
@@ -751,6 +642,214 @@ static Boolean ApplicationHandleEvent(EventPtr e)
     }
 
     return handled;
+}
+
+static void GetEventNoteInfo()
+{
+    MemHandle recordH = 0;
+    UInt16  currindex = 0;
+    char*   rp;
+    Boolean found = false;
+
+    gEventNoteInfo = 0;
+
+    if (gPrefsR.eventNoteExists) {
+        if ((recordH = DmQueryRecord(MemoDB, gPrefsR.eventNoteIndex)) != NULL) {
+            rp = (char *) MemHandleLock(recordH);
+            if (StrNCaselessCompare(rp, HappydaysEventNoteTitle, StrLen(HappydaysEventNoteTitle)) == 0) {
+                gNumOfEventNote = GetNumOfEventNoteInfo(rp);
+                if (gNumOfEventNote > 0) {
+                    gEventNoteInfo = MemPtrNew(sizeof(EventNoteInfo) * gNumOfEventNote);
+
+                    ProcessEventNoteInfo(gEventNoteInfo, rp, gNumOfEventNote);
+                }
+
+                MemHandleUnlock(recordH);
+                return;
+            }
+            MemHandleUnlock(recordH);
+        }
+    }
+    
+    while ((recordH = DmQueryNextInCategory(MemoDB,
+                                            &currindex, dmAllCategories)) ) {
+        rp = (char *) MemHandleLock(recordH);
+        if (StrNCaselessCompare(rp, HappydaysEventNoteTitle, StrLen(HappydaysEventNoteTitle)) == 0) {
+            gNumOfEventNote = GetNumOfEventNoteInfo(rp);
+
+            if (gNumOfEventNote > 0) {
+                gEventNoteInfo = MemPtrNew(sizeof(EventNoteInfo) * gNumOfEventNote);
+
+                ProcessEventNoteInfo(gEventNoteInfo, rp, gNumOfEventNote);
+            }
+
+            gPrefsR.eventNoteIndex = currindex;
+            found = true;
+            MemHandleUnlock(recordH);
+            break;
+        }
+
+        MemHandleUnlock(recordH);
+        currindex++;
+    }
+    gPrefsR.eventNoteExists = found;
+}
+
+static Int16 GetNumOfEventNoteInfo(Char *rp)
+{
+    char* p = rp;
+    char *q;
+    Int16 num = 0;
+
+    while ( (q = StrChr(p, '\n')) )
+    {
+        if (*(q+1) == '*') {
+            p = q+1;
+            num++;
+        }
+        else p++;
+    }
+     
+    return num;
+}
+
+static void ProcessEventNoteInfo(EventNoteInfo* eventNoteInfo, Char* rp, Int16 num)
+{
+    char *p = rp;
+    char *q;
+    Int16 i = 0;
+    Int16 len;
+
+    while (*p++ != '*' && *p)
+        ;
+
+    for (i = 0; i < num; i++) 
+    {
+        if (!*p) break;
+
+        while (*p && (*p == ' ' || *p == '\n'))
+            p++;
+
+        q = p;
+
+        while (*p && *p++ != '\n')
+            ;
+
+        len = (p - q) - 1;
+        if (len > 20) len = 20;
+            
+        StrNCopy(eventNoteInfo[i].name, q, len);
+        eventNoteInfo[i].name [len] = 0;
+
+        eventNoteInfo[i].start = p - rp;
+
+        while (*p && *p != '*')
+            p++;
+
+        eventNoteInfo[i].len = (p - rp) - eventNoteInfo[i].start;
+        if (*p == '*') {
+        	eventNoteInfo[i].len--;
+        	p++;
+        }
+    }
+    gNumOfEventNote = i;
+}
+
+
+static Boolean SpecialKeyDown(EventPtr e) 
+{
+    Int16 chr;
+    DateTimeType dt;
+    static Int16 push_chr = '0';
+    Int8 month;
+
+    if (e->eType != keyDownEvent) return false;
+
+	// softkey only work on main screen
+	//
+	if (FrmGetActiveFormID() != MainForm) return false;
+
+    if (e->data.keyDown.modifiers & autoRepeatKeyMask) return false;
+    if (e->data.keyDown.modifiers & poweredOnKeyMask) return false;
+    if (e->data.keyDown.modifiers & commandKeyMask) return false;
+
+	chr = e->data.keyDown.chr;
+/*
+  if (e->data.keyDown.modifiers & commandKeyMask) {
+  if (keyboardAlphaChr == chr) {
+  gPrefsR.Prefs.sort = 0;     // sort by name
+  SndPlaySystemSound(sndClick);
+
+  gMainTableStart = 0;
+  FrmUpdateForm(MainForm, frmRedrawUpdateCode);
+  return true;
+  }
+  else if (keyboardNumericChr == chr) {
+  gPrefsR.Prefs.sort = 1;     // sort by date
+  SndPlaySystemSound(sndClick);
+
+  gMainTableStart = 0;
+  FrmUpdateForm(MainForm, frmRedrawUpdateCode);
+  return true;
+  }
+  }
+  else 
+*/
+	if (chr >= '0' && chr <= '9') {
+        // numeric character
+        //
+        if ( (push_chr == '1') && (chr >= '0' && chr <= '2')) {
+            month = 10 + (chr - '0');
+        }
+        else {
+            month = chr - '0';
+        }
+        if (month == 0) {
+            push_chr = chr;
+            return false;
+        }
+
+        TimSecondsToDateTime(TimGetSeconds(), &dt);
+
+        if ( month < dt.month ) {
+            dt.year++;
+        }
+        dt.month = month;
+        dt.day = 1;
+
+        // save the original
+        push_chr = chr;
+        
+        HighlightMatchRowDate(dt);
+        return false;
+    }
+    else if ((chr >= 'A' && chr <= 'Z') || (chr >= 'a' && chr <= 'z')) {
+        // is alpha?
+        //
+
+        if (chr >= 'a') chr -=  'a' - 'A';      // make capital
+        HighlightMatchRowName(chr);
+
+		return false;
+    }
+    // else if ( chr == 0xA4 || (chr >= 0xA1 && chr <= 0xFE) ) {
+    // is korean letter?
+    //
+    //}
+	
+    return false;
+}
+
+static Err NR70GraffitiHandleEvent(SysNotifyParamType *notifyParamsP)
+{
+    if (gFormID == MainForm) {
+        MainFormResize(FrmGetActiveForm(), true);
+    }
+    else if (gFormID == ViewForm) {
+        ViewFormResize(FrmGetActiveForm(), true);
+        ViewFormSilk();
+    }
+    return errNone;
 }
 
 /*
@@ -855,11 +954,11 @@ static Int16 OpenDatabases(void)
 
     compDBRef = DmOpenDatabaseByTypeCreator('aexo', 'pdmE', dmModeReadOnly);
     if (!compDBRef) {
-        isNewPIMS = false;
+        gIsNewPIMS = false;
     }
     else {
         DmCloseDatabase(compDBRef);
-        isNewPIMS = true;
+        gIsNewPIMS = true;
     }
 
     /* Determine if secret records should be shown. */
@@ -869,7 +968,7 @@ static Int16 OpenDatabases(void)
     gSystemdfmts = gPrefdfmts = sysPrefs.dateFormat;// save global date format
     gPreftfmts = sysPrefs.timeFormat;               // save global time format
 
-    if (!isNewPIMS) {
+    if (!gIsNewPIMS) {
         int ret = OpenPIMDatabases(DatebookAppID, AddressAppID, ToDoAppID, MemoAppID, mode);
         if (ret < 0) return ret;
     }
@@ -930,89 +1029,6 @@ static void CloseDatabases(void)
 	WritePrefsRec();
 }
 
-static Boolean SpecialKeyDown(EventPtr e) 
-{
-    Int16 chr;
-    DateTimeType dt;
-    static Int16 push_chr = '0';
-    Int8 month;
-
-    if (e->eType != keyDownEvent) return false;
-
-	// softkey only work on main screen
-	//
-	if (FrmGetActiveFormID() != MainForm) return false;
-
-    if (e->data.keyDown.modifiers & autoRepeatKeyMask) return false;
-    if (e->data.keyDown.modifiers & poweredOnKeyMask) return false;
-    if (e->data.keyDown.modifiers & commandKeyMask) return false;
-
-	chr = e->data.keyDown.chr;
-/*
-  if (e->data.keyDown.modifiers & commandKeyMask) {
-  if (keyboardAlphaChr == chr) {
-  gPrefsR.Prefs.sort = 0;     // sort by name
-  SndPlaySystemSound(sndClick);
-
-  gMainTableStart = 0;
-  FrmUpdateForm(MainForm, frmRedrawUpdateCode);
-  return true;
-  }
-  else if (keyboardNumericChr == chr) {
-  gPrefsR.Prefs.sort = 1;     // sort by date
-  SndPlaySystemSound(sndClick);
-
-  gMainTableStart = 0;
-  FrmUpdateForm(MainForm, frmRedrawUpdateCode);
-  return true;
-  }
-  }
-  else 
-*/
-	if (chr >= '0' && chr <= '9') {
-        // numeric character
-        //
-        if ( (push_chr == '1') && (chr >= '0' && chr <= '2')) {
-            month = 10 + (chr - '0');
-        }
-        else {
-            month = chr - '0';
-        }
-        if (month == 0) {
-            push_chr = chr;
-            return false;
-        }
-
-        TimSecondsToDateTime(TimGetSeconds(), &dt);
-
-        if ( month < dt.month ) {
-            dt.year++;
-        }
-        dt.month = month;
-        dt.day = 1;
-
-        // save the original
-        push_chr = chr;
-        
-        HighlightMatchRowDate(dt);
-        return false;
-    }
-    else if ((chr >= 'A' && chr <= 'Z') || (chr >= 'a' && chr <= 'z')) {
-        // is alpha?
-        //
-
-        if (chr >= 'a') chr -=  'a' - 'A';      // make capital
-        HighlightMatchRowName(chr);
-
-		return false;
-    }
-    // else if ( chr == 0xA4 || (chr >= 0xA1 && chr <= 0xFE) ) {
-    // is korean letter?
-    //
-    //}
-	
-    return false;
-}
 
 static void RereadHappyDaysDB(DateType start)
 {
@@ -1252,9 +1268,13 @@ Boolean MenuHandler(FormPtr frm, EventPtr e)
             int ret;
             
             // do clean up processing
-            ret = CleanupFromTD(ToDoDB);
+            if (!gIsNewPIMS) {
+                ret = CleanupFromTD(ToDoDB);
+            }
+            else {
+                ret = NewCleanupFromTD(ToDoDB);
+            }
             StrPrintF(gAppErrStr, "%d", ret);
-
             FrmCustomAlert(CleanupDone, tmpString, gAppErrStr, " ");
         }
         
@@ -3086,6 +3106,8 @@ static Boolean StartFormHandleEvent(EventPtr e)
     Boolean handled = false;
     Boolean rescan;
 	Boolean ok = true;
+
+    extern Boolean FindHappyDaysField();
     
     FormPtr frm = FrmGetFormPtr(StartForm);
 
@@ -3096,8 +3118,13 @@ static Boolean StartFormHandleEvent(EventPtr e)
         
         if(gbVgaExists) 
        		VgaFormModify(frm, vgaFormModify160To240);
-        
-        FindHappyDaysField();
+
+        if (!gIsNewPIMS) {
+            FindHappyDaysField();
+        }
+        else {
+            NewFindHappyDaysField();
+        }
 
         rescan = false;
             
@@ -3125,7 +3152,12 @@ static Boolean StartFormHandleEvent(EventPtr e)
                 break;
             }
             if (rescan) {
-                ok = UpdateHappyDaysDB(frm);
+                if (!gIsNewPIMS) {
+                    ok = UpdateHappyDaysDB(frm);
+                }
+                else {
+                    ok = NewUpdateHappyDaysDB(frm);
+                }
             }
             if (ok) SetReadAddressDB();     // mark addressDB is read
         }

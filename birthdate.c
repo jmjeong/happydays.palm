@@ -1,6 +1,6 @@
 /*
-HappyDays - A HDday displayer for the PalmPilot
-Copyright (C) 1999-2001 JaeMok Jeong
+HappyDays - A Birthday displayer for the Palm
+Copyright (C) 1999-2006 JaeMok Jeong
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -21,12 +21,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "birthdate.h"
 #include "util.h"
 #include "happydays.h"
-#include "address.h"
 #include "happydaysRsc.h"
 #include "lunar.h"
 
+#define	INDICATE_TOP		110
+#define	INDICATE_HEIGHT		6
+#define	INDICATE_LEFT		20	
+#define	INDICATE_WIDTH		15
+#define INDICATE_NUM        8
+
 extern Boolean gbVgaExists;
 extern UInt16    lunarRefNum;
+
+extern Int16 GotoAddress(Int16 index);
 
 void PackHappyDays(HappyDays *hd, void* recordP)
 {
@@ -146,6 +153,15 @@ static Int16 CalculateAge(DateType converted, DateType origin,
     return converted.year - origin.year;
 }
 
+/** 
+ * @brief
+ * @param dbP Happydays DB pointer
+ * @param AddrCategory The category of Address to be displayed
+ * @param start Start position
+ * @return The number of total Item
+ * @remarks
+ * @endif
+ */
 UInt16 AddrGetHappyDays(DmOpenRef dbP, UInt16 AddrCategory, DateType start)
 {
     UInt16 totalItems;
@@ -440,22 +456,6 @@ Boolean AnalysisHappyDays(const char* field,
     return true;
 }
 
-static void CleanupHappyDaysCache(DmOpenRef dbP)
-{
-    UInt16 currindex = 0;     
-    MemHandle recordH = 0;
-
-    if (dbP) {
-        while (1) {
-            recordH = DmQueryNextInCategory(dbP, &currindex,
-                                            dmAllCategories);
-            if (!recordH) break;
-            
-            DmRemoveRecord(dbP, currindex);     // remove all traces
-        }
-    }
-}
-
 static void UnderscoreToSpace(Char *src)
 {
     // change _ into ' '
@@ -532,7 +532,7 @@ static UInt16 HDFindSortPosition(DmOpenRef dbP, PackedHappyDays* newRecord)
                                (DmComparF *)HDComparePackedRecords, 0);
 }
 
-static Int16 HDNewRecord(DmOpenRef dbP, HappyDays *r, UInt16 *index)
+Int16 HDNewRecord(DmOpenRef dbP, HappyDays *r, UInt16 *index)
 {
     MemHandle recordH;
     PackedHappyDays* recordP;
@@ -561,8 +561,7 @@ static Int16 HDNewRecord(DmOpenRef dbP, HappyDays *r, UInt16 *index)
     return err;
 }
 
-                          
-static Int16 AnalOneRecord(UInt16 addrattr, Char* src,
+Int16 AnalizeOneRecord(UInt16 addrattr, Char* src,
                   HappyDays* hd, Boolean *ignore)
 {
     Char *p, *q;
@@ -603,7 +602,7 @@ static Int16 AnalOneRecord(UInt16 addrattr, Char* src,
         if ((p = StrChr(src, ' '))) *p = 0;
         else goto ErrHandler;
     
-        if ( *(src+1) != 0 ) {                    // if src have 'custom' tag
+        if ( *(src+1) != 0 ) {                       // if src have 'custom' tag
             hd->custom = src+1;
             UnderscoreToSpace(src+1);
         }
@@ -707,31 +706,6 @@ static Int16 AnalOneRecord(UInt16 addrattr, Char* src,
     return 0;
 }
 
-
-Boolean FindHappyDaysField()
-{
-    AddrAppInfoPtr addrInfoPtr;
-    Int16 i;
-
-    gHappyDaysField = -1;
-    
-    if ((addrInfoPtr = (AddrAppInfoPtr)AppInfoGetPtr(AddressDB))) {
-        for (i= firstRenameableLabel; i <= lastRenameableLabel; i++) {
-            if (!StrCaselessCompare(addrInfoPtr->fieldLabels[i],
-                                    gPrefsR.custom)) {
-                gHappyDaysField = i;
-                break;
-            }
-        }
-        MemPtrUnlock(addrInfoPtr);
-    }
-    if (gHappyDaysField < 0) {
-        // Custom field에 일치하는 게 없는 경우에는 note field를 조사
-        return true;
-    }
-    return true;
-}
-
 Boolean IsChangedAddressDB()
 {
     return !((MemCmp((char*) &gAdcdate, gPrefsR.adrcdate, 4) == 0) &&
@@ -744,13 +718,7 @@ void  SetReadAddressDB()
     MemMove(gPrefsR.adrmdate, (char *)&gAdmdate, 4);
 }
 
-#define	INDICATE_TOP		110
-#define	INDICATE_HEIGHT		6
-#define	INDICATE_LEFT		20	
-#define	INDICATE_WIDTH		15
-#define INDICATE_NUM        8
-
-static void initIndicate()
+void initIndicate()
 {
 	RectangleType rect;
 	CustomPatternType pattern;
@@ -776,7 +744,7 @@ static void initIndicate()
 	return;
 }
 
-static void displayNextIndicate( int index )
+void displayNextIndicate( int index )
 {
 	FormPtr form;
 	RectangleType rect;
@@ -799,157 +767,3 @@ static void displayNextIndicate( int index )
 	return;
 }
 
-Boolean UpdateHappyDaysDB(FormPtr frm)
-{
-    UInt16 currIndex = 0;
-    AddrPackedDBRecord *rp;
-    AddrDBRecordType r;
-    MemHandle recordH = 0;
-    UInt16 recordNum;
-    int i = 0, indicateNext;
-    int step;
-
-    // create the happydays cache db
-    HappyDays   hd;
-    Boolean     ignore = false;         // ignore error record
-    Char*       hdField;
-    UInt16      addrattr;
-    Char        *p, *q, *end;
-
-    // display collecting information
-    //
-    FrmDrawForm(frm);
-
-    // clean up old database
-    //
-    CleanupHappyDaysCache(MainDB);
-
-    recordNum = DmNumRecords(AddressDB);
-    indicateNext = step = recordNum / INDICATE_NUM;
-
-    if (recordNum > 50) initIndicate();
-            
-    while (1) {
-        char *name1, *name2;
-        Int8 whichField;        // birthday field or note field?
-            
-        recordH = DmQueryNextInCategory(AddressDB, &currIndex,
-                                        dmAllCategories);
-        if (!recordH) break;
-        if (i++ == indicateNext) {
-            if (recordNum > 50) displayNextIndicate( (i-1) / step);
-            indicateNext += step;
-        }
-
-        DmRecordInfo(AddressDB, currIndex, &addrattr, NULL, NULL);
-        addrattr &= dmRecAttrCategoryMask;      // get category info
-                
-        rp = (AddrPackedDBRecord*)MemHandleLock(recordH);
-        /*
-         * Build the unpacked structure for an AddressDB record.  It
-         * is just a bunch of pointers into the rp structure.
-         */
-        AddrUnpack(rp, &r);
-
-        if ((gHappyDaysField <= 0 || !r.fields[gHappyDaysField])
-            && !(gPrefsR.scannote && r.fields[note]
-                 && StrStr(r.fields[note], gPrefsR.notifywith) ) ) {
-            // not exist in happydays field or note field
-            //
-            MemHandleUnlock(recordH);
-            currIndex++;
-            continue;
-        }
-			
-        MemSet(&hd, sizeof(hd), 0);
-        hd.addrRecordNum = currIndex;
-        if (DetermineRecordName(&r, gSortByCompany,
-                                &hd.name1,
-                                &hd.name2)) {
-            // name 1 has priority;
-            hd.flag.bits.priority_name1 = 1;
-        }
-
-        // save the temporary name
-        name1 = hd.name1;
-        name2 = hd.name2;
-
-        if (gHappyDaysField >= 0 && r.fields[gHappyDaysField])
-            whichField = gHappyDaysField;
-        else whichField = note;
-
-        while (whichField >= 0) {
-
-            if (whichField == note) {
-                p = StrStr(r.fields[note], gPrefsR.notifywith)
-                    + StrLen(gPrefsR.notifywith) + 1;
-
-                if ( StrLen(r.fields[note]) < (p - r.fields[note]) ) break;
-            }
-            else {
-                p = r.fields[whichField];
-            }
-                
-            hdField =
-                MemPtrNew(StrLen(r.fields[whichField]) - (p - r.fields[whichField])+1);
-
-            SysCopyStringResource(gAppErrStr, NotEnoughMemoryString);
-            ErrFatalDisplayIf(!hdField, gAppErrStr);
-            
-            p = StrCopy(hdField, p);
-
-            if (whichField == note && 
-                (end = StrStr(p, gPrefsR.notifywith))) {
-                // end delimeter
-                //
-                *end = 0;
-            }
-            
-            while ((q = StrChr(p, '\n'))) {
-                // multiple event
-                //
-
-                *q = 0;
-                if (AnalOneRecord(addrattr, p, &hd, &ignore)) 
-					goto Update_ErrHandler;
-                p = q+1;
-
-                // restore the saved name
-                hd.name1 = name1;
-                hd.name2 = name2;
-                
-                // reset multiple flag
-                hd.flag.bits.multiple_event = 0;
-
-                while (*p == ' ' || *p == '\t' || *p == '\n')
-                    p++;     // skip white space
-            }
-            // last record
-            if (*p) {
-                // check the null '\n'
-                if (AnalOneRecord(addrattr, p, &hd, &ignore)) 
-					goto Update_ErrHandler;
-            }
-                
-            if (whichField == gHappyDaysField  // next is note field
-                && (gPrefsR.scannote     // scanNote & exists
-                    && r.fields[note]       
-                    && StrStr(r.fields[note], gPrefsR.notifywith)) ) {
-                whichField = note;
-            }
-            else whichField = -1;
-
-            MemPtrFree(hdField);
-        }
-        MemHandleUnlock(recordH);
-        currIndex++;
-    }
-    if (recordNum > 50) displayNextIndicate( INDICATE_NUM -1);
-    
-	return true;
-
-Update_ErrHandler:
-	MemPtrFree(hdField);
-	MemHandleUnlock(recordH);
-	return false;
-}

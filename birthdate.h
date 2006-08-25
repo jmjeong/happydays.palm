@@ -42,7 +42,6 @@ Boolean AnalysisHappyDays(const char* birthdate,
 Boolean UpdateHappyDaysDB(FormPtr frm) ;
 void  SetReadAddressDB() ;
 
-Boolean FindHappyDaysField() ;
 Boolean IsChangedAddressDB() ;
 
 #endif

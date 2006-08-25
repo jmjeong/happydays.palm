@@ -470,3 +470,4 @@ static UInt16 PrvFrmGetGSI(FormPtr frmP)
 	return(-1);
 }
 */
+
