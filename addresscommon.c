@@ -33,13 +33,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 char *UnnamedRecordStringPtr="";
 
-void CleanupHappyDaysCache(DmOpenRef dbP) SECT2;
-Int16 GotoAddress(Int16 index) SECT2;
-
-void DrawRecordName(
-    char* name1, char* name2,
-    UInt16 nameExtent, Int16 *x, Int16 y,
-    Boolean center, Boolean priorityIsName1);
+extern Int16 GotoAddress(Int16 index);
+// called from Find function(must be in main section)
+extern void DrawRecordName(char* name1, char* name2,
+                           UInt16 nameExtent, Int16 *x, Int16 y,
+                           Boolean center, Boolean priorityIsName1);
 
 /***********************************************************************
  *
