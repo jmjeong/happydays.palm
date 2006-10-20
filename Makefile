@@ -1,6 +1,6 @@
 ## Makefile for HappyDays application
 
-VERSION = 2.40
+VERSION = 3.0
 TARGET = happydays
 APPNAME = "HappyDays"
 APPID = "Jmje"
@@ -21,7 +21,7 @@ CFLAGS = -Wall -O2 -I/usr/local/share/palmdev/sonysdk -I/usr/local/share/palmdev
 #CFLAGS = -Wall -g -O2
 
 PILRC = pilrc
-OBJRES = m68k-palmos-obj-res
+# OBJRES = m68k-palmos-obj-res
 NM = m68k-palmos-nm
 BUILDPRC = build-prc
 PILOTXFER = pilot-xfer

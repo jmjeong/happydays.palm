@@ -23,7 +23,7 @@
 #include "happydays.h"
 #include "happydaysRsc.h"
 #include "datebook.h"
-#include "address.h"
+#include "birthdate.h"
 #include "util.h"
 
 ////////////////////////////////////////////////////////////////////

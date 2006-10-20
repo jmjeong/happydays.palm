@@ -1,5 +1,7 @@
 TRANSLATION "KOREAN"
 BEGIN
+    "sKst"= "sKst"
+
     "long_notifySettingMoreString" =  ""\
 	"Action Names나 DateBk3/4등과 같은 프로그램에서는 노트 정보를 이용하여 "\
 	"아이콘, 폰트, 카테고리 정보 등을 나타냅니다.\n\n"\
@@ -27,6 +29,7 @@ BEGIN
     "간주하고 삭제합니다. (주의 요망)\n"
     "long_removeConfirmString" =  ""\
     "모든 해피데이즈 알림 항목을 삭제하길 원하십니까?"
+
     "Invalid input date" =  "날짜 입력이 잘못되었습니다."
     "Select Time" =  "알람 시간"
     "No Time" =  "지정안됨"
@@ -34,6 +37,13 @@ BEGIN
     "long_sl2lnString" =  ""\
         "-)는 음력 평달을 의미합니다.\n"\
         "#)은 음력 윤달을 의미합니다."
+    "long_prefString" =  "Notify format\n"\
+        "+L = Last, First\n"\
+        "+F = First Last\n"\
+        "+f = First\n"\
+        "+e = Event Type(1)\n"\
+        "+E = Event Type(f)\n"\
+        "+y = Year age\n"
 
     "SUN" =  "일"
     "MON" =  "월"
@@ -43,7 +53,9 @@ BEGIN
     "FRI" =  "금"
     "SAT" =  "토"
 
-    "January"= "1월"
+    "SMTWTFS"= "SMTWTFS"
+
+    "January" =  "1월"
     "February" =  "2월"
     "March" =  "3월"
     "April" =  "4월"
@@ -65,7 +77,7 @@ BEGIN
     "(not exist in this year)" =  "(올해엔 없는 날입니다)"
     "Please run Date Book once first." =  "먼저 일정관리를 한번 수행하세요."
     "Please run Todo once first." =  "먼저 TODO 프로그램을 한번 수행하세요."
-    "Days"= "일"
+    "Days" =  "일"
     "%dY %dM %dD (%ld)" =  "%d년 %d월 %d일째 (%ld)"
     "%dth day" =  "%d일입니다"
     "(%dth)" =  "(%d일)"
@@ -84,7 +96,7 @@ BEGIN
     "Datebook Note" =  "일정관리 노트"
     "ToDo Note" =  "ToDo 노트"
 
-    "Edit Categories..."= "Edit Categories..."
+    "Edit Categories..." =  "Edit Categories..."
 
     "Collecting Information" =  ""\
         "주소록으로부터 정보 수집중"
@@ -106,29 +118,43 @@ BEGIN
     "Utilities" =  "유틸리티 "
     "Date Book Notify" =  "일정관리에 알림 "
     "Cleanup Date Book" =  "일정관리에서 정리 "
+    "C"= "C"
     "To Do Notify" =  "할 일에 알림 "
+    "T"= "T"
     "Cleanup To Do" =  "할 일에서 정리 "
+    "O"= "O"
     "Export to Memo Pad" =  "메모장으로 전송 "
+    "E"= "E"
     "Solar to Lunar" =  "양력을 음력으로 "
+    "S"= "S"
     "Lunar to Solar" =  "음력을 양력으로 "
+    "L"= "L"
     "Rescan Address Book" =  "주소록 재검색 "
 
     "Options" =  "옵션 "
     "Font..." =  "글꼴..."
+    "F"= "F"
     "Preferences" =  "설정 "
+    "R"= "R"
     "Display Preferences" =  "화면 설정 "
     "About HappyDays" =  "해피데이즈란? "
 
     "Edit" =  "수정"
     "Undo" =  "되돌리기"
+    "U"= "U"
     "Cut" =  "자르기"
+    "X"= "X"
     "Copy" =  "복사"
     "Paste" =  "붙이기"
+    "P"= "P"
     "Select All" =  "전체 선택"
     "Keyboard" =  "키보드"
+    "K"= "K"
     "Graffiti" =  "그래피티"
+    "G"= "G"
 
     "Emphasize Lunar Date" =  "음력강조"
+    "Display solar/lunar info in View"= "세부화면에 음력정보 표시"
     "OK" =  "승인"
     "Cancel" =  "취소"
 
@@ -152,13 +178,15 @@ BEGIN
     "Ask" =  "묻기"
     "Never" =  "안함"
 
-    "Notify Format:" =  "알림 레코드 형식: "
+    "Noti Fmt:"= "알림 형식: "
     "[Last, First] E(1) Year" =  "[성, 이름] E(1) 나이"
     "[First Last] E(1) Year" =  "[이름 성] E(1) 나이"
     "[First] E(1) Year" =  "[이름] E(1) 나이"
     "Event - Last, First Year" =  "행사 - 성, 이름 나이"
     "Event - First Last Year" =  "행사 - 이름 성 나이"
     "First Last Year" =  "이름 성 나이"
+    "Custom"= "사용자 정의"
+    "= "= "= "
 
     "Address Book:" =  "주소록 : "
     "Built-in" =  "주소록"
@@ -167,7 +195,7 @@ BEGIN
     "Address Plus(+)" =  "Address Plus(+)"
     "Super Names" =  "Super Names"
     "TealPhone" =  "TealPhone"
-    "HanAD"= "HanAD"
+    "HanAD" =  "HanAD"
 
     "HappyDays ID:" =  "HappyDays ID:"
 
@@ -193,10 +221,13 @@ BEGIN
     "modify" =  "수정"
 
     "Category:" =  "카테고리 :"
+    "                 "= "                 "
+
     "Private:" =  "비공개 :"
-    " "= " "
+    " " =  " "
 
     "Alarm:" =  "알람 :"
+
     "Time:" =  "시간 :"
 
     "Repeat for:" =  "몇 년간 :"
@@ -213,6 +244,8 @@ BEGIN
     "4" =  "4"
     "5" =  "5"
 
+    "                "= "                "
+
     "HappyDays says" =  "정 보"
     "^1" =  "^1"
 
@@ -227,7 +260,7 @@ BEGIN
         "메모장으로 해피데이즈 목록을 옮길까요?"
 
     "HappyDays Cleanup" =  "해피데이즈 정리"
-    "^1: ^2" = "^1: ^2"
+    "^1: ^2" =  "^1: ^2"
 
     "Notify warning" =  "알림 경고"
     "long_notifywarningString" =  ""\
@@ -243,10 +276,13 @@ BEGIN
     "^1: ^2 HappyDays notify entries removed." =  ""\
 	"^1: ^2 개의 해피데이즈 알림 레코드가 제거되었습니다."
 
+    "HappyDays 3.0b3"= "HappyDays 3.0b3"
     "GPL free software" =  "GPL free software"
+    "(c) 1999-2006 Jaemok Jeong"= "(c) 1999-2006 정재목"
 
     "E-Mail & Web Page" =  "이메일 & 웹페이지"
-    "happydays@jmjeong.com" =  "happydays@jmjeong.com"
+    "jmjeogn@gmail.com"= "jmjeogn@gmail.com"
+    "jmjeong.com/?HappyDays"= "jmjeong.com/?HappyDays"
 
     "Translator" =  "한글 버젼"
     "Translator's email" =  "정재목"
@@ -255,12 +291,4 @@ BEGIN
 
     "Processing" =  "진행중"
     "Processed : " =  "처리된것 : "
-
-    "long_prefString" = "Notify format\n"\
-        "+L = Last, First\n"\
-        "+F = First Last\n"\
-        "+f = First\n"\
-        "+e = Event Type(1)\n"\
-        "+E = Event Type(f)\n"\
-        "+y = Year age\n"
 END

@@ -518,7 +518,7 @@ BEGIN
     TITLE "About HappyDays"
 
 	FORMBITMAP AT (6 18) BITMAP ID_BitmapIcon USABLE 
-    LABEL "HappyDays 3.0b2" AUTOID AT (PrevRight+38 PrevTop) FONT 1
+    LABEL "HappyDays 3.0b3" AUTOID AT (PrevRight+38 PrevTop) FONT 1
     LABEL "GPL free software"
         AUTOID AT (PrevLeft PrevTop+ABOUT_LINE_SPACING) FONT 0
     LABEL "(c) 1999-2006 Jaemok Jeong"
@@ -588,4 +588,4 @@ SMALLICONFAMILY
 	TRANSPARENT 192 192 0
 
 APPLICATIONICONNAME 1000 "HappyDays"
-VERSION ID 1 "3.0b2"
+VERSION ID 1 "3.0b3"
