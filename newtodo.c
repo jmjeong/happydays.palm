@@ -4,6 +4,8 @@
 #include "happydays.h"
 #include "newtodo.h"
 #include "util.h"
+#include "todo.h"
+#include "notify.h"
 #include "section.h"
 
 #define TODO_SORT_OTHER_MAKE( sort, filter, subfilter )	((((sort) & 0x0F) << 8) | (((filter) & 0x0F) << 4) |(((subfilter) & 0x0F)))
@@ -11,38 +13,19 @@
 #define TODO_SORT_OTHER_GET_FILTER( other )		(((other) >> 4) & 0x0F)
 #define TODO_SORT_OTHER_GET_SUBFILTER( other )	(((other) & 0x0F))
 
-Int16 NewActualPerformNotifyTD(HappyDays birth, DateType when, Int8 age,
-                               Int16 *created, Int16 *touched, Int16 existIndex) SECT2;
-UInt8 NewToDoGetSortOrder (DmOpenRef dbP) SECT2;
-Err ToDoDBRecordSetDueDate( DmOpenRef dbP, UInt16 index, DateType *dueDateP ) SECT2;
-Err ToDoDBRecordClearDueDate( DmOpenRef dbP, UInt16 index ) SECT2;
-
-extern Int16 FindEventNoteInfo(HappyDays birth);
-extern void LoadEventNoteString(char *p, Int16 idx, Int16 maxString);
-extern Char* NotifyDescString(DateType when, HappyDays birth, 
-							  Int8 age, Boolean todo);
-extern void ChkNMakePrivateRecord(DmOpenRef db, Int16 index);
-extern Boolean IsSameRecord(Char* notefield, HappyDays birth);
-extern Boolean IsHappyDaysRecord(Char* notefield);
-
-
-static Char *ToDoDBRecordGetFieldPointer( ToDoDBRecordPtr recordP,
-		ToDoRecordFieldType field ) SECT2;
-static Err ToDoDBRecordSetOptionalField( DmOpenRef dbP, UInt16 index,
-                                         ToDoRecordFieldType field, void *fieldDataP, UInt32 fieldDataSize ) SECT2;
-static MemHandle NewToDoGetAppInfo (DmOpenRef dbP) SECT2;
-static Int16 DateTypeCmp(DateType d1, DateType d2) SECT2;
-static Int16 CategoryCompare (UInt8 attr1, UInt8 attr2, MemHandle appInfoH) SECT2;
-static Int16 ToDoCompareRecords( ToDoDBRecordPtr r1,  ToDoDBRecordPtr r2,
-                                 Int16 sortOther, SortRecordInfoPtr info1, SortRecordInfoPtr info2,
-                                 MemHandle appInfoH ) SECT2;
-static UInt16 ToDoFindSortPosition(DmOpenRef dbP, ToDoDBRecord *newRecord, 
-                                   SortRecordInfoPtr newRecordInfo, UInt16 filter, UInt16 subFilter ) SECT2;
-
-
 #define maxDescLen	256
 #define maxNoteLen	maxFieldTextLen             //was 4096, now is 32,767
 
+static Char *ToDoDBRecordGetFieldPointer( ToDoDBRecordPtr recordP,
+		ToDoRecordFieldType field );
+static UInt8 NewToDoGetSortOrder (DmOpenRef dbP);
+static MemHandle NewToDoGetAppInfo (DmOpenRef dbP);
+static Err ToDoDBRecordSetOptionalField( DmOpenRef dbP, UInt16 index,
+                                         ToDoRecordFieldType field, void *fieldDataP, UInt32 fieldDataSize );
+static Char* NewGetToDoNotePtr (ToDoDBRecordPtr recordP);
+
+// static Err ToDoDBRecordSetDueDate( DmOpenRef dbP, UInt16 index, DateType *dueDateP );
+		
 /************************************************************
  *
  *  FUNCTION: DateTypeCmp
@@ -186,8 +169,7 @@ static Int16 ToDoCompareRecords( ToDoDBRecordPtr r1,  ToDoDBRecordPtr r2,
 		}
 	else
 		{
-		dateP = ( DatePtr ) ToDoDBRecordGetFieldPointer( r1,
-			toDoRecordFieldCompletionDate );
+		dateP = ( DatePtr ) ToDoDBRecordGetFieldPointer( r1,toDoRecordFieldCompletionDate );
 		if ( dateP )
 			{
 			r1DueDate = *dateP;
@@ -310,7 +292,7 @@ static Int16 ToDoCompareRecords( ToDoDBRecordPtr r1,  ToDoDBRecordPtr r2,
  *       art	3/22/96	Rename routine and added more sort orders
  *
  *************************************************************/
-UInt8 NewToDoGetSortOrder (DmOpenRef dbP)
+static UInt8 NewToDoGetSortOrder (DmOpenRef dbP)
 {
 	UInt8 sortOrder;
 	ToDoAppInfoPtr appInfoP;
@@ -499,7 +481,7 @@ static Err ToDoDBRecordSetOptionalField( DmOpenRef dbP, UInt16 index,
  *  BY: Art Lamb
  *
  *************************************************************/
-MemHandle NewToDoGetAppInfo (DmOpenRef dbP)
+static MemHandle NewToDoGetAppInfo (DmOpenRef dbP)
 {
 	Err error;
 	UInt16 cardNo;
@@ -557,7 +539,7 @@ Char* GetToDoDescriptionPtr (ToDoDBRecordPtr recordP)
  *	CS2		01/23/03	Revised for new structs
  *
  ***********************************************************************/
-Char* NewGetToDoNotePtr (ToDoDBRecordPtr recordP)
+static Char* NewGetToDoNotePtr (ToDoDBRecordPtr recordP)
 {
 	return ToDoDBRecordGetFieldPointer( recordP, toDoRecordFieldNote );
 }
@@ -726,7 +708,7 @@ static Err NewToDoNewRecord( DmOpenRef dbP, ToDoItemPtr item, UInt16 category,
 	SortRecordInfoType	sortInfo;
 
 	// Compute the size of the new to do record.
-	size = sizeDBRecord;
+	size = newSizeDBRecord;
 
 	if ( item->dataFlags.dueDate )
 	{
@@ -898,7 +880,7 @@ Int16 NewActualPerformNotifyTD(HappyDays birth, DateType when, Int8 age,
 
     if (existIndex < 0) {            // there is no same record
         //
-        // if not exists
+;        // if not exists
         // write the new record (be sure to fill index)
         //
         NewToDoNewRecord(ToDoDB, &todo, gPrefsR.todoCategory, 0, 0, (UInt16*)&existIndex);
@@ -1003,3 +985,4 @@ int NewCleanupFromTD(DmOpenRef db)
     }
     return ret;
 }
+

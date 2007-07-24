@@ -111,7 +111,7 @@ BEGIN
 	"Address Book:" = "Address Book:"
 	"Built-in" = "Built-in"
 
-    "long_prefString" = "Notify format\n"\
+    "long_prefString" = "Notify format Help\n"\
         "+L = Last, First\n"\
         "+F = First Last\n"\
         "+l = LastName\n"\

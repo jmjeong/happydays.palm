@@ -253,19 +253,58 @@ typedef struct {
 
 typedef ApptDBRecordType*   ApptDBRecordPtr;
 
-/************************************************************
- *
- * Appointment database routines.
- *
- *************************************************************/
+/***********************************************************************
+ *  
+ *  Internal Structutes
+ *  
+ ***********************************************************************/
+    
+// The following structure doesn't really exist.  The first field
+// varies depending on the data present.  However, it is convient
+// (and less error prone) to use when accessing the other information.
+typedef struct {
+    ApptDateTimeType    when;
+    ApptDBRecordFlags   flags;  // A flag set for each  datum present
+    char                firstField;
+} ApptPackedDBRecordType;
 
-extern Err ApptNewRecord (DmOpenRef dbP, ApptDBRecordPtr r, UInt16 *index) SECT1;
-extern MemHandle ApptGetAppointments (DmOpenRef dbP, DateType date,
-                                      UInt16 *countP) SECT1;
-extern Err ApptGetRecord (DmOpenRef dbP, UInt16 index, ApptDBRecordPtr r,
-                   MemHandle * handleP) SECT1;
-extern Err ApptChangeRecord(DmOpenRef dbP, UInt16 *index, ApptDBRecordPtr r,
-                            ApptDBRecordFlags changedFields) SECT1;
+typedef ApptPackedDBRecordType * ApptPackedDBRecordPtr;
+ 
+Int16 DateCompare(DateType d1, DateType d2) SECT2;
+RepeatInfoPtr ApptGetRepeatInfo(ApptPackedDBRecordPtr src) SECT2;
+void ApptUnpack(ApptPackedDBRecordPtr src, ApptDBRecordPtr dest) SECT2;
+Boolean ApptFindFirst (DmOpenRef dbP, DateType date, UInt16 * indexP) SECT2;
+Err ApptGetRecord (DmOpenRef dbP, UInt16 index, ApptDBRecordPtr r,
+                   MemHandle * handleP) SECT2;
+Err ApptChangeRecord(DmOpenRef dbP, UInt16 *index, ApptDBRecordPtr r,
+                     ApptDBRecordFlags changedFields) SECT2; 
+Boolean ApptRepeatsOnDate (ApptDBRecordPtr apptRec, DateType date) SECT2;
+MemHandle ApptGetAppointments (DmOpenRef dbP, DateType date, UInt16 * countP) SECT2;
+Err ApptNewRecord(DmOpenRef dbP, ApptDBRecordPtr r, UInt16 *index) SECT2; 
+void RescheduleAlarms (DmOpenRef dbP) SECT2;
 
+Boolean NextRepeat (ApptDBRecordPtr apptRec, DatePtr dateP) SECT2;
+Boolean ApptNextRepeat (ApptDBRecordPtr apptRec, DatePtr dateP)  SECT2;
+UInt32 ApptGetAlarmTime (ApptDBRecordPtr apptRec, UInt32 currentTime)  SECT2;
+UInt32 AlarmGetTrigger (UInt32* refP)  SECT2;
+void AlarmSetTrigger (UInt32 alarmTime, UInt32 ref)  SECT2;
+UInt16 GetDismissedAlarmCount (PendingAlarmQueueType*	inAlarmInternalsP )  SECT2;
+UInt32 * GetDismissedAlarmList (PendingAlarmQueueType*	inAlarmInternalsP )  SECT2;
+UInt32 ApptAlarmMunger (
+	DmOpenRef					inDbR,
+	UInt32						inAlarmStart,
+	UInt32						inAlarmStop,
+	PendingAlarmQueueType *	    inAlarmInternalsP,
+	UInt16*					    ioCountP,
+	DatebookAlarmType *		    outAlarmListP,
+	Boolean*					outAudibleP )  SECT2;
+UInt32 ApptGetTimeOfNextAlarm (
+	DmOpenRef					inDbR,			    // the open database
+	UInt32						inAlarmStart ) SECT2;	// find first alarm on or after this time (in seconds)
+void ReleaseAlarmInternals (
+	PendingAlarmQueueType *	inAlarmInternalsP,
+	Boolean						inModified ) SECT2;
+void ReserveAlarmInternals (
+	PendingAlarmQueueType*		outAlarmInternalsP ) SECT2;
 
 #endif

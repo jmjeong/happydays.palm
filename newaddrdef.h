@@ -95,8 +95,8 @@
  * @name Common String Literals and Constants
  */
 /*@{*/
-#define shortenedFieldString                "..."
-#define shortenedFieldLength                3
+// #define shortenedFieldString                "..."
+// #define shortenedFieldLength                3
 #define fieldSeparatorString                ", "
 #define fieldSeparatorLength                2
 #define spaceBetweenNamesAndPhoneNumbers    6

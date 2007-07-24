@@ -42,6 +42,14 @@ Boolean AnalysisHappyDays(const char* birthdate,
 Boolean UpdateHappyDaysDB(FormPtr frm) ;
 void  SetReadAddressDB() ;
 
-Boolean IsChangedAddressDB() ;
+Boolean IsChangedAddressDB();
+
+Int16 HDNewRecord(DmOpenRef dbP, HappyDays *r, UInt16 *index);
+
+Int16 AnalizeOneRecord(UInt16 addrattr, Char* src,
+                       HappyDays* hd, Boolean *ignore);
+
+void initIndicate();
+void displayNextIndicate( int index );
 
 #endif

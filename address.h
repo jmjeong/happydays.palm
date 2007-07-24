@@ -201,6 +201,12 @@ typedef AddrAppInfoType * AddrAppInfoPtr;
 
 #define GetPhoneLabel(r, p) (((r)->options.phoneBits >> (((p) - firstPhoneField) << 2)) & 0xF)
 
+Boolean FindHappyDaysField();
+Boolean UpdateHappyDaysDB(FormPtr frm);
+
+void AddrUnpack(AddrPackedDBRecord *src, AddrDBRecordPtr dest);
+
+
 /*
  * Function prototypes
  */

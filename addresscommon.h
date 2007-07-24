@@ -8,12 +8,15 @@
 #define fieldSeparatorString              ", "
 #define fieldSeparatorLength              2
 
-void CleanupHappyDaysCache(DmOpenRef dbP) SECT2;
-Int16 GotoAddress(Int16 index) SECT2;
+Int16 GotoAddress(Int16 index);
 
 void DrawRecordName(
     char* name1, char* name2,
     UInt16 nameExtent, Int16 *x, Int16 y,
     Boolean center, Boolean priorityIsName1);
+
+void CleanupHappyDaysCache(DmOpenRef dbP);
+Int16 GotoAddress(Int16 index);
+
 
 #endif

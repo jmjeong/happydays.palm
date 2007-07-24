@@ -22,18 +22,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "util.h"
 #include "happydays.h"
 #include "happydaysRsc.h"
+#include "datebook.h"
 #include "lunar.h"
+#include "addresscommon.h"
 
 #define	INDICATE_TOP		110
 #define	INDICATE_HEIGHT		6
 #define	INDICATE_LEFT		20	
 #define	INDICATE_WIDTH		15
 #define INDICATE_NUM        8
-
-extern Boolean gbVgaExists;
-extern UInt16    lunarRefNum;
-
-extern Int16 GotoAddress(Int16 index);
 
 void PackHappyDays(HappyDays *hd, void* recordP)
 {

@@ -365,7 +365,7 @@ typedef ToDoDBRecord*       ToDoDBRecordPtr;
  *
  * @return  Minimum size of the packed record.
  */
-#define sizeDBRecord    (sizeof( ToDoDBRecord ) + 2)
+#define newSizeDBRecord    (sizeof( ToDoDBRecord ) + 2)
 
 /** @brief Record format
  *
@@ -442,10 +442,6 @@ typedef enum {
 #define TODO_SUBFILTER_DATE_LAST_SEVEN	(0x0001)
 #define TODO_SUBFILTER_DATE_NEXT_SEVEN	(0x0002)
 #define TODO_SUBFILTER_DATE_PAST_DUE	(0x0003)
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /************************************************************
  *
@@ -996,10 +992,6 @@ extern Err ToDoDBNumRecordsInDateSubFilters( DmOpenRef dbP, DateType today,
 
 #if ERROR_CHECK_LEVEL == ERROR_CHECK_FULL
 extern void ECToDoDBValidate( DmOpenRef dbP );
-#endif
-
-#ifdef __cplusplus
-}
 #endif
 
 #endif // __TDTODOMGR_H__

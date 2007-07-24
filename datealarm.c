@@ -5,6 +5,7 @@
 
 #include "datebook.h"
 #include "happydaysRsc.h"
+#include "util.h"
 #include "section.h"
 
 #define apptNoAlarm                    -1
@@ -14,28 +15,6 @@
 #define datebookUnsavedPrefID           0x00
 
 #define apptEndOfTime                   0xffffffff
-
-typedef struct {
-    ApptDateTimeType    when;
-    ApptDBRecordFlags   flags;  // A flag set for each  datum present
-    char                firstField;
-    UInt8               reserved;
-} ApptPackedDBRecordType;
-
-typedef ApptPackedDBRecordType * ApptPackedDBRecordPtr;
-
-extern void ApptUnpack(ApptPackedDBRecordPtr src, ApptDBRecordPtr dest);
-extern Int16 DateCompare(DateType d1, DateType d2);
-UInt32
-ApptAlarmMunger (
-	DmOpenRef					inDbR,
-	UInt32							inAlarmStart,
-	UInt32							inAlarmStop,
-	PendingAlarmQueueType *	inAlarmInternalsP,
-	UInt16*						ioCountP,
-	DatebookAlarmType *		outAlarmListP,
-	Boolean*					outAudibleP )  SECT1;
-Boolean NextRepeat (ApptDBRecordPtr apptRec, DatePtr dateP) SECT1;
 
 Boolean NextRepeat (ApptDBRecordPtr apptRec, DatePtr dateP) 
 {

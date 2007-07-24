@@ -23,6 +23,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "happydaysRsc.h"
 #include "happydays.h"
 #include "address.h"
+#include "addresscommon.h"
+#include "birthdate.h"
 #include "util.h"
 
 #define INDICATE_NUM        8
@@ -32,20 +34,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define GetBitMacro(bitfield, index)      ((bitfield) & BitAtPosition(index))
 #define SetBitMacro(bitfield, index)      ((bitfield) |= BitAtPosition(index))
 #define RemoveBitMacro(bitfield, index)   ((bitfield) &= ~BitAtPosition(index))
-
-extern void initIndicate();
-extern void displayNextIndicate( int index );
-extern Int16 AnalizeOneRecord(UInt16 addrattr, Char* src, HappyDays* hd, Boolean *ignore);
-extern void CleanupHappyDaysCache(DmOpenRef dbP);
-
-void AddrUnpack(AddrPackedDBRecord *src, AddrDBRecordPtr dest) SECT2;
-Boolean FindHappyDaysField() SECT2;
-Boolean UpdateHappyDaysDB(FormPtr frm) SECT2;
-
-static Boolean DetermineRecordName(AddrDBRecordPtr recordP, 
-                                   Boolean sortByCompany,
-                                   Char **name1,
-                                   Char **name2) SECT2;
 
 
 /************************************************************

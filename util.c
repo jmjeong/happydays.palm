@@ -21,9 +21,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <SonyCLIE.h>
 #include "util.h"
 #include "happydaysRsc.h"
+#include "datebook.h"
 #include "lunar.h"
 
-extern UInt16 lunarRefNum;
+static FieldPtr SetFieldTextFromHandle(UInt16 fieldID, MemHandle txtH);
 
 /***********************************************************************
  * FUNCTION:    ResizeSilk
@@ -186,7 +187,7 @@ void * GetObjectPointer(FormPtr frm, UInt16 objID)
 //
 //  SetFieldTextFromHandle - set txtH into field object text
 //
-FieldPtr SetFieldTextFromHandle(UInt16 fieldID, MemHandle txtH)
+static FieldPtr SetFieldTextFromHandle(UInt16 fieldID, MemHandle txtH)
 {
    MemHandle   oldTxtH;
    FormPtr     frm = FrmGetActiveForm();

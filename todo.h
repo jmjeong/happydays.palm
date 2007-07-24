@@ -18,6 +18,7 @@
 #define __TDTODOMGR_H__
 
 #include <DateTime.h>
+#include "happydays.h"
 #include "section.h"
 
 #define LocalizedAppInfoStr	1000
@@ -103,43 +104,14 @@ typedef enum  {
 	toDoCategory
 } ToDoRecordFieldType;
 
+// external declaration
+int CleanupFromTD(DmOpenRef db);
+Char* GetToDoNotePtr (ToDoDBRecordPtr recordP);
+Err ToDoNewRecord(DmOpenRef dbP, ToDoItemPtr item, UInt16 category, UInt16 *index);
+Int16 ActualPerformNotifyTD(HappyDays birth, DateType when, Int8 age,
+                            Int16 *created, Int16 *touched, Int16 existIndex);
+Int16 CheckToDoRecord(DateType when, HappyDays birth);
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-
-//-------------------------------------------------------------------
-// Routines
-//-------------------------------------------------------------------
-extern Err ToDoNewRecord(DmOpenRef dbP, ToDoItemPtr item, UInt16 category, UInt16 *index) SECT1;
-
-extern Err ToDoInsertNewRecord (DmOpenRef dbP, UInt16 * index) SECT1;
-
-extern Err ToDoChangeRecord(DmOpenRef dbP, UInt16 * index, 
-                     ToDoRecordFieldType changedField, void * data) SECT1;
-
-extern Err ToDoChangeSortOrder(DmOpenRef dbP, UInt8 sortOrder) SECT1;
-
-extern Err ToDoAppInfoInit(DmOpenRef dbP) SECT1;
-
-extern MemHandle ToDoGetAppInfo  (DmOpenRef dbP) SECT1;
-
-extern UInt8 ToDoGetSortOrder (DmOpenRef dbP) SECT1;
-
-extern void ToDoSort (DmOpenRef dbP) SECT1;
-
-extern Err ToDoGetDatabase (DmOpenRef *dbPP, UInt16 mode) SECT1;
-
-extern void ToDoSetDBBackupBit (DmOpenRef dbP) SECT1;
-
-extern Char* GetToDoNotePtr (ToDoDBRecordPtr recordP) SECT1;
-
-#ifdef __cplusplus
-}
-#endif
-
-
+    
 #endif
 

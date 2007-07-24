@@ -37,7 +37,7 @@ BEGIN
     "long_sl2lnString" =  ""\
         "-)는 음력 평달을 의미합니다.\n"\
         "#)은 음력 윤달을 의미합니다."
-    "long_prefString" =  "Notify format\n"\
+    "long_prefString" =  "알림 형식 도움말\n"\
         "+L = Last, First\n"\
         "+F = First Last\n"\
         "+f = First\n"\
@@ -276,9 +276,7 @@ BEGIN
     "^1: ^2 HappyDays notify entries removed." =  ""\
 	"^1: ^2 개의 해피데이즈 알림 레코드가 제거되었습니다."
 
-    "HappyDays 3.0b3"= "HappyDays 3.0b3"
-    "GPL free software" =  "GPL free software"
-    "(c) 1999-2006 Jaemok Jeong"= "(c) 1999-2006 정재목"
+    "(c) 1999-2007 Jaemok Jeong"= "(c) 1999-2007 정재목"
 
     "E-Mail & Web Page" =  "이메일 & 웹페이지"
     "jmjeogn@gmail.com"= "jmjeogn@gmail.com"

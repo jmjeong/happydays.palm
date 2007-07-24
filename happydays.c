@@ -1,6 +1,6 @@
 /*
   HappyDays - A Birthday displayer for the Palm
-  Copyright (C) 1999-2006 JaeMok Jeong
+  Copyright (C) 1999-2007 JaeMok Jeong
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -22,17 +22,21 @@
 #include "Handera/Vga.h"
 #include "Handera/Silk.h"
 
+#include "section.h"
+
 #include "address.h"
 #include "memodb.h"
 #include "lunar.h"
+#include "todo.h"
+#include "newtodo.h"
 #include "birthdate.h"
 #include "happydays.h"
 #include "happydaysRsc.h"
 #include "s2lconvert.h"
 #include "util.h"
 #include "notify.h"
-#include "section.h"
 #include "addresscommon.h"
+#include "newaddress.h"
 
 #define frmRescanUpdateCode (frmRedrawUpdateCode + 1)
 #define frmUpdateFontCode (frmRedrawUpdateCode + 2)
@@ -88,11 +92,6 @@ enum ViewFormType { ViewType = 0,
                     ViewSpace
 };
 
-extern Boolean NewUpdateHappyDaysDB(FormPtr frm);
-extern Boolean NewFindHappyDaysField();
-extern int CleanupFromTD(DmOpenRef db);
-extern int NewCleanupFromTD(DmOpenRef db);
-
 ////////////////////////////////////////////////////////////////////
 // function declaration 
 ////////////////////////////////////////////////////////////////////
@@ -113,7 +112,7 @@ static Boolean SpecialKeyDown(EventPtr e);
 
 static Err NR70GraffitiHandleEvent(SysNotifyParamType * /* notifyParamsP */) SECT1;
 
-static Int16 OpenDatabases(void) SECT2;
+static Int16 OpenDatabases(void);
 static void freememories(void) SECT2;
 static void CloseDatabases(void) SECT2;
 static void MainFormReadDB() SECT2;
@@ -128,8 +127,6 @@ static Boolean PrefFormHandleEvent(EventPtr e) SECT1;
 static Boolean DispPrefFormHandleEvent(EventPtr e) SECT1;
 static Boolean ViewFormHandleEvent(EventPtr e) SECT1;
 static Boolean MainFormHandleEvent(EventPtr e) SECT1;
-Int16 OpenPIMDatabases(UInt32 dbid, UInt32 adid, UInt32 tdid, UInt32 mmid, UInt16 mode) SECT1;
-
 
 static void HighlightMatchRowDate(DateTimeType inputDate) SECT1;
 static void HighlightMatchRowName(Char first) SECT1;
@@ -142,15 +139,16 @@ static void MainFormInit(FormPtr formP, Boolean resize) SECT1;
 static void MainFormResize(FormPtr frmP, Boolean draw) SECT1;
 static void MainTableSelectItem(TablePtr table, Int16 row, Boolean selected) SECT1;
 
-void MainFormDrawRecord(MemPtr tableP, Int16 row, Int16 column, RectanglePtr bounds) SECT1;
+static void MainFormDrawRecord(MemPtr tableP, Int16 row, Int16 column, RectanglePtr bounds) SECT1;
 
-Boolean MenuHandler(FormPtr frm, EventPtr e) SECT1;
-void MainFormScroll(Int16 newValue, Int16 oldValue, Boolean force_redraw) SECT1;
-void MainFormScrollLines(Int16 lines, Boolean force_redraw) SECT1;
-void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column, 
+static Boolean MenuHandler(FormPtr frm, EventPtr e) SECT1;
+static void MainFormScroll(Int16 newValue, Int16 oldValue, Boolean force_redraw) SECT1;
+static void MainFormScrollLines(Int16 lines, Boolean force_redraw) SECT1;
+static void ViewTableDrawData(MemPtr tableP, Int16 row, Int16 column, 
                        RectanglePtr bounds) SECT1;
-void DrawTiny(int size,int x,int y,int n) SECT1;
-void DrawSilkMonth(int mon, int year, int day, int x, int y) SECT1;
+
+static void DrawTiny(int size,int x,int y,int n) SECT1;
+static void DrawSilkMonth(int mon, int year, int day, int x, int y) SECT1;
 
 ////////////////////////////////////////////////////////////////////
 // private database for HappyDays
@@ -1831,12 +1829,12 @@ static Boolean UnloadPrefsFields()
     lstnotify = GetObjectPointer(frm, PrefFormNotifyFmts);
     gPrefsR.notifyformat = LstGetSelection(lstnotify);
 
-    if (FldDirty(GetObjectPointer(frm, PrefFormNotifyField))) {
-        if (FldGetTextPtr(GetObjectPointer(frm, PrefFormNotifyField))) {
-            StrNCopy(gPrefsR.notifyformatstring,
-                     FldGetTextPtr(GetObjectPointer(frm, PrefFormNotifyField)), 39);
-        }
+    // if (FldDirty(GetObjectPointer(frm, PrefFormNotifyField))) {
+    if (FldGetTextPtr(GetObjectPointer(frm, PrefFormNotifyField))) {
+        StrNCopy(gPrefsR.notifyformatstring,
+                 FldGetTextPtr(GetObjectPointer(frm, PrefFormNotifyField)), 39);
     }
+    // }
 
     // automatic scan of Address
     lstaddr = GetObjectPointer(frm, PrefFormAutoRescan);
@@ -3107,8 +3105,6 @@ static Boolean StartFormHandleEvent(EventPtr e)
     Boolean rescan;
 	Boolean ok = true;
 
-    extern Boolean FindHappyDaysField();
-    
     FormPtr frm = FrmGetFormPtr(StartForm);
 
     // no event procedure
@@ -3171,56 +3167,3 @@ static Boolean StartFormHandleEvent(EventPtr e)
     
     return handled;
 }
-
-// $Revision$
-//
-//
-// $Log: happydays.c,v $
-// Revision 1.77  2004/11/21 15:51:18  jmjeong
-// Fix lunar mismatch(2006.1.1)
-// Enforce to check the wrong lunar input
-//
-// Revision 1.76  2004/05/07 03:43:36  jmjeong
-// Sony Clie Hires+ Support
-//
-// Revision 1.75  2004/04/19 15:46:17  jmjeong
-// Datebook category support
-// Can edit the category of Datebook, Todo in HappyDays
-//
-// Revision 1.74  2004/03/08 13:21:47  jmjeong
-// -(Add) Can Assign N-th day of Event.
-// -(Add) Give different icon or color to different event types. You can set any
-// note field for each event type with "= HappyDays Notes".
-// -(Enhance) Change the color for table select
-//
-// Revision 1.73  2003/01/15 02:11:18  jmjeong
-// re-arrange multi segment
-//
-// Revision 1.72  2003/01/13 23:42:51  jmjeong
-// (Fix) Datebook Alarm (reschedule alarm after notifying)
-//
-// Revision 1.71  2002/11/26 19:40:55  jmjeong
-// * Fix 'run datebook once' error(I hope)
-// * Rearrance preference record
-// * Make 'custom field' optional
-//
-// Revision 1.70  2002/05/27 10:59:49  jmjeong
-// german resource
-//
-// Revision 1.69  2002/04/23 19:29:18  jmjeong
-// Fix memory leaks in Datebook Notify
-// Fix a compabibility issue on Palm OS 3.3
-// Change Datebook Notify
-// (Rather than making repeating entries, make an individual entry to show age)
-// Add Todo Note Field
-//
-// Revision 1.68  2002/04/11 12:58:42  jmjeong
-// error msg in start screen
-//
-// Revision 1.67  2002/02/14 14:33:37  jmjeong
-// add the routine to process prefix '!'
-//
-// Revision 1.66  2002/02/03 14:20:48  jmjeong
-// add log, revision
-//
-//

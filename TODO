@@ -2,7 +2,6 @@
 
 * On-going
 ** Add option to ignore 'Global Find'
-** Support the New PIMS
 
 * Considering
 ** Display preferences(modified)
@@ -10,7 +9,7 @@
 *** Display additional event info(origin screen)
 *** Display sexseasonary info
 ** Support 'last Sunday of September'
-
+** Support full date(not from 1904 to 2031)
 
 * Plan(done)
 ** Fix selection code(done)
@@ -23,4 +22,5 @@
 ** consider lunar date in age calculation routine(done)
 ** Replace the start form into 'progress widget'(consider)
 ** Write the detailed manual with screenshot(done)
+** Support the New PIMS(done)
 

@@ -17,7 +17,7 @@ OBJS =  obj/lunar.o obj/address.o obj/datebook.o obj/util.o \
 
 CC = m68k-palmos-gcc
 
-CFLAGS = -Wall -O2 -I/usr/local/share/palmdev/sonysdk -I/usr/local/share/palmdev/sonysdk/System -I/usr/local/share/palmdev/sonysdk/Libraries
+CFLAGS = -Wall -Wmissing-declarations -O2 -I/usr/local/share/palmdev/sonysdk -I/usr/local/share/palmdev/sonysdk/System -I/usr/local/share/palmdev/sonysdk/Libraries
 #CFLAGS = -Wall -g -O2
 
 PILRC = pilrc
@@ -70,9 +70,9 @@ tur: ENGLISH obj/$(TARGET)-tur.prc
 	mv obj/$(TARGET)-tur.prc prc
 	zip $(TARGET)-$(VERSION)-tur.zip prc/$(TARGET)-tur.prc manual/turkish-manual.zip
 
-ko: ENGLISH obj/$(TARGET)-k8.prc obj/$(TARGET)-k11.prc
-	mv obj/$(TARGET)-k8.prc obj/$(TARGET)-k11.prc prc
-	zip $(TARGET)-$(VERSION)-ko.zip prc/$(TARGET)-k8.prc prc/$(TARGET)-k11.prc
+ko: ENGLISH obj/$(TARGET)-k8.prc # obj/$(TARGET)-k11.prc 
+	mv obj/$(TARGET)-k8.prc prc  # obj/$(TARGET)-k11.prc prc
+	zip $(TARGET)-$(VERSION)-ko.zip prc/$(TARGET)-k8.prc # prc/$(TARGET)-k11.prc
 
 sp: ENGLISH obj/$(TARGET)-sp.prc
 	mv obj/$(TARGET)-sp.prc prc
@@ -440,6 +440,7 @@ zip: prc/$(TARGET).prc
 	-@echo "Making distribution file(happydays-$(VERSION).zip) ..." &&\
 	\rm -rf dist && mkdir dist && \
 	cp prc/$(TARGET).prc dist && cp manual/README.txt dist  && \
+	cp prc/lunarlib.prc dist && \
 	cp manual/HappyDaysManual.pdf dist && cd dist && \
 	zip -r ../happydays-$(VERSION).zip *  && \rm -rf dist
 

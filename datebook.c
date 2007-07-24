@@ -26,27 +26,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <PalmOS.h>
 #include "address.h"
 #include "datebook.h"
+#include "util.h"
 
 #include "happydays.h"
 #include "happydaysRsc.h"
 
-/***********************************************************************
- *  
- *  Internal Structutes
- *  
- ***********************************************************************/
-    
-// The following structure doesn't really exist.  The first field
-// varies depending on the data present.  However, it is convient
-// (and less error prone) to use when accessing the other information.
-typedef struct {
-    ApptDateTimeType    when;
-    ApptDBRecordFlags   flags;  // A flag set for each  datum present
-    char                firstField;
-} ApptPackedDBRecordType;
-
-typedef ApptPackedDBRecordType * ApptPackedDBRecordPtr;
- 
 typedef Int16 comparF (const void *, const void *, Int16 other);
  
 /***********************************************************************
@@ -135,7 +119,7 @@ static Int16 TimeCompare (TimeType t1, TimeType t2) {
  *  BY: Peter Epstein
  *
  *************************************************************/
- RepeatInfoPtr ApptGetRepeatInfo(ApptPackedDBRecordPtr src)
+RepeatInfoPtr ApptGetRepeatInfo(ApptPackedDBRecordPtr src)
 {
 	ApptDBRecordFlags	flags;
 	char *p;

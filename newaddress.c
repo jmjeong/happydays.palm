@@ -24,7 +24,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "happydays.h"
 #include "util.h"
 
+#include "addresscommon.h"
 #include "newaddress.h"
+#include "birthdate.h"
 
 #define INDICATE_NUM        8
 
@@ -41,21 +43,11 @@ typedef struct {
 
 extern Int16 gHappyDaysField;
 
-extern void initIndicate();
-extern void displayNextIndicate( int index );
-extern Int16 AnalizeOneRecord(UInt16 addrattr, Char* src, HappyDays* hd, Boolean *ignore);
-extern void CleanupHappyDaysCache(DmOpenRef dbP);
-extern Int16 HDNewRecord(DmOpenRef dbP, HappyDays *r, UInt16 *index);
-
-static void NewAddrUnpack(PrvAddrPackedDBRecord *src, AddrDBRecordPtr dest) SECT2;
-static Boolean DetermineRecordName(AddrDBRecordPtr recordP, 
-                                   Boolean sortByCompany,
-                                   Char **name1,
-                                   Char **name2) SECT2;
-
 #define sortKeyFieldBits   (BitAtPosition(name) | BitAtPosition(firstName) | BitAtPosition(company))
 
-void NewAddrUnpack(PrvAddrPackedDBRecord *src, AddrDBRecordPtr dest)
+static void NewAddrUnpack(PrvAddrPackedDBRecord *src, AddrDBRecordPtr dest);
+
+static void NewAddrUnpack(PrvAddrPackedDBRecord *src, AddrDBRecordPtr dest)
 {
 	Int16   				index;
 	AddrDBRecordFlags 		flags;

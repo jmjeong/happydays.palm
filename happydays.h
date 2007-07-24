@@ -17,8 +17,10 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#ifndef _HAPPYDATE_H_
-#define _HAPPYDATE_H_
+#ifndef __HAPPYDAYS_H__
+#define __HAPPYDAYS_H__
+
+#include "section.h"
 
 #define AppErrStrLen        256
 #define DEFAULT_DURATION    5
@@ -171,5 +173,27 @@ extern DmOpenRef MemoDB;
 extern UInt32 gDbcdate, gDbmdate, gAdcdate, gAdmdate;
 extern DateFormatType gPrefdfmts;  // global date format for Birthday field
 extern DateFormatType gDispdfmts;  // global date format for display
+
+extern Boolean gbVgaExists;
+extern Int16   gNumOfEventNote;
+extern EventNoteInfo *gEventNoteInfo;
+extern Boolean  is35;
+extern TimeFormatType gPreftfmts;  	// global time format
+
+extern Boolean gIsNewPIMS;
+extern DateType gStartDate;			// staring date of birthday listing
+extern Int16 gMainTableTotals;      // Main Form table total rows;
+extern Int16 gMainTableHandleRow;   // The row of birthdate view to display
+
+Int16 OpenPIMDatabases(UInt32 dbid, UInt32 adid, UInt32 tdid, UInt32 mmid, UInt16 mode);
+
+// defined in newtodo.c
+int NewCleanupFromTD(DmOpenRef db);
+
+// defined in newaddress.c
+Boolean NewFindHappyDaysField() SECT2;
+Boolean NewUpdateHappyDaysDB(FormPtr frm) SECT2;
+    
+
 
 #endif

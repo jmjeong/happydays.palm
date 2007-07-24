@@ -30,16 +30,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "happydays.h"
 #include "happydaysRsc.h"
+#include "notify.h"
 
-extern Int16 FindEventNoteInfo(HappyDays birth);
-extern void LoadEventNoteString(char *p, Int16 idx, Int16 maxString);
-extern Char* NotifyDescString(DateType when, HappyDays birth, 
-							  Int8 age, Boolean todo);
-extern void ChkNMakePrivateRecord(DmOpenRef db, Int16 index);
-extern Boolean IsSameRecord(Char* notefield, HappyDays birth);
-extern Boolean IsHappyDaysRecord(Char* notefield);
-
-Int16 CheckToDoRecord(DateType when, HappyDays birth);
+static UInt8 ToDoGetSortOrder (DmOpenRef dbP);
+static MemHandle ToDoGetAppInfo (DmOpenRef dbP);
 
 /***********************************************************************
  *
@@ -121,7 +115,7 @@ static Int16 DateTypeCmp(DateType d1, DateType d2)
  *       art    3/22/96 Rename routine and added more sort orders
  *
  *************************************************************/
-UInt8 ToDoGetSortOrder (DmOpenRef dbP)
+static UInt8 ToDoGetSortOrder (DmOpenRef dbP)
 {
     UInt8 sortOrder;
     ToDoAppInfoPtr appInfoP;
@@ -148,7 +142,7 @@ UInt8 ToDoGetSortOrder (DmOpenRef dbP)
  *  BY: Art Lamb
  *
  *************************************************************/
-MemHandle ToDoGetAppInfo (DmOpenRef dbP)
+static MemHandle ToDoGetAppInfo (DmOpenRef dbP)
 {
     Err error;
     UInt16 cardNo;

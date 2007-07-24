@@ -31,8 +31,11 @@
  * <hr>
  */
 
-#ifndef _ADDRESSDB_H_
-#define _ADDRESSDB_H_
+// define name is the same as address.h
+// It is intentional
+//
+#ifndef __ADDRESS_H__
+#define __ADDRESS_H__
 
 #include "newaddrdef.h"
 
@@ -1006,9 +1009,6 @@ extern Boolean AddrDBLookupString (DmOpenRef dbP, Char *key,
                                    UInt16 *recordP, Boolean *completeMatch,
                                    UInt16* oNumMatchingCharsP, Boolean masked) SECT2;
 
-Boolean NewFindHappyDaysField() SECT2;
-Boolean NewUpdateHappyDaysDB(FormPtr frm) SECT2;
-    
 #ifdef __cplusplus
 }
 #endif

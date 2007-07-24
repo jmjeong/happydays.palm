@@ -1,6 +1,6 @@
 /*
-HappyDays - A Birthdate displayer for the PalmPilot
-Copyright (C) 1999-2001 JaeMok Jeong
+HappyDays - A Birthdate displayer for Palm
+Copyright (C) 1999-2007 JaeMok Jeong
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -25,12 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "lunar.h"
 #include "birthdate.h"
 #include "util.h"
-
-extern Boolean gbVgaExists;
-extern UInt16    lunarRefNum;
-
-Boolean Ln2SlFormHandleEvent(EventPtr e);
-Boolean Sl2LnFormHandleEvent(EventPtr e);
+#include "s2lconvert.h"
 
 static void DisplayInvalidDateErrorString(UInt16 id)
 {

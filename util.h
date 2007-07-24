@@ -23,29 +23,27 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <PalmOS.h>
 #include "section.h"
 
-extern void * GetObjectPointer(FormPtr frm, UInt16 objID);
-extern FieldPtr SetFieldTextFromHandle(UInt16 fieldID, MemHandle txtH);
-extern FieldPtr SetFieldTextFromStr(UInt16 fieldID, Char * strP);
-extern FieldPtr ClearFieldText(UInt16 fieldID);
-extern Char * DateToAsciiLong(UInt8 months, UInt8 days, Int16 year,
-                            DateFormatType dateFormat, Char * pstring);
-extern UInt32 Hash(Char* name1, Char* name2);
-extern Boolean SelectCategoryPopup(DmOpenRef dbP, UInt16* selected,
-                                   UInt32 list, UInt32 trigger, Char *string);
-extern void DisplayCategory(UInt32 trigger, Char* string, Boolean redraw);
+extern UInt16    lunarRefNum;
 
-extern MemPtr AppInfoGetPtr(DmOpenRef dbP);
+Err EnableSilkResize(UInt16 silkRefNum, UInt16 state);
+Err ResizeSilk(UInt16 silkRefNum, UInt16 size);
 
-extern Boolean FindNearLunar(DateType *dt, DateType base, Boolean leapyes);
-extern Int16 DateCompare (DateType d1, DateType d2); // defined in datebook.c
-
-extern void PrvMoveObject(FormPtr frmP, UInt16 objIndex, Coord y_diff, Boolean draw) SECT1;
-extern void PrvResizeObject(FormPtr frmP, UInt16 objIndex, Coord y_diff, Boolean draw) SECT1;
-
+void * GetObjectPointer(FormPtr frm, UInt16 objID);
+void PrvMoveObject(FormPtr frmP, UInt16 objIndex, 
+                   Coord y_diff, Boolean draw);
+void PrvResizeObject(FormPtr frmP, UInt16 objIndex, 
+                     Coord y_diff, Boolean draw);
+Char* DateToAsciiLong(UInt8 months, UInt8 days, Int16 year,
+                      DateFormatType dateFormat, Char * pstring);
+Boolean SelectCategoryPopup(DmOpenRef dbP, UInt16* selected,
+                            UInt32 list, UInt32 trigger, Char *string);
+FieldPtr SetFieldTextFromStr(UInt16 fieldID, Char * strP);
+void DisplayCategory(UInt32 trigger, Char* string, Boolean redraw);
+UInt16 GetSilkPos(UInt16 silkRefNum);
+MemPtr AppInfoGetPtr(DmOpenRef dbP);
 Boolean TextMenuHandleEvent(UInt16 menuID, UInt16 objectID);
-
-Err ResizeSilk(UInt16 silkRefNum, UInt16 size) SECT1;
-Err EnableSilkResize(UInt16 silkRefNum, UInt16 state) SECT1;
-UInt16 GetSilkPos(UInt16 silkRefNum) SECT1;
+FieldPtr ClearFieldText(UInt16 fieldID);
+Boolean FindNearLunar(DateType *dt, DateType base, Boolean leapyes);
+UInt32 Hash(Char* name1, Char* name2);
 
 #endif

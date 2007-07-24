@@ -24,29 +24,13 @@
 #include "happydaysRsc.h"
 #include "datebook.h"
 #include "birthdate.h"
+#include "notify.h"
 #include "util.h"
+#include "todo.h"
 
 ////////////////////////////////////////////////////////////////////
 // 	Global variable
 ////////////////////////////////////////////////////////////////////
-
-extern DmOpenRef DatebookDB;
-extern DmOpenRef ToDoDB;
-extern DmOpenRef MemoDB;
-
-extern Boolean gbVgaExists;
-extern struct sPrefsR gPrefsR;
-extern TimeFormatType gPreftfmts;  	// happydas.h
-extern UInt32 gMmcdate, gMmmdate;   // Memo create/modify time
-extern Int16 gMainTableTotals;      // Main Form table total rows;
-extern Int16 gMainTableHandleRow;   // The row of birthdate view to display
-extern DateType gStartDate;			// staring date of birthday listing
-
-extern Int16 gNumOfEventNote;
-extern EventNoteInfo *gEventNoteInfo;
-extern Boolean gIsNewPIMS;
-
-UInt16 gToDoCategory;               // todo category
 
 typedef enum _WhichString {
     DBSetting = 1,
@@ -56,51 +40,34 @@ typedef enum _WhichString {
 // to be used for loading Note String Form
 static WhichString whichString;     // 1 = DB, 2 = ToDo
 
-////////////////////////////////////////////////////////////////////
-// function declaration 
-////////////////////////////////////////////////////////////////////
-
-extern Boolean TextMenuHandleEvent(UInt16 menuID, UInt16 objectID);
-extern void RescheduleAlarms (DmOpenRef dbP);
-
-static void LoadTDNotifyPrefsFields(void) SECT2;
-static void UnloadTDNotifyPrefsFields() SECT2;
+static void UnloadTDNotifyPrefsFields();
+static void LoadTDNotifyPrefsFields(void);
 static void NotifyAction(UInt32 whatAlert,
                          void (*func)(int mainDBIndex, DateType when,
 							 	      Int8 age,	Int16 *created, 
-									  Int16 *touched)) SECT2;
+									  Int16 *touched));
 static void NotifyToDo(int mainDBIndex, DateType when, Int8 age,
-                       Int16 *created, Int16 *touched) SECT2;
-
-static void LoadDBNotifyPrefsFields(void) SECT2;
-static void UnloadDBNotifyPrefsFields() SECT2;
+                       Int16 *created, Int16 *touched);
+static void LoadDBNotifyPrefsFields(void);
+static void UnloadDBNotifyPrefsFields();
 static void NotifyDatebook(int mainDBIndex, DateType when, Int8 age,
-                           Int16 *created, Int16 *touched) SECT2;
+                           Int16 *created, Int16 *touched);
 static void TimeToAsciiLocal(TimeType when, TimeFormatType timeFormat,
-                             Char * pString) SECT2;
-static void LoadDBNotifyPrefsFieldsMore(void) SECT2;
-static void UnloadDBNotifyPrefsFieldsMore() SECT2;
-static void ShowNoteStuff() SECT2;
-static void HideNoteStuff() SECT2;
-static Int16 CheckDatebookRecord(DateType when, HappyDays birth) SECT2;
-static void LoadCommonPrefsFields(FormPtr frm) SECT2;
-static void UnloadCommonNotifyPrefs(FormPtr frm) SECT2;
+                             Char * pString);
+static void LoadDBNotifyPrefsFieldsMore(void);
+static void UnloadDBNotifyPrefsFieldsMore();
+static void ShowNoteStuff();
+static void HideNoteStuff();
+static Int16 CheckDatebookRecord(DateType when, HappyDays birth);
+static void TimeToAsciiLocal(TimeType when, TimeFormatType timeFormat,
+                             Char * pString);
+static void LoadCommonPrefsFields(FormPtr frm);
+static void UnloadCommonNotifyPrefs(FormPtr frm);
 
-void ChkNMakePrivateRecord(DmOpenRef db, Int16 index) SECT2;
-Char* EventTypeString(HappyDays r) SECT2;
-int CleanupFromDB(DmOpenRef db) SECT2;
-void PerformExport(Char * memo, int mainDBIndex, DateType when) SECT2;
-Boolean DBNotifyFormHandleEvent(EventPtr e) SECT2;
-Boolean NotifyStringFormHandleEvent(EventPtr e) SECT2;
-Boolean ToDoFormHandleEvent(EventPtr e) SECT2;
-Int16 ActualPerformNotifyTD(HappyDays birth, DateType when, Int8 age,
-                            Int16 *created, Int16 *touched, Int16 existIndex) SECT2;
-Int16 NewActualPerformNotifyTD(HappyDays birth, DateType when, Int8 age,
-                               Int16 *created, Int16 *touched, Int16 existIndex) SECT2;
-Int16 CheckToDoRecord(DateType when, HappyDays birth) SECT2;
-Int16 NewCheckToDoRecord(DateType when, HappyDays birth) SECT2;
-Boolean IsHappyDaysRecord(Char* notefield) SECT2;
-Boolean IsSameRecord(Char* notefield, HappyDays birth) SECT2;
+
+////////////////////////////////////////////////////////////////////
+// function declaration 
+////////////////////////////////////////////////////////////////////
 
 // temporary return value;
 Char* EventTypeString(HappyDays r)
@@ -920,17 +887,23 @@ static Int16 PerformNotifyTD(HappyDays birth, DateType when, Int8 age,
 {
     Int16 existIndex;
 
-    // for the performance, check this first 
-    if ( ((existIndex = CheckToDoRecord(when, birth)) >= 0)
-         && !gPrefsR.existing ) {    // exists and keep the record
-        (*touched)++;
-        return 0;
-    }
 
     if (!gIsNewPIMS) {
+        // for the performance, check this first 
+
+        if ( ((existIndex = CheckToDoRecord(when, birth)) >= 0)
+             && !gPrefsR.existing ) {    // exists and keep the record
+            (*touched)++;
+            return 0;
+        }
         ActualPerformNotifyTD(birth, when, age, created, touched, existIndex);
     }
     else {
+        if ( ((existIndex = NewCheckToDoRecord(when, birth)) >= 0)
+             && !gPrefsR.existing ) {    // exists and keep the record
+            (*touched)++;
+            return 0;
+        }
         NewActualPerformNotifyTD(birth, when, age, created, touched, existIndex);
     }
     return 0;
