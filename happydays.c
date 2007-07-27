@@ -1986,7 +1986,6 @@ static Boolean PrefFormHandleEvent(EventPtr e)
             
             Int16 selection = LstPopupList(lst);
             if (selection >= 0) {
-                gPrefsR.notifyformat = selection;
                 CtlSetLabel(GetObjectPointer(FrmGetActiveForm(), PrefFormNotifyTrigger),
                             LstGetSelectionText(lst, selection));
             }
