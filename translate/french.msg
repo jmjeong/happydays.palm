@@ -19,6 +19,18 @@ BEGIN
    	"= Format de saisie\n\n"\
    	"[*[{EventType}]\\ws{Description}\\ws{Date}[[nth day list]]\n"
 
+"long_prefString" =  ""\
+    "Aide format notification:\n"\
+    "+L=Nom,Prénom\n"\
+    "+F=Prénom,Nom\n"\
+    "+l=Nom\n"\
+    "+f=Prénom\n"\
+    "+e=Type événement(1)\n"\
+    "+E=Type événement(f)\n"\
+    "+y=Age(ans)\n"\
+    "++=+\n"
+
+
  /* -------------- */
  /* UNUSED - start */
  /* -------------- */
@@ -175,7 +187,7 @@ BEGIN
     "GPL free software" =  "Logiciel gratuit GPL"
     "E-Mail & Web Page" =  "Email & page web"
     "Translator" =  "Traduction : Antoine"
-    "Translator's email" =  "antoine@freewarefrance.com"
+    "Translator's email" =  "www.freewarefrance.com"
     "OK" =  "OK"
     "Cancel" =  "Annuler"
 
@@ -267,7 +279,7 @@ BEGIN
 
     "Date Book" =  "Agenda"  
     "To Do" =  "Tâches"  
-    "Scan note field" =  "Scruter champ Note"  
+    "Scan note field" =  "Lire champ Note"  
     "%ld days left" =  "%ld jour(s) restant(s)"  
     "%ld days passed" =  "échu depuis %ld jour(s)"  
 

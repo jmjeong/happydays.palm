@@ -1,2 +1,2 @@
 #!/bin/sh
-gawk -f ./RCP-MakeTranslate.awk -v lang=french ../happydays.rcp
+gawk -f ./RCP-MakeTranslate.awk -v lang=german ../happydays.rcp

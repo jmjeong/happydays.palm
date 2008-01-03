@@ -445,6 +445,6 @@ zip: prc/$(TARGET).prc
 	zip -r ../happydays-$(VERSION).zip *  && \rm -rf dist
 
 upload: zip 
-	scp -P 8022 *.zip jmjeong.com:~/wikix/myfile/HappyDays
+	scp -P 8023 *.zip jmjeong.com:/home/wikix/myfile/HappyDays
 
 -include .depend
